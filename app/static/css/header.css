@@ -1,0 +1,13 @@
+/* import font family*/
+@import url('https://fonts.cdnfonts.com/css/informal-roman');
+
+/********************************************* header **********************************************************/
+.logo{
+    font-family: "Informal Roman";
+    font-weight: normal;
+    color:white;
+}
+
+header{
+    background-color: black;
+}
