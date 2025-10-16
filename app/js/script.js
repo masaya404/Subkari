@@ -1,22 +1,29 @@
+// ========== スライド制御 ==========
+
 let currentSlide = 0;
+const slideContainer = document.querySelector('.hero-slide');
 const slides = document.querySelectorAll('.hero-slide-item');
 const totalSlides = slides.length;
-const slideContainer = document.querySelector('.hero-slide');
 
+// 1スライドあたりの幅（4枚同時表示）
+const slideWidth = 100 / 4;
+
+// スライド表示
 function showSlide(index) {
-  const slideWidth = 100 / 4; // 1スライドあたり幅（4枚並べ）
   slideContainer.style.transition = 'transform 0.8s ease';
   slideContainer.style.transform = `translateX(-${index * slideWidth}%)`;
 }
 
+// 次へ
 function nextSlide() {
   currentSlide++;
-  if (currentSlide > totalSlides - 4) { // 4枚表示なので最後から戻す
+  if (currentSlide > totalSlides - 4) {
     currentSlide = 0;
   }
   showSlide(currentSlide);
 }
 
+// 前へ
 function previousSlide() {
   currentSlide--;
   if (currentSlide < 0) {
@@ -28,9 +35,11 @@ function previousSlide() {
 // 自動スライド
 let autoSlide = setInterval(nextSlide, 4000);
 
-// マウスで一時停止
+// hero要素が存在する場合のみイベント付与
 const hero = document.querySelector('.hero');
-hero.addEventListener('mouseenter', () => clearInterval(autoSlide));
-hero.addEventListener('mouseleave', () => {
-  autoSlide = setInterval(nextSlide, 4000);
-});
+if (hero) {
+  hero.addEventListener('mouseenter', () => clearInterval(autoSlide));
+  hero.addEventListener('mouseleave', () => {
+    autoSlide = setInterval(nextSlide, 4000);
+  });
+}
