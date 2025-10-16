@@ -24,7 +24,14 @@ CREATE TABLE `m_account` (
   `updateDate` DATETIME,
   `updaterId` INT,
   `password` VARCHAR(255) NOT NULL,
-  
+  `identifyOffer` boolean
+  `apiFavoriteAnnounce` boolean
+  `password`
+  `password`
+  `password`
+  `password`
+  `password`
+  `password`
   PRIMARY KEY (`id`)
 );
 
