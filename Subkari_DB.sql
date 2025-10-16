@@ -20,8 +20,8 @@ CREATE TABLE `m_account` (
   `smoker` boolean NOT NULL,
   `introduction` TEXT  ,
   `money` INT,
-  `newCreationDate` DATE NOT NULL,
-  `updateDate` DATETIME,
+  `newCreationDate` timestamp default current_timestamp,
+  `updateDate` timestamp default current_timestamp on update current_timestamp,
   `updaterId` INT,
   `password` VARCHAR(255) NOT NULL,
   `identifyOffer` boolean,
@@ -45,12 +45,11 @@ CREATE TABLE `m_product` (
   `price` INT NOT NULL,
   `size` VARCHAR(255) NOT NULL,
   `clean_id` INT NOT NULL,
-  `upload` DATE NOT NULL,
+  `upload` timestamp default current_timestamp,
   `sellRental` VARCHAR(255) NOT NULL,
   `showing` VARCHAR(255) NOT NULL,
   `draft` VARCHAR(255) NULL,
-  `creation` DATE NOT NULL,
-  `update` DATE NOT NULL,
+  `update` timestamp default current_timestamp on update current_timestamp,
   `account_id` INT NOT NULL,
   `brand_id` INT NULL,
   `category_id` INT NULL,
@@ -77,8 +76,8 @@ CREATE TABLE `m_adminAccount` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `fullName` VARCHAR(100) NOT NULL,
   `level` ENUM NOT NULL,
-  `creationDate` DATETIME NOT NULL,
-  `lastLogin` DATETIME,
+  `creationDate` timestamp default current_timestamp ,
+  `lastLogin` timestamp default current_timestamp on update current_timestamp,
   `password` VARCHAR(255) NOT NULL,
   
   PRIMARY KEY (`id`)
@@ -90,8 +89,9 @@ CREATE TABLE `m_admin_contents` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `content_detail` TEXT NOT NULL,                       --この形式後で要調査
-  `created_at` DATETIME NOT NULL,
-  `updated_at` DATETIME NOT NULL,
+  `created_at` timestamp default current_timestamp ,
+  `updated_at` timestamp default current_timestamp on update current_timestamp,
+  
   
   PRIMARY KEY (`id`)
 );
@@ -117,8 +117,8 @@ CREATE TABLE `m_category` (
 CREATE TABLE `t_login` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `account_id` INT NOT NULL,
-  `loginDatetime` DATETIME,
-  `logoutDatetime` DATETIME,
+  `loginDatetime` timestamp default current_timestamp on update current_timestamp ,
+  `logoutDatetime` timestamp default current_timestamp on update current_timestamp,
   `notice` boolean,
 
   PRIMARY KEY (`id`),
@@ -135,7 +135,7 @@ CREATE TABLE `t_favorite` (
   `account_id` INT NOT NULL,
   `product_id` INT,
   `brand_id` INT,
-  `resisterTime` DATETIME NOT NULL,
+  `resisterTime` timestamp default current_timestamp ,
   
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`)
@@ -205,7 +205,7 @@ CREATE TABLE `t_comments` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `account_id` INT NOT NULL,
   `content` TEXT NOT NULL,
-  `createdDate` DATETIME NOT NULL,
+  `createdDate` timestamp default current_timestamp ,
   `product_id` INT,
   
   PRIMARY KEY (`id`),
@@ -222,7 +222,7 @@ CREATE TABLE `t_connection` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `execution_id` INT NOT NULL,
   `target_id` INT NOT NULL,
-  `Datetime` DATETIME NOT NULL,
+  `Datetime` timestamp default current_timestamp ,
   `type` ENUM NOT NULL,
 
   PRIMARY KEY (`id`),
@@ -241,7 +241,7 @@ CREATE TABLE `t_alert` (
   `product_id` INT,
   `content` TEXT ,
   `category` ENUM ,
-  `reportDate` DATETIME,
+  `reportDate` timestamp default current_timestamp ,
   `comments_id` INT,
   `account_id` INT,
   `transaction_id` INT,
@@ -281,7 +281,7 @@ CREATE TABLE `t_transaction` (
   `status` VARCHAR(255) NOT NULL,
   `situation` boolean NOT NULL,
   `paymentMethod` ENUM NOT NULL,
-  `date` DATETIME NOT NULL,
+  `date` timestamp default current_timestamp ,
   `paymentDeadline` DATETIME NOT NULL,
   `shippingAddress` VARCHAR(255) NOT NULL,
   `shippingPhoto` VARCHAR(255) NOT NULL,
@@ -311,7 +311,7 @@ CREATE TABLE `t_message` (
   `recipient_id` INT NOT NULL,
   `t_transaction_id` INT NOT NULL,
   `content` VARCHAR(255) NOT NULL,
-  `sendingTime` DATETIME NOT NULL,
+  `sendingTime` timestamp default current_timestamp ,
   `readStatus` VARCHAR(255) NOT NULL,
 
   PRIMARY KEY (`id`),
@@ -330,10 +330,10 @@ CREATE TABLE `t_message` (
 -- 評価テーブル ---------------------------------------
 CREATE TABLE `t_evaluation` (
   `id` INT AUTO_INCREMENT NOT NULL,
-  `t_transaction_id` INT NOT NULL,
+  `transaction_id` INT NOT NULL,
   `score` INT NOT NULL,
   `comment` TEXT ,
-  `evaluationTime` DATETIME NOT NULL,
+  `evaluationTime` timestamp default current_timestamp ,
   `productCheck` boolean NOT NULL,
 
   PRIMARY KEY (`id`),
@@ -367,7 +367,7 @@ CREATE TABLE `t_inquiry` (
   `id` INT NOT NULL,
   `sender_id` INT NOT NULL,
   `content` TEXT NOT NULL,
-  `timeSent` DATETIME NOT NULL,
+  `timeSent` timestamp default current_timestamp ,
   `product_id` INT,
   `adminAccount_id` INT,
   `replyDetail` TEXT NOT NULL,
@@ -392,12 +392,12 @@ CREATE TABLE `t_report` (
   `product_id` INT NOT NULL,
   `content` TEXT NOT NULL,
   `category` VARCHAR(255) NOT NULL,
-  `reportDate` DATETIME NOT NULL,
+  `reportDate` timestamp default current_timestamp ,
   `status` ENUM NOT NULL,
   `comment_id` INT,
   `sender_id` INT,
   `adminAccount_id` INT,
-  `commitDate` DATETIME,
+  `commitDate` timestamp default current_timestamp ,
 
   
   PRIMARY KEY (`id`),
