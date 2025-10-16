@@ -24,7 +24,7 @@ CREATE TABLE `m_account` (
   `updateDate` timestamp default current_timestamp on update current_timestamp,
   `updaterId` INT,
   `password` VARCHAR(255) NOT NULL,
-  `identifyOffer` boolean,
+  `identifyImg` varchar(255) NOT NULL,
   `apiFavoriteAnnounce` boolean,
   `apiFollowAnnounce` boolean,
   `apiSystemAnnounce` boolean,
