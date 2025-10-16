@@ -4,13 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}サブカリ{% endblock%}</title>
+    <link rel="stylesheet" href="../static/css/header.css">
+     <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
     <header>
+    <div class="logo">SUBKARI</div>
+        
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="すべてのアイテムから探す">
+        </div>
+
+        <div class="header-icons">
+            <a href="#" class="icon-item">
+                <i class="far fa-user"></i>
+                <span>マイページ</span>
+            </a>
+            <a href="#" class="icon-item">
+                <i class="far fa-heart"></i>
+                <span>いいね</span>
+            </a>
+            <a href="#" class="icon-item">
+                <i class="far fa-bell"></i>
+                <span>通知</span>
+            </a>
+            <a href="#" class="icon-item">
+                <i class="far fa-image"></i>
+                <span>出品</span>
+            </a>
+            <a href="#" class="icon-item">
+                <i class="fas fa-redo"></i>
+                <span>取引</span>
+            </a>
+            <a href="#" class="icon-item">
+                <i class="fas fa-bars"></i>
+            </a>
+        </div>
+    <div class="nav-container">
+        <nav>
+            <a href="#">Coordinate</a>
+            <a href="#">Tops</a>
+            <a href="#">Bottoms</a>
+            <a href="#">Accessories</a>
+        </nav>
+    </div>
 
     </header>
+
     <main>
         {% block content %}
+     
         {% endblock %}
     </main>
     <footer>
