@@ -187,3 +187,4 @@ INSERT INTO `t_creditCard` (`account_id`, `number`, `expiry`, `holderName`) VALU
 
 -- ID:5 のユーザー (伊藤 四朗)
 (5, '5555666677778888', '06/27', 'SHIRO ITO');
+
