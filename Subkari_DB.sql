@@ -186,7 +186,7 @@ CREATE TABLE `t_history` (
   `account_id` INT NOT NULL,
   `transaction_id` INT,
   `product_id` INT,
-  `datetime` DATETIME NOT NULL,
+  `datetime` timestamp default current_timestamp,
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`)
