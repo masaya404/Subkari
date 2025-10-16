@@ -199,6 +199,14 @@ h1 {
     display: flex;
 }
 
+#deleteConfirmModal {
+    z-index: 2000;
+}
+
+#securityHelpModal {
+    z-index: 2000;
+}
+
 .modal-content {
     background: #fff;
     width: 90%;
@@ -645,10 +653,16 @@ h1 {
 /* セキュリティコード説明モーダル */
 .security-modal-content {
     background: #fff;
-    padding: 30px;
+    padding: 40px;
     border-radius: 8px;
     max-width: 500px;
     position: relative;
+}
+
+.security-modal-content .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
 }
 
 .security-modal-title {
@@ -703,6 +717,103 @@ h1 {
     width: 100%;
     position: absolute;
     top: 15px;
+}
+
+/* カード登録ページオーバーレイ */
+.card-register-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f5f5f5;
+    z-index: 2000;
+    overflow-y: auto;
+}
+
+.card-register-header {
+    background: #000;
+    color: #fff;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.card-register-container-inner {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.card-register-content {
+    background: #fff;
+    padding: 50px 60px;
+    border-radius: 4px;
+}
+
+.card-register-title {
+    font-size: 28px;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #1a1a1a;
+}
+
+.card-brands-section {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 4px;
+    margin-bottom: 40px;
+}
+
+.card-brands-label {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.card-logos {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.visa-logo {
+    color: #1434CB;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.mastercard-logo {
+    width: 35px;
+    height: 24px;
+    background: linear-gradient(90deg, #EB001B 50%, #F79E1B 50%);
+    border-radius: 50%;
+}
+
+.jcb-logo {
+    color: #0E4C96;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.amex-logo {
+    color: #006FCF;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 .edit-link {
