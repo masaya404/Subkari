@@ -12,3 +12,28 @@
 header{
     background-color: black;
 }
+
+.search-box {
+  position: relative;
+  display: inline-block;
+}
+.search-box input {
+  padding: 8px 40px 8px 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  font-size: 18px;
+}
+.search-btn:hover {
+  color: #000;
+}
