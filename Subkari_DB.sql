@@ -24,16 +24,9 @@ CREATE TABLE `m_account` (
   `updateDate` DATETIME,
   `updaterId` INT,
   `password` VARCHAR(255) NOT NULL,
-  `identifyOffer` boolean
-  `apiFavoriteAnnounce` boolean
-  `password`
-  `password`
-  `password`
-  `password`
-  `password`
-  `password`
   PRIMARY KEY (`id`)
 );
+
 
 -- 商品テーブル ------------------------------------
 CREATE TABLE `m_product` (
@@ -42,21 +35,22 @@ CREATE TABLE `m_product` (
   `name` VARCHAR(255) NOT NULL,
   `price` INT NOT NULL,
   `size` VARCHAR(255) NOT NULL,
-  `clean_id` VARCHAR(255) NOT NULL,
+  `clean_id` INT NOT NULL,
   `upload` DATE NOT NULL,
   `sellRental` VARCHAR(255) NOT NULL,
   `showing` VARCHAR(255) NOT NULL,
   `draft` VARCHAR(255) NULL,
   `creation` DATE NOT NULL,
   `update` DATE NOT NULL,
-  `m_account_id` INT NOT NULL,
-  `m_brand_id` VARCHAR(255) NULL,
-  `m_category_id` VARCHAR(255) NOT NULL,
+  `account_id` INT NOT NULL,
+  `brand_id` INT NULL,
+  `category_id` INT NULL,
   `visible` VARCHAR(255) NOT NULL,
   `rentalDuration` DATE NOT NULL,
   `explanation` VARCHAR(255) NULL,
   PRIMARY KEY (`id`)
 );
+
 
 -- 洗濯表示テーブル --------------------------------------------
 CREATE TABLE `m_cleanSign` (
@@ -67,6 +61,7 @@ CREATE TABLE `m_cleanSign` (
   
   PRIMARY KEY (`id`)
 );
+
 
 -- 管理者アカウントテーブル --------------------------------
 CREATE TABLE `m_adminAccount` (
@@ -80,6 +75,7 @@ CREATE TABLE `m_adminAccount` (
   PRIMARY KEY (`id`)
 );
 
+
 -- コンテンツテーブル ---------------------------------
 CREATE TABLE `m_admin_contents` (
   `id` INT AUTO_INCREMENT NOT NULL,
@@ -90,6 +86,7 @@ CREATE TABLE `m_admin_contents` (
   
   PRIMARY KEY (`id`)
 );
+
 
 -- ブランドテーブル -------------------------------------
 CREATE TABLE `m_brand` (
@@ -121,6 +118,8 @@ CREATE TABLE `t_login` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+
+
 -- お気に入りテーブル --------------------------------
 CREATE TABLE `t_favorite` (
   `id` INT AUTO_INCREMENT NOT NULL,
@@ -147,7 +146,7 @@ CREATE TABLE `t_transfer` (
   `account_id` INT NOT NULL,
   `bankName` VARCHAR(100) NOT NULL,
   `accountType` VARCHAR(20) NOT NULL,
-  `branchCode` VARCHAR(10) NOT NULL,
+  `branchName` VARCHAR(10) NOT NULL,
   `accountNumber` VARCHAR(20) NOT NULL,
   `accountHolder` VARCHAR(20) NOT NULL,
   
@@ -170,6 +169,7 @@ CREATE TABLE `t_creditCard` (
     REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
 
 -- 履歴テーブル --------------------------------
 CREATE TABLE `t_history` (
