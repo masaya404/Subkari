@@ -399,37 +399,3 @@ CREATE TABLE `t_inquiry` (
     REFERENCES `m_adminAccount`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
-
--- 通報テーブル -------------------------------------------------
-CREATE TABLE `t_report` (
-  `id` INT NOT NULL,
-  `product_id` INT NOT NULL,
-  `content` TEXT NOT NULL,
-  `category` VARCHAR(255) NOT NULL,
-  `reportDate` timestamp default current_timestamp ,
-  `status` ENUM() NOT NULL,
-  `comment_id` INT,
-  `sender_id` INT,
-  `adminAccount_id` INT,
-  `commitDate` timestamp default current_timestamp ,
-
-  
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`sender_id`)
-    REFERENCES `m_account`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE,
-  FOREIGN KEY (`comment_id`)
-    REFERENCES `t_comments`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE,
-  FOREIGN KEY (`adminAccount_id`)
-    REFERENCES `m_adminAccount`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
-  FOREIGN KEY (`product_id`)
-    REFERENCES `m_product`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
-
-
-
-
