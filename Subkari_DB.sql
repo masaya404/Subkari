@@ -42,21 +42,32 @@ CREATE TABLE `m_product` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `img` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `price` INT NOT NULL,
+  `purchasePrice` INT NULL,
+  `rentalPrice` INT NULL,
   `size` VARCHAR(255) NOT NULL,
-  `clean_id` INT NOT NULL,
-  `upload` timestamp default current_timestamp,
-  `sellRental` VARCHAR(255) NOT NULL,
-  `showing` VARCHAR(255) NOT NULL,
-  `draft` VARCHAR(255) NULL,
-  `update` timestamp default current_timestamp on update current_timestamp,
+  `upload` DATE NOT NULL,
+  `showing` ENUM('公開','非公開','非表示') NOT NULL,
+  `draft` boolean NOT NULL,
+  `update` DATETIME NOT NULL,
+  `purchaseFlg` boolean NOT NULL,
+  `rentalFlg` boolean NOT NULL,
+  `explanation` TEXT NULL,
   `account_id` INT NOT NULL,
-  `brand_id` INT NULL,
-  `category_id` INT NULL,
-  `visible` VARCHAR(255) NOT NULL,
-  `rentalDuration` DATE NOT NULL,
-  `explanation` VARCHAR(255) NULL,
+  `brand_id` INT NOT NULL,
+  `category_id` INT NOT NULL,
+  `cleanNotes` TEXT ,
+  `smokingFlg` boolean NOT NULL,
+
   PRIMARY KEY (`id`)
+  FOREIGN KEY (`brand_id`)
+    REFERENCES `m_brand`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+  FOREIGN KEY (`category_id`)
+    REFERENCES `m_category`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+  FOREIGN KEY (`account_id`)
+    REFERENCES `m_account`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
