@@ -350,7 +350,7 @@ CREATE TABLE `t_transaction` (
   `receivedPhoto` VARCHAR(255) NOT NULL,
   `receivedFlg` boolean NOT NULL,
   `rentalPeriod` DATETIME NOT NULL,
-  `creditcards_id` INT NOT NULL,
+  `creditcards_id` INT ,
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`product_id`)
