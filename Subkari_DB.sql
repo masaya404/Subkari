@@ -372,10 +372,10 @@ CREATE TABLE `t_message` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `sender_id` INT NOT NULL,
   `recipient_id` INT NOT NULL,
-  `t_transaction_id` INT NOT NULL,
+  `transaction_id` INT NOT NULL,
   `content` VARCHAR(255) NOT NULL,
   `sendingTime` timestamp default current_timestamp ,
-  `readStatus` VARCHAR(255) NOT NULL,
+  `readStatus` boolean NOT NULL,
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`sender_id`)
@@ -384,7 +384,7 @@ CREATE TABLE `t_message` (
   FOREIGN KEY (`recipient_id`)
     REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE,
-  FOREIGN KEY (`t_transaction_id`)
+  FOREIGN KEY (`transaction_id`)
     REFERENCES `t_transaction`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
