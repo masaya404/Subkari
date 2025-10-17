@@ -1,0 +1,343 @@
+/* ===============================
+   Reset & Base
+================================*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Yu Gothic', 'Hiragino Kaku Gothic Pro', sans-serif;
+  color: #333;
+  background: #fff;
+}
+
+/* ===============================
+   Header / Nav
+================================*/
+header, nav {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 40px;
+  color: #fff;
+}
+
+.logo {
+  font-size: 24px;
+  font-style: italic;
+  letter-spacing: 2px;
+}
+
+.search-box {
+  flex: 1;
+  max-width: 400px;
+  margin: 0 40px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 20px;
+}
+
+.header-links, nav {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.header-links a, nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+/* ===============================
+   Hero Section
+================================*/
+.hero {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  background: #e5e5e5;
+}
+
+.hero-slider {
+  display: flex;
+  height: 100%;
+  transition: transform 0.5s ease;
+}
+
+.hero-slide {
+  min-width: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-text {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.slider-arrows {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  transform: translateY(-50%);
+}
+
+.arrow {
+  background: rgba(255,255,255,0.8);
+  border: none;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* ===============================
+   Intro / Features / Brands
+================================*/
+.intro-section {
+  text-align: center;
+  padding: 60px 20px;
+  background: #fafafa;
+}
+
+.intro-section h1, .intro-section h2 {
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+}
+
+.intro-section p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+/* ブランドロゴグリッド */
+.brands-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 120px 0;
+  padding: 90px 0;
+  margin: 40px auto;
+  max-width: 80%;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.brands-grid img {
+  width: 16.666%;
+  max-height: 100px;
+  object-fit: contain;
+  padding: 0 30px;
+}
+
+/* ===============================
+   Category Grid（カテゴリー検索用）
+================================*/
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  justify-items: center;
+  align-items: center;
+  padding: 60px 0;
+  border: none; /* brands-gridの線を消す */
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+.category-item {
+  text-align: center;
+}
+
+.category-item img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+
+.category-item img:hover {
+  transform: scale(1.05);
+}
+
+.category-item p {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+}
+
+
+/* サービス特徴 */
+.features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin: 60px auto;
+  max-width: 800px;
+}
+
+.feature {
+  text-align: center;
+  padding: 30px;
+}
+
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+}
+
+.feature h3 {
+  font-size: 17px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.feature p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* ブランド探索 */
+.explore-group {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.brand-explore-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 30px 0 20px;
+}
+
+.brands-grid-with-text {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 80px 10px;
+  max-width: 90%;
+  margin: 0 auto 60px;
+}
+
+.brand-item img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: contain;
+  margin-bottom: 5px;
+}
+
+/* ===============================
+   SNS Section
+================================*/
+.sns-section-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 120px;
+  margin: 250px 0;
+}
+
+.sns-title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.sns-description {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* ===============================
+   CTA Section
+================================*/
+.cta-section {
+  text-align: center;
+  padding: 70px 30px;
+  background: #f5f5f5;
+}
+
+.cta-section h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.cta-section p {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 35px;
+  line-height: 1.8;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.cta-btn {
+  padding: 12px 40px;
+  border-radius: 25px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cta-btn.primary { background: #333; color: #fff; }
+.cta-btn.secondary { background: #fff; border: 2px solid #333; color: #333; }
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ===============================
+   Footer
+================================*/
+footer {
+  background: #333;
+  color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.footer-links, .social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.footer-links a {
+  color: #aaa;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+/* ===============================
+   Responsive
+================================*/
+@media (max-width: 768px) {
+  .features { grid-template-columns: 1fr; }
+  .brands-grid-with-text { grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  .sns-section-content { flex-direction: column; margin: 100px 0; gap: 60px; }
+  header { padding: 15px 20px; }
+}
