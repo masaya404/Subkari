@@ -11,7 +11,7 @@ CREATE TABLE `m_account` (
   `username` VARCHAR(100) NOT NULL,
   `fullName` VARCHAR(100) NOT NULL,
   `birthday` DATE NOT NULL,
-  `zip` CHAR(7) NOT NULL,
+  `zip` CHAR(8) NOT NULL,
   `pref` VARCHAR(50) NOT NULL,
   `address1` VARCHAR(50) NOT NULL,
   `address2` VARCHAR(50) NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE `m_cleanSign` (
 CREATE TABLE `m_adminAccount` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `fullName` VARCHAR(100) NOT NULL,
-  `level` ENUM NOT NULL,
+  `level` ENUM('administrator','operator') NOT NULL,
   `creationDate` timestamp default current_timestamp ,
   `lastLogin` timestamp default current_timestamp on update current_timestamp,
   `password` VARCHAR(255) NOT NULL,
