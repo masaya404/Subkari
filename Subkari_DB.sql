@@ -11,11 +11,6 @@ CREATE TABLE `m_account` (
   `username` VARCHAR(100) NOT NULL,
   `fullName` VARCHAR(100) NOT NULL,
   `birthday` DATE NOT NULL,
-  `zip` CHAR(8) NOT NULL,
-  `pref` VARCHAR(50) NOT NULL,
-  `address1` VARCHAR(50) NOT NULL,
-  `address2` VARCHAR(50) NOT NULL,
-  `address3` VARCHAR(50) NOT NULL,
   `mail` VARCHAR(255) NOT NULL,
   `smoker` boolean NOT NULL,
   `introduction` TEXT  ,
@@ -36,6 +31,21 @@ CREATE TABLE `m_account` (
   PRIMARY KEY (`id`)
 );
 
+-- 住所テーブル -----------------------------------
+CREATE TABLE `m_account` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `account_id` INT NOT NULL,
+  `zip` CHAR(8) NOT NULL,
+  `pref` VARCHAR NOT(255) NULL,
+  `address1` VARCHAR(255) NOT NULL,
+  `address2` VARCHAR(255) NOT NULL,
+  `address3` VARCHAR(255) NOT NULL,
+  
+  PRIMARY KEY (`id`,`account_id`)
+  FOREIGN KEY (`account_id`)
+    REFERENCES `m_account`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+);
 
 -- 商品テーブル ------------------------------------
 CREATE TABLE `m_product` (
