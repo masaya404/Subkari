@@ -141,7 +141,17 @@ CREATE TABLE `t_login` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- レンタル期間テーブル ---------------------------------------
+CREATE TABLE `t_rentalPeriod` (
+  `id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
 
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`product_id`)
+    REFERENCES `m_product`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+);
 
 -- お気に入りテーブル --------------------------------
 CREATE TABLE `t_favorite` (
