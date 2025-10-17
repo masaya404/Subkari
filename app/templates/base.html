@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../static/css/header.css">
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
     <header>
@@ -71,7 +72,33 @@
         {% endblock %}
     </main>
     <footer>
-        
+          <div class="footer-top">
+            <div class="footer-logo">SUBKARI</div>
+            <nav class="footer-nav">
+                <a href="#usage">利用規約</a>
+                <a href="#shopping">ショッピングガイド</a>
+                <a href="#faq">FAQ</a>
+                <a href="#contact">お問い合わせ</a>
+                <a href="#privacy">プライバシーポリシー</a>
+                <a href="#law">特定商取引に基づく表記</a>
+            </nav>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-info">
+                <p>〒530-0001 大阪府大阪市北区梅田３丁目３－１</p>
+                <p>日曜定休／営業時間 10:30～19:00</p>
+                <p>TEL　06-6347-0001</p>
+            </div>
+            <div class="footer-social">
+                <div class="social-icon">
+                    <img src="../img/x-icon.png"></img>
+                </div>
+                <div class="social-icon">
+                   <img src="../img/instagram-icon.png"></img>
+                </div>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
