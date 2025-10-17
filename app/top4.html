@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>トップス - SUBKARI</title>
+    <link rel="stylesheet" href="css/style copy.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-top-nav">
+            <div class="search-bar">
+                <input type="text" value="トップス" placeholder="トップスの検索...">
+            </div>
+            <nav class="user-nav">
+                <ul>
+                    <li><a href="#">新規会員登録</a></li>
+                    <li><a href="#">ログイン</a></li>
+                    <li><a href="#">≡</a></li>
+                </ul>
+            </nav>
+        </div>
+        <nav class="header-main-nav">
+            <ul>
+                <li><a href="#">Coordinate</a></li>
+                <li class="active"><a href="#">Tops</a></li>
+                <li><a href="#">Bottoms</a></li>
+                <li><a href="#">...</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="product-list-page">
+        <div class="container">
+            <div class="breadcrumb">
+                <span><a href="#">ホーム</a></span> > <span>トップス</span>
+            </div>
+            <h1 class="page-title">トップス</h1>
+
+            <div class="content-wrapper">
+                
+                <aside class="sidebar">
+                    <div class="filter-group category-nav">
+                        <h3>カテゴリ</h3>
+                        <ul>
+                            <li><a href="#">ワンピース</a></li>
+                            <li><a href="#">シューズ</a></li>
+                            </ul>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>ブランド</h3>
+                        <ul>
+                            <li><a href="#">BRAND NAME 1</a></li>
+                            </ul>
+                    </div>
+
+                    <div class="filter-group color-filter">
+                        <h3>カラー</h3>
+                        <div class="color-options">
+                            <label><input type="radio" name="color" value="white" checked><span class="color-swatch white"></span>ホワイト</label>
+                            <label><input type="radio" name="color" value="black"><span class="color-swatch black"></span>ブラック</label>
+                            <label><input type="radio" name="color" value="gray"><span class="color-swatch gray"></span>グレー</label>
+                            <label><input type="radio" name="color" value="green"><span class="color-swatch green"></span>グリーン</label>
+                            <label><input type="radio" name="color" value="blue"><span class="color-swatch blue"></span>ブルー</label>
+                            <label><input type="radio" name="color" value="pink"><span class="color-swatch pink"></span>ピンク</label>
+                            <label><input type="radio" name="color" value="red"><span class="color-swatch red"></span>レッド</label>
+                            <label><input type="radio" name="color" value="yellow"><span class="color-swatch yellow"></span>イエロー</label>
+                            <label><input type="radio" name="color" value="purple"><span class="color-swatch purple"></span>パープル</label>
+                            <label><input type="radio" name="color" value="other"><span class="color-swatch other"></span>その他</label>
+                            <button class="more-colors-toggle">すべて</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-group price-filter">
+                        <h3>価格</h3>
+                        <div class="price-range">
+                            <input type="text" placeholder="最低">
+                            <span>〜</span>
+                            <input type="text" placeholder="最高">
+                        </div>
+                        <button class="filter-apply">絞り込む</button>
+                    </div>
+                </aside>
+
+                <section class="product-grid-section">
+                    
+                    <div class="sort-options">
+                        <select>
+                            <option>新着順</option>
+                            </select>
+                    </div>
+
+                    <div class="products-container">
+                        <div class="product-card">
+                            <img src="https://via.placeholder.com/150x200/cccccc/000000?text=TOP" alt="商品画像">
+                            <p class="product-name">RTS. RM</p>
+                            <p class="product-brand">ブランド名</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card">...</div>
+                        <div class="product-card">...</div>
+                        <div class="product-card">...</div>
+                        <div class="product-card">...</div>
+                        <div class="product-card">...</div>
+                        
+                        <div class="product-card">...</div>
+                        <div class="product-card">...</div>
+                    </div>
+
+                    <div class="pagination">
+                        <button class="page-nav prev">＜</button>
+                        <a href="#" class="page-link active">1</a>
+                        <a href="#" class="page-link">2</a>
+                        <a href="#" class="page-link">3</a>
+                        <span class="page-link ellipsis">...</span>
+                        <a href="#" class="page-link">10</a>
+                        <button class="page-nav next">＞</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo">SUBKARI</div>
+            <div class="social-icons">
+                </div>
+        </div>
+    </footer>
+
+</body>
+</html>
