@@ -223,7 +223,7 @@ CREATE TABLE `t_connection` (
   `execution_id` INT NOT NULL,
   `target_id` INT NOT NULL,
   `Datetime` timestamp default current_timestamp ,
-  `type` ENUM NOT NULL,
+  `type` ENUM('フォロー', 'ブロック') NOT NULL,
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`execution_id`)
