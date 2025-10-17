@@ -11,6 +11,7 @@ CREATE TABLE `m_account` (
   `username` VARCHAR(100) NOT NULL,
   `fullName` VARCHAR(100) NOT NULL,
   `birthday` DATE NOT NULL,
+  `tel` VARCHAR(20) NOT NULL,
   `mail` VARCHAR(255) NOT NULL,
   `smoker` boolean NOT NULL,
   `introduction` TEXT  ,
