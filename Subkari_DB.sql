@@ -120,23 +120,37 @@ CREATE TABLE `m_brand` (
 CREATE TABLE `m_category` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  
+
   PRIMARY KEY (`id`)
 );
 
 -- トップステーブル --------------------------------
-
-
-
-
+CREATE TABLE `m_topsSize` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `shoulderWidth` DECIMAL(5,2) NOT NULL,
+  `bodyWidth` DECIMAL(5,2) NOT NULL,
+  `sleeveLength` DECIMAL(5,2) NOT NULL,
+  `bodyLength` DECIMAL(5,2) NOT NULL,
+  `notes` VARCHAR(255) ,
+  
+  PRIMARY KEY (`id`)
+);
 
 -- ボトムステーブル --------------------------------
+CREATE TABLE `m_bottomsSize` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `hip` DECIMAL(5,2) NOT NULL,
+  `totalLength` DECIMAL(5,2) NOT NULL,
+  `rise` DECIMAL(5,2) NOT NULL,
+  `inseam` DECIMAL(5,2) NOT NULL,
+  `waist` DECIMAL(5,2) NOT NULL,
+  `thighWidth` DECIMAL(5,2) NOT NULL,
+  `hemWidth` DECIMAL(5,2) NOT NULL,
+  `skirtLength` DECIMAL(5,2) NOT NULL,
+  `notes` VARCHAR(255),
 
-
-
-
-
-
+  PRIMARY KEY (`id`)
+);
 
 -- ログインテーブル --------------------------------
 CREATE TABLE `t_login` (
