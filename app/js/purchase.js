@@ -54,12 +54,15 @@ function updatePaymentMethod() {
     
     switch(selectedPaymentMethod) {
         case 'card1':
+            paymentLabel.textContent = 'クレジットカード決済';
             selectedCardElement.textContent = '************1234 01/01';
             break;
         case 'card2':
+            paymentLabel.textContent = 'クレジットカード決済';
             selectedCardElement.textContent = '************1234 02/02';
             break;
         case 'card3':
+            paymentLabel.textContent = 'クレジットカード決済';
             selectedCardElement.textContent = '************1234 03/03';
             break;
         case 'conveni':
