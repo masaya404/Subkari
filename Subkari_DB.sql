@@ -527,6 +527,253 @@ CREATE TABLE `t_time` (
 );
 
 
+--  トリガー作成 ----------------------------------------------------------------
+
+
+
+-- トリガー作成: t_loginに新しい行が挿入された後にt_timeにデータを挿入するトリガー
+-- 文末記号を ; から // に変更します
+DELIMITER //
+
+CREATE TRIGGER trg_after_insert_login
+    AFTER INSERT ON t_login
+    FOR EACH ROW
+BEGIN
+    -- t_timeテーブルに、今挿入された行の情報をINSERTします
+    INSERT INTO t_time (
+        account_id,  -- ログインした人のID
+        login_id     -- 関連するt_loginのID
+    )
+    VALUES (
+        NEW.account_id,  -- 今t_loginに挿入された行の account_id
+        NEW.id           -- 今t_loginに挿入された行の id (主キー)
+    );
+END;
+//
+
+-- 文末記号を // から ; に戻します
+DELIMITER ;
+
+
+-- トリガー作成: t_commentsに新しい行が挿入された後にt_timeにデータを挿入するトリガー
+-- 文末記号を ; から // に変更します
+DELIMITER //
+
+CREATE TRIGGER `trg_notify_favorite_users_on_comment`
+AFTER INSERT ON `t_comments`
+FOR EACH ROW
+BEGIN
+    
+    -- t_timeテーブルにデータを挿入する
+    -- INSERT ... SELECT 構文を使用し、
+    -- t_favoriteテーブルから「NEW.product_id（今回コメントがついた商品ID）」を
+    -- お気に入り登録している全ての「account_id」を取得し、その人たちの分の行を挿入する
+    
+    INSERT INTO `t_time` (
+        `account_id`,       -- お気に入り登録している人のID
+        `comments_id`,      -- 新しく挿入されたコメントのID
+        `product_id`,       -- コメントがついた商品のID
+        `product_change`    -- 変更の種類
+    )
+    SELECT
+        tf.account_id,      -- お気に入り登録しているユーザーのID
+        NEW.id,             -- 挿入された新しいコメントのID
+        NEW.product_id,     -- コメントされた商品のID
+        'コメント'            -- 変更種別
+    FROM
+        `t_favorite` AS tf
+    WHERE
+        tf.product_id = NEW.product_id  -- コメントされた商品IDと一致するお気に入りを探す
+        
+        -- （推奨）コメントした本人には通知しない場合
+        AND tf.account_id != NEW.account_id;
+
+END//
+
+-- 文末記号を // から ; に戻します
+DELIMITER ;
+
+
+
+-- トリガー作成: m_productの価格が変更された後にt_timeにデータを挿入するトリガー
+-- デリミタ（文の終わりを示す記号）を ; から $$ に一時的に変更します
+DELIMITER $$
+
+CREATE TRIGGER `trg_product_price_change`
+AFTER UPDATE ON `m_product`
+FOR EACH ROW
+BEGIN
+
+    -- 変更前(OLD)と変更後(NEW)の価格を比較します
+    -- (NULL<=>NULL は TRUE になるため、NOT (<=>) で NULL <-> 値 の変更も検知します)
+    
+    IF NOT (NEW.purchasePrice <=> OLD.purchasePrice) OR 
+       NOT (NEW.rentalPrice <=> OLD.rentalPrice) THEN
+        
+        -- purchasePrice または rentalPrice のどちらかが変更されていた場合、
+        -- t_time テーブルにデータを挿入します
+        
+        INSERT INTO `t_time` (
+            `account_id`,       -- 商品の所有者のID (t_timeでNOT NULLのため)
+            `product_id`,       -- 変更された商品のID
+            `product_change`    -- 変更内容
+        )
+        VALUES (
+            NEW.account_id,     -- m_product の account_id を設定
+            NEW.id,             -- 変更された商品のID
+            '料金変更'
+        );
+        
+    END IF;
+    
+END$$
+
+-- デリミタを $$ から ; に戻します
+DELIMITER ;
+
+
+-- トリガー作成: t_transactionのstatusが変更された後にt_timeにデータを挿入するトリガー
+-- デリミタ（文の終わりを示す記号）を ; から $$ に一時的に変更します
+DELIMITER $$
+
+CREATE TRIGGER `trg_transaction_status_change`
+AFTER UPDATE ON `t_transaction`
+FOR EACH ROW
+BEGIN
+
+    -- 変更前(OLD)と変更後(NEW)のstatusが異なる場合のみ実行
+    IF OLD.status != NEW.status THEN
+    
+        -- 【1】購入者 (customer_id) の t_time テーブルに挿入
+        INSERT INTO `t_time` (
+            `account_id`,       -- 購入者のID
+            `transaction_id`,   -- 変更があった取引のID
+            `transaction_status`, -- ★ 変更前のステータス
+            `product_change`    -- 変更内容
+        )
+        VALUES (
+            NEW.customer_id,    -- 更新後の行の customer_id
+            NEW.id,             -- 更新された取引の ID
+            OLD.status,         -- ★ 変更前の status
+            '取引状態遷移'
+        );
+        
+        -- 【2】販売者 (seller_id) の t_time テーブルにも挿入
+        -- (もし購入者と販売者が同じIDの場合は、重複挿入を避ける)
+        IF NEW.customer_id != NEW.seller_id THEN
+            INSERT INTO `t_time` (
+                `account_id`,       -- 販売者のID
+                `transaction_id`,   -- 変更があった取引のID
+                `transaction_status`, -- ★ 変更前のステータス
+                `product_change`    -- 変更内容
+            )
+            VALUES (
+                NEW.seller_id,      -- 更新後の行の seller_id
+                NEW.id,             -- 更新された取引の ID
+                OLD.status,         -- ★ 変更前の status
+                '取引状態遷移'
+            );
+        END IF;
+        
+    END IF;
+    
+END$$
+
+-- デリミタを $$ から ; に戻します
+DELIMITER ;
+
+-- トリガー作成: t_messageに新しい行が挿入された後にt_timeにデータを挿入するトリガー
+-- デリミタ（文の終わりを示す記号）を ; から $$ に一時的に変更します
+DELIMITER $$
+
+CREATE TRIGGER `trg_message_to_timeline`
+AFTER INSERT ON `t_message`
+FOR EACH ROW
+BEGIN
+    
+    -- t_message に新しい行が挿入されたら、
+    -- そのメッセージの「受信者(recipient_id)」の t_time テーブルにレコードを挿入します
+    
+    INSERT INTO `t_time` (
+        `account_id`,       -- ★ メッセージ受信者のID
+        `message_id`,       -- 新しいメッセージのID
+        `transaction_id`    -- 関連する取引のID
+    )
+    VALUES (
+        NEW.recipient_id,   -- 挿入されたメッセージの受信者ID
+        NEW.id,             -- 挿入されたメッセージのID
+        NEW.transaction_id  -- 挿入されたメッセージの取引ID
+    );
+
+END$$
+
+-- デリミタを $$ から ; に戻します
+DELIMITER ;
+
+
+-- トリガー作成: t_inquiryのadminAccount_idがNULLからNOT NULLに更新された後にt_timeにデータを挿入するトリガー
+-- デリミタを $$ に変更
+DELIMITER $$
+
+CREATE TRIGGER `trg_inquiry_admin_assigned_update`
+AFTER UPDATE ON `t_inquiry`
+FOR EACH ROW
+BEGIN
+    -- adminAccount_id が NULL から NOT NULL に変更されたかチェック
+    -- (更新前のOLDがNULL かつ 更新後のNEWがNULLでない)
+    IF OLD.adminAccount_id IS NULL AND NEW.adminAccount_id IS NOT NULL THEN
+    
+        -- 送信者 (sender_id) の t_time テーブルに挿入
+        INSERT INTO `t_time` (
+            `account_id`,   -- 送信者のID
+            `inquiry_id`,
+            `product_id`
+        )
+        VALUES (
+            NEW.sender_id,  -- t_time.account_id = t_inquiry.sender_id
+            NEW.id,
+            NEW.product_id
+        );
+        
+    END IF;
+END$$
+
+
+-- デリミタを ; に戻す
+DELIMITER ;
+
+-- トリガー作成: t_evaluationに新しい行が挿入された後にt_timeにデータを挿入するトリガー
+-- デリミタ（文の終わりを示す記号）を ; から $$ に一時的に変更します
+DELIMITER $$
+
+CREATE TRIGGER `trg_evaluation_to_timeline`
+AFTER INSERT ON `t_evaluation`
+FOR EACH ROW
+BEGIN
+    
+    -- t_evaluation に新しい行が挿入されたら、
+    -- その評価の「受信者(recipient_id)」の t_time テーブルにレコードを挿入します
+    
+    INSERT INTO `t_time` (
+        `account_id`,       -- ★ 評価「された」人 (受信者) のID
+        `evaluation_id`,    -- 新しい評価のID
+        `transaction_id`    -- 関連する取引のID
+    )
+    VALUES (
+        NEW.recipient_id,   -- 挿入された評価の受信者ID
+        NEW.id,             -- 挿入された評価のID
+        NEW.transaction_id  -- 挿入された評価の取引ID
+    );
+
+END$$
+
+-- デリミタを $$ から ; に戻します
+DELIMITER ;
+
+
+
+
+
 --  ビュー作成 ----------------------------------------------------------------
 CREATE VIEW v_notice AS 
 SELECT
