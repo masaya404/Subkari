@@ -201,7 +201,7 @@ CREATE TABLE `t_rentalPeriod` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`product_id`)
     REFERENCES `m_product`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE,
+    ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- お気に入りテーブル --------------------------------
@@ -245,7 +245,7 @@ CREATE TABLE `t_creditCard` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `account_id` INT NOT NULL,
   `number` VARCHAR(20) NOT NULL,
-  `expiry` CHAR(5) NOT NULL,                              --有効期限これで大丈夫？
+  `expiry` CHAR(5) NOT NULL,                             
   `holderName` VARCHAR(100) NOT NULL,
   
   PRIMARY KEY (`id`),
