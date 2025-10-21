@@ -271,7 +271,7 @@ CREATE TABLE `t_transaction` (
   `receivedPhoto` VARCHAR(255) NOT NULL,
   `receivedFlg` boolean NOT NULL,
   `rentalPeriod` DATETIME NOT NULL,
-  `creditcards_id` INT ,
+  `creditcard_id` INT ,
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`product_id`)
@@ -283,8 +283,8 @@ CREATE TABLE `t_transaction` (
   FOREIGN KEY (`seller_id`)
     REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE,
-  FOREIGN KEY (`creditcards_id`)
-    REFERENCES `m_creditcards`(`id`)
+  FOREIGN KEY (`creditcard_id`)
+    REFERENCES `t_creditcard`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 -- 履歴テーブル --------------------------------
