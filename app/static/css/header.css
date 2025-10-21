@@ -11,10 +11,13 @@
 
 header{
     background-color: black;
+  
 }
 .header{
     display: flex;
     flex-direction: row wrap;
+    width: 100%;
+    box-sizing: border-box;
 }
 .header-left{
     margin: 0 10%;
@@ -25,11 +28,13 @@ header{
 }
 
 .header-right{
-    padding-top:20px;
+    padding:20px 0px 0 0 ;
     display: flex;
     flex-direction: column;
     margin:0 auto;
     gap:20px;
+    justify-content: flex-end;
+    box-sizing: border-box;
 }
 .header-icons{
     display: flex;
@@ -40,6 +45,10 @@ header{
 .header-icons a{
     text-decoration: none;
 }
+.header-icons span{
+    font-size:1rem;
+    color:white;
+}
 .icon-item{
     display: flex;
     flex-direction: column;
@@ -47,13 +56,19 @@ header{
     /* width: 80px; */
    
 }
-.icon-item i{
-    
+
+.header-login{
+    display: flex;
+    flex-direction: flex nowrap;
+    justify-content: flex-end;
+    gap:26px;
 }
-.icon-item span{
-    font-size: 10px;
+.header-login span{
+    font-size: 1rem;
     text-decoration: none;
     color:white;
+    font-weight:bold;
+    font-family: "Inter";
 }
 
 .nav-container{
