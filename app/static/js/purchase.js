@@ -7,69 +7,69 @@ let addressToDelete = null;
 
 function openPaymentModal(event) {
     event.preventDefault();
-    const modal = document.getElementById('paymentModal');
-    if (modal) modal.classList.add('active');
+    document.getElementById('paymentModal').classList.add('active');
 }
 
 function closePaymentModal() {
-    const modal = document.getElementById('paymentModal');
-    if (modal) modal.classList.remove('active');
+    document.getElementById('paymentModal').classList.remove('active');
 }
 
 function editPaymentMethods(event) {
     event.preventDefault();
-    const paymentModal = document.getElementById('paymentModal');
-    const editModal = document.getElementById('paymentEditModal');
-    if (paymentModal) paymentModal.classList.remove('active');
-    if (editModal) editModal.classList.add('active');
+    document.getElementById('paymentModal').classList.remove('active');
+    document.getElementById('paymentEditModal').classList.add('active');
 }
 
 function closePaymentEditModal() {
-    const modal = document.getElementById('paymentEditModal');
-    if (modal) modal.classList.remove('active');
+    document.getElementById('paymentEditModal').classList.remove('active');
 }
 
 function completePaymentEdit(event) {
     event.preventDefault();
     closePaymentEditModal();
-    const modal = document.getElementById('paymentModal');
-    if (modal) modal.classList.add('active');
+    document.getElementById('paymentModal').classList.add('active');
 }
 
 function selectPayment(method) {
     selectedPaymentMethod = method;
     
-    document.querySelectorAll('.radio-btn').forEach(btn => {
+    // paymentModalとpaymentEditModalの両方のラジオボタンの状態を同期させる
+    document.querySelectorAll('#paymentModal .radio-btn, #paymentEditModal .radio-btn').forEach(btn => {
         btn.classList.remove('selected');
     });
     
     const radioBtn = document.getElementById('radio-' + method);
-    if (radioBtn) {
-        radioBtn.classList.add('selected');
-    }
+    const editRadioBtn = document.getElementById('radio-edit-' + method);
+
+    if (radioBtn) radioBtn.classList.add('selected');
+    if (editRadioBtn) editRadioBtn.classList.add('selected');
 }
 
+// ▼▼▼ 変更点3: このJavaScript関数を全面的に修正しました ▼▼▼
 function updatePaymentMethod() {
-    const selectedCardElement = document.getElementById('selectedCard');
-    
+    const paymentInfoDisplay = document.getElementById('payment-info-display');
+    const paymentSummaryValue = document.getElementById('payment-summary-value');
+
     switch(selectedPaymentMethod) {
         case 'card1':
-            paymentLabel.textContent = 'クレジットカード決済';
-            selectedCardElement.textContent = '************1234 01/01';
+            paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 01/01</div>`;
+            paymentSummaryValue.textContent = 'クレジットカード';
             break;
         case 'card2':
-            paymentLabel.textContent = 'クレジットカード決済';
-            selectedCardElement.textContent = '************1234 02/02';
+            paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 02/02</div>`;
+            paymentSummaryValue.textContent = 'クレジットカード';
             break;
         case 'card3':
-            paymentLabel.textContent = 'クレジットカード決済';
-            selectedCardElement.textContent = '************1234 03/03';
+            paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 03/03</div>`;
+            paymentSummaryValue.textContent = 'クレジットカード';
             break;
         case 'conveni':
-            selectedCardElement.textContent = 'コンビニ支払い';
+            paymentInfoDisplay.innerHTML = 'コンビニ支払い';
+            paymentSummaryValue.textContent = 'コンビニ支払い';
             break;
         case 'paypay':
-            selectedCardElement.textContent = 'PayPay';
+            paymentInfoDisplay.innerHTML = 'PayPay';
+            paymentSummaryValue.textContent = 'PayPay';
             break;
     }
     
@@ -111,49 +111,38 @@ function editCard(event, cardId) {
 function goToCardRegister() {
     closePaymentModal();
     closePaymentEditModal();
-    const page = document.getElementById('cardRegisterPage');
-    if (page) {
-        page.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
+    document.getElementById('cardRegisterPage').style.display = 'block';
+    document.body.style.overflow = 'hidden';
 }
 
 function closeCardRegister() {
-    const page = document.getElementById('cardRegisterPage');
-    if (page) {
-        page.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
+    document.getElementById('cardRegisterPage').style.display = 'none';
+    document.body.style.overflow = 'auto';
 }
 
 function openAddressModal(event) {
     event.preventDefault();
-    const modal = document.getElementById('addressModal');
-    if (modal) modal.classList.add('active');
+    document.getElementById('addressModal').classList.add('active');
 }
 
 function closeAddressModal() {
-    const modal = document.getElementById('addressModal');
-    if (modal) modal.classList.remove('active');
+    document.getElementById('addressModal').classList.remove('active');
 }
 
 function editAddresses(event) {
     event.preventDefault();
-    closeAddressModal();
-    const modal = document.getElementById('addressEditModal');
-    if (modal) modal.classList.add('active');
+    document.getElementById('addressModal').classList.remove('active');
+    document.getElementById('addressEditModal').classList.add('active');
 }
 
 function closeAddressEditModal() {
-    const modal = document.getElementById('addressEditModal');
-    if (modal) modal.classList.remove('active');
+    document.getElementById('addressEditModal').classList.remove('active');
 }
 
 function completeAddressEdit(event) {
     event.preventDefault();
     closeAddressEditModal();
-    const addressModal = document.getElementById('addressModal');
-    if (addressModal) addressModal.classList.add('active');
+    document.getElementById('addressModal').classList.add('active');
 }
 
 function selectAddress(addressId) {
@@ -190,34 +179,7 @@ function confirmDeleteAddress(event, addressId) {
 }
 
 function addNewAddress() {
-    // 住所が3件以上ある場合は制限アラート表示
-    if (true) { // 実際には住所の数をチェック
-        document.getElementById('addressLimitModal').classList.add('active');
-    } else {
-        openAddressRegister();
-    }
-}
-
-function openAddressRegister() {
-    closeAddressModal();
-    closeAddressEditModal();
-    document.getElementById('addressRegisterPage').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-}
-
-function closeAddressRegister() {
-    document.getElementById('addressRegisterPage').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-function closeAddressLimitModal() {
-    document.getElementById('addressLimitModal').classList.remove('active');
-}
-
-function registerNewAddress(e) {
-    e.preventDefault();
-    alert('新しい住所が登録されました');
-    closeAddressRegister();
+    alert('新しい住所登録画面へ遷移します');
 }
 
 function openDeliveryLocationModal(event) {
@@ -311,14 +273,13 @@ document.addEventListener('DOMContentLoaded', function() {
             e.target.value = value;
         });
     }
+});
 
-    // モーダル外クリックで閉じる
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
-            }
-        });
+// モーダル外クリックで閉じる
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('active');
+        }
     });
 });
