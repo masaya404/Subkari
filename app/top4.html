@@ -1,75 +1,78 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>トップス - SUBKARI</title>
-    <link rel="stylesheet" href="css/style copy.css">
+    <link rel="stylesheet" href="css/top2.css">
 </head>
-<body>
 
-    <header class="main-header">
-        <div class="header-top-nav">
-            <div class="search-bar">
-                <input type="text" value="トップス" placeholder="トップスの検索...">
-            </div>
-            <nav class="user-nav">
-                <ul>
-                    <li><a href="#">新規会員登録</a></li>
-                    <li><a href="#">ログイン</a></li>
-                    <li><a href="#">≡</a></li>
-                </ul>
-            </nav>
-        </div>
-        <nav class="header-main-nav">
-            <ul>
-                <li><a href="#">Coordinate</a></li>
-                <li class="active"><a href="#">Tops</a></li>
-                <li><a href="#">Bottoms</a></li>
-                <li><a href="#">...</a></li>
-            </ul>
-        </nav>
-    </header>
+<body>
 
     <main class="product-list-page">
         <div class="container">
             <div class="breadcrumb">
-                <span><a href="#">ホーム</a></span> > <span>トップス</span>
+                <span><a href="#">ホーム</span> > <span>トップス</span></a>
             </div>
-            <h1 class="page-title">トップス</h1>
+            <!-- <h1 class="page-title">ホーム トップス</h1> -->
 
             <div class="content-wrapper">
-                
+
                 <aside class="sidebar">
+                    <h2 class="filter-header">絞り込み</h2>
+
                     <div class="filter-group category-nav">
                         <h3>カテゴリ</h3>
                         <ul>
                             <li><a href="#">ワンピース</a></li>
                             <li><a href="#">シューズ</a></li>
-                            </ul>
+                            <li><a href="#">バッグ</a></li>
+                            <li><a href="#">アクセサリ</a></li>
+                        </ul>
                     </div>
 
                     <div class="filter-group">
                         <h3>ブランド</h3>
-                        <ul>
-                            <li><a href="#">BRAND NAME 1</a></li>
-                            </ul>
+                        <ul class="brand-list" id="brandFilterList">
+                            <li><input type="checkbox" id="brand1"><label for="brand1">TRAVAS TOKYO</label></li>
+                            <li><input type="checkbox" id="brand2"><label for="brand2">REFLEM</label></li>
+                            <li><input type="checkbox" id="brand3"><label for="brand3">CIVARIZE</label></li>
+                            <li><input type="checkbox" id="brand4"><label for="brand4">Amilige</label></li>
+                            <li><input type="checkbox" id="brand5"><label for="brand5">KINGLYMASK</label></li>
+                            <li><input type="checkbox" id="brand6"><label for="brand6">LIZ LISA</label></li>
+                            <li class="hidden-brand"><input type="checkbox" id="brand7"><label
+                                    for="brand7">AnkRouge</label></li>
+                            <li class="hidden-brand"><input type="checkbox" id="brand8"><label for="brand8">BRII</label>
+                            </li>
+                        </ul>
+                        <button class="more-toggle" data-target="brandFilterList">もっと見る</button>
                     </div>
 
                     <div class="filter-group color-filter">
                         <h3>カラー</h3>
-                        <div class="color-options">
-                            <label><input type="radio" name="color" value="white" checked><span class="color-swatch white"></span>ホワイト</label>
-                            <label><input type="radio" name="color" value="black"><span class="color-swatch black"></span>ブラック</label>
-                            <label><input type="radio" name="color" value="gray"><span class="color-swatch gray"></span>グレー</label>
-                            <label><input type="radio" name="color" value="green"><span class="color-swatch green"></span>グリーン</label>
-                            <label><input type="radio" name="color" value="blue"><span class="color-swatch blue"></span>ブルー</label>
-                            <label><input type="radio" name="color" value="pink"><span class="color-swatch pink"></span>ピンク</label>
-                            <label><input type="radio" name="color" value="red"><span class="color-swatch red"></span>レッド</label>
-                            <label><input type="radio" name="color" value="yellow"><span class="color-swatch yellow"></span>イエロー</label>
-                            <label><input type="radio" name="color" value="purple"><span class="color-swatch purple"></span>パープル</label>
-                            <label><input type="radio" name="color" value="other"><span class="color-swatch other"></span>その他</label>
-                            <button class="more-colors-toggle">すべて</button>
+                        <div class="color-options" id="colorFilterOptions">
+                            <label><input type="checkbox" name="color" value="white" checked><span
+                                    class="color-swatch white"></span>ホワイト</label>
+                            <label><input type="checkbox" name="color" value="black"><span
+                                    class="color-swatch black"></span>ブラック</label>
+                            <label><input type="checkbox" name="color" value="gray"><span
+                                    class="color-swatch gray"></span>グレー</label>
+                            <label><input type="checkbox" name="color" value="green"><span
+                                    class="color-swatch green"></span>グリーン</label>
+                            <label><input type="checkbox" name="color" value="blue"><span
+                                    class="color-swatch blue"></span>ブルー</label>
+                            <label class="hidden-color"><input type="checkbox" name="color" value="pink"><span
+                                    class="color-swatch pink"></span>ピンク</label>
+                            <label class="hidden-color"><input type="checkbox" name="color" value="red"><span
+                                    class="color-swatch red"></span>レッド</label>
+                            <label class="hidden-color"><input type="checkbox" name="color" value="yellow"><span
+                                    class="color-swatch yellow"></span>イエロー</label>
+                            <label class="hidden-color"><input type="checkbox" name="color" value="purple"><span
+                                    class="color-swatch purple"></span>パープル</label>
+                            <label class="hidden-color"><input type="checkbox" name="color" value="other"><span
+                                    class="color-swatch other"></span>その他</label>
+                            <button class="more-colors-toggle" data-target="colorFilterOptions">すべて</button>
                         </div>
                     </div>
 
@@ -85,28 +88,264 @@
                 </aside>
 
                 <section class="product-grid-section">
-                    
+
                     <div class="sort-options">
                         <select>
                             <option>新着順</option>
-                            </select>
+                            <option>価格の安い順</option>
+                        </select>
                     </div>
 
                     <div class="products-container">
-                        <div class="product-card">
-                            <img src="https://via.placeholder.com/150x200/cccccc/000000?text=TOP" alt="商品画像">
-                            <p class="product-name">RTS. RM</p>
-                            <p class="product-brand">ブランド名</p>
+
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
                             <p class="product-price">¥11,500</p>
                         </div>
-                        <div class="product-card">...</div>
-                        <div class="product-card">...</div>
-                        <div class="product-card">...</div>
-                        <div class="product-card">...</div>
-                        <div class="product-card">...</div>
-                        
-                        <div class="product-card">...</div>
-                        <div class="product-card">...</div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+                        <div class="product-card"><img src="img/image 67.png" alt="商品画像">
+                            <p class="product-name">REFLREM</p>
+                            <p class="product-brand">トップス</p>
+                            <p class="product-price">¥11,500</p>
+                        </div>
+
                     </div>
 
                     <div class="pagination">
@@ -114,22 +353,13 @@
                         <a href="#" class="page-link active">1</a>
                         <a href="#" class="page-link">2</a>
                         <a href="#" class="page-link">3</a>
-                        <span class="page-link ellipsis">...</span>
-                        <a href="#" class="page-link">10</a>
                         <button class="page-nav next">＞</button>
                     </div>
                 </section>
             </div>
         </div>
     </main>
-
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-logo">SUBKARI</div>
-            <div class="social-icons">
-                </div>
-        </div>
-    </footer>
-
+    <script src="js/top2.js"></script>
 </body>
+
 </html>
