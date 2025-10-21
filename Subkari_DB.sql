@@ -99,7 +99,7 @@ CREATE TABLE `m_adminAccount` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `fullName` VARCHAR(100) NOT NULL,
   `level` ENUM('administrator','operator') NOT NULL,
-  `creationDate` timestamp default current_timestamp ,
+  `created_at` timestamp default current_timestamp ,
   `lastLogin` timestamp default current_timestamp on update current_timestamp,
   `password` VARCHAR(255) NOT NULL,
   
