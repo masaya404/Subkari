@@ -8,18 +8,6 @@ import os
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-#session確認し、ログイン状態に応じてindex.html表示------------------------------------------------------------------------------------------------------------------------
-@auth_bp.route('/',methods=['GET'])
-def index():
-    if 'ID' in session:
-        user = session.get('ID')
-    else :
-        user = None
-    if 'authority' in session:
-        authority = session.get('authority')
-    else :
-        authority = 1   
-    return render_template('index.html',user=user,authority=authority)
 
 #Login画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
 @auth_bp.route('/login',methods=['GET'])

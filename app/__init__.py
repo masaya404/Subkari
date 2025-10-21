@@ -2,7 +2,7 @@
 # Filename      : app/__init__.py
 # Descriptions  : Application Factory
 # ==========================================================
-from flask import Flask,make_response, render_template,request
+from flask import Flask,make_response, render_template,request,session
 from config import Config
 
 def create_app():
@@ -24,14 +24,13 @@ def create_app():
     # --- トップページのルートをここで定義 ---
     @app.route('/')
     def index():
-        #cookieの登録資料まず確認
-        username=request.cookies.get('username')
+        #sessionの登録資料まず確認
+        if 'ID' in session:
+            user = session.get('ID')
+        else :
+            user = None
         
-        #cookieの登録資料がない
-        if not username:
-            username=None
-       
-        resp=make_response(render_template('index.html',username=username))
+        resp=make_response(render_template('index.html',user=user))
         return resp
-    
+        
     return app
