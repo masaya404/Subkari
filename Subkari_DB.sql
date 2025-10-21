@@ -178,6 +178,19 @@ CREATE TABLE `t_login` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- 管理者ログインテーブル --------------------------------
+CREATE TABLE `t_adminLogin` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `adminAccount_id` INT NOT NULL,
+  `loginDatetime` DATETIME,
+  `logoutDatetime` DATETIME,
+  `flag` tinyint not null,
+
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`adminAccount_id`)
+    REFERENCES `m_adminAccount`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+);
 -- レンタル期間テーブル ---------------------------------------
 CREATE TABLE `t_rentalPeriod` (
   `id` INT NOT NULL,
