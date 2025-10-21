@@ -520,3 +520,63 @@ CREATE TABLE `t_time` (
     REFERENCES `t_evaluation`(`evaluation_id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+
+CREATE VIEW v_notice AS 
+SELECT
+    -- (1) 主役となる t_time のカラム
+    ttm.created_at,  -- (並び替えの基準)
+    ttm.transaction_status,
+    ttm.product_change,
+
+    -- (2) t_transaction (取引) のカラム
+    ttr.date AS transaction_date,
+    ttr.paymentDeadline,
+    ttr.rentalPeriod,
+    
+    -- (3) t_alert (アラート) のカラム
+    ta.category AS alert_category,
+    
+    -- (4) m_product (商品) のカラム
+    mp.purchasePrice,
+    mp.rentalPrice,
+    
+    -- (5) m_account (ユーザー) のカラム
+    ma.id AS user_account_id,
+    
+    -- (6) どのイベントかを識別するためのID (デバッグ・処理分岐用)
+    ttm.id AS time_id,
+    ttm.transaction_id,
+    ttm.alert_id,
+    ttm.comments_id,
+    ttm.product_id
+
+FROM
+    t_time AS ttm  -- (A) 主役のテーブル
+
+-- (B) ユーザー情報を結合
+LEFT JOIN
+    m_account AS ma ON ttm.account_id = ma.id
+
+-- (C) 取引情報を結合
+LEFT JOIN
+    t_transaction AS ttr ON ttm.transaction_id = ttr.id
+
+-- (D) アラート情報を結合 (t_time の alert_id が t_alert の id を参照すると仮定)
+LEFT JOIN
+    t_alert AS ta ON ttm.alert_id = ta.id
+
+-- (E) コメント情報を結合 (前回のテーブル定義より)
+LEFT JOIN
+    t_comments AS tc ON ttm.comments_id = tc.id
+
+-- (F) 商品情報を結合 (※最重要ポイント)
+LEFT JOIN
+    m_product AS mp ON ttm.product_id = mp.id
+WHERE
+    -- (G) 特定のユーザーの通知一覧を指定
+    ttm.account_id = 123  -- (例: ログイン中のユーザーIDが123)
+
+ORDER BY
+    -- (H) 時系列順 (新しい順) に並び替え
+    ttm.created_at DESC
