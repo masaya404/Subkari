@@ -168,10 +168,10 @@ CREATE TABLE `m_bottomsSize` (
 CREATE TABLE `t_login` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `account_id` INT NOT NULL,
-  `loginDatetime` timestamp default current_timestamp on update current_timestamp ,
-  `logoutDatetime` timestamp default current_timestamp on update current_timestamp,
+  `loginDatetime` DATETIME NULL,
+  `logoutDatetime` DATETIME NULL,
   `notice` boolean,
-
+  `flag` boolean ,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`)
     REFERENCES `m_account`(`id`)
@@ -480,8 +480,8 @@ CREATE TABLE `t_time` (
   `evaluation_id` INT NULL,
   `product_change` ENUM('料金変更','取引状態遷移','コメント') NULL,
 
-  `updated_at`
-  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at`
+  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`)
