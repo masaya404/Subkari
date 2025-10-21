@@ -111,7 +111,7 @@ CREATE TABLE `m_adminAccount` (
 CREATE TABLE `m_admin_contents` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  `content_detail` TEXT NOT NULL,                       --この形式後で要調査
+  `content_detail` TEXT NOT NULL,                      
   `created_at` timestamp default current_timestamp ,
   `updated_at` timestamp default current_timestamp on update current_timestamp,
   
