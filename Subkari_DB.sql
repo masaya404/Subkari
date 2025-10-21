@@ -522,6 +522,7 @@ CREATE TABLE `t_time` (
 );
 
 
+--  ビュー作成 ----------------------------------------------------------------
 CREATE VIEW v_notice AS 
 SELECT
     -- (1) 主役となる t_time のカラム
@@ -580,3 +581,146 @@ WHERE
 ORDER BY
     -- (H) 時系列順 (新しい順) に並び替え
     ttm.created_at DESC
+
+
+
+-- ダッシュボード ---------------------------------------------------
+-- 今週の新規ユーザー数  
+create view v_weekly_new_users
+select  count(*) as 今週の新規ユーザー数
+from m_account
+where datediff(date_sub(curdate(),interval(weekday(curdate())) day),created_at)<7
+;
+
+-- 新規ユーザー数先週比 
+create view v_compare_1_week_ago_new_users
+SELECT
+  ROUND(
+
+    SUM(CASE WHEN YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END)
+
+    / NULLIF(SUM(CASE WHEN YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1) - 1 THEN 1 ELSE 0 END), 0)
+
+    * 100, 1
+
+  ) AS 先週比
+
+FROM m_account;
+
+-- WL
+create view v_weekly_listing
+select  count(*) as 今週の出品数
+from m_product
+where datediff(date_sub(curdate(),interval(weekday(curdate())) day),upload)<7
+;
+
+-- WL先週比
+create view v_compare_1_week_ago_listing
+SELECT
+  ROUND(
+
+    SUM(CASE WHEN YEARWEEK(upload, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END)
+
+    / NULLIF(SUM(CASE WHEN YEARWEEK(upload, 1) = YEARWEEK(CURDATE(), 1) - 1 THEN 1 ELSE 0 END), 0)
+
+    * 100, 1
+
+  ) AS 先週比
+
+
+-- WAU 
+create view v_weekly_active_users
+select  count(*) as 今週のアクティブユーザー数
+from t_login
+where datediff(date_sub(curdate(),interval(weekday(curdate())) day),loginDatetime)<7
+;
+
+-- MAU 
+create view v_monthly_active_users
+select 
+date_format(loginDatetime,'%Y-%m') as  month,count(distinct account_id) as MAU
+from t_login
+where loginDatetime>=date_format(date_sub(curdate(),interval 6 month),'%Y-%m-01')
+group by month
+order by month; 
+
+
+
+-- 通報未対応 
+create view v_report_unchecked
+select count(*) as 未対応通報
+from t_report
+where category='通報' and situation = '未対応'
+;
+-- お問い合わせ未対応 
+create view v_inquiry_unchecked
+select count(*)
+from t_inquiry
+where situation = '未対応'
+
+-- 本人確認依頼 
+create view v_identify_offer
+select count(*)
+from m_account
+where  identifyOffer='0'
+
+
+
+
+-- 地域別ユーザー数 
+create view v_region_new_users
+SELECT
+  DATE_FORMAT(a.created_at, '%Y-%m') AS month,
+  SUM(CASE WHEN region = '北海道' THEN 1 ELSE 0 END) AS 北海道,
+  SUM(CASE WHEN region = '東北' THEN 1 ELSE 0 END) AS 東北,
+  SUM(CASE WHEN region = '関東' THEN 1 ELSE 0 END) AS 関東,
+  SUM(CASE WHEN region = '中部' THEN 1 ELSE 0 END) AS 中部,
+  SUM(CASE WHEN region = '近畿' THEN 1 ELSE 0 END) AS 近畿,
+  SUM(CASE WHEN region = '中国' THEN 1 ELSE 0 END) AS 中国,
+  SUM(CASE WHEN region = '四国' THEN 1 ELSE 0 END) AS 四国,
+  SUM(CASE WHEN region = '九州' THEN 1 ELSE 0 END) AS 九州
+FROM (
+  SELECT
+    a.id,
+    a.created_at,
+    CASE
+      WHEN addr.pref = '北海道' THEN '北海道'
+      WHEN addr.pref IN ('青森県','岩手県','宮城県','秋田県','山形県','福島県') THEN '東北'
+      WHEN addr.pref IN ('茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県') THEN '関東'
+      WHEN addr.pref IN ('新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県') THEN '中部'
+      WHEN addr.pref IN ('三重県','滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県') THEN '近畿'
+      WHEN addr.pref IN ('鳥取県','島根県','岡山県','広島県','山口県') THEN '中国'
+      WHEN addr.pref IN ('徳島県','香川県','愛媛県','高知県') THEN '四国'
+      WHEN addr.pref IN ('福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県') THEN '九州'
+      ELSE '不明'
+    END AS region
+  FROM
+    m_account a
+    INNER JOIN t_address addr ON a.id = addr.account_id
+  WHERE a.status not in('削除','強制削除') and
+    a.created_at >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH), '%Y-%m-01')
+) AS region_data
+GROUP BY
+  DATE_FORMAT(created_at, '%Y-%m')
+ORDER BY
+  month;
+
+
+-- 年代別新規ユーザー数 
+create view v_age_group_new_users
+SELECT
+  DATE_FORMAT(a.created_at, '%Y-%m') AS month,
+  SUM(CASE WHEN TIMESTAMPDIFF(YEAR, a.birthday, CURDATE()) < 20 THEN 1 ELSE 0 END) AS "0〜19歳",
+  SUM(CASE WHEN TIMESTAMPDIFF(YEAR, a.birthday, CURDATE()) BETWEEN 20 AND 29 THEN 1 ELSE 0 END) AS "20代",
+  SUM(CASE WHEN TIMESTAMPDIFF(YEAR, a.birthday, CURDATE()) BETWEEN 30 AND 39 THEN 1 ELSE 0 END) AS "30代",
+  SUM(CASE WHEN TIMESTAMPDIFF(YEAR, a.birthday, CURDATE()) BETWEEN 40 AND 49 THEN 1 ELSE 0 END) AS "40代",
+  SUM(CASE WHEN TIMESTAMPDIFF(YEAR, a.birthday, CURDATE()) BETWEEN 50 AND 59 THEN 1 ELSE 0 END) AS "50代",
+  SUM(CASE WHEN TIMESTAMPDIFF(YEAR, a.birthday, CURDATE()) >= 60 THEN 1 ELSE 0 END) AS "60代以上"
+FROM
+  m_account a
+where status not in("削除","強制削除")
+  AND a.created_at >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH), '%Y-%m-01')
+GROUP BY
+  month
+ORDER BY
+  month;
