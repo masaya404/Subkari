@@ -34,16 +34,16 @@ CREATE TABLE `m_account` (
 );
 
 -- 住所テーブル -----------------------------------
-CREATE TABLE `m_account` (
+CREATE TABLE `m_address` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `account_id` INT NOT NULL,
   `zip` CHAR(8) NOT NULL,
-  `pref` VARCHAR NOT(255) NULL,
+  `pref` VARCHAR (255) NOT NULL,
   `address1` VARCHAR(255) NOT NULL,
   `address2` VARCHAR(255) NOT NULL,
   `address3` VARCHAR(255) NOT NULL,
   
-  PRIMARY KEY (`id`,`account_id`)
+  PRIMARY KEY (`id`,`account_id`),
   FOREIGN KEY (`account_id`)
     REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
@@ -76,7 +76,7 @@ CREATE TABLE `m_product` (
   `upload` DATE NOT NULL,
   `showing` ENUM('公開','非公開','非表示') NOT NULL,
   `draft` boolean NOT NULL,
-  `update` DATETIME NOT NULL,
+  `updateDate` DATETIME NOT NULL,
   `purchaseFlg` boolean NOT NULL,
   `rentalFlg` boolean NOT NULL,
   `explanation` TEXT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE `m_product` (
   `cleanNotes` TEXT ,
   `smokingFlg` boolean NOT NULL,
 
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
   FOREIGN KEY (`brand_id`)
     REFERENCES `m_brand`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
@@ -281,7 +281,7 @@ CREATE TABLE `t_comments` (
   `account_id` INT NOT NULL,
   `content` TEXT NOT NULL,
   `createdDate` timestamp default current_timestamp ,
-  `product_id` INT,
+  `product_id` INT ,
   
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`)
