@@ -254,7 +254,39 @@ CREATE TABLE `t_creditCard` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- 取引テーブル ---------------------------------
+CREATE TABLE `t_transaction` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `product_id` INT NOT NULL,
+  `customer_id` INT NOT NULL,
+  `seller_id` INT NOT NULL,
+  `status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','発送待ち','取引完了') NOT NULL,
+  `situation` ENUM('購入','レンタル') NOT NULL,
+  `paymentMethod` ENUM('クレジットカード','PayPay','コンビニ払い') NOT NULL,
+  `date` timestamp default current_timestamp ,
+  `paymentDeadline` DATETIME NOT NULL,
+  `shippingAddress` VARCHAR(255) NOT NULL,
+  `shippingPhoto` VARCHAR(255) NOT NULL,
+  `shippingFlg` boolean NOT NULL,
+  `receivedPhoto` VARCHAR(255) NOT NULL,
+  `receivedFlg` boolean NOT NULL,
+  `rentalPeriod` DATETIME NOT NULL,
+  `creditcards_id` INT ,
 
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`product_id`)
+    REFERENCES `m_product`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (`customer_id`)
+    REFERENCES `m_account`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (`seller_id`)
+    REFERENCES `m_account`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (`creditcards_id`)
+    REFERENCES `m_creditcards`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+);
 -- 履歴テーブル --------------------------------
 CREATE TABLE `t_history` (
   `id` INT AUTO_INCREMENT NOT NULL,
@@ -347,39 +379,7 @@ CREATE TABLE `t_alert` (
 
 
 
--- 取引テーブル ---------------------------------
-CREATE TABLE `t_transaction` (
-  `id` INT AUTO_INCREMENT NOT NULL,
-  `product_id` INT NOT NULL,
-  `customer_id` INT NOT NULL,
-  `seller_id` INT NOT NULL,
-  `status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','発送待ち','取引完了') NOT NULL,
-  `situation` ENUM('購入','レンタル') NOT NULL,
-  `paymentMethod` ENUM('クレジットカード','PayPay','コンビニ払い') NOT NULL,
-  `date` timestamp default current_timestamp ,
-  `paymentDeadline` DATETIME NOT NULL,
-  `shippingAddress` VARCHAR(255) NOT NULL,
-  `shippingPhoto` VARCHAR(255) NOT NULL,
-  `shippingFlg` boolean NOT NULL,
-  `receivedPhoto` VARCHAR(255) NOT NULL,
-  `receivedFlg` boolean NOT NULL,
-  `rentalPeriod` DATETIME NOT NULL,
-  `creditcards_id` INT ,
 
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`product_id`)
-    REFERENCES `m_product`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE,
-  FOREIGN KEY (`customer_id`)
-    REFERENCES `m_account`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE,
-  FOREIGN KEY (`seller_id`)
-    REFERENCES `m_account`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE,
-  FOREIGN KEY (`creditcards_id`)
-    REFERENCES `m_creditcards`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
-);
 
 -- 取引メッセージ ------------------------------------
 CREATE TABLE `t_message` (
