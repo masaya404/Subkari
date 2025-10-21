@@ -1,18 +1,23 @@
-
-{% extends "base.html" %}
-{% block title %}購入の確認 - SUBKARI
-<link rel="stylesheet" href="../../static/css/purchase.css">
-
-{% endblock %}
-
-{% block content %}
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>購入の確認 - SUBKARI</title>
+    <link rel="stylesheet" href="../../static/css/purchase.css">
+    
+</head>
+<body>
+    <!-- <header>
+        <div class="logo">SUBKARI</div>
+    </header> -->
 
     <div class="container">
         <h1>購入の確認</h1>
 
         <div class="content-wrapper">
             <div class="left-column">
+                <!-- 商品情報 -->
                 <div class="section">
                     <div class="product-info">
                         <div class="product-image"></div>
@@ -23,17 +28,19 @@
                     </div>
                 </div>
 
+                <!-- 支払い方法 -->
                 <div class="section">
                     <div class="section-header">
                         <h2 class="section-title">支払い方法</h2>
                         <a href="#" class="change-btn" onclick="openPaymentModal(event)">変更する</a>
                     </div>
-                    <div class="payment-info" id="payment-info-display">
+                    <div class="payment-info">
                         クレジットカード決済
                         <div class="masked-card" id="selectedCard">************1234 01/01</div>
                     </div>
                 </div>
 
+                <!-- 配送先 -->
                 <div class="section">
                     <div class="section-header">
                         <h2 class="section-title">配送先</h2>
@@ -46,6 +53,7 @@
                     </div>
                 </div>
 
+                <!-- 置き配の指定 -->
                 <div class="section">
                     <div class="section-header">
                         <h2 class="section-title">置き配の指定</h2>
@@ -65,7 +73,7 @@
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">お支払い方法</span>
-                         <span class="summary-value" id="payment-summary-value">クレジットカード</span>
+                        <span class="summary-value">クレジットカード</span>
                     </div>
                 </div>
 
@@ -78,7 +86,7 @@
         </div>
     </div>
 
-    <footer>
+    <!-- <footer>
         <div class="footer-content">
             <div class="footer-links">
                 <a href="#">初めての方へ</a>
@@ -93,7 +101,54 @@
             </div>
         </div>
     </footer>
+ -->
+    <!-- カード登録ページオーバーレイ -->
+    <div class="card-register-overlay" id="cardRegisterPage">
+        <div class="card-register-header">
+            <div class="logo">SUBKARI</div>
+            <a class="back-link" onclick="closeCardRegister()">← 戻る</a>
+        </div>
+        <div class="card-register-container-inner">
+            <div class="card-register-content">
+                <h2 class="card-register-title">クレジットカードの登録</h2>
 
+                <div class="card-brands-section">
+                    <div class="card-brands-label">利用可能なクレジットカード</div>
+                    <div class="card-logos">
+                        <span class="visa-logo">VISA</span>
+                        <div class="mastercard-logo"></div>
+                        <span class="jcb-logo">JCB</span>
+                        <span class="amex-logo">AMEX</span>
+                    </div>
+                </div>
+
+                <form onsubmit="registerNewCard(event)">
+                    <div class="form-group">
+                        <label class="form-label">カード番号</label>
+                        <input type="text" class="form-input" placeholder="0000 0000 0000 0000" maxlength="19" id="newCardNumber">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">有効期限</label>
+                        <input type="text" class="form-input" placeholder="MM/YY" maxlength="5" id="newCardExpiry">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">セキュリティコード</label>
+                        <input type="text" class="form-input" placeholder="3桁または4桁の番号" maxlength="4" id="newSecurityCode">
+                        <div class="security-help" onclick="openSecurityHelp()">
+                            <span>セキュリティコードとは</span>
+                            <div class="help-icon">?</div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="register-btn">登録する</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 支払い方法モーダル -->
     <div class="modal" id="paymentModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -101,6 +156,7 @@
                 <a href="#" class="edit-link" onclick="editPaymentMethods(event)">編集する</a>
             </div>
             <div class="modal-body">
+                <!-- クレジットカード1 -->
                 <div class="payment-option" onclick="selectPayment('card1')">
                     <div class="radio-btn selected" id="radio-card1"></div>
                     <div class="payment-details">
@@ -108,6 +164,7 @@
                     </div>
                 </div>
 
+                <!-- クレジットカード2 -->
                 <div class="payment-option" onclick="selectPayment('card2')">
                     <div class="radio-btn" id="radio-card2"></div>
                     <div class="payment-details">
@@ -115,6 +172,7 @@
                     </div>
                 </div>
 
+                <!-- クレジットカード3 -->
                 <div class="payment-option" onclick="selectPayment('card3')">
                     <div class="radio-btn" id="radio-card3"></div>
                     <div class="payment-details">
@@ -122,16 +180,19 @@
                     </div>
                 </div>
 
+                <!-- 新しいクレジットカード追加 -->
                 <div class="add-card-link" onclick="goToCardRegister()">
                     <div class="add-icon">+</div>
                     <span>新しいクレジットカードを登録する</span>
                 </div>
 
+                <!-- コンビニ支払い -->
                 <div class="payment-method-item" onclick="selectPayment('conveni')">
                     <div class="radio-btn" id="radio-conveni"></div>
                     <div class="payment-method-name">コンビニ支払い</div>
                 </div>
 
+                <!-- PayPay -->
                 <div class="payment-method-item" onclick="selectPayment('paypay')">
                     <div class="radio-btn" id="radio-paypay"></div>
                     <div class="payment-method-name">PayPay</div>
@@ -143,6 +204,7 @@
         </div>
     </div>
 
+    <!-- 支払い方法編集モーダル -->
     <div class="modal" id="paymentEditModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -150,6 +212,7 @@
                 <a href="#" class="edit-link" onclick="completePaymentEdit(event)">完了する</a>
             </div>
             <div class="modal-body">
+                <!-- クレジットカード1 -->
                 <div class="payment-option" onclick="selectPayment('card1')">
                     <div class="radio-btn selected" id="radio-edit-card1"></div>
                     <div class="payment-details">
@@ -158,6 +221,7 @@
                     <button class="delete-btn" onclick="confirmDeleteCard(event, 'card1')">削除する</button>
                 </div>
 
+                <!-- クレジットカード2 -->
                 <div class="payment-option" onclick="selectPayment('card2')">
                     <div class="radio-btn" id="radio-edit-card2"></div>
                     <div class="payment-details">
@@ -166,6 +230,7 @@
                     <button class="delete-btn" onclick="confirmDeleteCard(event, 'card2')">削除する</button>
                 </div>
 
+                <!-- クレジットカード3 -->
                 <div class="payment-option" onclick="selectPayment('card3')">
                     <div class="radio-btn" id="radio-edit-card3"></div>
                     <div class="payment-details">
@@ -174,16 +239,19 @@
                     <button class="delete-btn" onclick="confirmDeleteCard(event, 'card3')">削除する</button>
                 </div>
 
+                <!-- 新しいクレジットカード追加 -->
                 <div class="add-card-link" onclick="goToCardRegister()">
                     <div class="add-icon">+</div>
                     <span>新しいクレジットカードを登録する</span>
                 </div>
 
+                <!-- コンビニ支払い -->
                 <div class="payment-method-item" onclick="selectPayment('conveni')">
                     <div class="radio-btn" id="radio-edit-conveni"></div>
                     <div class="payment-method-name">コンビニ支払い</div>
                 </div>
 
+                <!-- PayPay -->
                 <div class="payment-method-item" onclick="selectPayment('paypay')">
                     <div class="radio-btn" id="radio-edit-paypay"></div>
                     <div class="payment-method-name">PayPay</div>
@@ -195,6 +263,7 @@
         </div>
     </div>
 
+    <!-- 削除確認モーダル -->
     <div class="modal" id="deleteConfirmModal">
         <div class="confirm-modal">
             <p class="confirm-modal-text">この項目を削除しますか？</p>
@@ -205,6 +274,7 @@
         </div>
     </div>
 
+    <!-- 置き配指定モーダル -->
     <div class="modal" id="deliveryLocationModal">
         <div class="modal-content">
             <div class="modal-header" style="position: relative;">
@@ -247,6 +317,7 @@
         </div>
     </div>
 
+    <!-- 配送先住所一覧モーダル -->
     <div class="modal" id="addressModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -254,6 +325,7 @@
                 <a href="#" class="edit-link" onclick="editAddresses(event)">編集する</a>
             </div>
             <div class="modal-body">
+                <!-- 住所1 -->
                 <div class="address-option" onclick="selectAddress('address1')">
                     <div class="radio-btn selected" id="radio-address1"></div>
                     <div class="address-details">
@@ -263,6 +335,7 @@
                     </div>
                 </div>
 
+                <!-- 住所2 -->
                 <div class="address-option" onclick="selectAddress('address2')">
                     <div class="radio-btn" id="radio-address2"></div>
                     <div class="address-details">
@@ -272,6 +345,7 @@
                     </div>
                 </div>
 
+                <!-- 住所3 -->
                 <div class="address-option" onclick="selectAddress('address3')">
                     <div class="radio-btn" id="radio-address3"></div>
                     <div class="address-details">
@@ -281,11 +355,13 @@
                     </div>
                 </div>
 
+                <!-- 新しい住所追加 -->
                 <div class="add-card-link" onclick="addNewAddress()">
                     <div class="add-icon">+</div>
                     <span>新しい住所を登録する</span>
                 </div>
 
+                <!-- 警告文 -->
                 <div class="warning-notice">
                     <span class="warning-icon">⚠</span>
                     <span>「新しい住所を登録」に郵便局/コンビニの住所を設定されても、商品を受取ることはできません</span>
@@ -297,6 +373,7 @@
         </div>
     </div>
 
+    <!-- 配送先住所編集モーダル -->
     <div class="modal" id="addressEditModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -304,6 +381,7 @@
                 <a href="#" class="edit-link" onclick="completeAddressEdit(event)">完了する</a>
             </div>
             <div class="modal-body">
+                <!-- 住所1 -->
                 <div class="address-option" onclick="selectAddress('address1')">
                     <div class="radio-btn selected" id="radio-edit-address1"></div>
                     <div class="address-details">
@@ -316,6 +394,7 @@
                     </div>
                 </div>
 
+                <!-- 住所2 -->
                 <div class="address-option" onclick="selectAddress('address2')">
                     <div class="radio-btn" id="radio-edit-address2"></div>
                     <div class="address-details">
@@ -328,6 +407,7 @@
                     </div>
                 </div>
 
+                <!-- 住所3 -->
                 <div class="address-option" onclick="selectAddress('address3')">
                     <div class="radio-btn" id="radio-edit-address3"></div>
                     <div class="address-details">
@@ -340,11 +420,13 @@
                     </div>
                 </div>
 
+                <!-- 新しい住所追加 -->
                 <div class="add-card-link" onclick="addNewAddress()">
                     <div class="add-icon">+</div>
                     <span>新しい住所を登録する</span>
                 </div>
 
+                <!-- 警告文 -->
                 <div class="warning-notice">
                     <span class="warning-icon">⚠</span>
                     <span>「新しい住所を登録」に郵便局/コンビニの住所を設定されても、商品を受取ることはできません</span>
@@ -356,6 +438,7 @@
         </div>
     </div>
 
+    <!-- セキュリティコード説明モーダル -->
     <div class="modal" id="securityHelpModal">
         <div class="security-modal-content">
             <button class="close-btn" onclick="closeSecurityHelp()" style="position: absolute;">×</button>
@@ -376,6 +459,7 @@
             </div>
         </div>
     </div>
-    <script src="../../static/js/purchase.js"></script>
-
-{% endblock %}
+    <script src="../../js/purchase.js"></script>
+    
+</body>
+</html>
