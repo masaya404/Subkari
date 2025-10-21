@@ -49,6 +49,22 @@ CREATE TABLE `m_account` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- ブランドテーブル -------------------------------------
+CREATE TABLE `m_brand` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  
+  PRIMARY KEY (`id`)
+);
+
+-- カテゴリテーブル -------------------------------------
+CREATE TABLE `m_category` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+
+  PRIMARY KEY (`id`)
+);
+
 -- 商品テーブル ------------------------------------
 CREATE TABLE `m_product` (
   `id` INT AUTO_INCREMENT NOT NULL,
@@ -120,21 +136,6 @@ CREATE TABLE `m_admin_contents` (
 );
 
 
--- ブランドテーブル -------------------------------------
-CREATE TABLE `m_brand` (
-  `id` INT AUTO_INCREMENT NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-  
-  PRIMARY KEY (`id`)
-);
-
--- カテゴリテーブル -------------------------------------
-CREATE TABLE `m_category` (
-  `id` INT AUTO_INCREMENT NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-
-  PRIMARY KEY (`id`)
-);
 
 -- トップステーブル --------------------------------
 CREATE TABLE `m_topsSize` (
@@ -315,7 +316,7 @@ CREATE TABLE `t_alert` (
   `product_id` INT,
   `content` TEXT ,
   `category` ENUM ('通報','警告') ,
-  `reportDate` timestamp default current_timestamp ,
+  `reportDate` datetime , 
   `comments_id` INT,
   `account_id` INT,
   `transaction_id` INT,
