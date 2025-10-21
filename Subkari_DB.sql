@@ -490,35 +490,35 @@ CREATE TABLE `t_time` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 
   FOREIGN KEY (`login_id`)
-    REFERENCES `t_login`(`login_id`)
+    REFERENCES `t_login`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 
       FOREIGN KEY (`comments_id`)
-    REFERENCES `t_comments`(`comments_id`)
+    REFERENCES `t_comments`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 
       FOREIGN KEY (`alert_id`)
-    REFERENCES `m_alert`(`alert_id`)
+    REFERENCES `m_alert`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 
       FOREIGN KEY (`product_id`)
-    REFERENCES `m_product`(`product_id`)
+    REFERENCES `m_product`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 
       FOREIGN KEY (`message_id`)
-    REFERENCES `t_message`(`message_id`)
+    REFERENCES `t_message`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 
       FOREIGN KEY (`inquiry_id`)
-    REFERENCES `t_inquiry`(`inquiry_id`)
+    REFERENCES `t_inquiry`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 
           FOREIGN KEY (`transaction_id`)
-    REFERENCES `t_transaction`(`transaction_id`)
+    REFERENCES `t_transaction`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 
           FOREIGN KEY (`evaluation_id`)
-    REFERENCES `t_evaluation`(`evaluation_id`)
+    REFERENCES `t_evaluation`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
