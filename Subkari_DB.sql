@@ -3,7 +3,7 @@
 create database db_subkari
 default character set utf8;
 
-
+use db_subkari
 -- テーブル作成 
 -- アカウントテーブル ------------------------------
 CREATE TABLE `m_account` (
