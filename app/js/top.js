@@ -43,3 +43,5 @@ if (hero) {
     autoSlide = setInterval(nextSlide, 4000);
   });
 }
+
+

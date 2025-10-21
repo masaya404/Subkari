@@ -448,3 +448,62 @@ CREATE TABLE `t_inquiry` (
     REFERENCES `m_adminAccount`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+
+
+-- タイムテーブル ------------------------------------------
+
+CREATE TABLE `t_time` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `account_id` INT NOT NULL,
+  `login_id` INT NULL,
+  `comments_id` INT NULL,
+  `alert_id` INT NULL,
+  `product_id` INT NULL,
+  `message_id` INT NULL,
+  `inquiry_id` INT NULL,
+  `transaction_id` INT NULL,
+  `transaction_status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','発送待ち','取引完了') NULL,
+  `evaluation_id` INT NULL,
+  `product_change` ENUM('料金変更','取引状態遷移','コメント') NULL,
+
+  `updated_at`
+  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`account_id`)
+    REFERENCES `m_account`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+
+  FOREIGN KEY (`login_id`)
+    REFERENCES `t_login`(`login_id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+
+      FOREIGN KEY (`comments_id`)
+    REFERENCES `t_comments`(`comments_id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+
+      FOREIGN KEY (`alert_id`)
+    REFERENCES `m_alert`(`alert_id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+
+      FOREIGN KEY (`product_id`)
+    REFERENCES `m_product`(`product_id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+
+      FOREIGN KEY (`message_id`)
+    REFERENCES `t_message`(`message_id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+
+      FOREIGN KEY (`inquiry_id`)
+    REFERENCES `t_inquiry`(`inquiry_id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+
+          FOREIGN KEY (`transaction_id`)
+    REFERENCES `t_transaction`(`transaction_id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+
+          FOREIGN KEY (`evaluation_id`)
+    REFERENCES `t_evaluation`(`evaluation_id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+);
