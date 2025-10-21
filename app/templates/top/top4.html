@@ -4,362 +4,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>トップス - SUBKARI</title>
-    <link rel="stylesheet" href="../../../app/static/css/top2.css">
+    <title>トップス - SUBKARI (メインコンテンツのみ)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /*==================================================
+        Base & Reset
+        ==================================================*/
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* ヘッダーのCSSは削除済み */
+
+        /*==================================================
+        Breadcrumbs
+        ==================================================*/
+        .breadcrumbs {
+            max-width: 1400px;
+            margin: 15px auto;
+            padding: 0 20px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .breadcrumbs .current {
+            color: #333;
+        }
+
+        /*==================================================
+        Main Content (サイドバーと一覧)
+        ==================================================*/
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+            display: flex;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 250px;
+            padding-right: 40px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            font-size: 13px;
+        }
+
+        .sidebar__title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group__title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .filter-list a {
+            display: block;
+            font-size: 13px;
+            padding: 4px 0;
+            color: #555;
+        }
+
+        /* カラーフィルター */
+        .color-list li {
+            font-size: 13px;
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .color-list label {
+            display: flex;
+            align-items: center;
+        }
+
+        .color-list input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        .color-swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            margin-right: 8px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        /* 各色の再現 */
+        .color-list li:nth-child(1) .color-swatch { background-color: white; border-color: #333; }
+        .color-list li:nth-child(2) .color-swatch { background-color: black; }
+        .color-list li:nth-child(3) .color-swatch { background-color: gray; }
+        .color-list li:nth-child(4) .color-swatch { background-color: green; }
+        .color-list li:nth-child(5) .color-swatch { background-color: blue; }
+        .color-list li:nth-child(6) .color-swatch { background-color: pink; }
+        .color-list li:nth-child(7) .color-swatch { background-color: red; }
+        .color-list li:nth-child(8) .color-swatch { background-color: purple; }
+        .color-list li:nth-child(9) .color-swatch { background-color: #d2b48c; border: 1px solid #ccc; } /* ベージュ */
+
+        .btn-filter-more {
+            background: none;
+            border: none;
+            color: #555;
+            font-size: 13px;
+            padding: 5px 0;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* 価格帯フィルター */
+        .price-input-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .price-input {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            text-align: right;
+        }
+
+        .btn-filter-submit {
+            background-color: #6d6d6d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+
+        /* --- Content (商品一覧) --- */
+        .content {
+            flex-grow: 1;
+        }
+
+        .content__title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .product-grid {
+            display: grid;
+            /* 画像と同じ5列レイアウトを再現 */
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        /* 商品カード */
+        .product-card {
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .product-card__image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #f0f0f0;
+            display: block;
+        }
+        /* 画像がない場合のダミー背景 (ダミーパスを使用しているため、このスタイルが適用されます) */
+        .product-card img[src*="placeholder"] {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#222"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="10" fill="#ccc">Product Image</text></svg>');
+            background-size: cover;
+        }
+
+
+        .product-card__name,
+        .product-card__price,
+        .product-card__detail {
+            margin: 5px 0;
+            line-height: 1.2;
+        }
+
+        .product-card__name {
+            font-weight: bold;
+        }
+
+        .product-card__detail {
+            color: #888;
+        }
+
+        /* ページネーション */
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+
+        .pagination__link {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: 1px solid #ccc;
+            color: #555;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .pagination__link.is-active {
+            background-color: #6d6d6d;
+            color: white;
+            border-color: #6d6d6d;
+            font-weight: bold;
+        }
+
+        .pagination__separator {
+            padding: 5px 2px;
+            color: #999;
+        }
+
+        .pagination__next {
+            background-color: #6d6d6d;
+            color: white;
+            border: 1px solid #6d6d6d;
+            padding: 5px 10px;
+            border-radius: 2px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        
+        /* フッターのCSSは削除済み */
+    </style>
 </head>
 
 <body>
+    <div class="breadcrumbs">
+        <a href="#">TOP</a> &gt; <span class="current">商品一覧</span>
+    </div>
 
-    <main class="product-list-page">
-        <div class="container">
-            <div class="breadcrumb">
-                <span><a href="#">ホーム</span> > <span>トップス</span></a>
+    <main class="main-container">
+        <aside class="sidebar">
+
+            <div class="filter-group">
+                <p class="filter-group__title">性別</p>
+                <ul class="filter-list">
+                    <li><a href="#">ユニセックス</a></li>
+                    <li><a href="#">レディース</a></li>
+                </ul>
             </div>
-            <!-- <h1 class="page-title">ホーム トップス</h1> -->
 
-            <div class="content-wrapper">
-
-                <aside class="sidebar">
-                    <h2 class="filter-header">絞り込み</h2>
-
-                    <div class="filter-group category-nav">
-                        <h3>カテゴリ</h3>
-                        <ul>
-                            <li><a href="#">ワンピース</a></li>
-                            <li><a href="#">シューズ</a></li>
-                            <li><a href="#">バッグ</a></li>
-                            <li><a href="#">アクセサリ</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="filter-group">
-                        <h3>ブランド</h3>
-                        <ul class="brand-list" id="brandFilterList">
-                            <li><input type="checkbox" id="brand1"><label for="brand1">TRAVAS TOKYO</label></li>
-                            <li><input type="checkbox" id="brand2"><label for="brand2">REFLEM</label></li>
-                            <li><input type="checkbox" id="brand3"><label for="brand3">CIVARIZE</label></li>
-                            <li><input type="checkbox" id="brand4"><label for="brand4">Amilige</label></li>
-                            <li><input type="checkbox" id="brand5"><label for="brand5">KINGLYMASK</label></li>
-                            <li><input type="checkbox" id="brand6"><label for="brand6">LIZ LISA</label></li>
-                            <li class="hidden-brand"><input type="checkbox" id="brand7"><label
-                                    for="brand7">AnkRouge</label></li>
-                            <li class="hidden-brand"><input type="checkbox" id="brand8"><label for="brand8">BRII</label>
-                            </li>
-                        </ul>
-                        <button class="more-toggle" data-target="brandFilterList">もっと見る</button>
-                    </div>
-
-                    <div class="filter-group color-filter">
-                        <h3>カラー</h3>
-                        <div class="color-options" id="colorFilterOptions">
-                            <label><input type="checkbox" name="color" value="white" checked><span
-                                    class="color-swatch white"></span>ホワイト</label>
-                            <label><input type="checkbox" name="color" value="black"><span
-                                    class="color-swatch black"></span>ブラック</label>
-                            <label><input type="checkbox" name="color" value="gray"><span
-                                    class="color-swatch gray"></span>グレー</label>
-                            <label><input type="checkbox" name="color" value="green"><span
-                                    class="color-swatch green"></span>グリーン</label>
-                            <label><input type="checkbox" name="color" value="blue"><span
-                                    class="color-swatch blue"></span>ブルー</label>
-                            <label class="hidden-color"><input type="checkbox" name="color" value="pink"><span
-                                    class="color-swatch pink"></span>ピンク</label>
-                            <label class="hidden-color"><input type="checkbox" name="color" value="red"><span
-                                    class="color-swatch red"></span>レッド</label>
-                            <label class="hidden-color"><input type="checkbox" name="color" value="yellow"><span
-                                    class="color-swatch yellow"></span>イエロー</label>
-                            <label class="hidden-color"><input type="checkbox" name="color" value="purple"><span
-                                    class="color-swatch purple"></span>パープル</label>
-                            <label class="hidden-color"><input type="checkbox" name="color" value="other"><span
-                                    class="color-swatch other"></span>その他</label>
-                            <button class="more-colors-toggle" data-target="colorFilterOptions">すべて</button>
-                        </div>
-                    </div>
-
-                    <div class="filter-group price-filter">
-                        <h3>価格</h3>
-                        <div class="price-range">
-                            <input type="text" placeholder="最低">
-                            <span>〜</span>
-                            <input type="text" placeholder="最高">
-                        </div>
-                        <button class="filter-apply">絞り込む</button>
-                    </div>
-                </aside>
-
-                <section class="product-grid-section">
-
-                    <div class="sort-options">
-                        <select>
-                            <option>新着順</option>
-                            <option>価格の安い順</option>
-                        </select>
-                    </div>
-
-                    <div class="products-container">
-
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-                        <div class="product-card"><img src="../../../app/img/image 67.png" alt="商品画像">
-                            <p class="product-name">REFLREM</p>
-                            <p class="product-brand">トップス</p>
-                            <p class="product-price">¥11,500</p>
-                        </div>
-
-                    </div>
-
-                    <div class="pagination">
-                        <button class="page-nav prev">＜</button>
-                        <a href="#" class="page-link active">1</a>
-                        <a href="#" class="page-link">2</a>
-                        <a href="#" class="page-link">3</a>
-                        <button class="page-nav next">＞</button>
-                    </div>
-                </section>
+            <div class="filter-group">
+                <p class="filter-group__title">カテゴリ</p>
+                <ul class="filter-list">
+                    <li><a href="#">コーデ</a></li>
+                    <li><a href="#">トップス</a></li>
+                    <li><a href="#">ボトムス</a></li>
+                    <li><a href="#">アクセサリー</a></li>
+                </ul>
             </div>
-        </div>
+
+            <div class="filter-group">
+                <p class="filter-group__title">ブランド</p>
+                <ul class="filter-list">
+                    <li><a href="#">TRAVAS TOKYO</a></li>
+                    <li><a href="#">REFLEM</a></li>
+                    <li><a href="#">CIVARIZE</a></li>
+                    <li><a href="#">ililil</a></li>
+                    <li><a href="#">Amilige</a></li>
+                    <li><a href="#">VOLCAN & APHRODITE</a></li>
+                    <li><a href="#">THICC PSYNYXX</a></li>
+                    <li><a href="#">KINGLYMASK</a></li>
+                    <li><a href="#">OY</a></li>
+                    <li><a href="#">Ank Rouge</a></li>
+                    <li><a href="#">LIZ LISA</a></li>
+                    <li><a href="#">Mars</a></li>
+                    <li><a href="#">No - Bland</a></li>
+                    <li><a href="#">その他</a></li>
+                </ul>
+            </div>
+
+
+            <div class="filter-group">
+                <p class="filter-group__title">カラー</p>
+                <ul class="color-list">
+                    <li><input type="radio" id="color-white" name="color" checked><label for="color-white"><span
+                                class="color-swatch"></span>ホワイト</label></li>
+                    <li><input type="radio" id="color-black" name="color"><label for="color-black"><span
+                                class="color-swatch"></span>ブラック</label></li>
+                    <li><input type="radio" id="color-gray" name="color"><label for="color-gray"><span
+                                class="color-swatch"></span>グレー</label></li>
+                    <li><input type="radio" id="color-green" name="color"><label for="color-green"><span
+                                class="color-swatch"></span>グリーン</label></li>
+                    <li><input type="radio" id="color-blue" name="color"><label for="color-blue"><span
+                                class="color-swatch"></span>ブルー</label></li>
+                    <li><input type="radio" id="color-beige" name="color"><label for="color-beige"><span
+                                class="color-swatch"></span>ベージュ</label></li>
+                    <li><input type="radio" id="color-pink" name="color"><label for="color-pink"><span
+                                class="color-swatch"></span>ピンク</label></li>
+                    <li><input type="radio" id="color-red" name="color"><label for="color-red"><span
+                                class="color-swatch"></span>レッド</label></li>
+                    <li><input type="radio" id="color-purple" name="color"><label for="color-purple"><span
+                                class="color-swatch"></span>パープル</label></li>
+                </ul>
+                <button class="btn-filter-more">さらに表示</button>
+            </div>
+
+            <div class="filter-group price-filter">
+                <p class="filter-group__title">価格帯</p>
+                <div class="price-input-group">
+                    <input type="number" class="price-input" value="100">
+                    <span>〜</span>
+                    <input type="number" class="price-input" value="999">
+                </div>
+                <button class="btn-filter-submit">検索</button>
+            </div>
+        </aside>
+
+        <section class="content">
+            <h2 class="content__title">トップス</h2> 
+
+            <div class="product-grid" id="product-grid">
+                </div>
+
+            <div class="pagination">
+                <a href="#" class="pagination__link is-active" data-page="1">1</a>
+                <a href="#" class="pagination__link" data-page="2">2</a>
+                <a href="#" class="pagination__link" data-page="3">3</a>
+                <!-- <span class="pagination__separator">...</span>
+                <a href="#" class="pagination__link" data-page="10">10</a> -->
+                <a href="#" class="pagination__next">次へ</a>
+            </div>
+        </section>
     </main>
-    <script src="js/top2.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productGrid = document.getElementById('product-grid');
+            const paginationLinks = document.querySelectorAll('.pagination__link');
+            const totalItems = 50; // 全商品数 (ダミー)
+            const itemsPerPage = 20; // 1ページあたりの表示数 (4行×5列=20個を想定)
+
+            // 商品カードのHTMLテンプレート
+            // 画像が表示されない問題を解決するため、ダミーのプレースホルダー画像パスを使用します。
+            const productHtml = (index) => `
+                <div class="product-card" data-item="${index}">
+                    <img src="placeholder-image-${index}.png" alt="商品画像" class="product-card__image">
+                    <p class="product-card__name">FRAY I.D ${index}</p>
+                    <p class="product-card__price">¥ 10,500</p>
+                    <p class="product-card__detail">¥ 10,500 (1泊)</p>
+                </div>
+            `;
+
+            /**
+             * 指定されたページの商品を表示する
+             * @param {number} page - 表示するページ番号
+             */
+            function renderProducts(page) {
+                productGrid.innerHTML = ''; // グリッドをクリア
+                const start = (page - 1) * itemsPerPage;
+                const end = Math.min(start + itemsPerPage, totalItems);
+
+                if (start >= totalItems) {
+                    productGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center;">商品がありません。</p>';
+                    return;
+                }
+
+                for (let i = start + 1; i <= end; i++) {
+                    productGrid.innerHTML += productHtml(i);
+                }
+            }
+
+            /**
+             * ページネーションリンクの活性状態を更新する
+             * @param {number} activePage - 現在活性化するページ番号
+             */
+            function updatePagination(activePage) {
+                paginationLinks.forEach(link => {
+                    link.classList.remove('is-active');
+                    if (parseInt(link.dataset.page) === activePage) {
+                        link.classList.add('is-active');
+                    }
+                });
+            }
+
+            // ページネーションリンクにクリックイベントを追加
+            paginationLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = parseInt(link.dataset.page);
+
+                    // 1〜3ページのみを切り替えるように制御
+                    if (page && page >= 1 && page <= 3) {
+                        renderProducts(page);
+                        updatePagination(page);
+                    } else if (link.classList.contains('pagination__next')) {
+                         const activeLink = document.querySelector('.pagination__link.is-active');
+                        let currentPage = parseInt(activeLink.dataset.page);
+                        let nextPage = currentPage + 1;
+                        
+                        if (nextPage >= 1 && nextPage <= 3) {
+                            renderProducts(nextPage);
+                            updatePagination(nextPage);
+                        } else {
+                            // 3ページを超えたらアラート
+                            alert("次のページはありません。（デモのため最大3ページです）");
+                        }
+                    }
+                });
+            });
+
+            // フィルターボタンのデモ機能
+            document.querySelector('.btn-filter-submit').addEventListener('click', (e) => {
+                e.preventDefault();
+                const minPrice = document.querySelector('.price-input:first-child').value;
+                const maxPrice = document.querySelector('.price-input:last-child').value;
+                alert(`価格帯で検索: ¥${minPrice} 〜 ¥${maxPrice}`);
+            });
+
+            // 初期表示（1ページ目を表示）
+            renderProducts(1);
+            updatePagination(1);
+        });
+    </script>
 </body>
 
 </html>
