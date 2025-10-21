@@ -413,10 +413,16 @@ CREATE TABLE `t_evaluation` (
   `comment` TEXT ,
   `evaluationTime` timestamp default current_timestamp ,
   `productCheck` boolean NOT NULL,
+  `recipient_id` INT NOT NULL,
+
+  
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`transaction_id`)
     REFERENCES `t_transaction`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+    FOREIGN KEY (`recipient_id`)
+    REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
