@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ログイン - SUBKARI</title>
+    <link rel="stylesheet" href="../../../app/static/css/login.css">
+
+</head>
+<body>
+  <div class="container--login login-page">
+    <h1>ログイン</h1>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">メールアドレス</label>
+        <input type="email" id="email" required>
+        <div class="link">
+          <a href="forgot-email.html">メールアドレス忘れた方</a>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input type="password" id="password" required>
+        <div class="link">
+          <a href="forgot-password.html">パスワード忘れた方</a>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn--login">ログイン</button>
+    </form>
+
+    <p class="register-link">
+      <a href="register-simple.html">新規会員登録</a>
+    </p>
+  </div>
+    <script src="../../../app/static/js/script.js" defer></script>
+</body>
+</html>
