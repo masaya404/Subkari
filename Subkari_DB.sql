@@ -4,6 +4,12 @@ create database db_subkari
 default character set utf8;
 
 use db_subkari
+
+-- アラートとタイムテーブルがまだ
+-- アラートはenum内が空
+
+
+
 -- テーブル作成 
 -- アカウントテーブル ------------------------------
 CREATE TABLE `m_account` (
@@ -349,7 +355,7 @@ CREATE TABLE `t_alert` (
   `content` TEXT ,
   `category` ENUM ('通報','警告') ,
   `reportDate` datetime , 
-  `comments_id` INT,
+  `comment_id` INT,
   `account_id` INT,
   `transaction_id` INT,
   `adminAccount_id` INT,
@@ -357,17 +363,12 @@ CREATE TABLE `t_alert` (
   `reportMemo` TEXT,
   `situation` ENUM('未対応','対応中','対応済み'),
   `reportType` ENUM,
-  `notice` boolean,
-  
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`)
     REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE,
-  FOREIGN KEY (`comments_id`)
+  FOREIGN KEY (`comment_id`)
     REFERENCES `t_comments`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE,
-  FOREIGN KEY (`account_id`)
-    REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (`transaction_id`)
     REFERENCES `t_transaction`(`id`)
@@ -414,11 +415,8 @@ CREATE TABLE `t_evaluation` (
   `productCheck` boolean NOT NULL,
 
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`t_transaction_id`)
+  FOREIGN KEY (`transaction_id`)
     REFERENCES `t_transaction`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE,
-  FOREIGN KEY (`m_account_id`)
-    REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -428,13 +426,13 @@ CREATE TABLE `t_clean` (
   `product_id` INT NOT NULL,
   `cleanSign_id` INT NOT NULL,
 
-  PRIMARY KEY (`product_id`,`cleanSign_id`)
+  PRIMARY KEY (`product_id`,`cleanSign_id`),
   FOREIGN KEY (`product_id`)
     REFERENCES `m_product`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (`cleanSign_id`)
     REFERENCES `m_cleanSign`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE,
+    ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
@@ -498,7 +496,7 @@ CREATE TABLE `t_time` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 
       FOREIGN KEY (`alert_id`)
-    REFERENCES `m_alert`(`id`)
+    REFERENCES `t_alert`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 
       FOREIGN KEY (`product_id`)
