@@ -356,7 +356,8 @@ CREATE TABLE `t_alert` (
   `category` ENUM ('通報','警告') ,
   `reportDate` datetime , 
   `comment_id` INT,
-  `account_id` INT,
+  `sender_id` INT,
+  `recipient_id` INT,
   `transaction_id` INT,
   `adminAccount_id` INT,
   `manageDate` DATETIME,
@@ -364,7 +365,7 @@ CREATE TABLE `t_alert` (
   `situation` ENUM('未対応','対応中','対応済み'),
   `reportType` ENUM('商品','ユーザー','取引','その他'),
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`account_id`)
+  FOREIGN KEY (`sender_id`)
     REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (`comment_id`)
@@ -375,6 +376,9 @@ CREATE TABLE `t_alert` (
     ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (`adminAccount_id`)
     REFERENCES `m_adminAccount`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+  FOREIGN KEY (`recipient_id`)
+    REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
