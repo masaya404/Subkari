@@ -159,7 +159,7 @@
 
         .content-wrapper {
             display: flex;
-            max-width: 1300px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 25px 20px;
             gap: 250px;
@@ -217,9 +217,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
+            /* margin-bottom: 18px; */
             padding-bottom: 8px;
-            border-bottom: 2px solid #000;
+            /* border-bottom: 2px solid #000; */
         }
 
         .category-header h2 {
@@ -236,7 +236,7 @@
         .product-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
+            /* gap: 18px; */
         }
 
         .product-card {
@@ -850,7 +850,7 @@ a {
 
 .content-wrapper {
     display: flex;
-    gap: 200px;
+    gap: 190px;
 }
 
 /* 2-1. サイドバー（フィルタリング） */
@@ -1008,7 +1008,7 @@ a {
 .product-card img {
     /* placeholder画像または代替画像 */
     width: 100%;
-    height: auto;
+    /* height: auto; */
     display: block;
     object-fit: cover;
     margin-bottom: 5px;
