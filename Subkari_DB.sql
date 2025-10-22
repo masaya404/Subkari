@@ -775,6 +775,37 @@ END$$
 DELIMITER ;
 
 
+-- トリガー作成: t_alertに新しい行が挿入された後にt_timeにデータを挿入するトリガー
+-- デリミタ（文の終わりを示す記号）を ; から $$ に一時的に変更します
+DELIMITER $$
+
+CREATE TRIGGER `trg_alert_warning_to_timeline`
+AFTER INSERT ON `t_alert`
+FOR EACH ROW
+BEGIN
+    
+    -- 挿入された行（NEW）の category が '警告' 
+    -- かつ、t_time の必須カラム account_id に相当する recipient_id が NULL でないことをチェック
+    
+    IF NEW.category = '警告' AND NEW.recipient_id IS NOT NULL THEN
+    
+        -- 条件を満たした場合、t_time テーブルにデータを挿入
+        INSERT INTO `t_time` (
+            `account_id`,   -- 警告の対象となったアカウントID (受信者)
+            `alert_id`      -- 挿入された t_alert の ID
+        )
+        VALUES (
+            NEW.recipient_id, -- t_alert テーブルの recipient_id
+            NEW.id            -- t_alert テーブルの id
+        );
+        
+    END IF;
+    
+END$$
+
+-- デリミタを $$ から ; に戻します
+DELIMITER ;
+
 
 
 
