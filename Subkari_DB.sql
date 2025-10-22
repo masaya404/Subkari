@@ -874,7 +874,7 @@ ORDER BY
 -- ダッシュボード ---------------------------------------------------
 -- 今週の新規ユーザー数  
 create view v_weekly_new_users
-select  count(*) as 今週の新規ユーザー数
+select  count(id) as 今週の新規ユーザー数
 from m_account
 where datediff(date_sub(curdate(),interval(weekday(curdate())) day),created_at)<7
 ;
