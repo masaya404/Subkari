@@ -362,7 +362,7 @@ CREATE TABLE `t_alert` (
   `manageDate` DATETIME,
   `reportMemo` TEXT,
   `situation` ENUM('未対応','対応中','対応済み'),
-  `reportType` ENUM,
+  `reportType` ENUM('商品','ユーザー','取引','その他'),
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`)
     REFERENCES `m_account`(`id`)
