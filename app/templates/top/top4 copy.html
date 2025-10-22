@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マイページ - SUBKARI</title>
+<style>
+/* ===============================
+   リセット & 基本設定
+=============================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #e8e8e8;
+    color: #333;
+}
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+h1 {
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 30px;
+}
+
+/* ===============================
+   マイページレイアウト
+=============================== */
+.mypage-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 0;
+    min-height: 600px;
+}
+nav {
+    background: #fff;
+    padding: 0;
+    border-right: 1px solid #ddd;
+}
+.nav-profile {
+    text-align: center;
+    padding: 30px 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.nav-profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+.nav-profile p {
+    font-size: 16px;
+    font-weight: 500;
+}
+.nav-top {
+    padding: 20px 30px;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.nav-top:hover { background: #f5f5f5; }
+nav ul { list-style: none; border-bottom: 1px solid #e0e0e0; padding: 15px 0; }
+.navtitle { font-size: 13px; font-weight: 600; color: #666; padding: 10px 30px; cursor: default; }
+nav ul li:not(.navtitle) {
+    padding: 12px 30px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+nav ul li:not(.navtitle):hover { background: #f5f5f5; }
+nav ul li.active {
+    background: #f0f0f0;
+    border-left: 3px solid #333;
+    font-weight: 500;
+}
+
+/* ===============================
+   コンテンツ
+=============================== */
+section {
+    background: #fff;
+    padding: 40px;
+    min-height: 600px;
+}
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+.content-title { font-size: 24px; font-weight: 400; }
+.action-btn {
+    padding: 10px 25px;
+    border: 1px solid #e74c3c;
+    background: #fff;
+    color: #e74c3c;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+.action-btn:hover { background: #e74c3c; color: #fff; }
+.content-body { padding: 20px 0; }
+.info-row {
+    display: flex;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.info-label { width: 200px; font-weight: 500; color: #666; }
+.info-value { flex: 1; color: #333; }
+.empty-state { text-align: center; padding: 60px 20px; color: #999; }
+.empty-state svg { width: 80px; height: 80px; margin-bottom: 20px; opacity: 0.3; }
+
+/* ===============================
+   レスポンシブ
+=============================== */
+@media (max-width: 768px) {
+    .mypage-container { grid-template-columns: 1fr; }
+    nav { border-right: none; border-bottom: 1px solid #ddd; }
+}
+</style>
+</head>
+<body>
+<main>
+    <h1>マイページ</h1>
+    <div class="mypage-container">
+        <!-- サイドナビ -->
+        <nav>
+            <div class="nav-profile">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%231e3c72'/%3E%3Ctext x='50' y='60' font-size='40' fill='white' text-anchor='middle'%3E猫%3C/text%3E%3C/svg%3E" alt="アカウント画像">
+                <p>ねこ</p>
+            </div>
+            <p class="nav-top" onclick="loadContent('top')">マイページTOP</p>
+            <ul>
+                <li class="navtitle">アカウント情報</li>
+                <li class="active" onclick="loadContent('profile')">プロフィール</li>
+            </ul>
+            <ul>
+                <li class="navtitle">振込</li>
+                <li onclick="loadContent('bank')">銀行登録</li>
+                <li onclick="loadContent('withdraw')">振込申請</li>
+            </ul>
+            <ul>
+                <li class="navtitle">履歴管理</li>
+                <li onclick="loadContent('view-history')">閲覧履歴</li>
+                <li onclick="loadContent('rental-history')">レンタル履歴</li>
+                <li onclick="loadContent('purchase-history')">購入履歴</li>
+            </ul>
+            <ul>
+                <li class="navtitle">設定</li>
+                <li onclick="loadContent('notification')">通知</li>
+                <li onclick="loadContent('personal-info')">個人情報設定</li>
+                <li onclick="loadContent('auto-login')">自動ログイン</li>
+                <li onclick="loadContent('block-list')">ブロック一覧</li>
+            </ul>
+            <ul>
+                <li class="navtitle">規約・ポリシー</li>
+                <li onclick="loadContent('terms')">利用規約</li>
+                <li onclick="loadContent('privacy')">プライバシーポリシー</li>
+            </ul>
+            <ul>
+                <li class="navtitle">ヘルプ</li>
+                <li onclick="loadContent('contact')">問い合わせ</li>
+                <li onclick="loadContent('faq')">FAQ</li>
+                <li onclick="loadContent('help-center')">ヘルプセンター</li>
+            </ul>
+            <ul>
+                <li class="navtitle">アカウント管理</li>
+                <li onclick="logout()">ログアウト</li>
+                <li onclick="deleteAccount()">アカウント削除</li>
+            </ul>
+        </nav>
+
+        <!-- コンテンツ -->
+        <section id="content-area">
+            <!-- 各コンテンツを最初からHTMLに用意 -->
+            <div class="content-section" id="top" style="display:none;">
+                <div class="content-header">
+                    <h2 class="content-title">マイページTOP</h2>
+                </div>
+                <div class="content-body">
+                    <p>マイページのトップページです。</p>
+                </div>
+            </div>
+
+            <div class="content-section" id="profile">
+                <div class="content-header">
+                    <h2 class="content-title">プロフィール</h2>
+                    <button class="action-btn" onclick="editProfile()">プロフィール編集</button>
+                </div>
+                <div class="content-body">
+                    <div class="info-row"><div class="info-label">ユーザー名</div><div class="info-value">ねこ</div></div>
+                    <div class="info-row"><div class="info-label">評価</div><div class="info-value">☆☆☆☆☆</div></div>
+                    <div class="info-row"><div class="info-label">喫煙状況</div><div class="info-value">喫煙あり</div></div>
+                    <div class="info-row"><div class="info-label">自己紹介</div><div class="info-value">猫アレルギーの人はごめんなさい。<br>猫の毛がついてるかもです。</div></div>
+                </div>
+            </div>
+
+            <div class="content-section" id="bank" style="display:none;">
+                <div class="content-header">
+                    <h2 class="content-title">銀行登録</h2>
+                    <button class="action-btn">新規登録</button>
+                </div>
+                <div class="content-body">
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                        <p>銀行口座が登録されていません</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 他のコンテンツも同様に追加可能 -->
+        </section>
+    </div>
+</main>
+
+<script>
+function loadContent(page) {
+    document.querySelectorAll('nav ul li:not(.navtitle)').forEach(item => item.classList.remove('active'));
+    event.target.classList.add('active');
+
+    document.querySelectorAll('.content-section').forEach(sec => sec.style.display = 'none');
+    const target = document.getElementById(page);
+    if (target) target.style.display = 'block';
+}
+
+function editProfile() { alert('プロフィール編集画面へ遷移します'); }
+function logout() { if(confirm('ログアウトしますか？')) alert('ログアウトしました'); }
+function deleteAccount() { if(confirm('本当にアカウントを削除しますか？')) alert('アカウント削除処理を開始します'); }
+
+// 初期表示
+loadContent('profile');
+</script>
+
+</body>
+</html>
