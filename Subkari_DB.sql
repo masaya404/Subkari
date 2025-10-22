@@ -22,7 +22,7 @@ CREATE TABLE `m_account` (
   `smoker` boolean NOT NULL,
   `introduction` TEXT  ,
   `money` INT,
-  `newCreationDate` timestamp default current_timestamp,
+  `created_at` timestamp default current_timestamp,
   `updateDate` timestamp default current_timestamp on update current_timestamp,
   `status` ENUM('未確認','本人確認済み','凍結','削除','強制削除') NOT NULL,
   `updaterId` INT,
