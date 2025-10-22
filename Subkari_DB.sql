@@ -941,10 +941,10 @@ order by month;
 
 
 -- 通報未対応 
-create view v_report_unchecked
+create view v_alert_unchecked
 as
 select count(*) as 未対応通報
-from t_report
+from t_alert
 where category='通報' and situation = '未対応'
 ;
 -- お問い合わせ未対応 
@@ -959,7 +959,7 @@ create view v_identify_offer
 as
 select count(*)
 from m_account
-where  identifyOffer='0'
+where  status='未確認'
 ;
 
 
