@@ -944,13 +944,13 @@ create view v_inquiry_unchecked
 select count(*)
 from t_inquiry
 where situation = '未対応'
-
+;
 -- 本人確認依頼 
 create view v_identify_offer
 select count(*)
 from m_account
 where  identifyOffer='0'
-
+;
 
 
 
