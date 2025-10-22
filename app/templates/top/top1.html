@@ -5,37 +5,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUBKARI - ファッションレンタルプラットフォーム</title>
-  <link rel="stylesheet" href="../../../app/static/css/top.css">
+    <link rel="stylesheet" href="../../../app/static/css/top.css">
+
+    <style>
+        /* ==================== スライダー用 CSS (無限ループ対応) ==================== */
+
+        .hero {
+            /* スライダーコンテナの幅と位置を調整 */
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden; /* スライドコンテナの外側を隠す */
+        }
+
+        .hero-slider {
+            overflow: hidden;
+        }
+
+        .hero-slide {
+            display: flex;
+            /* JavaScriptで transform が設定される */
+            transition: transform 0.8s ease;
+            /* クローンを含めて、全てのアイテムが並ぶように十分な幅を確保 */
+            /* JSで動的に幅を制御するため、ここでは最小限の設定 */
+        }
+
+        .hero-slide-item {
+            /* 4枚同時表示: 100%を4で割った幅 (25%) */
+            min-width: 25%;
+            height: 400px; /* 画像の高さ（適宜調整） */
+            box-sizing: border-box;
+            padding: 5px; /* スライド間の隙間 */
+            flex-shrink: 0; /* 縮小しない */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 8px; /* 角丸（任意） */
+        }
+
+        /* 制御ボタン */
+        .slider-arrows {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 10px;
+            pointer-events: none; /* 矢印の間にあるコンテンツをクリックできるようにする */
+            z-index: 10;
+        }
+
+        .slider-arrow {
+            pointer-events: auto; /* ボタン自体はクリック可能にする */
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 1.5em;
+            line-height: 1;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .slider-arrow:hover {
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- === トップスライダー === -->
     <section class="hero">
         <div class="hero-slider" id="heroSlider">
             <div class="hero-slide">
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image\ 22.png');"></div>
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image\ 22.png');"></div>
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image\ 22.png');"></div>
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image\ 22.png');"></div>
+                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
+                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
+                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
+                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
+                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
+                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
+                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
+                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
             </div>
         </div>
 
         <div class="slider-arrows">
-            <button class="slider-arrow" onclick="previousSlide()">◀</button>
-            <button class="slider-arrow" onclick="nextSlide()">▶</button>
+            <button class="slider-arrow prev-arrow">◀</button>
+            <button class="slider-arrow next-arrow">▶</button>
         </div>
     </section>
 
-    <!-- === スライダーの下に配置するテキスト === -->
     <section class="hero-content">
         <h2>先月の人気モデルのコーディネート！</h2>
         <p>今が旬のコーデを毎号レンタルして楽しもう。</p>
         <a href="#" class="hero-link">詳しくはこちら</a>
     </section>
 
-    <!-- === メインコンテンツ === -->
     <div class="content-wrapper">
-        <!-- サイドバー -->
         <aside class="sidebar">
             <div class="sidebar-section">
                 <h3>ブランドから探す</h3>
@@ -71,8 +139,6 @@
             </div>
         </aside>
 
-        <!-- メイン商品エリア -->
-        <!-- === メイン商品エリア === -->
         <main class="main-content">
             <section class="category-section">
                 <div class="category-header">
@@ -99,7 +165,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 26.png" alt="コート">
-                            alt="Coat">
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">コート</div>
@@ -133,7 +198,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 43.png" alt="トップス">
-                           
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">トップス</div>
@@ -142,7 +206,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 43.png" alt="トップス">
-                           
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">トップス</div>
@@ -168,7 +231,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 39.png" alt="ボトムズ">
-                           
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">ボトムス</div>
@@ -177,7 +239,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 39.png" alt="ボトムズ">
-                           
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">ボトムス</div>
@@ -186,7 +247,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 39.png" alt="ボトムズ">
-                           
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">ボトムス</div>
@@ -195,7 +255,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 39.png" alt="ボトムズ">
-                        
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">ボトムス</div>
@@ -213,7 +272,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 51.png" alt="アクセサリー">
-                           
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">アクセサリー</div>
@@ -222,7 +280,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 51.png" alt="アクセサリー">
-                         
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">アクセサリー</div>
@@ -231,7 +288,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 51.png" alt="アクセサリー">
-                          
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">アクセサリー</div>
@@ -240,7 +296,6 @@
                     <div class="product-card">
                         <div class="product-image">
                             <img src="../../../app/img/image 51.png" alt="アクセサリー">
-                          
                         </div>
                         <div class="product-brand">ブランド名</div>
                         <div class="product-name">アクセサリー</div>
@@ -251,7 +306,6 @@
         </main>
     </div>
 
-    <!-- === ガイドライン === -->
     <section class="guidelines">
         <div class="guidelines-container">
             <h2>Guidelines</h2>
@@ -285,7 +339,148 @@
         </div>
     </section>
 
-    <script src="js/top.js"></script>
+    <script>
+        // ========== 無限ループ スライド制御 ==========
+
+        const slideContainer = document.querySelector('.hero-slide');
+        const slides = Array.from(document.querySelectorAll('.hero-slide-item')); // Arrayに変換
+        const SLIDES_TO_SHOW = 4; // 4枚同時表示
+        const totalSlides = slides.length; // 元のアイテム数 (ここでは8)
+        const slideWidthStep = 100 / SLIDES_TO_SHOW; // 1ステップあたりの移動幅 (25%)
+
+        let currentSlide = 0; // スライド番号の管理に使用（主にループチェック）
+        let currentPosition = SLIDES_TO_SHOW; // クローンを含めたDOM上の開始位置 (4)
+
+        // ------------------ 1. クローンの作成と挿入 ------------------
+        
+        // 前方に挿入するクローン (最後の4枚)
+        const firstClones = slides.slice(totalSlides - SLIDES_TO_SHOW).map(item => {
+            const clone = item.cloneNode(true);
+            clone.classList.add('clone', 'clone-start');
+            return clone;
+        });
+
+        // 後方に挿入するクローン (最初の4枚)
+        const lastClones = slides.slice(0, SLIDES_TO_SHOW).map(item => {
+            const clone = item.cloneNode(true);
+            clone.classList.add('clone', 'clone-end');
+            return clone;
+        });
+
+        // DOMに挿入
+        firstClones.reverse().forEach(clone => slideContainer.prepend(clone)); // 最後に表示するものが先に
+        lastClones.forEach(clone => slideContainer.appendChild(clone));
+
+        // クローンを含めた全スライドの総数
+        const allSlidesCount = totalSlides + 2 * SLIDES_TO_SHOW; // 8 + 4 + 4 = 16
+
+
+        // ------------------ 2. スライド表示関数 ------------------
+
+        /** スライド表示（クローンによる位置調整を行う） */
+        function showSlide(position, transition = true) {
+            if (transition) {
+                slideContainer.style.transition = 'transform 0.8s ease';
+            } else {
+                // 無限ループ時の瞬間移動用
+                slideContainer.style.transition = 'none';
+            }
+            // クローンを考慮した位置でtranslateXを計算
+            slideContainer.style.transform = `translateX(-${position * slideWidthStep}%)`;
+        }
+
+        /** 無限ループのための瞬間移動処理 */
+        function checkLoop() {
+            // スライド完了までの時間 (CSSのtransitionと同じ値)
+            const transitionDuration = 800; 
+
+            // 最後のクローンセットの表示が完了したら、先頭の「本物のスライド」へ瞬間移動
+            // currentPositionが最後のクローンセット (8+4=12) に達したら
+            if (currentPosition === totalSlides + SLIDES_TO_SHOW) {
+                // currentPositionを最初の本物のスライドインデックス (4) にリセット
+                currentPosition = SLIDES_TO_SHOW;
+                // アニメーション完了後に瞬間移動を行うための遅延
+                setTimeout(() => showSlide(currentPosition, false), transitionDuration); 
+            }
+            
+            // 最初のクローンセットの表示が完了したら、末尾の「本物のスライド」へ瞬間移動
+            // currentPositionが最初のクローンセット (3) に達したら
+            if (currentPosition === 0) {
+                // currentPositionを最後の本物のスライドインデックス (8) にリセット
+                currentPosition = totalSlides;
+                // アニメーション完了後に瞬間移動を行うための遅延
+                setTimeout(() => showSlide(currentPosition, false), transitionDuration);
+            }
+        }
+
+        // ------------------ 3. ナビゲーション関数 ------------------
+
+        // 次へ
+        function nextSlide() {
+            // 既に最後のクローンセットの位置にいる場合、処理をスキップ
+            if (currentPosition >= allSlidesCount) return; 
+
+            currentPosition++;
+            showSlide(currentPosition);
+            
+            // 次のスライドが表示された後、瞬間移動のチェックを行う
+            if (currentPosition >= totalSlides + SLIDES_TO_SHOW) {
+                checkLoop();
+            }
+        }
+
+        // 前へ
+        function previousSlide() {
+            // 既に最初のクローンセットの位置にいる場合、処理をスキップ
+            if (currentPosition <= 0) return; 
+
+            currentPosition--;
+            showSlide(currentPosition);
+
+            // 前のスライドが表示された後、瞬間移動のチェックを行う
+            if (currentPosition < SLIDES_TO_SHOW) {
+                checkLoop();
+            }
+        }
+
+        // ------------------ 4. 初期化とイベント設定 ------------------
+        
+        // 初期表示: 最初の本物のスライド (クローン4枚分をスキップした位置)
+        showSlide(currentPosition, false); 
+
+        // 自動スライド
+        let autoSlide = setInterval(nextSlide, 4000);
+
+        // hero要素のイベント (マウスホバーで停止/再開)
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            hero.addEventListener('mouseenter', () => clearInterval(autoSlide));
+            hero.addEventListener('mouseleave', () => {
+                autoSlide = setInterval(nextSlide, 4000);
+            });
+        }
+
+        // 手動操作ボタンのイベントリスナー設定
+        const nextButton = document.querySelector('.next-arrow');
+        const prevButton = document.querySelector('.prev-arrow');
+
+        const handleManualClick = (action) => {
+            // 手動操作時は自動スライドを一旦リセット
+            clearInterval(autoSlide);
+            action();
+            // 4秒後に自動スライドを再開
+            autoSlide = setInterval(nextSlide, 4000);
+        };
+
+        if (nextButton) {
+            nextButton.addEventListener('click', () => handleManualClick(nextSlide));
+        }
+
+        if (prevButton) {
+            prevButton.addEventListener('click', () => handleManualClick(previousSlide));
+        }
+        // ===========================================
+    </script>
 </body>
 
 </html>

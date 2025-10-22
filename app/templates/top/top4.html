@@ -2,456 +2,474 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>トップス - SUBKARI (メインコンテンツのみ)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /*==================================================
-        Base & Reset
-        ==================================================*/
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            color: #333333;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>白 トップス - SUBKARI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+      background: #fff;
+    }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        /* ヘッダーのCSSは削除済み */
+    nav {
+      background: #000;
+      padding: 10px 30px;
+      display: flex;
+      gap: 30px;
+      justify-content: flex-end;
+      border-top: 1px solid #333;
+    }
 
-        /*==================================================
-        Breadcrumbs
-        ==================================================*/
-        .breadcrumbs {
-            max-width: 1400px;
-            margin: 15px auto;
-            padding: 0 20px;
-            font-size: 12px;
-            color: #999;
-        }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 12px;
+    }
 
-        .breadcrumbs .current {
-            color: #333;
-        }
+    .breadcrumb {
+      padding: 15px 30px;
+      font-size: 12px;
+      color: #666;
+      background: #f8f8f8;
+    }
 
-        /*==================================================
-        Main Content (サイドバーと一覧)
-        ==================================================*/
-        .main-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px 40px;
-            display: flex;
-        }
+    .breadcrumb a {
+      color: #4a9eff;
+      text-decoration: none;
+    }
 
-        /* --- Sidebar --- */
-        .sidebar {
-            width: 250px;
-            padding-right: 40px;
-            box-sizing: border-box;
-            flex-shrink: 0;
-            font-size: 13px;
-        }
+    .container {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px;
+      gap: 180px;
+    }
 
-        .sidebar__title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
+    /* --- サイドバー固定化 --- */
+    .sidebar {
+      width: auto;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      height: 100vh;
+      overflow-y: auto;
+      background: #fff;
+      border-right: 1px solid #eee;
+      padding-right: 10px;
+    }
 
-        .filter-group {
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
+    .filter-section {
+      margin-bottom: 30px;
+    }
 
-        .filter-group__title {
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
+    .filter-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ddd;
+    }
 
-        .filter-list a {
-            display: block;
-            font-size: 13px;
-            padding: 4px 0;
-            color: #555;
-        }
+    .filter-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-        /* カラーフィルター */
-        .color-list li {
-            font-size: 13px;
-            padding: 4px 0;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 5px 0;
+    }
 
-        .color-list label {
-            display: flex;
-            align-items: center;
-        }
+    .filter-option:hover {
+      color: #4a9eff;
+    }
 
-        .color-list input[type="radio"] {
-            margin-right: 8px;
-        }
+    .color-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 5px 0;
+    }
 
-        .color-swatch {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: 1px solid #ccc;
-            margin-right: 8px;
-            display: inline-block;
-            flex-shrink: 0;
-        }
-        /* 各色の再現 */
-        .color-list li:nth-child(1) .color-swatch { background-color: white; border-color: #333; }
-        .color-list li:nth-child(2) .color-swatch { background-color: black; }
-        .color-list li:nth-child(3) .color-swatch { background-color: gray; }
-        .color-list li:nth-child(4) .color-swatch { background-color: green; }
-        .color-list li:nth-child(5) .color-swatch { background-color: blue; }
-        .color-list li:nth-child(6) .color-swatch { background-color: pink; }
-        .color-list li:nth-child(7) .color-swatch { background-color: red; }
-        .color-list li:nth-child(8) .color-swatch { background-color: purple; }
-        .color-list li:nth-child(9) .color-swatch { background-color: #d2b48c; border: 1px solid #ccc; } /* ベージュ */
+    .color-circle {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+    }
 
-        .btn-filter-more {
-            background: none;
-            border: none;
-            color: #555;
-            font-size: 13px;
-            padding: 5px 0;
-            cursor: pointer;
-            text-decoration: underline;
-        }
+    .price-filter {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
 
-        /* 価格帯フィルター */
-        .price-input-group {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-bottom: 10px;
-        }
+    .price-filter input {
+      width: 70px;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      font-size: 11px;
+    }
 
-        .price-input {
-            width: 80px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            text-align: right;
-        }
+    .filter-btn {
+      display: flex;
+      gap: 5px;
+      margin-top: 10px;
+    }
 
-        .btn-filter-submit {
-            background-color: #6d6d6d;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            font-size: 14px;
-            cursor: pointer;
-            width: 100%;
-        }
+    .filter-btn button {
+      padding: 5px 15px;
+      border: 1px solid #ddd;
+      background: #f5f5f5;
+      font-size: 11px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
 
+    .filter-btn button:hover {
+      background: #e8e8e8;
+    }
 
-        /* --- Content (商品一覧) --- */
-        .content {
-            flex-grow: 1;
-        }
+    /* --- メイン --- */
+    .main-content {
+      flex: 1;
+      height: calc(100vh - 100px);
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      padding-right: 10px;
+    }
 
-        .content__title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
 
-        .product-grid {
-            display: grid;
-            /* 画像と同じ5列レイアウトを再現 */
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-        }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+    }
 
-        /* 商品カード */
-        .product-card {
-            text-align: center;
-            font-size: 12px;
-        }
+    .product-card {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
 
-        .product-card__image {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            background-color: #f0f0f0;
-            display: block;
-        }
-        /* 画像がない場合のダミー背景 (ダミーパスを使用しているため、このスタイルが適用されます) */
-        .product-card img[src*="placeholder"] {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#222"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="10" fill="#ccc">Product Image</text></svg>');
-            background-size: cover;
-        }
+    .product-card:hover {
+      transform: translateY(-3px);
+    }
 
+    .product-image {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #f0f0f0;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
 
-        .product-card__name,
-        .product-card__price,
-        .product-card__detail {
-            margin: 5px 0;
-            line-height: 1.2;
-        }
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        .product-card__name {
-            font-weight: bold;
-        }
+    .product-brand {
+      font-size: 10px;
+      color: #666;
+      margin-bottom: 3px;
+    }
 
-        .product-card__detail {
-            color: #888;
-        }
+    .product-name {
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
 
-        /* ページネーション */
-        .pagination {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-top: 30px;
-            font-size: 14px;
-        }
+    .product-price {
+      font-size: 13px;
+      font-weight: 600;
+    }
 
-        .pagination__link {
-            padding: 5px 10px;
-            margin: 0 2px;
-            border: 1px solid #ccc;
-            color: #555;
-            border-radius: 2px;
-            cursor: pointer;
-        }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 50px 0;
+    }
 
-        .pagination__link.is-active {
-            background-color: #6d6d6d;
-            color: white;
-            border-color: #6d6d6d;
-            font-weight: bold;
-        }
+    .page-number {
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      font-size: 13px;
+    }
 
-        .pagination__separator {
-            padding: 5px 2px;
-            color: #999;
-        }
+    .page-number.active {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
 
-        .pagination__next {
-            background-color: #6d6d6d;
-            color: white;
-            border: 1px solid #6d6d6d;
-            padding: 5px 10px;
-            border-radius: 2px;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-        
-        /* フッターのCSSは削除済み */
-    </style>
+    .page-number:hover:not(.active) {
+      background: #f5f5f5;
+    }
+
+    .page-arrow {
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #666;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .page-arrow:hover {
+      background: #555;
+    }
+
+    @media (max-width:1200px) {
+      .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width:768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        border-right: none;
+      }
+
+      .main-content {
+        height: auto;
+        overflow: visible;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="breadcrumbs">
-        <a href="#">TOP</a> &gt; <span class="current">商品一覧</span>
-    </div>
 
-    <main class="main-container">
-        <aside class="sidebar">
+  <div class="breadcrumb">
+    <a href="index.html">SubKari</a> ＞ 検索結果
+  </div>
 
-            <div class="filter-group">
-                <p class="filter-group__title">性別</p>
-                <ul class="filter-list">
-                    <li><a href="#">ユニセックス</a></li>
-                    <li><a href="#">レディース</a></li>
-                </ul>
-            </div>
+  <div class="container">
+    <!-- 固定サイドバー -->
+    <aside class="sidebar">
+      <div class="filter-section">
+        <div class="filter-title">種別</div>
+        <div class="filter-options">
+          <label class="filter-option"><input type="radio" name="type" checked> ユニセックス</label>
+          <label class="filter-option"><input type="radio" name="type"> レディース</label>
+        </div>
+      </div>
 
-            <div class="filter-group">
-                <p class="filter-group__title">カテゴリ</p>
-                <ul class="filter-list">
-                    <li><a href="#">コーデ</a></li>
-                    <li><a href="#">トップス</a></li>
-                    <li><a href="#">ボトムス</a></li>
-                    <li><a href="#">アクセサリー</a></li>
-                </ul>
-            </div>
+      <div class="filter-section">
+        <div class="filter-title">カテゴリ</div>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox"> コート</label>
+          <label class="filter-option"><input type="checkbox" checked> トップス</label>
+          <label class="filter-option"><input type="checkbox"> ボトムス</label>
+          <label class="filter-option"><input type="checkbox"> アクセサリー</label>
+        </div>
+      </div>
 
-            <div class="filter-group">
-                <p class="filter-group__title">ブランド</p>
-                <ul class="filter-list">
-                    <li><a href="#">TRAVAS TOKYO</a></li>
-                    <li><a href="#">REFLEM</a></li>
-                    <li><a href="#">CIVARIZE</a></li>
-                    <li><a href="#">ililil</a></li>
-                    <li><a href="#">Amilige</a></li>
-                    <li><a href="#">VOLCAN & APHRODITE</a></li>
-                    <li><a href="#">THICC PSYNYXX</a></li>
-                    <li><a href="#">KINGLYMASK</a></li>
-                    <li><a href="#">OY</a></li>
-                    <li><a href="#">Ank Rouge</a></li>
-                    <li><a href="#">LIZ LISA</a></li>
-                    <li><a href="#">Mars</a></li>
-                    <li><a href="#">No - Bland</a></li>
-                    <li><a href="#">その他</a></li>
-                </ul>
-            </div>
+      <div class="filter-section">
+        <div class="filter-title">ブランド</div>
+        <div class="filter-options">
+          <div class="filter-option">TRAVAS TOKYO</div>
+          <div class="filter-option">REFLEM</div>
+          <div class="filter-option">CIVARIZE</div>
+          <div class="filter-option">BRI</div>
+          <div class="filter-option">Amilige</div>
+          <div class="filter-option">VOLCAN & APHRODITE</div>
+          <div class="filter-option">THCC PSYYNXX</div>
+          <div class="filter-option">KINGLYMASK</div>
+          <div class="filter-option">QY</div>
+          <div class="filter-option">Ark Rouge</div>
+          <div class="filter-option">LIZ LISA</div>
+          <div class="filter-option">Mars</div>
+          <div class="filter-option">No - Brand</div>
+          <div class="filter-option">その他</div>
+        </div>
+      </div>
 
+      <div class="filter-section">
+        <div class="filter-title">カラー</div>
+        <div class="filter-options">
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#fff;border:2px solid #ddd;"></div>ホワイト
+          </label>
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#000;"></div>ブラック
+          </label>
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#808080;"></div>グレー
+          </label>
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#8B4513;"></div>ブラウン
+          </label>
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#00FF00;"></div>グリーン
+          </label>
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#0000FF;"></div>ブルー
+          </label>
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#800080;"></div>パープル
+          </label>
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#FFFF00;"></div>イエロー
+          </label>
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#FFC0CB;"></div>ピンク
+          </label>
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#FF0000;"></div>レッド
+          </label>
+          <label class="color-option">
+            <input type="checkbox">
+            <div class="color-circle" style="background:#FFA500;"></div>オレンジ
+          </label>
+        </div>
+        <div class="filter-btn">
+          <button onclick="clearFilter()">クリア</button>
+          <button onclick="applyFilter()">OK</button>
+        </div>
+      </div>
 
-            <div class="filter-group">
-                <p class="filter-group__title">カラー</p>
-                <ul class="color-list">
-                    <li><input type="radio" id="color-white" name="color" checked><label for="color-white"><span
-                                class="color-swatch"></span>ホワイト</label></li>
-                    <li><input type="radio" id="color-black" name="color"><label for="color-black"><span
-                                class="color-swatch"></span>ブラック</label></li>
-                    <li><input type="radio" id="color-gray" name="color"><label for="color-gray"><span
-                                class="color-swatch"></span>グレー</label></li>
-                    <li><input type="radio" id="color-green" name="color"><label for="color-green"><span
-                                class="color-swatch"></span>グリーン</label></li>
-                    <li><input type="radio" id="color-blue" name="color"><label for="color-blue"><span
-                                class="color-swatch"></span>ブルー</label></li>
-                    <li><input type="radio" id="color-beige" name="color"><label for="color-beige"><span
-                                class="color-swatch"></span>ベージュ</label></li>
-                    <li><input type="radio" id="color-pink" name="color"><label for="color-pink"><span
-                                class="color-swatch"></span>ピンク</label></li>
-                    <li><input type="radio" id="color-red" name="color"><label for="color-red"><span
-                                class="color-swatch"></span>レッド</label></li>
-                    <li><input type="radio" id="color-purple" name="color"><label for="color-purple"><span
-                                class="color-swatch"></span>パープル</label></li>
-                </ul>
-                <button class="btn-filter-more">さらに表示</button>
-            </div>
+      <div class="filter-section">
+        <div class="filter-title">価格</div>
+        <div class="price-filter">
+          <input type="number" value="0" min="0"><span>円</span><span>〜</span>
+          <input type="number" value="100000" min="0"><span>円</span>
+        </div>
+        <div class="filter-btn">
+          <button onclick="clearPrice()">クリア</button>
+          <button onclick="applyPrice()">OK</button>
+        </div>
+      </div>
+    </aside>
 
-            <div class="filter-group price-filter">
-                <p class="filter-group__title">価格帯</p>
-                <div class="price-input-group">
-                    <input type="number" class="price-input" value="100">
-                    <span>〜</span>
-                    <input type="number" class="price-input" value="999">
-                </div>
-                <button class="btn-filter-submit">検索</button>
-            </div>
-        </aside>
-
-        <section class="content">
-            <h2 class="content__title">トップス</h2> 
-
-            <div class="product-grid" id="product-grid">
-                </div>
-
-            <div class="pagination">
-                <a href="#" class="pagination__link is-active" data-page="1">1</a>
-                <a href="#" class="pagination__link" data-page="2">2</a>
-                <a href="#" class="pagination__link" data-page="3">3</a>
-                <!-- <span class="pagination__separator">...</span>
-                <a href="#" class="pagination__link" data-page="10">10</a> -->
-                <a href="#" class="pagination__next">次へ</a>
-            </div>
-        </section>
+    <!-- メインエリア -->
+    <main class="main-content">
+      <h1 class="page-title">白 トップス</h1>
+      <div class="product-grid" id="productGrid"></div>
+      <div class="pagination">
+        <div class="page-number active">1</div>
+        <div class="page-number">2</div>
+        <div class="page-number">3</div>
+        <div class="page-number">4</div>
+        <div class="page-arrow">＞</div>
+      </div>
     </main>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const productGrid = document.getElementById('product-grid');
-            const paginationLinks = document.querySelectorAll('.pagination__link');
-            const totalItems = 50; // 全商品数 (ダミー)
-            const itemsPerPage = 20; // 1ページあたりの表示数 (4行×5列=20個を想定)
+  <script>
+    // 商品カード生成
+    function generateProducts() {
+      const grid = document.getElementById('productGrid');
+      const imgSrc = '../../../app/img/image 67.png';
+      for (let i = 0; i < 40; i++) {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <div class="product-image">
+            <img src="${imgSrc}" alt="トップス">
+          </div>
+          <div class="product-brand">REFLEM</div>
+          <div class="product-name">トップス</div>
+          <div class="product-price">¥12,000</div>
+        `;
+        card.addEventListener('click', () => window.location.href = 'product-detail.html');
+        grid.appendChild(card);
+      }
+    }
+    generateProducts();
 
-            // 商品カードのHTMLテンプレート
-            // 画像が表示されない問題を解決するため、ダミーのプレースホルダー画像パスを使用します。
-            const productHtml = (index) => `
-                <div class="product-card" data-item="${index}">
-                    <img src="placeholder-image-${index}.png" alt="商品画像" class="product-card__image">
-                    <p class="product-card__name">FRAY I.D ${index}</p>
-                    <p class="product-card__price">¥ 10,500</p>
-                    <p class="product-card__detail">¥ 10,500 (1泊)</p>
-                </div>
-            `;
+    // フィルター機能
+    function clearFilter() {
+      document.querySelectorAll('.color-option input').forEach(i => i.checked = false);
+    }
 
-            /**
-             * 指定されたページの商品を表示する
-             * @param {number} page - 表示するページ番号
-             */
-            function renderProducts(page) {
-                productGrid.innerHTML = ''; // グリッドをクリア
-                const start = (page - 1) * itemsPerPage;
-                const end = Math.min(start + itemsPerPage, totalItems);
+    function applyFilter() {
+      alert('フィルターを適用しました');
+    }
 
-                if (start >= totalItems) {
-                    productGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center;">商品がありません。</p>';
-                    return;
-                }
+    function clearPrice() {
+      const inputs = document.querySelectorAll('.price-filter input');
+      inputs[0].value = 0;
+      inputs[1].value = 100000;
+    }
 
-                for (let i = start + 1; i <= end; i++) {
-                    productGrid.innerHTML += productHtml(i);
-                }
-            }
+    function applyPrice() {
+      alert('価格フィルターを適用しました');
+    }
 
-            /**
-             * ページネーションリンクの活性状態を更新する
-             * @param {number} activePage - 現在活性化するページ番号
-             */
-            function updatePagination(activePage) {
-                paginationLinks.forEach(link => {
-                    link.classList.remove('is-active');
-                    if (parseInt(link.dataset.page) === activePage) {
-                        link.classList.add('is-active');
-                    }
-                });
-            }
+    // ページネーション
+    document.querySelectorAll('.page-number').forEach(page => {
+      page.addEventListener('click', function () {
+        document.querySelectorAll('.page-number').forEach(p => p.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
 
-            // ページネーションリンクにクリックイベントを追加
-            paginationLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const page = parseInt(link.dataset.page);
-
-                    // 1〜3ページのみを切り替えるように制御
-                    if (page && page >= 1 && page <= 3) {
-                        renderProducts(page);
-                        updatePagination(page);
-                    } else if (link.classList.contains('pagination__next')) {
-                         const activeLink = document.querySelector('.pagination__link.is-active');
-                        let currentPage = parseInt(activeLink.dataset.page);
-                        let nextPage = currentPage + 1;
-                        
-                        if (nextPage >= 1 && nextPage <= 3) {
-                            renderProducts(nextPage);
-                            updatePagination(nextPage);
-                        } else {
-                            // 3ページを超えたらアラート
-                            alert("次のページはありません。（デモのため最大3ページです）");
-                        }
-                    }
-                });
-            });
-
-            // フィルターボタンのデモ機能
-            document.querySelector('.btn-filter-submit').addEventListener('click', (e) => {
-                e.preventDefault();
-                const minPrice = document.querySelector('.price-input:first-child').value;
-                const maxPrice = document.querySelector('.price-input:last-child').value;
-                alert(`価格帯で検索: ¥${minPrice} 〜 ¥${maxPrice}`);
-            });
-
-            // 初期表示（1ページ目を表示）
-            renderProducts(1);
-            updatePagination(1);
-        });
-    </script>
+    document.querySelector('.page-arrow').addEventListener('click', function () {
+      const active = document.querySelector('.page-number.active');
+      const next = active.nextElementSibling;
+      if (next && next.classList.contains('page-number')) {
+        active.classList.remove('active');
+        next.classList.add('active');
+        document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  </script>
 </body>
-
 </html>
