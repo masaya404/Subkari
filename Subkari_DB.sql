@@ -904,7 +904,7 @@ from m_product
 where datediff(date_sub(curdate(),interval(weekday(curdate())) day),upload)<7
 ;
 
--- WL先週比
+-- WL先週比  qqq
 create view v_compare_1_week_ago_listing
 as
 SELECT
@@ -917,6 +917,7 @@ SELECT
     * 100, 1
 
   ) AS 先週比
+from m_product
 ;
 
 -- WAU 
@@ -953,7 +954,7 @@ select count(*)
 from t_inquiry
 where situation = '未対応'
 ;
--- 本人確認依頼 
+-- 本人確認依頼 00
 create view v_identify_offer
 as
 select count(*)
@@ -967,7 +968,7 @@ where  identifyOffer='0'
 create view v_region_new_users
 as
 SELECT
-  DATE_FORMAT(a.created_at, '%Y-%m') AS month,
+  DATE_FORMAT(created_at, '%Y-%m') AS month,
   SUM(CASE WHEN region = '北海道' THEN 1 ELSE 0 END) AS 北海道,
   SUM(CASE WHEN region = '東北' THEN 1 ELSE 0 END) AS 東北,
   SUM(CASE WHEN region = '関東' THEN 1 ELSE 0 END) AS 関東,
@@ -993,9 +994,9 @@ FROM (
     END AS region
   FROM
     m_account a
-    INNER JOIN t_address addr ON a.id = addr.account_id
+    INNER JOIN m_address addr ON a.id = addr.account_id
   WHERE a.status not in('削除','強制削除') and
-    a.created_at >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH), '%Y-%m-01')
+  created_at >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH), '%Y-%m-01')
 ) AS region_data
 GROUP BY
   DATE_FORMAT(created_at, '%Y-%m')
