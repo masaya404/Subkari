@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUBKARI - ファッションレンタルプラットフォーム</title>
+    <title>SUBKARI</title>
     <link rel="stylesheet" href="../../../app/static/css/top.css">
 
     <style>
@@ -13,19 +13,29 @@
         .hero {
             /* スライダーコンテナの幅と位置を調整 */
             width: 100%;
+            height: 550px;
             margin: 0 auto;
             position: relative;
             overflow: hidden;
             height: auto;
+            background: #d8d8d8;
         }
 
         .hero-slider {
             overflow: hidden;
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease;
+
         }
 
         .hero-slide {
             display: flex;
             transition: transform 0.8s ease;
+            min-width: 100%;
+            height: 100%;
+            
+
         }
 
         .hero-slide-item {
@@ -74,6 +84,9 @@
         .slider-arrow:hover {
             opacity: 0.8; 
         }
+
+
+        
     </style>
 </head>
 
@@ -339,7 +352,7 @@
         </div>
     </section>
 
-    <script>
+<script>
         // ========== 一方向 無限ループ スライド制御 (ジャンプ抑制版) ==========
 
         const slideContainer = document.querySelector('.hero-slide');
@@ -427,14 +440,16 @@
         showSlide(currentPosition, false);
 
         // 自動スライド
-        let autoSlide = setInterval(nextSlide, 4000);
+        // 修正箇所: 4000ミリ秒 (4秒) を 5000ミリ秒 (5秒) に変更
+        let autoSlide = setInterval(nextSlide, 5000);
 
         // hero要素のイベント (マウスホバーで停止/再開)
         const hero = document.querySelector('.hero');
         if (hero) {
             hero.addEventListener('mouseenter', () => clearInterval(autoSlide));
             hero.addEventListener('mouseleave', () => {
-                autoSlide = setInterval(nextSlide, 4000);
+                // 修正箇所: 4000ミリ秒 (4秒) を 5000ミリ秒 (5秒) に変更
+                autoSlide = setInterval(nextSlide, 5000);
             });
         }
 
@@ -458,8 +473,9 @@
                 prevSlide(); 
             }
 
-            // 4秒後に自動スライドを再開
-            autoSlide = setInterval(nextSlide, 4000);
+            // 5秒後に自動スライドを再開
+            // 修正箇所: 4000ミリ秒 (4秒) を 5000ミリ秒 (5秒) に変更
+            autoSlide = setInterval(nextSlide, 5000);
         };
 
         if (nextButton) {
@@ -470,7 +486,6 @@
             prevButton.addEventListener('click', () => handleManualClick('prev'));
         }
         // ===========================================
-    </script>
-</body>
+    </script></body>
 
 </html>
