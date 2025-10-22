@@ -8,14 +8,15 @@
     <link rel="stylesheet" href="../../../app/static/css/top.css">
 
     <style>
-        /* ==================== スライダー用 CSS (無限ループ対応) ==================== */
+        /* ==================== スライダー用 CSS (一方向無限ループ & 左右矢印配置) ==================== */
 
         .hero {
             /* スライダーコンテナの幅と位置を調整 */
             width: 100%;
             margin: 0 auto;
             position: relative;
-            overflow: hidden; /* スライドコンテナの外側を隠す */
+            overflow: hidden;
+            height: auto;
         }
 
         .hero-slider {
@@ -24,54 +25,54 @@
 
         .hero-slide {
             display: flex;
-            /* JavaScriptで transform が設定される */
             transition: transform 0.8s ease;
-            /* クローンを含めて、全てのアイテムが並ぶように十分な幅を確保 */
-            /* JSで動的に幅を制御するため、ここでは最小限の設定 */
         }
 
         .hero-slide-item {
             /* 4枚同時表示: 100%を4で割った幅 (25%) */
             min-width: 25%;
-            height: 400px; /* 画像の高さ（適宜調整） */
+            height: 700px;
+            /* 画像の高さ（適宜調整） */
             box-sizing: border-box;
-            padding: 5px; /* スライド間の隙間 */
-            flex-shrink: 0; /* 縮小しない */
+            padding: 5px;
+            flex-shrink: 0;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            border-radius: 8px; /* 角丸（任意） */
+            border-radius: 8px;
         }
 
-        /* 制御ボタン */
+        /* 制御ボタン (修正箇所) */
         .slider-arrows {
             position: absolute;
             top: 50%;
             width: 100%;
             display: flex;
+            /* 修正点: ボタンを左右に配置 */
             justify-content: space-between;
             transform: translateY(-50%);
             padding: 0 10px;
-            pointer-events: none; /* 矢印の間にあるコンテンツをクリックできるようにする */
+            pointer-events: none;
             z-index: 10;
         }
 
         .slider-arrow {
-            pointer-events: auto; /* ボタン自体はクリック可能にする */
-            background: rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+            /* 丸い背景と境界線を削除 */
+            background: none; 
             color: white;
             border: none;
             padding: 10px 15px;
             cursor: pointer;
-            border-radius: 50%;
+            border-radius: 0;
             font-size: 1.5em;
             line-height: 1;
-            opacity: 0.7;
+            opacity: 1; 
             transition: opacity 0.3s;
         }
 
         .slider-arrow:hover {
-            opacity: 1;
+            opacity: 0.8; 
         }
     </style>
 </head>
@@ -90,7 +91,6 @@
                 <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
             </div>
         </div>
-
         <div class="slider-arrows">
             <button class="slider-arrow prev-arrow">◀</button>
             <button class="slider-arrow next-arrow">▶</button>
@@ -340,27 +340,19 @@
     </section>
 
     <script>
-        // ========== 無限ループ スライド制御 ==========
+        // ========== 一方向 無限ループ スライド制御 (ジャンプ抑制版) ==========
 
         const slideContainer = document.querySelector('.hero-slide');
-        const slides = Array.from(document.querySelectorAll('.hero-slide-item')); // Arrayに変換
+        const slides = Array.from(document.querySelectorAll('.hero-slide-item'));
         const SLIDES_TO_SHOW = 4; // 4枚同時表示
         const totalSlides = slides.length; // 元のアイテム数 (ここでは8)
         const slideWidthStep = 100 / SLIDES_TO_SHOW; // 1ステップあたりの移動幅 (25%)
 
-        let currentSlide = 0; // スライド番号の管理に使用（主にループチェック）
-        let currentPosition = SLIDES_TO_SHOW; // クローンを含めたDOM上の開始位置 (4)
+        let currentPosition = 0; // 開始位置は最初の本物のスライド (0)
 
-        // ------------------ 1. クローンの作成と挿入 ------------------
-        
-        // 前方に挿入するクローン (最後の4枚)
-        const firstClones = slides.slice(totalSlides - SLIDES_TO_SHOW).map(item => {
-            const clone = item.cloneNode(true);
-            clone.classList.add('clone', 'clone-start');
-            return clone;
-        });
+        // ------------------ 1. クローンの作成と挿入 (末尾のみ) ------------------
 
-        // 後方に挿入するクローン (最初の4枚)
+        // 後方に挿入するクローン (最初の4枚) のみ
         const lastClones = slides.slice(0, SLIDES_TO_SHOW).map(item => {
             const clone = item.cloneNode(true);
             clone.classList.add('clone', 'clone-end');
@@ -368,11 +360,10 @@
         });
 
         // DOMに挿入
-        firstClones.reverse().forEach(clone => slideContainer.prepend(clone)); // 最後に表示するものが先に
         lastClones.forEach(clone => slideContainer.appendChild(clone));
 
-        // クローンを含めた全スライドの総数
-        const allSlidesCount = totalSlides + 2 * SLIDES_TO_SHOW; // 8 + 4 + 4 = 16
+        // クローンを含めた全スライドの総数 (8 + 4 = 12)
+        const allSlidesCount = totalSlides + SLIDES_TO_SHOW;
 
 
         // ------------------ 2. スライド表示関数 ------------------
@@ -391,62 +382,49 @@
 
         /** 無限ループのための瞬間移動処理 */
         function checkLoop() {
-            // スライド完了までの時間 (CSSのtransitionと同じ値)
-            const transitionDuration = 800; 
+            const transitionDuration = 800;
 
-            // 最後のクローンセットの表示が完了したら、先頭の「本物のスライド」へ瞬間移動
-            // currentPositionが最後のクローンセット (8+4=12) に達したら
-            if (currentPosition === totalSlides + SLIDES_TO_SHOW) {
-                // currentPositionを最初の本物のスライドインデックス (4) にリセット
-                currentPosition = SLIDES_TO_SHOW;
-                // アニメーション完了後に瞬間移動を行うための遅延
-                setTimeout(() => showSlide(currentPosition, false), transitionDuration); 
-            }
-            
-            // 最初のクローンセットの表示が完了したら、末尾の「本物のスライド」へ瞬間移動
-            // currentPositionが最初のクローンセット (3) に達したら
-            if (currentPosition === 0) {
-                // currentPositionを最後の本物のスライドインデックス (8) にリセット
-                currentPosition = totalSlides;
-                // アニメーション完了後に瞬間移動を行うための遅延
-                setTimeout(() => showSlide(currentPosition, false), transitionDuration);
+            // クローンが表示された後 (currentPosition === totalSlides)
+            if (currentPosition === totalSlides) {
+                // アニメーション完了を待つ (800ms)
+                setTimeout(() => {
+                    // currentPositionを最初の本物のスライドインデックス (0) にリセット
+                    currentPosition = 0;
+                    // 瞬間移動を実行
+                    showSlide(currentPosition, false);
+                }, transitionDuration);
             }
         }
 
         // ------------------ 3. ナビゲーション関数 ------------------
 
-        // 次へ
+        // 次へ (右方向)
         function nextSlide() {
-            // 既に最後のクローンセットの位置にいる場合、処理をスキップ
-            if (currentPosition >= allSlidesCount) return; 
+            // スライドが最後のクローンセットまで移動するのを許可
+            if (currentPosition >= allSlidesCount) {
+                return;
+            }
 
             currentPosition++;
             showSlide(currentPosition);
-            
-            // 次のスライドが表示された後、瞬間移動のチェックを行う
-            if (currentPosition >= totalSlides + SLIDES_TO_SHOW) {
+
+            // 最後の本物スライドから次のクローンへ移動した瞬間 (currentPosition = 8)
+            if (currentPosition === totalSlides) {
                 checkLoop();
             }
         }
-
-        // 前へ
-        function previousSlide() {
-            // 既に最初のクローンセットの位置にいる場合、処理をスキップ
-            if (currentPosition <= 0) return; 
-
-            currentPosition--;
-            showSlide(currentPosition);
-
-            // 前のスライドが表示された後、瞬間移動のチェックを行う
-            if (currentPosition < SLIDES_TO_SHOW) {
-                checkLoop();
-            }
+        
+        // 前へ (左方向) - **機能は無効**
+        // 無限ループは右方向のみなので、この関数は中身を空にして維持します。
+        function prevSlide() {
+            // 左方向への移動ロジックは実装しない（要望「右方向だけにずっと流れる無限ループでできるようにして他はいじらないで」を維持するため）
+            return;
         }
 
         // ------------------ 4. 初期化とイベント設定 ------------------
-        
-        // 初期表示: 最初の本物のスライド (クローン4枚分をスキップした位置)
-        showSlide(currentPosition, false); 
+
+        // 初期表示: 最初の本物のスライド (0)
+        showSlide(currentPosition, false);
 
         // 自動スライド
         let autoSlide = setInterval(nextSlide, 4000);
@@ -462,22 +440,34 @@
 
         // 手動操作ボタンのイベントリスナー設定
         const nextButton = document.querySelector('.next-arrow');
+        // 修正箇所: prevButtonを取得
         const prevButton = document.querySelector('.prev-arrow');
 
-        const handleManualClick = (action) => {
+
+        const handleManualClick = (direction) => {
             // 手動操作時は自動スライドを一旦リセット
             clearInterval(autoSlide);
-            action();
+            
+            // 右矢印のみ機能させる
+            if (direction === 'next') {
+                if (currentPosition < totalSlides) { // クローンへの移動中はクリックを受け付ける
+                    nextSlide();
+                }
+            } else if (direction === 'prev') {
+                // 左矢印（戻る）は機能させない
+                prevSlide(); 
+            }
+
             // 4秒後に自動スライドを再開
             autoSlide = setInterval(nextSlide, 4000);
         };
 
         if (nextButton) {
-            nextButton.addEventListener('click', () => handleManualClick(nextSlide));
+            nextButton.addEventListener('click', () => handleManualClick('next'));
         }
-
+        // 修正箇所: prevButtonのイベントリスナーを設定（機能は無効）
         if (prevButton) {
-            prevButton.addEventListener('click', () => handleManualClick(previousSlide));
+            prevButton.addEventListener('click', () => handleManualClick('prev'));
         }
         // ===========================================
     </script>
