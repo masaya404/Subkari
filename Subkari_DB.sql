@@ -874,13 +874,15 @@ ORDER BY
 -- ダッシュボード ---------------------------------------------------
 -- 今週の新規ユーザー数  
 create view v_weekly_new_users
-select  count(id) as 今週の新規ユーザー数
+ as
+select  count(*) as 今週の新規ユーザー数
 from m_account
 where datediff(date_sub(curdate(),interval(weekday(curdate())) day),created_at)<7
 ;
 
 -- 新規ユーザー数先週比 
 create view v_compare_1_week_ago_new_users
+as
 SELECT
   ROUND(
 
@@ -896,6 +898,7 @@ FROM m_account;
 
 -- WL
 create view v_weekly_listing
+as
 select  count(*) as 今週の出品数
 from m_product
 where datediff(date_sub(curdate(),interval(weekday(curdate())) day),upload)<7
@@ -917,6 +920,7 @@ SELECT
 
 -- WAU 
 create view v_weekly_active_users
+as
 select  count(*) as 今週のアクティブユーザー数
 from t_login
 where datediff(date_sub(curdate(),interval(weekday(curdate())) day),loginDatetime)<7
@@ -924,6 +928,7 @@ where datediff(date_sub(curdate(),interval(weekday(curdate())) day),loginDatetim
 
 -- MAU 
 create view v_monthly_active_users
+as
 select 
 date_format(loginDatetime,'%Y-%m') as  month,count(distinct account_id) as MAU
 from t_login
@@ -935,18 +940,21 @@ order by month;
 
 -- 通報未対応 
 create view v_report_unchecked
+as
 select count(*) as 未対応通報
 from t_report
 where category='通報' and situation = '未対応'
 ;
 -- お問い合わせ未対応 
 create view v_inquiry_unchecked
+as
 select count(*)
 from t_inquiry
 where situation = '未対応'
 ;
 -- 本人確認依頼 
 create view v_identify_offer
+as
 select count(*)
 from m_account
 where  identifyOffer='0'
@@ -956,6 +964,7 @@ where  identifyOffer='0'
 
 -- 地域別ユーザー数 
 create view v_region_new_users
+as
 SELECT
   DATE_FORMAT(a.created_at, '%Y-%m') AS month,
   SUM(CASE WHEN region = '北海道' THEN 1 ELSE 0 END) AS 北海道,
@@ -995,6 +1004,7 @@ ORDER BY
 
 -- 年代別新規ユーザー数 
 create view v_age_group_new_users
+as
 SELECT
   DATE_FORMAT(a.created_at, '%Y-%m') AS month,
   SUM(CASE WHEN TIMESTAMPDIFF(YEAR, a.birthday, CURDATE()) < 20 THEN 1 ELSE 0 END) AS "0〜19歳",
