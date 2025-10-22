@@ -22,7 +22,7 @@ CREATE TABLE `m_account` (
   `smoker` boolean NOT NULL,
   `introduction` TEXT  ,
   `money` INT,
-  `newCreationDate` timestamp default current_timestamp,
+  `created_at` timestamp default current_timestamp,
   `updateDate` timestamp default current_timestamp on update current_timestamp,
   `status` ENUM('未確認','本人確認済み','凍結','削除','強制削除') NOT NULL,
   `updaterId` INT,
@@ -95,10 +95,10 @@ CREATE TABLE `m_product` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`brand_id`)
     REFERENCES `m_brand`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (`category_id`)
     REFERENCES `m_category`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (`account_id`)
     REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
@@ -356,15 +356,16 @@ CREATE TABLE `t_alert` (
   `category` ENUM ('通報','警告') ,
   `reportDate` datetime , 
   `comment_id` INT,
-  `account_id` INT,
+  `sender_id` INT,
+  `recipient_id` INT,
   `transaction_id` INT,
   `adminAccount_id` INT,
   `manageDate` DATETIME,
   `reportMemo` TEXT,
   `situation` ENUM('未対応','対応中','対応済み'),
-  `reportType` ENUM,
+  `reportType` ENUM('商品','ユーザー','取引','その他'),
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`account_id`)
+  FOREIGN KEY (`sender_id`)
     REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (`comment_id`)
@@ -375,6 +376,9 @@ CREATE TABLE `t_alert` (
     ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (`adminAccount_id`)
     REFERENCES `m_adminAccount`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (`recipient_id`)
+    REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -420,7 +424,7 @@ CREATE TABLE `t_evaluation` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`transaction_id`)
     REFERENCES `t_transaction`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (`recipient_id`)
     REFERENCES `m_account`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
@@ -491,35 +495,35 @@ CREATE TABLE `t_time` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`)
     REFERENCES `m_account`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
 
   FOREIGN KEY (`login_id`)
     REFERENCES `t_login`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
 
       FOREIGN KEY (`comments_id`)
     REFERENCES `t_comments`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
 
       FOREIGN KEY (`alert_id`)
     REFERENCES `t_alert`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
 
       FOREIGN KEY (`product_id`)
     REFERENCES `m_product`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
 
       FOREIGN KEY (`message_id`)
     REFERENCES `t_message`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
 
       FOREIGN KEY (`inquiry_id`)
     REFERENCES `t_inquiry`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
 
           FOREIGN KEY (`transaction_id`)
     REFERENCES `t_transaction`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
+    ON DELETE RESTRICT ON UPDATE CASCADE,
 
           FOREIGN KEY (`evaluation_id`)
     REFERENCES `t_evaluation`(`id`)
@@ -771,6 +775,37 @@ END$$
 DELIMITER ;
 
 
+-- トリガー作成: t_alertに新しい行が挿入された後にt_timeにデータを挿入するトリガー
+-- デリミタ（文の終わりを示す記号）を ; から $$ に一時的に変更します
+DELIMITER $$
+
+CREATE TRIGGER `trg_alert_warning_to_timeline`
+AFTER INSERT ON `t_alert`
+FOR EACH ROW
+BEGIN
+    
+    -- 挿入された行（NEW）の category が '警告' 
+    -- かつ、t_time の必須カラム account_id に相当する recipient_id が NULL でないことをチェック
+    
+    IF NEW.category = '警告' AND NEW.recipient_id IS NOT NULL THEN
+    
+        -- 条件を満たした場合、t_time テーブルにデータを挿入
+        INSERT INTO `t_time` (
+            `account_id`,   -- 警告の対象となったアカウントID (受信者)
+            `alert_id`      -- 挿入された t_alert の ID
+        )
+        VALUES (
+            NEW.recipient_id, -- t_alert テーブルの recipient_id
+            NEW.id            -- t_alert テーブルの id
+        );
+        
+    END IF;
+    
+END$$
+
+-- デリミタを $$ から ; に戻します
+DELIMITER ;
+
 
 
 
@@ -833,12 +868,13 @@ WHERE
 ORDER BY
     -- (H) 時系列順 (新しい順) に並び替え
     ttm.created_at DESC
-
+;
 
 
 -- ダッシュボード ---------------------------------------------------
 -- 今週の新規ユーザー数  
 create view v_weekly_new_users
+ as
 select  count(*) as 今週の新規ユーザー数
 from m_account
 where datediff(date_sub(curdate(),interval(weekday(curdate())) day),created_at)<7
@@ -846,6 +882,7 @@ where datediff(date_sub(curdate(),interval(weekday(curdate())) day),created_at)<
 
 -- 新規ユーザー数先週比 
 create view v_compare_1_week_ago_new_users
+as
 SELECT
   ROUND(
 
@@ -861,13 +898,15 @@ FROM m_account;
 
 -- WL
 create view v_weekly_listing
+as
 select  count(*) as 今週の出品数
 from m_product
 where datediff(date_sub(curdate(),interval(weekday(curdate())) day),upload)<7
 ;
 
--- WL先週比
+-- WL先週比  qqq
 create view v_compare_1_week_ago_listing
+as
 SELECT
   ROUND(
 
@@ -878,10 +917,12 @@ SELECT
     * 100, 1
 
   ) AS 先週比
-
+from m_product
+;
 
 -- WAU 
 create view v_weekly_active_users
+as
 select  count(*) as 今週のアクティブユーザー数
 from t_login
 where datediff(date_sub(curdate(),interval(weekday(curdate())) day),loginDatetime)<7
@@ -889,6 +930,7 @@ where datediff(date_sub(curdate(),interval(weekday(curdate())) day),loginDatetim
 
 -- MAU 
 create view v_monthly_active_users
+as
 select 
 date_format(loginDatetime,'%Y-%m') as  month,count(distinct account_id) as MAU
 from t_login
@@ -899,30 +941,34 @@ order by month;
 
 
 -- 通報未対応 
-create view v_report_unchecked
+create view v_alert_unchecked
+as
 select count(*) as 未対応通報
-from t_report
+from t_alert
 where category='通報' and situation = '未対応'
 ;
 -- お問い合わせ未対応 
 create view v_inquiry_unchecked
+as
 select count(*)
 from t_inquiry
 where situation = '未対応'
-
--- 本人確認依頼 
+;
+-- 本人確認依頼 00
 create view v_identify_offer
+as
 select count(*)
 from m_account
-where  identifyOffer='0'
-
+where  status='未確認'
+;
 
 
 
 -- 地域別ユーザー数 
 create view v_region_new_users
+as
 SELECT
-  DATE_FORMAT(a.created_at, '%Y-%m') AS month,
+  DATE_FORMAT(created_at, '%Y-%m') AS month,
   SUM(CASE WHEN region = '北海道' THEN 1 ELSE 0 END) AS 北海道,
   SUM(CASE WHEN region = '東北' THEN 1 ELSE 0 END) AS 東北,
   SUM(CASE WHEN region = '関東' THEN 1 ELSE 0 END) AS 関東,
@@ -948,9 +994,9 @@ FROM (
     END AS region
   FROM
     m_account a
-    INNER JOIN t_address addr ON a.id = addr.account_id
+    INNER JOIN m_address addr ON a.id = addr.account_id
   WHERE a.status not in('削除','強制削除') and
-    a.created_at >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH), '%Y-%m-01')
+  created_at >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 MONTH), '%Y-%m-01')
 ) AS region_data
 GROUP BY
   DATE_FORMAT(created_at, '%Y-%m')
@@ -960,6 +1006,7 @@ ORDER BY
 
 -- 年代別新規ユーザー数 
 create view v_age_group_new_users
+as
 SELECT
   DATE_FORMAT(a.created_at, '%Y-%m') AS month,
   SUM(CASE WHEN TIMESTAMPDIFF(YEAR, a.birthday, CURDATE()) < 20 THEN 1 ELSE 0 END) AS "0〜19歳",
@@ -976,3 +1023,6 @@ GROUP BY
   month
 ORDER BY
   month;
+
+
+  
