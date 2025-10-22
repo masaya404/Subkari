@@ -10,120 +10,17 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
-    <header>
-        <div class="header">
-
-            <div class="header-left">
-                <div class="logo">SUBKARI</div>
-                
-                <div class="search-container">
-                    <form action="/search" method="get" class="search-box">
-                        <button type="submit" class="search-btn">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                        <input type="text" name="keyword" placeholder="すべてのアイテムから探す">
-                    </form>
-                </div>
-            </div>
-
-            <div class="header-right">
-
-                <div class="header-login">
-                    <a href="#" class="">
-                        <span>新規登録</span>
-                    </a>
-                    <a href="#" class="">
-                        <span>ログイン</span>
-                    </a>
-                    <a href="#" class="icon-item">
-                        <img src="../img/hamburger.png" class="icon"></img>
-                    </a>
-                </div>
-
-                <div class="header-icons">
-                    <a href="#" class="icon-item">
-                        <img src="../img/mypage.png" class="icon"></img>
-                        <span>マイページ</span>
-                    </a>
-                    <a href="#" class="icon-item">
-                        <img src="../img/heart.png" class="icon"></img>
-                        <span>いいね</span>
-                    </a>
-                    <a href="#" class="icon-item">
-                        <img src="../img/inform.png" class="icon"></img>
-                        <span>通知</span>
-                    </a>
-                    <a href="#" class="icon-item">
-                        <img src="../img/camera.png" class="icon"></img>
-                        <span>出品</span>
-                    </a>
-                    <a href="#" class="icon-item">
-                        <img src="../img/deal.png" class="icon"></img>
-                        <span>取引</span>
-                    </a>
-                    <a href="#" class="icon-item">
-                        <img src="../img/hamburger.png" class="icon"></img>
-                    </a>
-                </div>
-
-                <div class="nav-container">
-                    <nav>
-                        <a href="#">Coordinate</a>
-                        <a href="#">Tops</a>
-                        <a href="#">Bottoms</a>
-                        <a href="#">Accessories</a>
-                    </nav>
-                </div>
-            </div>
-          
-        
-        </div>
-    </header>
+   {%block header%}
+    {% include header1.html%}
+   {% endblock %}
 
     <main>
         {% block content %}
      
         {% endblock %}
     </main>
-    <footer>
-        <div class="footer-top">
-            <div class="footer-logo">SUBKARI</div>
-            <nav class="footer-nav">
-                <div class="footer-li">
-                    <a href="">はじめての方へ</a>
-                    <a href="">サイトマップ</a>
-                    <a href="#faq">FAQ</a>
-                    <a href="#contact">お問い合わせ</a>
-                    <a href="#usage">利用規約</a>
-                </div>
-                <div class="footer-li">
-                    <a href="#privacy">プライバシーポリシー</a>
-                    <a href="#law">特定商取引に基づく表記</a>
-                    <a href="#law">古物営業法に基づく表示</a>
-                </div>
-            </nav>
-        </div>
-
-        <div class="footer-bottom">
-            <div class="footer-info">
-                <p>〒530-0001 大阪府大阪市北区梅田３丁目３－１</p>
-                <p>日曜定休／営業時間 10:30～19:00</p>
-                <p>TEL　06-6347-0001</p>
-            </div>
-            
-           
-            <div class="footer-social">
-                <div class="social-icon">
-                    <img src="../img/x-icon.png"></img>
-                </div>
-                <div class="social-icon">
-                   <img src="../img/instagram-icon.png"></img>
-                </div>
-            </div>
-           
-        </div>
-        <p class="copyright">&copy; 2025 HAL OSAKA IA・IH Team 5</p>
-
-    </footer>
+   {% block footer %}
+    {% include footer1.html %}
+   {% endblock %}
 </body>
 </html>
