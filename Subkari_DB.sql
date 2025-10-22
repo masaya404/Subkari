@@ -906,6 +906,7 @@ where datediff(date_sub(curdate(),interval(weekday(curdate())) day),upload)<7
 
 -- WL先週比
 create view v_compare_1_week_ago_listing
+as
 SELECT
   ROUND(
 
@@ -916,7 +917,7 @@ SELECT
     * 100, 1
 
   ) AS 先週比
-
+;
 
 -- WAU 
 create view v_weekly_active_users
