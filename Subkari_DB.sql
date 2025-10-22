@@ -868,7 +868,7 @@ WHERE
 ORDER BY
     -- (H) 時系列順 (新しい順) に並び替え
     ttm.created_at DESC
-
+;
 
 
 -- ダッシュボード ---------------------------------------------------
@@ -1021,3 +1021,6 @@ GROUP BY
   month
 ORDER BY
   month;
+
+
+  
