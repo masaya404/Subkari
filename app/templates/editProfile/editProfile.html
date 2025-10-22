@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>プロフィール</title>
-    <link rel="stylesheet" href="../../static/css/userprf.css">
+    <link rel="stylesheet" href="../../static/css/editProfile.css">
 
 </head>
 <body>
@@ -57,18 +57,8 @@
                 <a href="#" class="show-more" id="showLessBtn" onclick="toggleDescription(event)" style="display: none;">閉じる</a>
             </div>
             
-            <div class="profile-actions">
-                <button class="follow-btn">
-                    <span>+</span>
-                    <span>フォロー</span>
-                </button>
-                <div class="dropdown-menu">
-                    <button class="menu-btn" onclick="toggleDropdown()">⋮</button>
-                    <div class="dropdown-content" id="dropdownMenu">
-                        <div class="dropdown-item">このユーザーをブロック</div>
-                        <div class="dropdown-item">このユーザーを報告</div>
-                    </div>
-                </div>
+           <div class="profile-actions">
+                <button class="edit-profile-btn">プロフィールを編集</button>
             </div>
         </div>
 
@@ -163,6 +153,6 @@
     </main>
 
 
-    <script src="../../static/js/userprf.js"></script>
+    <script src="../../static/js/editProfile.js"></script>
 </body>
 </html>
