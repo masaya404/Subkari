@@ -1,32 +1,35 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ログイン - SUBKARI</title>
-    <!-- <link rel="stylesheet" href="../../../app/static/css/login.css"> -->
-       <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-</head>
+{% extends "base.html" %}
+{% block title %}
+  ログイン - SUBKARI
+{% endblock %}
 
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename ='css/login.css') }}">
 <body>
   <div class="container--login login-page">
     <h1>ログイン</h1>
     <form id="loginForm" method="POST" action="{{ url_for('login.login_auth') }}">
       <div class="form-group">
-        <label for="email">メールアドレス</label>
-        <input type="email" id="email" name="email" required>
+        <label for="mail">メールアドレス</label>
+        <input type="email" id="mail" name="mail" required value={{ account.mail if account else ''}}>
+        {% if error_message %}
+          <p class="error-message">{{ error_message }}</p>
+        {% endif %}
+        <p class="error-text" id="mailError"></p>
         <div class="link">
-          <a href="forgot-email.html">メールアドレス忘れた方</a>
+          <a href="forgot_mail.html">メールアドレス忘れた方</a>
         </div>
       </div>
+      
       <div class="form-group">
         <label for="password">パスワード</label>
         <input type="password" id="password" name="password"  required>
+        <p class="error-text" id="passwordError"></p>
         <div class="link">
           <a href="forgot_password.html">パスワード忘れた方</a>
         </div>
       </div>
-      <button type="submit" class="btn btn--login">ログイン</button>
+      <button type="submit" class="btn btn--login" id="login_btn">ログイン</button>
     </form>
 
     <p class="register-link">
@@ -42,6 +45,7 @@
       {% endif %}
     {% endwith %}
   </div>
-    <!-- <script src="../../../app/js/login.js"></script> -->
+  <script src="{{url_for('static',filename='js/login_auth.js')}}"></script>
 </body>
-</html>
+{% endblock %}
+
