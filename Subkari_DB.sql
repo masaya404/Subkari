@@ -145,19 +145,22 @@ CREATE TABLE `m_admin_contents` (
 
 -- トップステーブル --------------------------------
 CREATE TABLE `m_topsSize` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `product_id` INT NOT NULL,
   `shoulderWidth` DECIMAL(5,2) NOT NULL,
   `bodyWidth` DECIMAL(5,2) NOT NULL,
   `sleeveLength` DECIMAL(5,2) NOT NULL,
   `bodyLength` DECIMAL(5,2) NOT NULL,
   `notes` VARCHAR(255) ,
-  
-  PRIMARY KEY (`id`)
+
+  PRIMARY KEY (`product_id`),
+  FOREIGN KEY (`product_id`)
+    REFERENCES `m_product`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- ボトムステーブル --------------------------------
 CREATE TABLE `m_bottomsSize` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `product_id` INT NOT NULL,
   `hip` DECIMAL(5,2) NOT NULL,
   `totalLength` DECIMAL(5,2) NOT NULL,
   `rise` DECIMAL(5,2) NOT NULL,
@@ -168,7 +171,10 @@ CREATE TABLE `m_bottomsSize` (
   `skirtLength` DECIMAL(5,2) NOT NULL,
   `notes` VARCHAR(255),
 
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`product_id`),
+  FOREIGN KEY (`product_id`)
+    REFERENCES `m_product`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- ログインテーブル --------------------------------
