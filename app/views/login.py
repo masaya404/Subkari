@@ -1,4 +1,4 @@
-from flask import Blueprint , render_template ,request,make_response,session
+from flask import Blueprint , render_template ,request,make_response,redirect,url_for,session
 from PIL import Image
 from werkzeug.utils import secure_filename
 from datetime import datetime , timedelta
@@ -21,34 +21,37 @@ def login():
 #Login確認--------------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/login/auth',methods=['POST'])
 def login_auth():
+    #mail,password取得
     account = request.form
+    #error回数
     ecnt = 0
     data = {}
-    error = "を入力してください。"
-    etbl={}
-    stbl={"ID":"ID","password":"パスワード"}
+
+    stbl={"mail":"メール","password":"パスワード"}
     
+    #空欄確認
     for key,value in account.items():
         if not value:
             ecnt+=1
-            etbl[key] = stbl[key] + error
+    #空欄あり、登録できない      
     if ecnt !=0:
-        return render_template('login/login.html',etbl=etbl,account=account)
+        return render_template('login/login.html',account=account)
     
-    sql = "SELECT * FROM user WHERE userid = %s;"
+    # 入力した資料がデータベースに存在するかどうかを確認
+    sql = "SELECT * FROM user WHERE mail = %s;"
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    cur.execute(sql,(account['ID'],))
-    # 入力した資料がデータベースに存在するかどうかを確認
+    cur.execute(sql,(account['mail'],))
+    # ここで確認
     userExist = cur.fetchone()
-    #ユーザーが存在しない　、　パスワードが間違い 
+    #ユーザーが存在しないまたはパスワードが一致しない
     if not userExist or userExist['password'] != account['password']:
-        etbl['ID'] = "IDまたはパスワードが間違がっています。"
-        return render_template('login.html',etbl = etbl,account=account)
+        return render_template('login/login.html',account=account)
     
-    session['ID'] = account['ID']
-    session['authority'] = userExist['authority']
-    return render_template('index.html',user = session.get('ID'),authority = session.get('authority'))
+    #登録成功の処理
+    session['user_id'] = userExist['mail']
+
+    return redirect(url_for('top.member_index'))
     
 #Logout--------------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/logout',methods=['GET'])
