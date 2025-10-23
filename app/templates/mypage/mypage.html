@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイページ</title>
+    <link rel="stylesheet" href="../../static/css/mypage.css">
+
+</head>
+<body>
+    <!-- ヘッダー -->
+    <main>
+        <section class="nav">
+            <ul class="nav-section">
+                <li class="nav-section-title">アカウント情報</li>
+                <li class="nav-item">プロフィール</li>
+                <li class="nav-item">やることリスト</li>
+                <li class="nav-item">いいね一覧</li>
+                <li class="nav-item">フォローリスト</li>
+                <li class="nav-item">出品した商品</li>
+                <li class="nav-item">レンタル・購入した商品</li>
+                <li class="nav-item">下書き一覧</li>
+                <li class="nav-item">セラーデータセンター</li>
+            </ul>
+
+            <ul class="nav-section">
+                <li class="nav-section-title">設定</li>
+                <li class="nav-item">お支払い方法</li>
+                <li class="nav-item">個人情報設定</li>
+                <li class="nav-item">お知らせ・機能設定</li>
+            </ul>
+
+            <ul class="nav-section">
+                <li class="nav-section-title">振込</li>
+                <li class="nav-item">銀行登録</li>
+                <li class="nav-item">振込申請</li>
+            </ul>
+
+            <ul class="nav-section">
+                <li class="nav-section-title">ヘルプ</li>
+                <li class="nav-item">問い合わせ</li>
+                <li class="nav-item">FAQ</li>
+                <li class="nav-item">ヘルプセンター</li>
+            </ul>
+
+            <ul class="nav-section">
+                <li class="nav-section-title">規約・ポリシー</li>
+                <li class="nav-item">利用規約</li>
+                <li class="nav-item">プライバシーポリシー</li>
+            </ul>
+
+            <ul class="nav-section">
+                <li class="nav-section-title">アカウント管理</li>
+                <li class="nav-item">ログアウト</li>
+                <li class="nav-item">アカウント削除</li>
+            </ul>
+        </section>
+
+        
+
+        <section id="profile">
+            <div>
+                
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%231e3c72'/%3E%3Ctext x='50' y='60' font-size='40' fill='white' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E" alt="プロフィール画像" class="profile-image">
+                
+                <div class="profile-name">
+                    <p>haltalo</p>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+                        <a href="../../templates/editProfile/editProfile.html">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg></a>
+                </div>
+            </div>
+                
+                
+            <div class="profile-rating">
+                <span class="stars">★★★★☆</span>
+                <span class="rating-count">255</span>
+            </div>
+            
+            <div class="badge-group">
+                <div class="badge">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p>本人確認済</p>
+                </div>
+                <div class="badge">喫煙者</div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-number">80</span>
+                    <span class="stat-label">出品数</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10</span>
+                    <span class="stat-label">フォロー</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">フォロワー</span>
+                </div>
+            </div>
+            
+            <div class="sold-info">
+                <div class="sold-label">売上金</div>
+                <div class="sold-amount">¥ 0</div>
+            </div>
+        </section>
+
+        </section>
+        <section id="todo">
+            <p>やることリストの内容を表示</p>
+        </section>
+        <section id="likes">
+            <p>いいねを押した商品を表示</p>
+
+        </section>
+        <section id="follow-list">
+            <p>フォローリストを表示</p>
+        </section>
+        <section id="listed-items">
+            <p>出品商品を表示</p>
+
+        </section>
+        <section id="purchased-items">
+            <p>レンタル購入した商品を表示</p>
+        </section>
+        <section id="drafts">
+            <p>下書き一覧</p>
+        </section>
+        <section id="seller-center">
+            <p>セラーデータセンター</p>
+        </section>
+
+        <section id="payment">
+            <p>支払い方法</p>
+        </section>
+        <section id="privacy">
+            <p>個人情報設定</p>
+        </section>
+        <section id="notifications">
+            <p>お知られ・機能設定</p>
+        </section>
+
+        <section id="bank">
+
+        </section>
+        <section id="transfer-request">
+
+        </section>
+
+        <section id="contact">
+
+        </section>
+        <section id="faq">
+
+        </section>
+
+        <section id="help-center">
+
+        </section>
+
+        <section id="terms">
+
+        </section>
+        <section id="policy">
+
+        </section>
+
+        <section id="logout">
+
+        </section>
+        <section id="delete-account">
+            <p>アカウント削除を表示</p>
+
+        </section>
+    
+    </main>
+    <script src="../../static/js/mypage.js"></script>
+    
+    
+</body>
+</html>
