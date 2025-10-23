@@ -1,4 +1,4 @@
-from flask import Blueprint , render_template ,request,make_response,redirect,url_for,session
+from flask import Blueprint , render_template ,request,make_response,redirect,url_for,session,jsonify
 from PIL import Image
 from werkzeug.utils import secure_filename
 from datetime import datetime , timedelta
@@ -25,17 +25,22 @@ def login_auth():
     account = request.form
     #error回数
     ecnt = 0
-    data = {}
-
-    stbl={"mail":"メール","password":"パスワード"}
+    error_messages={}
     
     #空欄確認
-    for key,value in account.items():
-        if not value:
-            ecnt+=1
-    #空欄あり、登録できない      
-    if ecnt !=0:
-        return render_template('login/login.html',account=account)
+    if not account.get('mail'):
+        error_messages['mail'] = "メールアドレスを入力してください。"
+    if not account.get('password'):
+        error_messages['password'] = "パスワードを入力してください。"
+    if error_messages:
+        return jsonify({'success': False, 'errors': error_messages})
+    
+    # for key,value in account.items():
+    #     if not value:
+    #         ecnt+=1
+    # #空欄あり、登録できない      
+    # if ecnt !=0:
+    #     return render_template('login/login.html',account=account)
     
     # 入力した資料がデータベースに存在するかどうかを確認
     sql = "SELECT * FROM user WHERE mail = %s;"
@@ -46,12 +51,15 @@ def login_auth():
     userExist = cur.fetchone()
     #ユーザーが存在しないまたはパスワードが一致しない
     if not userExist or userExist['password'] != account['password']:
-        return render_template('login/login.html',account=account)
+        error_messages['password'] = "メールアドレスまたはパスワードが正しくありません。"
+        return jsonify({'success': False, 'errors': error_messages})
+        # return render_template('login/login.html',account=account, error_messages=error_messages)
     
     #登録成功の処理
     session['user_id'] = userExist['mail']
+    return jsonify({'success': True, 'redirect': url_for('top.member_index')})
 
-    return redirect(url_for('top.member_index'))
+    # return redirect(url_for('top.member_index'))
     
 #Logout--------------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/logout',methods=['GET'])
