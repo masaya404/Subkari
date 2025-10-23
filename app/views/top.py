@@ -42,6 +42,6 @@ def connect_db():
         host = 'localhost',
         user = 'root',
         passwd = '',
-        db ='py23db'
+        db ='db_subkari'
     )
     return con
