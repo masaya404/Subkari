@@ -1,38 +1,40 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>電話番号認証 - SUBKARI</title>
-    <link rel="stylesheet" href="../../../app/static/css/login1.css">
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet"> -->
-</head>
-<body>
-    <main class="main-content">
-        <div class="auth-container">
-            <h2 class="title">電話番号認証</h2>
-            
-            <p class="instruction-text">
-                *******xxxx宛にSMSに認証コードを送信しました。<br>メッセージに記載された6桁の数字を確認し、入力してください。
-            </p>
+{% extends "base.html" %}
 
-            <p class="input-label">6桁の数字を入力してください</p>
+{% block title %}電話番号認証{% endblock %}
 
-            <div class="code-input-group" id="code-inputs">
-                <input type="text" maxlength="1" class="code-input" data-index="0">
-                <input type="text" maxlength="1" class="code-input" data-index="1">
-                <input type="text" maxlength="1" class="code-input" data-index="2">
-                <input type="text" maxlength="1" class="code-input" data-index="3">
-                <input type="text" maxlength="1" class="code-input" data-index="4">
-                <input type="text" maxlength="1" class="code-input" data-index="5">
+{% block content %}
+<main class="main-content">
+    <div class="auth-container">
+        <h2 class="title">電話番号認証</h2>
+        
+        <p class="instruction-text">
+            {{ masked_phone }}宛にSMSで認証コードを送信しました。<br>
+            メッセージに記載された6桁の数字を確認し、入力してください。
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="flash-{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login.phone_auth') }}">
+            <div class="code-input-group">
+                {% for i in range(6) %}
+                <input type="text" maxlength="1" name="code{{i}}" class="code-input">
+                {% endfor %}
             </div>
 
-            <button id="verify-button" class="btn btn-primary">認証する</button>
-            <button id="resend-button" class="btn btn-secondary">再送リクエスト</button>
-        </div>
-    </main>
+            <button type="submit" class="btn btn-primary">認証する</button>
+        </form>
 
-
-    <script src="../../../app/js/login.js"></script>
-</body>
-</html>
+        <form method="POST" action="{{ url_for('login.phone_auth_resend') }}">
+            <button type="submit" class="btn btn-secondary">再送リクエスト</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

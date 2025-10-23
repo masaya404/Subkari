@@ -6,20 +6,20 @@ import mysql.connector
 import json
 import os
 
-auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+login_bp = Blueprint('login', __name__, url_prefix='/login')
 
 
 #Login画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
-@auth_bp.route('/login',methods=['GET'])
+@login_bp.route('/login',methods=['GET'])
 def login():
     #errorメッセージ
     etbl={}
     account={}
       
-    return render_template('auth/login.html',etbl=etbl,account=account)
+    return render_template('login/login.html',etbl=etbl,account=account)
 
 #Login確認--------------------------------------------------------------------------------------------------------------------------------------------------------------
-@auth_bp.route('/login/auth',methods=['POST'])
+@login_bp.route('/login/auth',methods=['POST'])
 def login_auth():
     account = request.form
     ecnt = 0
@@ -33,7 +33,7 @@ def login_auth():
             ecnt+=1
             etbl[key] = stbl[key] + error
     if ecnt !=0:
-        return render_template('auth/login.html',etbl=etbl,account=account)
+        return render_template('login/login.html',etbl=etbl,account=account)
     
     sql = "SELECT * FROM user WHERE userid = %s;"
     con=connect_db()
@@ -51,22 +51,22 @@ def login_auth():
     return render_template('index.html',user = session.get('ID'),authority = session.get('authority'))
     
 #Logout--------------------------------------------------------------------------------------------------------------------------------------------------------------
-@auth_bp.route('/logout',methods=['GET'])
+@login_bp.route('/logout',methods=['GET'])
 def logout():
     session.pop('user', None)
     session.pop('authority', None)
     session.clear()
-    return render_template('auth/index.html')
+    return render_template('login/index.html')
 
 #Register-------------------------------------------------------------------------------------------------------------------------------------------------------------
-@auth_bp.route('/register_user',methods=['GET'])
+@login_bp.route('/register_user',methods=['GET'])
 def register_user():
     account = {}
     etbl ={}
-    return render_template('auth/register_user.html',account=account,etbl=etbl)
+    return render_template('login/register_user.html',account=account,etbl=etbl)
 
 #Register確認----------------------------------------------------------------------------------------------------------------------------------------------------------
-@auth_bp.route('/register_user/complete',methods=['POST'])
+@login_bp.route('/register_user/complete',methods=['POST'])
 def register_user_complete():
     account = request.form
     error = "を入力してください。"
@@ -79,7 +79,7 @@ def register_user_complete():
             ecnt+=1
             etbl[key] = stbl[key] + error
     if ecnt !=0:
-        return render_template('auth/register_user.html',etbl=etbl,account=account)
+        return render_template('login/register_user.html',etbl=etbl,account=account)
     
     #同一user確認    
     sql = "SELECT * FROM user WHERE userid = %s;"
@@ -103,7 +103,7 @@ def register_user_complete():
     cur.close()
     con.close()
 
-    return render_template('auth/register_user_complete.html',account = account)
+    return render_template('login/register_user_complete.html',account = account)
 
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
