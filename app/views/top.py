@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,request,make_response,session
+from flask import Blueprint,render_template,request,make_response,redirect,url_for,session
 from PIL import Image
 from werkzeug.utils import secure_filename
 from datetime import datetime , timedelta
@@ -8,33 +8,32 @@ import os
 
 top_bp = Blueprint('top',__name__,url_prefix='/top')
 
-#Products表示-----------------------------------------------------------------------------------------------------------------------------------------------------------
-@top_bp.route('/top',methods=['GET'])
-def show_list():   
-
-    username = request.cookies.get('username')
-
-    return render_template('products/products.html',products = products ,authority = session.get('authority'),username=username)
-
-#Products詳細-----------------------------------------------------------------------------------------------------------------------------------------------------------
-@top_bp.route('/products/<scode>',methods=['GET'])
-def product_detail(scode):
-    username = request.cookies.get('username')
-    #user確認
-    if 'ID' in session:
-    #商品資料を取得    
-        sql = "SELECT * FROM lunch WHERE scode= %s;"
-        con = connect_db()
-        cur = con.cursor(dictionary=True)
-        cur.execute(sql,(scode,))
-        result = cur.fetchone()
-        cur.close()
-        con.close()
-        
-        return render_template('products/product_detail.html',result = result,username=username)
+#sessionの中にuserの登録状態を確認し、ゲストまたはメンバーのtop pageに遷移する
+#訪客のtop page表示--------------------------------------------------------------------------------------------------------------------------------------------
+@top_bp.route('/')
+def guest_index():
+    #sessionの登録資料確認
+    if 'user_id' in session:
+        user_id = session.get('user_id')
+        resp = make_response(redirect(url_for('member.top')))
+    else :
+        user_id = None
     
+    resp = make_response(render_template('top/guset_index.html', user_id = user_id))
+    return resp
+    
+#会員のtop page表示-----------------------------------------------------------------------------------------------------------------------------------------------------------
+@top_bp.route('/top',methods=['GET'])
+def member_index():
+    #sessionの登録資料確認   
+    if 'user_id' not in session:
+        resp = make_response(url_for('auth.login'))
+        user_id = None
     else:
-        return render_template('index.html',username=username)
+        user_id = session.get('user_id')
+        
+    resp = make_response(render_template('top/member_index.html', user_id = user_id))
+    return resp
 
 
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -43,6 +42,6 @@ def connect_db():
         host = 'localhost',
         user = 'root',
         passwd = '',
-        db ='py23db'
+        db ='db_subkari'
     )
     return con

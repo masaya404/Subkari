@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASHBOARD - 商品管理</title>
+    <style>
+/* === Common Variables (画像の色に合わせた調整) === */
+:root {
+    --color-main: #696969; /* サイドバーの濃いグレー */
+    --color-active-bg: #e0e0e0; /* サイドバーのアクティブ背景色 */
+    --color-text: #333;
+    --color-white: #fff;
+    --color-sidebar-link: #ffffff;
+    --color-dashboard-bg: #f9f9f9;
+    --color-top-bar-bg: #fff; /* トップバーの背景色 */
+    --color-border: #e0e0e0;
+    --color-link: #4a9eff;
+    --color-icon-edit: #ff9900; /* 編集アイコンのオレンジ */
+    --color-icon-delete: #dc3545; /* 削除アイコンの赤 */
+}
+
+/* === Base & Layout Styles === */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif; 
+}
+body { 
+    background-color: var(--color-dashboard-bg); 
+    color: var(--color-text); 
+    line-height: 1.5; 
+    font-size: 14px; 
+}
+a { text-decoration: none; color: inherit; }
+.app-container { display: flex; min-height: 100vh; }
+
+/* === Sidebar (商品管理アクティブ) === */
+.sidebar { 
+    width: 250px; 
+    flex-shrink: 0; 
+    background-color: var(--color-main); 
+}
+.sidebar-header { 
+    background-color: var(--color-main); 
+    color: var(--color-white); 
+    padding: 20px; 
+    font-size: 20px; 
+    height: 70px; 
+    display: flex; 
+    align-items: center; 
+    font-weight: bold; 
+} 
+.sidebar-nav ul { list-style: none; padding: 0; }
+.sidebar-nav li a { 
+    display: flex; 
+    align-items: center; 
+    padding: 12px 20px; 
+    color: var(--color-sidebar-link); 
+    border-bottom: 1px solid #7a7a7a; 
+    font-size: 14px;
+}
+/* 商品管理にアクティブなスタイルを適用 */
+.sidebar-nav li:nth-child(3) a { 
+    background-color: var(--color-active-bg); 
+    color: var(--color-text); 
+    font-weight: bold; 
+} 
+.sidebar-nav .notification { 
+    background-color: #dc3545; 
+    color: var(--color-white); 
+    border-radius: 50%; 
+    width: 20px; 
+    height: 20px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    font-size: 11px; 
+    margin-left: auto; 
+    margin-right: 5px; 
+}
+
+/* === Main Content Area === */
+.main-content-area { flex-grow: 1; display: flex; flex-direction: column; background-color: var(--color-white); }
+.top-bar { 
+    display: flex; 
+    justify-content: flex-end; 
+    align-items: center; 
+    padding: 0 30px; 
+    background-color: var(--color-top-bar-bg); 
+    border-bottom: 1px solid var(--color-border); 
+    height: 70px; 
+}
+.header-right { display: flex; align-items: center; }
+.user-info { display: flex; align-items: center; gap: 10px; color: var(--color-text); font-size: 14px; }
+.user-name { font-weight: normal; margin-right: 5px; color: var(--color-text); }
+.user-avatar { 
+    width: 35px; 
+    height: 35px; 
+    border-radius: 50%; 
+    background-color: #d2d2d2; 
+    border: 1px solid #ccc; 
+    margin-left: 5px; 
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.logout-link { color: var(--color-link); font-size: 14px; cursor: pointer; font-weight: normal; margin-left: 15px; }
+
+/* === Page Content (商品管理固有) === */
+.page-content { 
+    padding: 50px 70px; 
+    flex-grow: 1; 
+    background-color: var(--color-white); 
+    display: flex;
+    flex-direction: column;
+}
+
+.page-title { 
+    font-size: 24px; 
+    font-weight: bold;
+    margin-bottom: 30px; 
+    color: var(--color-text);
+}
+
+/* --- 検索バー --- */
+.search-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px 10px;
+    width: 350px;
+}
+.search-icon {
+    font-size: 16px;
+    color: #999;
+    margin-right: 10px;
+}
+.search-input {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    font-size: 14px;
+    padding: 0;
+}
+
+/* --- ページネーションと一括選択 --- */
+.pagination-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.select-all {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+}
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    gap: 5px;
+}
+.pagination-arrow {
+    cursor: pointer;
+    padding: 0 5px;
+    color: #999;
+}
+.pagination-current {
+    border: 1px solid var(--color-text);
+    padding: 2px 10px;
+    border-radius: 4px;
+    background-color: var(--color-active-bg);
+}
+
+/* --- 結果テーブル --- */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.results-table thead th {
+    font-weight: bold;
+    background-color: var(--color-white);
+    color: var(--color-text);
+    padding: 10px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-text); /* 画像上部の濃い線 */
+}
+.results-table tbody td {
+    border-bottom: 1px solid var(--color-border);
+    padding: 10px 10px;
+    text-align: left;
+    white-space: nowrap; /* テキストが折り返さないように */
+}
+
+/* 偶数行の背景色（画像に合わせてわずかにグレー） */
+.results-table tbody tr:nth-child(even) {
+    background-color: #f7f7f7; 
+}
+/* チェックボックスの列 */
+.results-table td:first-child, .results-table th:first-child {
+    width: 30px;
+    text-align: center;
+}
+/* 管理列 */
+.results-table td:last-child {
+    width: 100px;
+    text-align: center;
+}
+
+/* 管理アイコン */
+.management-icons {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+.icon-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 18px;
+}
+.icon-edit {
+    background-color: var(--color-icon-edit);
+    color: var(--color-white);
+}
+.icon-delete {
+    background-color: var(--color-icon-delete);
+    color: var(--color-white);
+}
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">DASHBOARD</div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#">ダッシュボード</a></li>
+                    <li><a href="#">アカウント管理</a></li>
+                    <li><a href="#" class="active">商品管理</a></li>
+                    <li><a href="#">通報一覧</a></li>
+                    <li><a href="#">お問い合わせ <span class="notification">1</span></a></li>
+                    <li><a href="#">通知</a></li>
+                    <li><a href="#">コンテンツ編集</a></li>
+                    <li><a href="#">管理者アカウント作成</a></li>
+                    <li><a href="#">管理者アカウント管理</a></li>
+                    <li><a href="#">ログ閲覧</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="main-content-area">
+            <header class="top-bar">
+                <div class="header-right">
+                    <div class="user-info">
+                        <span class="user-name">中村 徳倉</span>
+                        <div class="user-avatar"></div>
+                    </div>
+                    <a href="#" class="logout-link">ログアウト</a>
+                </div>
+            </header>
+
+            <main class="page-content">
+                <h1 class="page-title">商品管理</h1>
+
+                <div class="search-container">
+                    <div class="search-input-group">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="商品検索">
+                    </div>
+                    
+                    <div class="pagination-area">
+                        <button class="select-all">全選択</button>
+                        <div class="pagination-controls">
+                            <span class="pagination-arrow" onclick="prevPage()">&lt;&lt;</span>
+                            <span class="pagination-current">1</span>
+                            <span class="pagination-arrow" onclick="nextPage()">&gt;&gt;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="select-all-header"></th>
+                            <th>商品id</th>
+                            <th>商品名</th>
+                            <th>価格</th>
+                            <th colspan="2">出品日時</th>
+                            <th>出品状況</th>
+                            <th>管理</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td>ダブルジップダメ・・</td>
+                            <td>3000</td>
+                            <td colspan="2">2019-08-07 15:03</td>
+                            <td>出品中</td>
+                            <td><div class="management-icons"><span class="icon-button icon-edit">📝</span><span class="icon-button icon-delete">🗑</span></div></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td>パーカー</td>
+                            <td>8500</td>
+                            <td colspan="2">2019-08-07 15:03</td>
+                            <td>非表示</td>
+                            <td><div class="management-icons"><span class="icon-button icon-edit">📝</span><span class="icon-button icon-delete">🗑</span></div></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>50</td>
+                            <td>ダブルジップダメ・・</td>
+                            <td>3000</td>
+                            <td colspan="2">2019-08-07 15:03</td>
+                            <td>出品中</td>
+                            <td><div class="management-icons"><span class="icon-button icon-edit">📝</span><span class="icon-button icon-delete">🗑</span></div></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>80</td>
+                            <td>パーカー</td>
+                            <td>8500</td>
+                            <td colspan="2">2019-08-07 15:03</td>
+                            <td>売却済み</td>
+                            <td><div class="management-icons"><span class="icon-button icon-edit">📝</span><span class="icon-button icon-delete">🗑</span></div></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>90</td>
+                            <td>ダブルジップダメ・・</td>
+                            <td>3000</td>
+                            <td colspan="2">2019-08-07 15:03</td>
+                            <td>出品中</td>
+                            <td><div class="management-icons"><span class="icon-button icon-edit">📝</span><span class="icon-button icon-delete">🗑</span></div></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>70</td>
+                            <td>パーカー</td>
+                            <td>8500</td>
+                            <td colspan="2">2019-08-07 15:03</td>
+                            <td>非表示</td>
+                            <td><div class="management-icons"><span class="icon-button icon-edit">📝</span><span class="icon-button icon-delete">🗑</span></div></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td>ダブルジップダメ・・</td>
+                            <td>3000</td>
+                            <td colspan="2">2019-08-07 15:03</td>
+                            <td>レンタル中</td>
+                            <td><div class="management-icons"><span class="icon-button icon-edit">📝</span><span class="icon-button icon-delete">🗑</span></div></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td>パーカー</td>
+                            <td>8500</td>
+                            <td colspan="2">2019-08-07 15:03</td>
+                            <td>削除済み</td>
+                            <td><div class="management-icons"><span class="icon-button icon-edit">📝</span><span class="icon-button icon-delete">🗑</span></div></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td>ダブルジップダメ・・</td>
+                            <td>3000</td>
+                            <td colspan="2">2019-08-07 15:03</td>
+                            <td>出品中</td>
+                            <td><div class="management-icons"><span class="icon-button icon-edit">📝</span><span class="icon-button icon-delete">🗑</span></div></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td>パーカー</td>
+                            <td>8500</td>
+                            <td colspan="2">2019-08-07 15:03</td>
+                            <td>強制削除</td>
+                            <td><div class="management-icons"><span class="icon-button icon-edit">📝</span><span class="icon-button icon-delete">🗑</span></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ログアウト機能
+            const logoutLink = document.querySelector('.logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('ログアウト処理を実行...');
+                    alert('ログアウトします');
+                });
+            }
+
+            // 全選択/解除機能
+            const selectAllHeader = document.getElementById('select-all-header');
+            const rowCheckboxes = document.querySelectorAll('.results-table tbody input[type="checkbox"]');
+            const selectAllButton = document.querySelector('.select-all');
+
+            selectAllHeader.addEventListener('change', (e) => {
+                rowCheckboxes.forEach(checkbox => {
+                    checkbox.checked = e.target.checked;
+                });
+                selectAllButton.textContent = e.target.checked ? '全解除' : '全選択';
+            });
+            
+            selectAllButton.addEventListener('click', () => {
+                 const isAllChecked = Array.from(rowCheckboxes).every(cb => cb.checked);
+                 const newState = !isAllChecked;
+                 
+                 rowCheckboxes.forEach(checkbox => {
+                    checkbox.checked = newState;
+                 });
+                 selectAllHeader.checked = newState;
+                 selectAllButton.textContent = newState ? '全解除' : '全選択';
+            });
+
+
+            // ページネーションのダミー機能
+            window.prevPage = function() {
+                console.log('前のページへ移動');
+                alert('前のページへ移動します');
+            };
+            window.nextPage = function() {
+                console.log('次のページへ移動');
+                alert('次のページへ移動します');
+            };
+
+            // 管理ボタンのダミー機能
+            document.querySelectorAll('.icon-edit').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const row = e.currentTarget.closest('tr');
+                    const productId = row.querySelector('td:nth-child(2)').textContent;
+                    console.log(`商品ID: ${productId} の編集画面へ遷移`);
+                    alert(`商品ID: ${productId} の編集画面へ遷移します`);
+                });
+            });
+
+            document.querySelectorAll('.icon-delete').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const row = e.currentTarget.closest('tr');
+                    const productId = row.querySelector('td:nth-child(2)').textContent;
+                    if (confirm(`商品ID: ${productId} を削除してもよろしいですか？`)) {
+                        console.log(`商品ID: ${productId} を削除`);
+                        alert(`商品ID: ${productId} を削除しました`);
+                        // 実際にはここでサーバーに削除リクエストを送る
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

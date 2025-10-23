@@ -1,3 +1,9 @@
+{% extends "base.html" %}
+{% block title %}
+    トップページ
+{% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -50,6 +56,7 @@
             background-position: center;
             background-repeat: no-repeat;
             border-radius: 8px;
+            
         }
 
         /* 制御ボタン (修正箇所) */
@@ -319,38 +326,6 @@
         </main>
     </div>
 
-    <section class="guidelines">
-        <div class="guidelines-container">
-            <h2>Guidelines</h2>
-            <p class="guidelines-subtitle">初めての方へ</p>
-            <div class="guidelines-grid">
-                <div class="guideline-card">
-                    <div class="guideline-icon"><img src="../../../app/img/Clothes.png" alt=""></div>
-                    <h3>SUBKARIについて</h3>
-                </div>
-                <div class="guideline-card">
-                    <div class="guideline-icon"><img src="../../../app/img/Vector.png" alt=""></div>
-                    <h3>会員登録について</h3>
-                </div>
-                <div class="guideline-card">
-                    <div class="guideline-icon"><img src="../../../app/img/Vector-2.png" alt=""></div>
-                    <h3>送料・お支払いについて</h3>
-                </div>
-                <div class="guideline-card">
-                    <div class="guideline-icon"><img src="../../../app/img/Error.png" alt=""></div>
-                    <h3>トラブルが起きたら</h3>
-                </div>
-                <div class="guideline-card">
-                    <div class="guideline-icon"><img src="img/Help.png" alt=""></div>
-                    <h3>ヘルプセンター</h3>
-                </div>
-                <div class="guideline-card">
-                    <div class="guideline-icon"><img src="img/Vector-1.png" alt=""></div>
-                    <h3>よくあるご質問</h3>
-                </div>
-            </div>
-        </div>
-    </section>
 
 <script>
         // ========== 一方向 無限ループ スライド制御 (ジャンプ抑制版) ==========
@@ -426,7 +401,7 @@
                 checkLoop();
             }
         }
-        
+
         // 前へ (左方向) - **機能は無効**
         // 無限ループは右方向のみなので、この関数は中身を空にして維持します。
         function prevSlide() {
@@ -458,7 +433,6 @@
         // 修正箇所: prevButtonを取得
         const prevButton = document.querySelector('.prev-arrow');
 
-
         const handleManualClick = (direction) => {
             // 手動操作時は自動スライドを一旦リセット
             clearInterval(autoSlide);
@@ -489,3 +463,22 @@
     </script></body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
