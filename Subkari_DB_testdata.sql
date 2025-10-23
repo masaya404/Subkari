@@ -1,20 +1,140 @@
--- アカウントテーブルテストデータ
+-- アカウントテーブルのテストデータ
 
-INSERT INTO `m_account` (`username`, `fullName`, `birthday`, `zip`, `pref`, `address1`, `address2`, `address3`, `mail`, `smoker`, `introduction`, `money`, `newCreationDate`, `updateDate`, `updaterId`, `password`) VALUES
-('taniguchi', '谷口 昌哉', '1990-04-15', '1000001', '東京都', '千代田区', '丸の内1-1', 'サンプルビル101', 'test@gmail.com', true, 'よろしくお願いします。趣味は読書です。', 50000, '2023-01-10', '2023-10-26 15:30:00', 1, '1234'),
-('suzuki_hanako', '鈴木 花子', '1995-08-20', '5400002', '大阪府', '大阪市中央区', '大手前2-2', 'ABCマンション202', 'hanako.suzuki@example.com', false, 'はじめまして！旅行が好きです。', 120000, '2023-02-05', '2023-11-01 09:00:00', 2, 'hashed_password_2'),
-('sato_jiro', '佐藤 次郎', '1988-12-01', '4600001', '愛知県', '名古屋市中区', '三の丸3-3', '', 'jiro.sato@example.com', true, NULL, 80000, '2023-03-20', NULL, NULL, 'hashed_password_3'),
-('takahashi_saburo', '高橋 三郎', '2000-01-30', '8100001', '福岡県', '福岡市中央区', '天神4-4', '天神ビル5F', 'saburo.takahashi@example.com', false, 'プログラミングを勉強中です。', NULL, '2023-05-15', '2023-09-10 18:45:00', 1, 'hashed_password_4'),
-('ito_shiro', '伊藤 四朗', '1985-07-07', '0600005', '北海道', '札幌市中央区', '北5条西5丁目', 'JRタワー', 'shiro.ito@example.com', false, '北海道の美味しいものを探しています。', 250000, '2023-06-01', NULL, NULL, 'hashed_password_5');
+INSERT INTO `m_account` (
+  `username`, 
+  `fullName`, 
+  `birthday`, 
+  `tel`, -- 不足していた NOT NULL カラム
+  `mail`, 
+  `smoker`, 
+  `introduction`, 
+  `money`, 
+  `created_at`, -- 'newCreationDate' から修正
+  `updateDate`, 
+  `status`, -- 不足していた NOT NULL カラム
+  `updaterId`, 
+  `password`, 
+  `identifyImg` -- 不足していた NOT NULL カラム
+) 
+VALUES
+('taniguchi', '谷口 昌哉', '1990-04-15', 
+'090-1111-1111', -- tel (ダミー)
+'test@gmail.com', true, 'よろしくお願いします。趣味は読書です。', 50000, 
+'2023-01-10', '2023-10-26 15:30:00', 
+'本人確認済み', -- status (ダミー)
+1, '1234', 
+'img/dummy1.jpg' -- identifyImg (ダミー)
+),
+('suzuki_hanako', '鈴木 花子', '1995-08-20', 
+'090-2222-2222', -- tel (ダミー)
+'hanako.suzuki@example.com', false, 'はじめまして！旅行が好きです。', 120000, 
+'2023-02-05', '2023-11-01 09:00:00', 
+'本人確認済み', -- status (ダミー)
+2, 'hashed_password_2', 
+'img/dummy2.jpg' -- identifyImg (ダミー)
+),
+('sato_jiro', '佐藤 次郎', '1988-12-01', 
+'090-3333-3333', -- tel (ダミー)
+'jiro.sato@example.com', true, NULL, 80000, 
+'2023-03-20', NULL, 
+'未確認', -- status (ダミー)
+NULL, 'hashed_password_3', 
+'img/dummy3.jpg' -- identifyImg (ダミー)
+),
+('takahashi_saburo', '高橋 三郎', '2000-01-30', 
+'090-4444-4444', -- tel (ダミー)
+'saburo.takahashi@example.com', false, 'プログラミングを勉強中です。', NULL, 
+'2023-05-15', '2023-09-10 18:45:00', 
+'未確認', -- status (ダミー)
+1, 'hashed_password_4', 
+'img/dummy4.jpg' -- identifyImg (ダミー)
+),
+('ito_shiro', '伊藤 四朗', '1985-07-07', 
+'090-5555-5555', -- tel (ダミー)
+'shiro.ito@example.com', false, '北海道の美味しいものを探しています。', 250000, 
+'2023-06-01', NULL, 
+'凍結', -- status (ダミー)
+NULL, 'hashed_password_5', 
+'img/dummy5.jpg' -- identifyImg (ダミー)
+);
 
--- 商品テーブルテストデータ
+
+INSERT INTO `m_address` 
+  (`account_id`, `zip`, `pref`, `address1`, `address2`, `address3`) 
+VALUES
+(1, '100-0001', '東京都', '千代田区', '丸の内1-1', 'サンプルビル101'),
+(2, '540-0002', '大阪府', '大阪市中央区', '大手前2-2', 'ABCマンション202'),
+(3, '460-0001', '愛知県', '名古屋市中区', '三の丸3-3', ''),
+(4, '810-0001', '福岡県', '福岡市中央区', '天神4-4', '天神ビル5F'),
+(5, '060-0005', '北海道', '札幌市中央区', '北5条西5丁目', 'JRタワー'),
+(1, '100-0002', '東京都', '千代田区', '皇居外苑', '1-1');
 
 
+-- ブランドテーブルテストデータ
+INSERT INTO `m_brand` (`name`) VALUES
+('TRAVAS TOKYO'),
+('REFLEM'),
+('CIVARIZE'),
+('ililil'),
+
+('Valerie'),
+('THICC PSYNYXX'),
+('KINGLYMASK'),
+('Amlige'),
+('Meltier'),
+('OY'),
+('LIZ LISA'),
+('Ank Rouge');
 
 
+-- カテゴリテーブルのテストデータ
+INSERT INTO `m_category` (`name`) VALUES
+('コーデ'),
+('トップス'),
+('ボトムス'),
+('アクセサリー');
 
+-- 商品テーブルのテストデータ
+INSERT INTO `m_product` 
+(
+  `img`, `name`, `purchasePrice`, `rentalPrice`, `size`,
+  `upload`, `showing`, `draft`, `updateDate`, `purchaseFlg`,
+  `rentalFlg`, `explanation`, `account_id`, `brand_id`, `category_id`,
+  `cleanNotes`, `smokingFlg`
+) 
+VALUES
+(
+  'img/products/vintage_tee.jpg', '80s ヴィンテージTシャツ', NULL, 3000, 'L', 
+  '2025-10-01', '公開', false, '2025-10-01 10:00:00', false, 
+  true, '80年代のロックTシャツです。非常にレアなアイテムです。', 1, 1, 1, 
+  '手洗い推奨。乾燥機の使用は避けてください。', false
+),
+(
+  'img/products/denim_jacket.jpg', 'リーバイス デニムジャケット', 15000, NULL, 'M', 
+  '2025-10-05', '公開', false, '2025-10-05 14:30:00', true, 
+  false, '定番のデニムジャケット。状態は良好です。', 2, 2, 2, 
+  '色落ちするため単体で洗濯してください。', true
+),
+(
+  'img/products/leather_bag.jpg', '本革ショルダーバッグ', 20000, 5000, 'フリーサイズ', 
+  '2025-10-10', '非公開', false, '2025-10-10 18:00:00', true, 
+  true, 'イタリア製の本革バッグ。A4サイズ収納可能です。', 3, 3, 3, 
+  '革専用クリーナーを使用してください。水濡れ厳禁。', false
+),
+(
+  'img/products/sneakers.jpg', '限定版スニーカー', NULL, 6000, '27.5cm', 
+  '2025-10-15', '公開', true, '2025-10-15 09:15:00', false, 
+  true, 'コラボ限定モデル。数回使用しました。', 1, 1, 1, 
+  NULL, false
+),
+(
+  'img/products/wool_coat.jpg', 'ウールロングコート', 35000, 8000, 'M', 
+  '2025-10-20', '公開', false, '2025-10-20 11:00:00', true, 
+  true, NULL, 4, 3, 2, 
+  'クリーニング必須。', false
+);
 
--- 洗濯表示テーブルテストデータ
+-- クリーニング表示テーブルのテストデータ
 INSERT INTO `m_cleanSign` (`id`, `cleanName`, `cleanImg`, `cleanDetail`) VALUES
 (190, '洗濯処理', 'sentaku_190.png', '液温は95℃を限度とし、洗濯機で洗濯ができる'),
 (170, '洗濯処理', 'sentaku_170.png', '液温は70℃を限度とし、洗濯機で洗濯ができる'),
@@ -61,16 +181,19 @@ INSERT INTO `m_cleanSign` (`id`, `cleanName`, `cleanImg`, `cleanDetail`) VALUES
 (700, 'ウエットクリーニング', 'wet_700.png', 'ウエットクリーニング禁止');
 
 
--- 管理者アカウントテーブルテストデータ
-INSERT INTO `m_adminAccount` (`fullName`, `level`, `creationDate`, `lastLogin`, `password`) VALUES
+-- 管理者アカウントテーブルのテストデータ
+
+INSERT INTO `m_adminAccount` 
+  (`fullName`, `level`, `created_at`, `lastLogin`, `password`) 
+VALUES
 ('中村輝', 'administrator', '2023-01-01 10:00:00', '2025-10-15 09:30:00', '1234'),
-('佐藤健吾', 'moderator', '2023-02-10 11:20:00', '2025-10-16 08:00:00', 'pass_sato'),
-('鈴木美穂', 'support', '2023-03-15 14:00:00', '2025-10-14 15:10:00', 'pass_suzuki'),
-('高橋大輔', 'moderator', '2023-04-20 09:00:00', NULL, 'pass_takahashi'),
+('佐藤健吾', 'operator', '2023-02-10 11:20:00', '2025-10-16 08:00:00', 'pass_sato'),
+('鈴木美穂', 'operator', '2023-03-15 14:00:00', '2025-10-14 15:10:00', 'pass_suzuki'),
+('高橋大輔', 'operator', '2023-04-20 09:00:00', NULL, 'pass_takahashi'),
 ('田中祐子', 'administrator', '2023-05-01 16:45:00', '2025-10-16 11:05:00', 'pass_tanaka');
 
 
--- コンテンツテーブルテストデータ
+-- コンテンツテーブルのテストデータ
 INSERT INTO `m_admin_contents` (`name`, `content_detail`, `created_at`, `updated_at`) VALUES
 (
     '利用規約',
@@ -90,6 +213,16 @@ INSERT INTO `m_admin_contents` (`name`, `content_detail`, `created_at`, `updated
     '2023-01-05 15:00:00',
     '2025-07-01 18:00:00'
 );
+
+-- トップスサイズテーブルのテストデータ
+INSERT INTO `m_topsSize` 
+  (`product_id`, `shoulderWidth`, `bodyWidth`, `sleeveLength`, `bodyLength`, `notes`) 
+VALUES
+(1, 48.00, 55.00, 22.00, 72.00, 'Lサイズ相当 (80s ヴィンテージTシャツ)'),
+(2, 45.50, 52.00, 60.50, 70.00, 'Mサイズ相当 (デニムジャケット)'),
+(5, 46.00, 54.00, 61.00, 90.00, 'Mサイズ (ウールロングコート)');
+
+
 
 
 -- ブランドテーブルテストデータ
