@@ -20,21 +20,5 @@ def create_app():
     app.register_blueprint(top.top_bp)
     app.register_blueprint(auth.auth_bp)
     app.register_blueprint(products.products_bp)
-<<<<<<< Updated upstream
-=======
 
-
-    # --- トップページのルートをここで定義 ---
-    # @app.route('/')
-    # def index():
-    #     #sessionの登録資料まず確認
-    #     if 'ID' in session:
-    #         user = session.get('ID')
-    #     else :
-    #         user = None
-        
-    #     resp=make_response(render_template('index.html',user=user))
-    #     return resp
->>>>>>> Stashed changes
-        
     return app
