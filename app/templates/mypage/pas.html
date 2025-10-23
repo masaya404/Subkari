@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パスワード確認</title>
+    <link rel="stylesheet" href="../../static/css/pas.css">
+    
+</head>
+<body>
+    <div class="container">
+        <h1>パスワード確認</h1>
+
+        <form onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label class="form-label">パスワード</label>
+                <div class="password-wrapper">
+                    <input 
+                        type="password" 
+                        class="form-input" 
+                        id="password"
+                        placeholder=""
+                        oninput="validatePassword()"
+                    >
+                </div>
+                <div class="error-message" id="passwordError">パスワードを入力してください</div>
+                <div class="forgot-password">
+                    <a href="#">パスワード忘れた方</a>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" class="submit-btn">確認</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="../../static/js/pas.js"></script>
+</body>
+</html>

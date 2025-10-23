@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUBKARI - アカウント情報確認</title>
-    <link rel="stylesheet" href="../../../app/static/css/login.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
 
@@ -13,28 +13,29 @@
             <p class="subkari-main__message">
                 ご登録している電話番号宛にメールアドレスを送信しました。
             </p>
-
             <div class="subkari-main__buttons">
-                <button class="subkari-button subkari-button--primary" onclick="goToLogin()">
+                <a href="{{ url_for('login') }}" class="subkari-button subkari-button--primary">
                     ログイン画面へ戻る
-                </button>
-                <button class="subkari-button subkari-button--secondary" onclick="resendRequest()">
+                </a>
+                <a href="{{ url_for('resend') }}" class="subkari-button subkari-button--secondary">
                     再送リクエストを送信
-                </button>
-                <button class="subkari-button subkari-button--secondary" onclick="createNewAccount()">
+                </a>
+                <a href="{{ url_for('register') }}" class="subkari-button subkari-button--secondary">
                     新規アカウント作成
-                </button>
+                </a>
             </div>
 
             <div class="subkari-main__note">
                 <p>
-                    <span class="subkari-main__note-star">※</span>登録時の電話番号が利用できない場合、ご本人確認ができないためメールアドレスを添付できません。<br>
-                    お手数ですが<a href="#" class="subkari-main__note-link">新規会員登録</a>をお願いします。
+                    <span class="subkari-main__note-star">※</span>
+                    登録時の電話番号が利用できない場合、ご本人確認ができないためメールアドレスを添付できません。<br>
+                    お手数ですが
+                    <a href="{{ url_for('register') }}" class="subkari-main__note-link">新規会員登録</a>
+                    をお願いします。
                 </p>
             </div>
         </div>
     </main>
 
-    <script src="app/js/login.js"></script>
 </body>
 </html>

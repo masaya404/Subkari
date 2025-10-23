@@ -4,37 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ログイン - SUBKARI</title>
-    <link rel="stylesheet" href="../../../app/static/css/login.css">
-
+    <!-- <link rel="stylesheet" href="../../../app/static/css/login.css"> -->
+       <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
+
 <body>
   <div class="container--login login-page">
     <h1>ログイン</h1>
-
-    <form id="loginForm">
+    <form id="loginForm" method="POST" action="{{ url_for('login.login_auth') }}">
       <div class="form-group">
         <label for="email">メールアドレス</label>
-        <input type="email" id="email" required>
+        <input type="email" id="email" name="email" required>
         <div class="link">
           <a href="forgot-email.html">メールアドレス忘れた方</a>
         </div>
       </div>
-
       <div class="form-group">
         <label for="password">パスワード</label>
-        <input type="password" id="password" required>
+        <input type="password" id="password" name="password"  required>
         <div class="link">
-          <a href="forgot-password.html">パスワード忘れた方</a>
+          <a href="forgot_password.html">パスワード忘れた方</a>
         </div>
       </div>
-
       <button type="submit" class="btn btn--login">ログイン</button>
     </form>
 
     <p class="register-link">
       <a href="register-simple.html">新規会員登録</a>
     </p>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
   </div>
-    <script src="../../../app/static/js/script.js" defer></script>
+    <!-- <script src="../../../app/js/login.js"></script> -->
 </body>
 </html>

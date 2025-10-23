@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>特定商取引法に基づく表記 - SUBKARI</title>
-    <link rel="stylesheet" href="../../../app/static/css/login.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body class="commercial-body">
 
@@ -45,7 +45,7 @@
                 <div class="commercial-sub-section">
                     <h4 class="commercial-sub-sub-heading">・仲介手数料</h4>
                     <ol class="commercial-list">
-                        <li class="commercial-list-item">販売手数料として**販売価格の30%**</li>
+                        <li class="commercial-list-item">販売手数料として<strong>販売価格の30%</strong></li>
                         <li class="commercial-list-item">出品した商品が購入され取引が完了した時に、販売価格の30%が販売手数料として販売価格から差し引かれます。</li>
                     </ol>
                 </div>
@@ -67,7 +67,7 @@
                 </div>
             </article>
 
-            </section>
+        </section>
     </main>
 
 </body>

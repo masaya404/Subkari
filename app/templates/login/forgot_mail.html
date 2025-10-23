@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>メールアドレス忘れた方 - SUBKARI</title>
-    <link rel="stylesheet" href="../../../app/static/css/login.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
   <div class="container--forgot-email forgot-email-page">
@@ -14,15 +14,18 @@
       登録された電話番号に紐づいたメールアドレスがSMSで送信されます。
     </p>
 
-    <form id="forgotEmailForm">
+    <form method="POST" action="{{ url_for('forgot_email') }}">
       <div class="form-group">
         <label for="phone">電話番号</label>
-        <input type="tel" id="phone" placeholder="09012345678" required pattern="[0-9]{10,11}">
+        <input type="tel" id="phone" name="phone" placeholder="09012345678" required pattern="[0-9]{10,11}">
       </div>
 
       <button type="submit" class="btn btn--forgot-email">送信する</button>
     </form>
+
+    {% if message %}
+      <p class="result-message">{{ message }}</p>
+    {% endif %}
   </div>
-    <script src="../../../app/static/js/script.js" defer></script>
 </body>
 </html>

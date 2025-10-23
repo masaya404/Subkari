@@ -133,7 +133,7 @@ body.registerForm-page {
 }
 
 .rfo-btn:hover {
-  background: #555;
+  background: #686666;
 }
 
 /* フッター */
@@ -305,6 +305,7 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+    background-color: #3333;
     margin-bottom: 15px;
 }
 
