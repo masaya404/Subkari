@@ -11,7 +11,10 @@
     <form id="loginForm" method="POST" action="{{ url_for('login.login_auth') }}">
       <div class="form-group">
         <label for="mail">メールアドレス</label>
-        <input type="mail" id="mail" name="mail" required>
+        <input type="email" id="mail" name="mail" required value={{ account.mail if account else ''}}>
+        {% if error_message %}
+          <p class="error-message">{{ error_message }}</p>
+        {% endif %}
         <p class="error-text" id="mailError"></p>
         <div class="link">
           <a href="forgot_mail.html">メールアドレス忘れた方</a>
@@ -26,7 +29,7 @@
           <a href="forgot_password.html">パスワード忘れた方</a>
         </div>
       </div>
-      <button type="submit" class="btn btn--login">ログイン</button>
+      <button type="submit" class="btn btn--login" id="login_btn">ログイン</button>
     </form>
 
     <p class="register-link">

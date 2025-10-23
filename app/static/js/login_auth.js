@@ -1,46 +1,19 @@
-console.log("loaded");
+console.log("login_auth is loaded.");
+errorMes = new Array()
+errorMes[0] = "メールを入力してください";
+errorMes[1] = "パスワードを入力してください";
 
-// $(document).on('submit', '#loginForm', function(e) {
-//   e.preventDefault();
-//   console.log("submit handler triggered!");
-// });
+$("#login_btn").on("click",function(){
+    console.log("check");
+    
+    $(".error-text").empty();
+    $(".error").remove();
 
-$(document).ready(function() {
-  $('#loginForm').on('submit', function(e) {
-    e.preventDefault(); 
-    console.log("form submitted via AJAX");
-
-    //エラーメッセージ削除
-    $('.error-text').text('');
-    $('input').removeClass('input-error');
-
-    $.ajax({
-      url: $(this).attr('action'),
-      type: 'POST',
-      data: $(this).serialize(), // 
-      dataType: 'json',
-      success: function(response) {
-        console.log("AJAX success:", response);
-        if (!response.success) {
-          // 
-          if (response.errors.mail) {
-            $('#mail').addClass('input-error');
-            $('#mailError').text(response.errors.mail);
-          }
-          if (response.errors.password) {
-            $('#password').addClass('input-error');
-            $('#passwordError').text(response.errors.password);
-          }
-        } else {
-          // 成功 
-          window.location.href = response.redirect;
-        }
-      },
-      error: function() {
-        console.log("AJAX error:", xhr.responseText);
-        alert('通信エラーが発生しました。もう一度お試しください。');
-      }
+    $("input[type='email'] , input[type='password']").each(function(index,e){
+        console.log("each");
+        if($(this).val()===""){
+            $(this).after(`<div class="error">${errorMes[index]}</div>`);
+            $(".error").css(`color`,`red`);
+        };
     });
-  });
 });
-

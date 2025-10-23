@@ -173,7 +173,7 @@ footer {
   font-weight: 500;
 }
 
-.login-page input[type="mail"],
+.login-page input[type="email"],
 .login-page input[type="password"] {
   width: 100%;
   padding: 12px 15px;
