@@ -38,6 +38,12 @@ main {
     grid-template-columns: 280px 1fr;
     gap: 40px;
 }
+h2{
+    font-size: 24px;
+    font-weight: 500;
+    margin: 30px 40px;
+    /* border-bottom: 2px solid #f0f0f0; */
+}
 
 /* --- --------サイドナビ ----------------------- */
 .nav {
@@ -202,6 +208,50 @@ main {
     font-size: 20px;
 }
 /* -----------------プロフィール終了 --------------------------*/
+
+
+
+
+
+
+
+
+/* --------------------振込-------------------*/
+.menu-item {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    text-decoration: none;
+    color: #333;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+
+.menu-link:hover {
+    background: #d8d3d3;
+}
+
+.menu-link::after {
+    content: '›';
+    font-size: 24px;
+    color: #999;
+}
+
+
+
+
+
+
+
 
 
 
