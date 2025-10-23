@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUBKARI Admin - メッセージ送信</title>
+    <style>
+/* common.css + account.css の内容を統合 */
+
+/* === Common Variables === */
+:root {
+    --color-main: #696969; /* サイドバーの背景色 */
+    --color-accent: #f0f0f0; /* アクティブなメニューの背景色 */
+    --color-text: #333;
+    --color-white: #fff;
+    --color-link: #d2d2d2; /* サイドバーのリンク色 */
+    --color-active-text: #333;
+    --color-dashboard-bg: #f9f9f9;
+    --color-primary: #4a90e2; /* 主要なボタン色 */
+    --color-danger: #dc3545; /* 削除・警告色 */
+    --color-success: #28a745; /* 保存・成功色 */
+}
+
+/* === Base Styles === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+}
+
+body {
+    background-color: var(--color-dashboard-bg);
+    color: var(--color-text);
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* === Main Layout === */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* === Sidebar === */
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background-color: var(--color-main);
+    color: var(--color-link);
+}
+
+.sidebar-header {
+    background-color: #555; /* DASKBOARDの背景は#555を想定 */
+    color: var(--color-white);
+    padding: 20px 20px;
+    font-size: 20px;
+    font-weight: normal; /* 画像では太字ではない */
+    font-family: Arial, sans-serif; /* 画像のフォントを再現 */
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: var(--color-white); /* リンク色は白または明るいグレーを想定 */
+    border-bottom: 1px solid #7a7a7a;
+    transition: background-color 0.2s;
+}
+
+.sidebar-nav li a:hover:not(.active) {
+    background-color: #7a7a7a;
+}
+
+/* --- アカウント管理をアクティブに設定 --- */
+.sidebar-nav li:nth-child(2) a {
+    background-color: var(--color-accent);
+    color: var(--color-active-text);
+    font-weight: bold;
+    border-right: none;
+}
+/* -------------------------------------- */
+
+.sidebar-nav .notification {
+    background-color: var(--color-danger);
+    color: var(--color-white);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    margin-left: auto;
+    margin-right: 5px;
+}
+
+/* === Main Content Area === */
+.main-content-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #acacac; /* 画像のヘッダー背景色を再現 */
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 20px;
+    color: var(--color-text); /* 文字色は黒に近い色 */
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ccc;
+    border: 1px solid #fff;
+}
+
+.logout-link {
+    color: #4a90e2; /* 画像の青いログアウト文字色を再現 */
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.page-content {
+    padding: 30px;
+    flex-grow: 1;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.sub-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* === Message Send Styles (account.css の一部を抽出・調整) === */
+.message-form-container {
+    max-width: 800px;
+}
+
+.message-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    clear: both;
+    display: flex;
+    align-items: flex-start;
+}
+
+.form-group label {
+    display: block;
+    font-weight: normal; /* 画像に合わせて調整 */
+    margin-bottom: 5px;
+    width: 150px; /* 画像に合わせて幅を調整 */
+    flex-shrink: 0;
+    padding-top: 8px;
+    font-size: 16px; /* 画像に合わせてフォントサイズ調整 */
+}
+
+.form-group .form-value {
+    display: inline-block;
+    padding: 8px 0;
+    font-size: 16px; /* 画像に合わせてフォントサイズ調整 */
+    font-weight: bold;
+    flex-grow: 1;
+}
+
+/* 件名 (input) */
+.form-group input[type="text"] {
+    flex-grow: 1;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 0; /* 画像に合わせる */
+    font-size: 16px;
+    max-width: 400px; /* 画像の入力欄の長さに合わせる */
+}
+
+/* 内容 (textarea) */
+.form-group.content-group {
+    display: block;
+}
+
+.form-group.content-group label {
+    float: left;
+    width: 150px;
+}
+
+.form-group.content-group textarea {
+    float: left;
+    width: calc(100% - 150px);
+    min-height: 400px; /* 画像の大きなテキストエリアを再現 */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 0; /* 画像に合わせる */
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.submit-btn {
+    display: block;
+    width: 150px;
+    padding: 10px;
+    background-color: #555; /* 画像の黒っぽいボタン色を再現 */
+    color: #fff;
+    border: none;
+    border-radius: 0; /* 画像に合わせる */
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.2s;
+    margin-left: 150px; /* ラベル幅の調整 */
+}
+
+.submit-btn:hover {
+    background-color: #333;
+}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">DASHBOARD</div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.html">ダッシュボード</a></li>
+                    <li><a href="account_list.html" class="active">アカウント管理</a></li>
+                    <li><a href="#">商品管理</a></li>
+                    <li><a href="#">通報一覧</a></li>
+                    <li><a href="contact_list.html">お問い合わせ<span class="notification">1</span></a></li>
+                    <li><a href="content_edit.html">コンテンツ編集</a></li>
+                    <li><a href="#">管理者</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="main-content-area">
+            <header class="top-bar">
+                <div class="user-info">
+                    <span class="user-name">中村 徳倉</span>
+                    <div class="user-avatar"></div>
+                </div>
+                <a href="#" class="logout-link">ログアウト</a>
+            </header>
+
+            <main class="page-content">
+                <h2 class="page-title">アカウント管理</h2>
+                
+                <div class="message-form-container">
+                    <h3 class="message-title">メッセージ送信</h3>
+
+                    <form class="message-form">
+                        <div class="form-group">
+                            <label for="account-name">アカウント名</label>
+                            <span id="account-name" class="form-value">選択されたアカウント名</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">件名</label>
+                            <input type="text" id="subject" value="利用規約改定のお知らせ">
+                        </div>
+
+                        <div class="form-group content-group">
+                            <label for="content">内容</label>
+                            <textarea id="content" placeholder="内容を入力"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">送信</button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ログアウト処理の例
+            const logoutLink = document.querySelector('.logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (confirm('ログアウトしますか？')) {
+                        // ログアウト処理
+                        // window.location.href = 'login.html'; 
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
