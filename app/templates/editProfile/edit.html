@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロフィール編集</title>
+    <link rel="stylesheet" href="../../static/css/edit.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1>プロフィール編集</h1>
+
+        <form>
+            <!-- 画像 -->
+            <div class="form-section">
+                <div class="section-title">画像</div>
+                <div class="image-upload">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%231e3c72'/%3E%3Ctext x='50' y='60' font-size='40' fill='white' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E" alt="プロフィール画像" class="profile-preview" id="profilePreview">
+                    <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="previewImage(event)">
+                    <button type="button" class="upload-btn" onclick="document.getElementById('imageInput').click()">画像を選択</button>
+                </div>
+            </div>
+
+            <!-- 喫煙の有無 -->
+            <div class="form-section">
+                <p class="section-title">喫煙の有無</p>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="smoking1" name="smoking" value="yes" checked>
+                        <label for="smoking1">禁煙している</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="smoking2" name="smoking" value="no">
+                        <label for="smoking2">現在、喫煙している</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アカウント名 -->
+            <div class="form-group">
+                <label class="form-label">アカウント名</label>
+                <input type="text" class="form-input" id="accountName" value="" maxlength="20" oninput="updateCharCount('accountName', 'nameCount', 20); validateAccountName()">
+                <div class="error-message" id="nameError">ニックネームを入力してください</div>
+                <div class="char-count"><span id="nameCount">0</span> / 20</div>
+            </div>
+
+            <!-- 自己紹介 -->
+            <div class="form-group">
+                <label class="form-label">自己紹介</label>
+                <textarea class="form-textarea" id="bio" maxlength="1000" oninput="updateCharCount('bio', 'bioCount', 1000); validateBio()"></textarea>
+                <div class="error-message" id="bioError">1000文字以下で入力してください</div>
+                <div class="char-count" id="bioCountWrapper"><span id="bioCount">0</span> / 1000</div>
+            </div>
+
+            <!-- 送信ボタン -->
+            <div class="submit-section">
+                <button type="submit" class="submit-btn" onclick="handleSubmit(event)">更新する</button>
+            </div>
+        </form>
+    </div>
+    <script src="../../static/js/edit.js"></script>
+
+</body>
+</html>
