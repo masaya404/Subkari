@@ -6,7 +6,7 @@ import mysql.connector
 import json
 import os
 
-top_bp = Blueprint('top',__name__,url_prefix='/top')
+top_bp = Blueprint('top',__name__)
 
 #sessionの中にuserの登録状態を確認し、ゲストまたはメンバーのtop pageに遷移する
 #訪客のtop page表示--------------------------------------------------------------------------------------------------------------------------------------------
@@ -15,11 +15,11 @@ def guest_index():
     #sessionの登録資料確認
     if 'user_id' in session:
         user_id = session.get('user_id')
-        resp = make_response(redirect(url_for('member.top')))
+        resp = make_response(redirect(url_for('top.member_index')))
     else :
         user_id = None
     
-    resp = make_response(render_template('top/guset_index.html', user_id = user_id))
+    resp = make_response(render_template('top/guest_index.html', user_id = user_id))
     return resp
     
 #会員のtop page表示-----------------------------------------------------------------------------------------------------------------------------------------------------------
