@@ -8,106 +8,182 @@
             font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'メイリオ', sans-serif;
             background: #fff;
         }
+        .hero {
+            /* スライダーコンテナの幅と位置を調整 */
+            width: 100%;
+            height: 550px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            height: auto;
+            background: #d8d8d8;
+        }
 
-        header {
-            background: #000;
-            padding: 10px 30px;
+        .hero-slider {
+            overflow: hidden;
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease;
+
+        }
+
+        .hero-slide {
+            display: flex;
+            transition: transform 0.8s ease;
+            min-width: 100%;
+            height: 100%;
+            
+
+        }
+
+        .hero-slide-item {
+            /* 4枚同時表示: 100%を4で割った幅 (25%) */
+            min-width: 25%;
+            height: 700px;
+            /* 画像の高さ（適宜調整） */
+            box-sizing: border-box;
+            padding: 5px;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 8px;
+            flex: 1;
+            
+        }
+
+        /* 制御ボタン (修正箇所) */
+        .slider-arrows {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            /* 修正点: ボタンを左右に配置 */
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 10px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .slider-arrow {
+            pointer-events: auto;
+            /* 丸い背景と境界線を削除 */
+            background: none; 
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 0;
+            font-size: 1.5em;
+            line-height: 1;
+            opacity: 1; 
+            transition: opacity 0.3s;
+        }
+
+        .slider-arrow:hover {
+            opacity: 0.8; 
+        }
+
+
+
+        /* .hero {
+            width: 100%;
+            height: 550px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            height: auto;
+            background: #d8d8d8;
+        } */
+
+        /* .hero-slider {
+            overflow: hidden;
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease;
+
+        } */
+
+        /* .hero-slide {
+            display: flex;
+            transition: transform 0.8s ease;
+            min-width: 100%;
+            height: 100%;
+            
+
+        } */
+
+        /* .hero-slide-item {
+            min-width: 25%;
+            height: 700px;
+            box-sizing: border-box;
+            padding: 5px;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 8px;
+            
+        }
+ */
+        /* 制御ボタン (修正箇所) */
+        /* .slider-arrows {
+            position: absolute;
+            top: 50%;
+            width: 100%;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-family: serif;
-            font-style: italic;
-            color: #fff;
-            font-size: 20px;
-            letter-spacing: 2px;
-        }
-
-        .header-search {
-            flex: 1;
-            max-width: 350px;
-            margin: 0 30px;
-            position: relative;
-        }
-
-        .header-search input {
-            width: 100%;
-            padding: 6px 15px 6px 30px;
-            border-radius: 15px;
-            border: none;
-            font-size: 12px;
-        }
-
-        .header-search::before {
-            content: "🔍";
-            position: absolute;
-            left: 10px;
-            top: 50%;
             transform: translateY(-50%);
-            font-size: 12px;
+            padding: 0 10px;
+            pointer-events: none;
+            z-index: 10;
         }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            color: #fff;
-            font-size: 11px;
-        }
-
-        .header-right a {
-            color: #fff;
-            text-decoration: none;
+ */
+        /* .slider-arrow {
+            pointer-events: auto;
+            background: none; 
+            color: white;
+            border: none;
+            padding: 10px 15px;
             cursor: pointer;
+            border-radius: 0;
+            font-size: 1.5em;
+            line-height: 1;
+            opacity: 1; 
+            transition: opacity 0.3s;
         }
+ */
+        /* .slider-arrow:hover {
+            opacity: 0.8; 
+        } */
 
-        nav {
-            background: #000;
-            padding: 10px 30px;
-            display: flex;
-            gap: 30px;
-            justify-content: flex-end;
-            border-top: 1px solid #333;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-        }
-
-        .hero {
+         /* .hero {
             position: relative;
             overflow: hidden;
             background: #d8d8d8;
             height: 550px;
-        }
-
-        .hero-slider {
+        }  */
+ 
+        /* .hero-slider {
             display: flex;
             height: 100%;
             transition: transform 0.5s ease;
-        }
-
-        .hero-slide {
+        } 
+ */
+        /* .hero-slide {
             min-width: 100%;
             height: 100%;
             display: flex;
-        }
+        }  */
 
-        .hero-slide-item {
+        /* .hero-slide-item {
             flex: 1;
             background: #c0c0c0;
             margin: 0 2px;
             background-size: cover;
             background-position: center;
-        }
+        } */
 
         .hero-content {
             position: absolute;
@@ -125,11 +201,11 @@
             margin-bottom: 8px;
         }
 
-        .hero-content p {
+         .hero-content p {
             font-size: 12px;
             margin-bottom: 12px;
         }
-
+ 
         .hero-link {
             color: #4a9eff;
             font-size: 12px;
@@ -159,7 +235,7 @@
 
         .content-wrapper {
             display: flex;
-            max-width: 1600px;
+            max-width: 90%;
             margin: 0 auto;
             padding: 25px 20px;
             gap: 250px;
@@ -414,7 +490,7 @@
     position: relative;
     overflow: hidden;
     background: #d8d8d8;
-    height: 550px;
+    /* height: 550px; */
 }
 
 .hero-slider {
@@ -568,7 +644,7 @@ header, nav {
 ================================*/
 .hero {
   position: relative;
-  height: 400px;
+  /* height: 400px; */
   overflow: hidden;
   background: #e5e5e5;
 }
@@ -622,10 +698,10 @@ header, nav {
 }
 
 .intro-section h1, .intro-section h2 {
+    font-size: 36px;
   letter-spacing: 3px;
   margin-bottom: var(--space-md);
 }
-
 .intro-section p {
   font-size: var(--font-sm);
   color: var(--color-text-muted);
@@ -1180,3 +1256,6 @@ footer {
 @media (max-width: 480px) {
   .brands-grid, .brands-grid-with-text { grid-template-columns: 1fr; gap: 20px; }
 }
+
+
+

@@ -1,19 +1,333 @@
+{% extends "base.html" %}
+{% block title %}
+    トップページ
+{% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SUBKARI - ファッションレンタルサービス</title>
-  <link rel="stylesheet" href="../../../app/static/css/top.css">
+  <title>SUBKARI</title>
+
+  <style>
+    /* === カスタムプロパティ === */
+    :root {
+      --color-bg: #fff;
+      --color-text: #333;
+      --color-text-muted: #666;
+      --color-header-bg: #000;
+      --color-header-link: #fff;
+      --color-cta-bg-primary: #333;
+      --color-cta-text-primary: #fff;
+      --color-cta-bg-secondary: #fff;
+      --color-cta-border-secondary: #333;
+      --color-footer-bg: #333;
+      --color-footer-link: #aaa;
+      --color-border: #eee;
+      --space-xs: 8px;
+      --space-sm: 12px;
+      --space-md: 20px;
+      --space-lg: 40px;
+      --space-xl: 60px;
+      --space-xxl: 90px;
+      --font-xs: 12px;
+      --font-sm: 14px;
+      --font-md: 17px;
+      --font-lg: 18px;
+      --font-xl: 22px;
+      --font-xxl: 24px;
+      --radius-sm: 20px;
+      --radius-md: 25px;
+      --radius-circle: 50%;
+    }
+
+    /* === リセット === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Yu Gothic', 'Hiragino Kaku Gothic Pro', sans-serif;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+
+    /* === ヘッダー === */
+    header, nav {
+      background: var(--color-header-bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-sm) var(--space-lg);
+      color: var(--color-header-link);
+    }
+
+    .logo {
+      font-size: var(--font-xxl);
+      font-style: italic;
+      letter-spacing: 2px;
+    }
+
+    .search-box {
+      flex: 1;
+      max-width: 400px;
+      margin: 0 var(--space-lg);
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: var(--space-xs) var(--space-md);
+      border: none;
+      border-radius: var(--radius-sm);
+    }
+
+    .header-links, nav {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+    }
+
+    .header-links a, nav a {
+      color: var(--color-header-link);
+      text-decoration: none;
+      font-size: var(--font-xs);
+    }
+
+    /* === ヒーロー / イントロ === */
+    .intro-section {
+      text-align: center;
+      padding: var(--space-xl) var(--space-md);
+      background: #fafafa;
+    }
+
+    .intro-section h1, .intro-section h2 {
+      font-size: 36px;
+      letter-spacing: 3px;
+      margin-bottom: var(--space-md);
+    }
+
+    .intro-section p {
+      font-size: var(--font-sm);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-xl);
+    }
+
+    /* === ブランドグリッド === */
+    .brands-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--space-xxl) var(--space-lg);
+      padding: var(--space-xxl) 0;
+      margin: var(--space-lg) auto;
+      max-width: 80%;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .brands-grids {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-xxl) var(--space-lg);
+      padding: var(--space-xxl) 0;
+      margin: var(--space-lg) auto;
+      max-width: 60%;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .brands-grid img {
+      width: 100%;
+      max-height: 100px;
+      object-fit: contain;
+      padding: 0 var(--space-md);
+    }
+
+    /* === 4つのサービス (Features) === */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-xl) var(--space-lg);
+      margin: var(--space-xl) auto;
+      max-width: 900px;
+    }
+
+    .feature {
+      text-align: center;
+      padding: var(--space-lg);
+      border-radius: 8px;
+    }
+
+    .feature-icon img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: var(--space-md);
+    }
+
+    .feature h3 {
+      font-size: var(--font-md);
+      margin-bottom: var(--space-xs);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .feature p {
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* === ブランド探索 === */
+    .explore-group {
+      text-align: center;
+      padding: var(--space-md) 0;
+    }
+
+    .brand-explore-title {
+      font-size: var(--font-sm);
+      font-weight: 500;
+      margin: var(--space-md) 0 var(--space-sm);
+    }
+
+    .brands-grid-with-text {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 80px 10px;
+      max-width: 90%;
+      margin: 0 auto var(--space-xl);
+      justify-items: center;
+    }
+
+    .brand-item img {
+      width: 100px;
+      height: 100px;
+      border-radius: var(--radius-circle);
+      object-fit: contain;
+      margin-bottom: 5px;
+    }
+
+    /* === SNSセクション === */
+    .sns-section-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 120px;
+      margin: 250px 0;
+    }
+
+    .sns-title {
+      font-size: var(--font-lg);
+      font-weight: 500;
+    }
+
+    .sns-description {
+      font-size: var(--font-xs);
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* === CTAセクション === */
+    .cta-section {
+      text-align: center;
+      padding: 70px 30px;
+      background: #f5f5f5;
+    }
+
+    .cta-section h2 {
+      font-size: var(--font-xl);
+      margin-bottom: var(--space-sm);
+    }
+
+    .cta-section p {
+      font-size: var(--font-xs);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-lg);
+      line-height: 1.8;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: center;
+    }
+
+    .cta-btn {
+      padding: 12px 40px;
+      border-radius: var(--radius-md);
+      font-size: var(--font-xs);
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      border: none;
+    }
+
+    .cta-btn.primary {
+      background: var(--color-cta-bg-primary);
+      color: var(--color-cta-text-primary);
+    }
+
+    .cta-btn.secondary {
+      background: var(--color-cta-bg-secondary);
+      border: 2px solid var(--color-cta-border-secondary);
+      color: var(--color-cta-border-secondary);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* === フッター === */
+    footer {
+      background: var(--color-footer-bg);
+      color: var(--color-footer-link);
+      padding: var(--space-xl) var(--space-md);
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+
+    .footer-links a {
+      color: var(--color-footer-link);
+      font-size: var(--font-xs);
+      text-decoration: none;
+    }
+
+    /* === レスポンシブ === */
+    @media (max-width: 1024px) {
+      .products-container { grid-template-columns: repeat(4, 1fr); }
+      .content-wrapper { gap: 150px; }
+    }
+
+    @media (max-width: 768px) {
+      .features { grid-template-columns: 1fr; max-width: 90%; gap: var(--space-lg); }
+      .brands-grid { grid-template-columns: repeat(2, 1fr); gap: 40px 20px; }
+      .brands-grid-with-text { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+      .sns-section-content { flex-direction: column; margin: 100px 0; gap: 60px; }
+      header { padding: 15px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .brands-grid, .brands-grid-with-text { grid-template-columns: 1fr; gap: 20px; }
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- ▼ サービス紹介 -->
+  <!-- === イントロセクション === -->
   <section class="intro-section">
     <h1>SUBKARIへようこそ</h1>
     <p>日本ではじめてのサブカル地雷特化のファッションレンタルサービスです。</p>
 
+    <!-- ブランドロゴ -->
     <div class="brands-grid">
       <img src="../../../app/img/Rectangle 210.png" alt="">
       <img src="../../../app/img/Rectangle 211.png" alt="">
@@ -29,6 +343,7 @@
       <img src="../../../app/img/Rectangle 218.png" alt="">
     </div>
 
+    <!-- サービス紹介 -->
     <div class="intro-section2">
       <h2>SUBKARI<br>4つのサービス</h2>
     </div>
@@ -39,19 +354,16 @@
         <h3>レンタルだけでなく<br>買い取りも</h3>
         <p>サブスクリプションだけでなく、アイテムごとに気に入ったものを買い取ることができます。</p>
       </div>
-
       <div class="feature">
         <div class="feature-icon"><img src="../../../app/img/Frame 310.png" alt=""></div>
         <h3>まだ自分を使いたいから<br>レンタル出品</h3>
         <p>特定のレンタル品を延長でレンタルし、レンタルオプションを延長する事も可能に出来ます。</p>
       </div>
-
       <div class="feature">
         <div class="feature-icon"><img src="../../../app/img/Frame 311.png" alt=""></div>
         <h3>あらゆるタイミングで<br>トラブル対応</h3>
         <p>セーフティ保証もついているので安心です。</p>
       </div>
-
       <div class="feature">
         <div class="feature-icon"><img src="../../../app/img/Frame 312.png" alt=""></div>
         <h3>ゼロからコーディネートを<br>知っていこう</h3>
@@ -60,7 +372,7 @@
     </div>
   </section>
 
-  <!-- ▼ SNS紹介 -->
+  <!-- === SNSセクション === -->
   <section class="sns-section">
     <div class="sns-section-content">
       <div class="sns-icon-area">
@@ -84,34 +396,34 @@
     </div>
   </section>
 
-  <!-- ▼ カテゴリー検索 -->
-<section class="intro-section">
-  <h2>さっそくアイテムを検索</h2>
-  <p>カテゴリーから探す</p>
+  <!-- === カテゴリー検索 === -->
+  <section class="intro-section">
+    <h2>さっそくアイテムを検索</h2>
+    <p>カテゴリーから探す</p>
 
-  <div class="brands-grids category-grid">
-    <div class="category-item">
-      <img src="../../../app/img/Frame 318.png" alt="コーデ">
-      <p>コーデ</p>
+    <div class="brands-grids category-grid">
+      <div class="category-item">
+        <img src="../../../app/img/Frame 318.png" alt="コーデ">
+        <p>コーデ</p>
+      </div>
+      <div class="category-item">
+        <img src="../../../app/img/Frame 319.png" alt="トップス">
+        <p>トップス</p>
+      </div>
+      <div class="category-item">
+        <img src="../../../app/img/Frame 320.png" alt="ボトムズ">
+        <p>ボトムズ</p>
+      </div>
+      <div class="category-item">
+        <img src="../../../app/img/Frame 321.png" alt="アクセサリー">
+        <p>アクセサリー</p>
+      </div>
     </div>
-    <div class="category-item">
-      <img src="../../../app/img/Frame 319.png" alt="トップス">
-      <p>トップス</p>
-    </div>
-    <div class="category-item">
-      <img src="../../../app/img/Frame 320.png" alt="ボトムズ">
-      <p>ボトムズ</p>
-    </div>
-    <div class="category-item">
-      <img src="../../../app/img/Frame 321.png" alt="アクセサリー">
-      <p>アクセサリー</p>
-    </div>
-  </div>
-</section>
-  <!-- ▼ ブランド検索 -->
+  </section>
+
+  <!-- === ブランドから探す === -->
   <section class="explore-group">
     <h4 class="brand-explore-title">ブランドから探す</h4>
-
     <div class="brands-grid-with-text">
       <div class="brand-item"><img src="../../../app/img/Rectangle 210.png" alt="TRAVAS"><p>TRAVAS</p></div>
       <div class="brand-item"><img src="../../../app/img/Rectangle 211.png" alt="REFLEM"><p>REFLEM</p></div>
@@ -128,7 +440,7 @@
     </div>
   </section>
 
-  <!-- ▼ CTAセクション -->
+  <!-- === CTAセクション === -->
   <section class="cta-section">
     <h2>SubKariには楽しいことが盛り沢山！</h2>
     <p>ファッションをかなごー安さる<br>リオぶけちとっても安心しよう！</p>
@@ -145,3 +457,16 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

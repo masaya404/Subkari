@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規会員登録 - SUBKARI</title>
+    <!-- <link rel="stylesheet" href="../../../app/static/css/login copy.css"> -->
+    <style>/* ===============================
+   新規会員登録ページ専用スタイル
+   （HTMLのクラス名: register-XXX, registerForm-XXX に対応）
+=============================== */
+
+/* 1. ベース */
+body.register-body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+    background: #f5f5f5;
+    margin: 0; /* 共通リセットに含まれていなければ追加 */
+}
+
+/* 2. メインコンテナ */
+.register-container {
+    max-width: 600px;
+    margin: 80px auto; /* 上下80px, 左右中央寄せ */
+    padding: 60px 40px;
+    background: #fff;
+    /* 必要であれば影を追加: box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
+}
+
+/* 3. 見出し */
+.register-container h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 50px;
+}
+
+/* 4. フォームグループ */
+.register-form-group {
+    margin-bottom: 30px;
+}
+
+.register-form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+/* 5. 入力フィールド */
+.register-form-group input[type="email"],
+.register-form-group input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box; /* paddingを含めたwidthにする */
+}
+
+.register-form-group input::placeholder {
+    color: #ccc;
+}
+
+/* 6. 送信ボタン */
+.register-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background: #666;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 40px;
+}
+
+.register-btn:hover {
+    background: #555;
+}
+
+/* 7. 利用規約・プライバシーポリシーへの注意書き */
+.register-terms-note {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #666; /* 色を追加 */
+}
+
+.register-terms-note a {
+    color: #4a9eff;
+    text-decoration: none;
+}
+
+.register-terms-note a:hover {
+    text-decoration: underline;
+}
+
+/* 8. フッター関連スタイル (HTMLには含まれていないが、CSSには定義があるため抽出) */
+footer.register-footer {
+    background: #4a4a4a;
+    color: #fff;
+    padding: 30px 40px;
+    margin-top: 100px;
+}
+
+.register-footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.register-footer-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.register-footer-links a:hover {
+    opacity: 0.7;
+}
+
+.register-copyright {
+    text-align: center;
+    font-size: 11px;
+    color: #999;
+}</style>
+</head>
+<body class="register-body">
+    <div class="register-container">
+        <h1>新規会員登録</h1>
+
+        <form onsubmit="return handleRegister(event)">
+            <div class="register-form-group">
+                <label for="email">メールアドレス</label>
+                <input type="email" id="email" placeholder="example@domain.com" required>
+            </div>
+
+            <div class="register-form-group">
+                <label for="password">パスワード</label>
+                <input type="password" id="password" placeholder="8文字以上" required minlength="8">
+            </div>
+
+            <div class="register-form-group">
+                <label for="password-confirm">パスワード再入力</label>
+                <input type="password" id="password-confirm" placeholder="確認用" required minlength="8">
+            </div>
+
+            <button type="submit" class="register-btn">同意して送信する</button>
+        </form>
+
+        <p class="register-terms-note">
+            会員登録には、<a href="terms.html">利用規約</a>および
+            <a href="privacy.html">プライバシーポリシー</a>への同意が必要です。
+        </p>
+    </div>
+<script src="../../../app/js/login.js"></script>
+</body>
+</html>

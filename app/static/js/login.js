@@ -237,3 +237,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// ログイン画面へ戻る
+function goToLogin() {
+    window.location.href = "login.html"; // ログイン画面のURLに変更してください
+}
+
+// 再送リクエストを送信
+function resendRequest() {
+    window.location.href = "resend_request.html"; // 再送リクエスト画面のURLに変更してください
+}
+
+// 新規アカウント作成
+function createNewAccount() {
+    window.location.href = "new_account.html"; // 新規アカウント作成画面のURLに変更してください
+}

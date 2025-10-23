@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロフィール</title>
+    <link rel="stylesheet" href="../../static/css/editProfile.css">
+
+</head>
+<body>
+
+    <!-- メインコンテンツ -->
+    <main>
+        <h1></h1>
+        <!-- プロフィールヘッダー -->
+        <div class="profile-header">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%231e3c72'/%3E%3Ctext x='50' y='60' font-size='40' fill='white' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E" alt="プロフィール画像" class="profile-image">
+            
+            <div class="profile-info">
+                <h1 class="profile-name">haltaro</h1>
+                
+                <div class="profile-rating">
+                    <span class="stars">★★★★☆</span>
+                    <span class="rating-count">255</span>
+                    <span class="reviewer-badge">喫煙者</span>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">80</span>
+                        <span class="stat-label">出品数</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">10</span>
+                        <span class="stat-label">フォロー</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5</span>
+                        <span class="stat-label">フォロワー</span>
+                    </div>
+                </div>
+                
+                <div class="profile-description" id="profileDescription">
+                    猫アレルギーの人はごめんなさい。<br>
+                    猫の毛がついてるかもです。<br>
+                    よろしくお願いします。<br>
+                    柄→柄選択します。
+                    <span id="moreText" style="display: none;">
+                        <br><br>
+                        【取引について】<br>
+                        ・購入時すぐに気持ちメッセージをお願いいたします。<br>
+                        ・発送時期は平日夕方となっています。基本即日発送はできません。プロフィルをしっかりと読んでいただくと判断した場合ものよっては取引を解除させていただきますので、安心して取引できない相手と判断し、評価は「悪い」にさせていただきます。
+                    </span>
+                </div>
+                
+                <a href="#" class="show-more" id="showMoreBtn" onclick="toggleDescription(event)">もっと見る</a>
+                <a href="#" class="show-more" id="showLessBtn" onclick="toggleDescription(event)" style="display: none;">閉じる</a>
+            </div>
+            
+           <div class="profile-actions" ><a href="edit.html">
+                <button class="edit-profile-btn">プロフィールを編集</button>
+            </div>
+            </a>
+        </div>
+
+        <!-- 商品グリッド -->
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1562137369-1a1a0bc66744?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1560243563-062bfc001d68?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1578932750355-5eb30ece2a83?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1558769132-cb1aea8f2c57?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1544441893-675973e31985?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1555529902-5261145633bf?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?w=300" alt="スカート" class="product-image">
+                <div class="product-name">スカート</div>
+            </div>
+        </div>
+
+        <!-- もっと見るボタン -->
+        <div class="load-more">
+            <button class="load-more-btn">もっと見る</button>
+        </div>
+    </main>
+
+
+    <script src="../../static/js/editProfile.js"></script>
+</body>
+</html>
