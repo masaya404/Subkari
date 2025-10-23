@@ -33,3 +33,49 @@ function toggleDescription(event) {
         showLessBtn.style.display = 'none';
     }
 }
+
+
+
+
+// ===== ブロック・報告ポップアップ機能 =====
+const modal = document.getElementById("modalOverlay");
+const modalTitle = document.getElementById("modalTitle");
+const modalMessage = document.getElementById("modalMessage");
+const cancelBtn = document.getElementById("cancelBtn");
+const confirmBtn = document.getElementById("confirmBtn");
+
+document.querySelectorAll(".dropdown-item").forEach(item => {
+    item.addEventListener("click", (e) => {
+        const text = e.target.textContent;
+
+        if (text.includes("ブロックしますか？")) {
+            showModal("ブロックすると、あなたをフォローすることや、あなたの出品商品に購入・", 
+                      "コメント・いいね！などができなくなります。");
+            confirmBtn.textContent = "ブロック";
+            confirmBtn.style.backgroundColor = "#e74c3c";
+        } 
+        else if (text.includes("報告しますか？")) {
+            showModal("報告内容を確認し、必要に応じて対応いたします。誤った報告はお控えください。");
+            confirmBtn.textContent = "報告";
+            confirmBtn.style.backgroundColor = "#f39c12";
+        }
+    });
+});
+
+function showModal(title, message) {
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    modal.style.display = "flex";
+}
+
+// モーダル閉じる処理
+cancelBtn.addEventListener("click", () => modal.style.display = "none");
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.style.display = "none";
+});
+
+// 実行ボタン（仮）
+confirmBtn.addEventListener("click", () => {
+    alert(confirmBtn.textContent + "を実行しました。");
+    modal.style.display = "none";
+});
