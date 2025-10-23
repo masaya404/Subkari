@@ -1,5 +1,3 @@
-
-
 {% extends "base.html" %}
 {% block title %}
     商品画面
@@ -14,8 +12,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUBKARI</title>
-    <link rel="stylesheet" href="../../../app/static/css/top.css">
-
     <style>
         /* ==================== スライダー用 CSS (一方向無限ループ & 左右矢印配置) ==================== */
 * {
@@ -42,7 +38,8 @@ a {
     position: relative;
     overflow: hidden;
     width: 100%;
-    background: #d8d8d8;
+    /* 修正箇所: ここを #fff に変更しました */
+    background: #fff; 
 }
 
 .hero-slider {
@@ -723,6 +720,17 @@ heroSlider.addEventListener('touchmove', (e) => {
    </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
