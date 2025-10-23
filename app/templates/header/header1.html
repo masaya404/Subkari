@@ -16,7 +16,7 @@
             </div>
 
             <div class="header-right">
-
+                {% if not user_id %}
                 <div class="header-login">
                     <a href="#" class="">
                         <span>新規登録</span>
@@ -28,7 +28,7 @@
                         <img src="{{ url_for('static', filename='img/hamburger.png') }}" class="icon"></img>
                     </a>
                 </div>
-
+                {% else %}    
                 <div class="header-icons">
                     <a href="#" class="icon-item">
                         <img src="{{ url_for('static', filename='img/mypage.png') }}" class="icon"></img>
@@ -54,7 +54,7 @@
                         <img src="{{ url_for('static', filename='img/hamburger.png') }}" class="icon"></img>
                     </a>
                 </div>
-
+                {% endif %}
                 <div class="nav-container">
                     <nav>
                         <a href="#">Coordinate</a>
