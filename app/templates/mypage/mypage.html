@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マイページ</title>
-    <link rel="stylesheet" href="../../static/css/mypage.css">
+{% extends "base.html" %}
+{% block title %}
+    マイページ
+{% endblock %}
 
-</head>
-<body>
+{% block content %}
+<link rel="stylesheet" href="../../static/css/mypage.css">
+
     <!-- ヘッダー -->
     <main>
         <section class="nav">
@@ -31,9 +29,9 @@
             </ul>
 
             <ul class="nav-section">
-                <li class="nav-section-title">振込</li>
-                <li class="nav-item">銀行登録</li>
+                <li class="nav-section-title">残高</li>
                 <li class="nav-item">振込申請</li>
+                <li class="nav-item">履歴</li>
             </ul>
 
             <ul class="nav-section">
@@ -145,11 +143,16 @@
             <p>お知られ・機能設定</p>
         </section>
 
-        <section id="bank">
+        <section id="transfer-request">
+            <h2>振込申請</h2>
+            <ul class="menu-list">
+                <li class="menu-item"> <a href="bankRegistration.html" class="menu-link">銀行口座登録</a></li>
+                <li class="menu-item"> <a href="#" class="menu-link">振込申請</a></li>
+            </ul>
 
         </section>
-        <section id="transfer-request">
-
+        <section id=history>
+            <p>履歴</p>
         </section>
 
         <section id="contact">
@@ -180,7 +183,4 @@
     
     </main>
     <script src="../../static/js/mypage.js"></script>
-    
-    
-</body>
-</html>
+{% endblock %} 

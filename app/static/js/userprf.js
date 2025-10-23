@@ -48,14 +48,14 @@ document.querySelectorAll(".dropdown-item").forEach(item => {
     item.addEventListener("click", (e) => {
         const text = e.target.textContent;
 
-        if (text.includes("ブロックしますか？")) {
-            showModal("ブロックすると、あなたをフォローすることや、あなたの出品商品に購入・", 
-                      "コメント・いいね！などができなくなります。");
+        if (text.includes("ブロック")) {
+            showModal("ブロックしますか？", 
+                      "ブロックすると、あなたをフォローすることや、あなたの出品商品に購入・コメント・いいね！などができなくなります。");
             confirmBtn.textContent = "ブロック";
             confirmBtn.style.backgroundColor = "#e74c3c";
         } 
-        else if (text.includes("報告しますか？")) {
-            showModal("報告内容を確認し、必要に応じて対応いたします。誤った報告はお控えください。");
+        else if (text.includes("報告")) {
+            showModal("報告しますか？","報告内容を確認し、必要に応じて対応いたします。誤った報告はお控えください。");
             confirmBtn.textContent = "報告";
             confirmBtn.style.backgroundColor = "#f39c12";
         }
@@ -76,6 +76,6 @@ modal.addEventListener("click", (e) => {
 
 // 実行ボタン（仮）
 confirmBtn.addEventListener("click", () => {
-    alert(confirmBtn.textContent + "を実行しました。");
+    // alert(confirmBtn.textContent + "を実行しました。");
     modal.style.display = "none";
 });
