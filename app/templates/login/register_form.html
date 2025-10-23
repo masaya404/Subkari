@@ -363,21 +363,25 @@ body.registerForm-page {
     // ------------------------------------
     // 郵便番号から住所を自動入力するダミー機能
     // ------------------------------------
-    document.getElementById('postal')?.addEventListener('blur', function() {
-        const postal = this.value.trim();
-        if (postal.length === 7 && /^\d{7}$/.test(postal)) {
-            // ダミーの自動入力処理
-            console.log('郵便番号から住所を検索: ' + postal);
-            
-            // 郵便番号に応じて、都道府県・市区町村・番地を更新する処理
-            if (postal === '5300001') {
-                const selectedDiv = document.querySelector('.rfo-prefecture-selected');
-                selectedDiv.textContent = '大阪府';
-                document.getElementById('city').value = '大阪市北区';
-                document.getElementById('address').focus(); // 次のフィールドにフォーカスを移動
+document.getElementById('postal').addEventListener('blur', function() {
+    const postal = this.value.replace(/[^0-9]/g, ''); // 数字だけ抽出
+    if (postal.length === 7) {
+        fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postal}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 200 && data.results) {
+                const result = data.results[0];
+                document.querySelector('.rfo-prefecture-selected').textContent = result.address1; // 都道府県
+                document.getElementById('city').value = result.address2; // 市区町村
+                document.getElementById('address').value = result.address3; // 番地
+                document.getElementById('building').focus(); // 次の入力欄にフォーカス
+            } else {
+                console.log('住所が見つかりません');
             }
-        }
-    });
+        })
+        .catch(err => console.error(err));
+    }
+});
 
 </script>
 
