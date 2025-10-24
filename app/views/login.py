@@ -60,53 +60,44 @@ def logout():
     return render_template('top/guest_index.html')
 
 #Register-------------------------------------------------------------------------------------------------------------------------------------------------------------
-@login_bp.route('/register_user',methods=['GET'])
+@login_bp.route('login/register_user',methods=['GET'])
 def register_user():
     account = {}
-    etbl ={}
-    return render_template('login/register_user.html',account=account,etbl=etbl)
+   
+    return render_template('login/new_account.html',account=account)
 
 #Register確認----------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/register_user/complete',methods=['POST'])
 def register_user_complete():
     account = request.form
-    error = "を入力してください。"
-    etbl={}
-    stbl={"ID":"ID","password":"パスワード"}
-    #入力確認
-    ecnt =0
-    for key,value in account.items():
-        if not value:
-            ecnt+=1
-            etbl[key] = stbl[key] + error
-    if ecnt !=0:
-        return render_template('login/register_user.html',etbl=etbl,account=account)
-      
+    error = ""
+    error_same = ""
+    # 入力確認
+   
+    if account['password'] != account['password_confirm']:
+        error = "パスワードと確認用パスワードが一致していません。"
+        return render_template('login/new_account.html', error=error, account=account)
     
     
     #同一user確認    
-    sql = "SELECT * FROM user WHERE userid = %s;"
+    sql = "SELECT * FROM m_account WHERE mail = %s;"
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    cur.execute(sql,(account['ID'],))
+    cur.execute(sql,(account['mail'],))
     userSame = cur.fetchone()    
     if userSame:
-        etbl['ID'] = "このIDは既に使用されています。"
-        return render_template('register_user.html',etbl = etbl,account=account)
+        error_same = "このIDは既に使用されています。"
+        return render_template('login/new_account.html',error_same = error_same,account=account)
 
-    if account['authority']  == "管理者":
-        authority = 0
-    else:
-        authority = 1   
     #DBに登録
-    user = (account['ID'],account['password'],authority)
-    sql = "INSERT INTO user (userid,password,authority) VALUES(%s,%s,%s)"
+    user = (account['mail'],account['password'])
+    sql = "INSERT INTO m_account (mail,password) VALUES(%s,%s)"
     cur.execute(sql,user)  
     con.commit()
     cur.close()
     con.close()
 
-    return render_template('login/register_user_complete.html',account = account)
+    return redirect(url_for('top.guest_index',account_id = account["mail"]))
 
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():

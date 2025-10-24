@@ -33,7 +33,7 @@
     </form>
 
     <p class="register-link">
-      <a href="register-simple.html">新規会員登録</a>
+      <a href="{{url_for('login.register_user')}}">新規会員登録</a>
     </p>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
