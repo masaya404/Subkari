@@ -37,7 +37,7 @@ def login_auth():
         return render_template('login/login.html',account=account)
     
     # 入力した資料がデータベースに存在するかどうかを確認
-    sql = "SELECT * FROM user WHERE mail = %s;"
+    sql = "SELECT * FROM m_account WHERE mail = %s;"
     con=connect_db()
     cur=con.cursor(dictionary=True)
     cur.execute(sql,(account['mail'],))
@@ -45,7 +45,7 @@ def login_auth():
     userExist = cur.fetchone()
     #ユーザーが存在しないまたはパスワードが一致しない
     if not userExist or userExist['password'] != account['password']:
-        error_message['password'] = "メールアドレスまたはパスワードが正しくありません。"
+        error_message = "メールアドレスまたはパスワードが正しくありません。"
         return render_template('login/login.html',account=account,error_message = error_message)
     
     #登録成功の処理
@@ -54,12 +54,10 @@ def login_auth():
     return redirect(url_for('top.member_index'))
     
 #Logout--------------------------------------------------------------------------------------------------------------------------------------------------------------
-@login_bp.route('/logout',methods=['GET'])
+@login_bp.route('/login/logout',methods=['GET'])
 def logout():
-    session.pop('user', None)
-    session.pop('authority', None)
-    session.clear()
-    return render_template('login/index.html')
+    session.pop('user_id', None)
+    return render_template('top/guest_index.html')
 
 #Register-------------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/register_user',methods=['GET'])
@@ -83,6 +81,8 @@ def register_user_complete():
             etbl[key] = stbl[key] + error
     if ecnt !=0:
         return render_template('login/register_user.html',etbl=etbl,account=account)
+      
+    
     
     #同一user確認    
     sql = "SELECT * FROM user WHERE userid = %s;"
@@ -117,3 +117,32 @@ def connect_db():
         db ='db_subkari'
     )
     return con
+
+#password-reset----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+@login_bp.route('/password-reset', methods=['GET'])
+def password_reset():
+    # 初期表示用に空の辞書を渡す
+    error = None
+    success = None
+    return render_template('login/password_reset.html', error=error, success=success)
+
+@login_bp.route('/password-reset', methods=['POST'])
+def reset_password():
+    password = request.form.get('password')
+    password_confirm = request.form.get('password_confirm')
+    error = None
+    success = None
+
+    # バリデーション
+    if not password or not password_confirm:
+        error = "パスワードを入力してください。"
+    elif password != password_confirm:
+        error = "パスワードが一致しません。"
+    elif len(password) < 8:
+        error = "パスワードは8文字以上で入力してください。"
+    else:
+        # 実際にはここでDBにパスワードを更新
+        success = "パスワードを更新しました。"
+
+    return render_template('login/password_reset.html', error=error, success=success)
