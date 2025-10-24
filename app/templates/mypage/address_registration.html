@@ -1,26 +1,22 @@
 
 {% extends "base.html" %}
-    <!-- <link rel="stylesheet" href="../../static/css/login.css"> -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/register_form.css') }}">
+    <!-- <link rel="stylesheet" href="../../static/css/Address_registration.css"> -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/Address_registration.css') }}"> -->
     
 {% extends "base.html" %}
 {% block title %}
-    登録フォーム
+    古物営業法に基づく表示
 {% endblock %}
 
 {% block content %}
+
+</head>
 <body class="registerForm-page">
 
 <div class="rfo-container">
-  <h1>登録フォーム</h1>
+  <h1>住所の登録</h1>
 
   <form id="registerForm" onsubmit="return handleRegisterForm(event)">
-    <div class="rfo-form-group">
-      <label for="account">アカウント名</label>
-      <input type="text" id="account" placeholder="例) さぶかり" required>
-      <div class="rfo-note">※プラットフォーム上に表示される名前</div>
-    </div>
-
     <div class="rfo-form-group">
       <label for="lastname">姓 (全角)</label>
       <input type="text" id="lastname" placeholder="例) HAL" required>
@@ -88,18 +84,10 @@
       <div class="rfo-note">※ハイフンなしの半角数字(10～11桁)</div>
     </div>
 
-    <div class="rfo-form-group">
-      <label>喫煙の有無</label>
-      <div class="rfo-radio-group">
-        <label><input type="radio" name="smoking" value="yes" checked> 喫煙している</label>
-        <label><input type="radio" name="smoking" value="no"> 喫煙していない</label>
-      </div>
-    </div>
-
     <button type="submit" class="rfo-btn">登録する</button>
   </form>
 </div>
 
 
-</body>
-{% endblock %}
+
+

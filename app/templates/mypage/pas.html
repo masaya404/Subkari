@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>パスワード確認</title>
-    <link rel="stylesheet" href="../../static/css/pas.css">
+{% extends "base.html" %}
+{% block title %}
+    パスワード確認
+{% endblock %}
+
+{% block content %}
+    <!-- <link rel="stylesheet" href="../../static/css/pas.css"> -->
+         <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/pas.css') }}"> -->
+
     
 </head>
 <body>
@@ -36,5 +38,4 @@
     </div>
 
     <script src="../../static/js/pas.js"></script>
-</body>
-</html>
+{% endblock %} 
