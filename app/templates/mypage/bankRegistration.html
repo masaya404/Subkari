@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>振込先口座の登録</title>
-    <link rel="stylesheet" href="../../static/css/bankRegistration.css">
+{% extends "base.html" %}
+    <!-- <link rel="stylesheet" href="../../static/css/bankRegistration.css"> -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bankRegistration.css') }}"> -->
     
-</head>
+{% extends "base.html" %}
+{% block title %}
+    振込先口座の登録
+{% endblock %}
 
+{% block content %}
 <body>
     <header>
         <div class="logo">SUBKARI</div>
@@ -137,5 +137,4 @@
     </footer>
     <script src="../../static/js/bankRegistration.js"></script>
     
-</body>
-</html>
+{% endblock %} 

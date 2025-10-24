@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>本人確認のお願い - SUBKARI</title>
+(% extends "base.html"%)
+{% blocktitle %}
+本人確認のお願い
+{% endblock %}
+{% blockcontent%}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login1.css') }}">
-</head>
-<body>
+
 
     <main class="main">
         <div class="container verification">
@@ -58,6 +56,4 @@
             {% endif %}
         </div>
     </main>
-
-</body>
-</html>
+{% endblock %}
