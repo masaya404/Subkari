@@ -1,11 +1,16 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>古物営業法に基づく表示 - SUBKARI</title>
+
+{% extends "base.html" %}
+    <!-- <link rel="stylesheet" href="../../static/css/bankRegistration.css"> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-</head>
+    
+{% extends "base.html" %}
+{% block title %}
+    古物営業法に基づく表示
+{% endblock %}
+
+{% block content %}
+
+
 <body class="antiques-body">
     <main class="antiques-main">
         <h2 class="antiques-title">古物営業法に基づく表示</h2>
@@ -77,5 +82,4 @@
 
         </section>
     </main>
-</body>
-</html>
+{% endblock %} 
