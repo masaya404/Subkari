@@ -4,24 +4,146 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/product_details.css') }}">
 
+<div class="container">
+        <div class="product-main">
+            <div class="product-images">
+                <div class="main-image-container">
+                    <img src="https://via.placeholder.com/500x600/333/fff?text=Fur+Parker" alt="ファーパーカー" class="main-image" id="mainImage">
+                    <div class="sold-badge">通報</div>
+                    <button class="nav-arrow left" onclick="changeImage(-1)">‹</button>
+                    <button class="nav-arrow right" onclick="changeImage(1)">›</button>
+                </div>
+                <div class="thumbnail-list">
+                    <img src="https://via.placeholder.com/80x80/333/fff?text=1" class="thumbnail active" onclick="selectImage(0)">
+                    <img src="https://via.placeholder.com/80x80/444/fff?text=2" class="thumbnail" onclick="selectImage(1)">
+                    <img src="https://via.placeholder.com/80x80/555/fff?text=3" class="thumbnail" onclick="selectImage(2)">
+                </div>
+            </div>
 
+            <div class="product-info">
+                <h1 class="product-title">ファーパーカー</h1>
+                
+                <div class="price-section">
+                    <div class="price-row">
+                        <span>レンタル価格</span>
+                        <span class="price">¥12,000 <span style="font-size:14px; font-weight:normal;">送料込み</span></span>
+                    </div>
+                    <div class="price-row">
+                        <span>購入価格</span>
+                        <span class="price">¥22,000 <span style="font-size:14px; font-weight:normal;">送料込み</span></span>
 
+                    </div>
+                </div>
 
+                <div class="action-buttons">
+                    <button class="btn">購入する</button>
+                    <button class="btn">レンタル</button>
+                </div>
 
+            </div>
+        </div>
 
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(0)">アイテム説明</button>
+            <button class="tab" onclick="switchTab(1)">商品概要</button>
+            <button class="tab" onclick="switchTab(2)">コメント</button>
+        </div>
 
+        <div class="tab-content active" id="tab0">
+            <p>高品質なファーを使用したオーバーサイズパーカー。ストリート系・サブカル系ファッションにぴったりのアイテムです。</p>
+        </div>
 
+        <div class="tab-content" id="tab1">
+            <p><strong>サイズ:</strong> フリーサイズ<br>
+            <strong>カラー:</strong> ブラック<br>
+            <strong>素材:</strong> ポリエステル100%<br>
+            <strong>状態:</strong> 目立った傷や汚れなし</p>
+        </div>
 
+        <div class="tab-content" id="tab2">
+            <div class="comment-item">
+                <div class="comment-avatar"></div>
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <span class="comment-name">中村 輝</span>
+                    </div>
+                    <div class="comment-text">コメント失礼します。購入を検討しているのですが、こちらの商品の使用期間はどれくらいでしょうか？</div>
+                </div>
+            </div>
 
+            <div class="comment-item">
+                <div class="comment-avatar"></div>
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <span class="comment-name">谷口 昌哉</span>
+                        <span class="seller-badge">出品者</span>
+                    </div>
+                    <div class="comment-text">商品の使用期間ですね。約○年間（または○か月間）使用しました。</div>
+                </div>
+            </div>
 
+            <div class="comment-form">
+                <input type="text" class="comment-input" placeholder="商品について質問や気になることがコメントしてください。">
+                <button class="submit-btn">投稿</button>
+            </div>
+        </div>
 
+        <div class="seller-info">
+            <div class="seller-header">
+                <div class="seller-details">
+                    <div class="seller-avatar"></div>
+                    <div>
+                        <div class="seller-name">谷口 昌哉</div>
+                        <div class="rating">★ 4.3</div>
+                    </div>
+                </div>
+                <button class="follow-btn">フォロー</button>
+            </div>
+        </div>
 
+        <div class="section-title">この出品者の他のアイテム</div>
+        <div class="item-grid">
+            <div class="item-card">
+                <img src="https://via.placeholder.com/280x280/333/fff?text=Item" class="item-image">
+            </div>
+            <div class="item-card">
+                <img src="https://via.placeholder.com/280x280/444/fff?text=Item" class="item-image">
+            </div>
+            <div class="item-card">
+                <img src="https://via.placeholder.com/280x280/555/fff?text=Item" class="item-image">
+            </div>
+            <div class="item-card">
+                <img src="https://via.placeholder.com/280x280/666/fff?text=Item" class="item-image">
+            </div>
+        </div>
 
-
-
-
-
+        <div class="section-title">おすすめアイテム</div>
+        <div class="item-grid">
+            <div class="item-card">
+                <img src="https://via.placeholder.com/280x280/333/fff?text=Recommend" class="item-image">
+                <div class="item-title">出品タイトル</div>
+                <div class="item-price">¥●●●●●</div>
+            </div>
+            <div class="item-card">
+                <img src="https://via.placeholder.com/280x280/444/fff?text=Recommend" class="item-image">
+                <div class="item-title">出品タイトル</div>
+                <div class="item-price">¥●●●●●</div>
+            </div>
+            <div class="item-card">
+                <img src="https://via.placeholder.com/280x280/555/fff?text=Recommend" class="item-image">
+                <div class="item-title">出品タイトル</div>
+                <div class="item-price">¥●●●●●</div>
+            </div>
+            <div class="item-card">
+                <img src="https://via.placeholder.com/280x280/666/fff?text=Recommend" class="item-image">
+                <div class="item-title">出品タイトル</div>
+                <div class="item-price">¥●●●●●</div>
+            </div>
+        </div>
+    </div>
+<script src="{{ url_for('static', filename='js/product_details.js') }}"></script>
 
 
 {% endblock %}

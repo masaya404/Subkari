@@ -37,7 +37,7 @@ def login_auth():
         return render_template('login/login.html',account=account)
     
     # 入力した資料がデータベースに存在するかどうかを確認
-    sql = "SELECT * FROM user WHERE mail = %s;"
+    sql = "SELECT * FROM m_account WHERE mail = %s;"
     con=connect_db()
     cur=con.cursor(dictionary=True)
     cur.execute(sql,(account['mail'],))
@@ -54,12 +54,10 @@ def login_auth():
     return redirect(url_for('top.member_index'))
     
 #Logout--------------------------------------------------------------------------------------------------------------------------------------------------------------
-@login_bp.route('/logout',methods=['GET'])
+@login_bp.route('/login/logout',methods=['GET'])
 def logout():
-    session.pop('user', None)
-    session.pop('authority', None)
-    session.clear()
-    return render_template('login/index.html')
+    session.pop('user_id', None)
+    return render_template('top/guest_index.html')
 
 #Register-------------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/register_user',methods=['GET'])

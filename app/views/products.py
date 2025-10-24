@@ -31,16 +31,16 @@ def product_detail(scode):
     #user確認
     if 'ID' in session:
     #商品資料を取得    
-        sql = "SELECT * FROM lunch WHERE scode= %s;"
+        sql = "SELECT * FROM m_product WHERE scode= %s;"
         con = connect_db()
         cur = con.cursor(dictionary=True)
         cur.execute(sql,(scode,))
         result = cur.fetchone()
         cur.close()
         con.close()
-        
-        return render_template('products/product_detail.html',result = result,username=username)
-    
+
+        return render_template('products/product_detail.html',result = result,account_id=session['ID'])
+
     else:
         return render_template('index.html',username=username)
 
@@ -51,6 +51,6 @@ def connect_db():
         host = 'localhost',
         user = 'root',
         passwd = '',
-        db ='py23db'
+        db ='db_subkari'
     )
     return con
