@@ -37,7 +37,7 @@ def login_auth():
         return render_template('login/login.html',account=account)
     
     # 入力した資料がデータベースに存在するかどうかを確認
-    sql = "SELECT * FROM user WHERE mail = %s;"
+    sql = "SELECT * FROM m_account WHERE mail = %s;"
     con=connect_db()
     cur=con.cursor(dictionary=True)
     cur.execute(sql,(account['mail'],))
