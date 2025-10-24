@@ -45,7 +45,7 @@ def login_auth():
     userExist = cur.fetchone()
     #ユーザーが存在しないまたはパスワードが一致しない
     if not userExist or userExist['password'] != account['password']:
-        error_message['password'] = "メールアドレスまたはパスワードが正しくありません。"
+        error_message = "メールアドレスまたはパスワードが正しくありません。"
         return render_template('login/login.html',account=account,error_message = error_message)
     
     #登録成功の処理
