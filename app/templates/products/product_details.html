@@ -23,16 +23,16 @@
             </div>
 
             <div class="product-info">
-                <h1 class="product-title">ファーパーカー</h1>
+                <h1 class="product-title">{{ result.name }}</h1>
                 
                 <div class="price-section">
                     <div class="price-row">
                         <span>レンタル価格</span>
-                        <span class="price">¥12,000 <span style="font-size:14px; font-weight:normal;">送料込み</span></span>
+                        <span class="price">{{ result.rentalPrice }}<span style="font-size:14px; font-weight:normal;"> 送料込み</span></span>
                     </div>
                     <div class="price-row">
                         <span>購入価格</span>
-                        <span class="price">¥22,000 <span style="font-size:14px; font-weight:normal;">送料込み</span></span>
+                        <span class="price">{{ result.purchasePrice }}<span style="font-size:14px; font-weight:normal;"> 送料込み</span></span>
 
                     </div>
                 </div>
