@@ -83,6 +83,8 @@ def register_user_complete():
             etbl[key] = stbl[key] + error
     if ecnt !=0:
         return render_template('login/register_user.html',etbl=etbl,account=account)
+      
+    
     
     #同一user確認    
     sql = "SELECT * FROM user WHERE userid = %s;"
@@ -117,3 +119,32 @@ def connect_db():
         db ='db_subkari'
     )
     return con
+
+#password-reset----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+@login_bp.route('/password-reset', methods=['GET'])
+def password_reset():
+    # 初期表示用に空の辞書を渡す
+    error = None
+    success = None
+    return render_template('login/password_reset.html', error=error, success=success)
+
+@login_bp.route('/password-reset', methods=['POST'])
+def reset_password():
+    password = request.form.get('password')
+    password_confirm = request.form.get('password_confirm')
+    error = None
+    success = None
+
+    # バリデーション
+    if not password or not password_confirm:
+        error = "パスワードを入力してください。"
+    elif password != password_confirm:
+        error = "パスワードが一致しません。"
+    elif len(password) < 8:
+        error = "パスワードは8文字以上で入力してください。"
+    else:
+        # 実際にはここでDBにパスワードを更新
+        success = "パスワードを更新しました。"
+
+    return render_template('login/password_reset.html', error=error, success=success)
