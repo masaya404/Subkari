@@ -78,12 +78,16 @@
 
         
           <div class="flex flex-row gap-[20px] justify-center">
-            <button class="w-[338px] bg-[#837575] text-white font-bold py-4 rounded hover:bg-gray-700 transition cursor-pointer">
-              出品する
-            </button>
-            <button class="w-[338px] bg-white text-[#826969] font-bold py-4 rounded border border-[#837575] hover:bg-gray-700 hover:text-white transition cursor-pointer">
-              データセンター
-            </button>
+            <a href="{{ url_for('seller.seller_format') }}" class="block">
+              <button onclick="window.location.href='/seller/format'" class="w-[338px] bg-[#837575] text-white font-bold py-4 rounded hover:bg-gray-700 transition cursor-pointer">
+                出品する
+              </button>
+            </a>
+            <a href="{{ url_for('seller.seller_format') }}" class="block">
+              <button onclick="window.location.href='/seller/format'" class="w-[338px] bg-white text-[#826969] font-bold py-4 rounded border border-[#837575] hover:bg-gray-700 hover:text-white transition cursor-pointer">
+                データセンター
+              </button>
+            </a>
           </div>
         </div>
       </div>

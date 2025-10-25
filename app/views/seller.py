@@ -21,7 +21,18 @@ def seller():
     resp = make_response(render_template('seller/seller_index.html', user_id = user_id))
     return resp
 
-
+#seller フォーマット----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/seller/format',methods=['GET'])
+def seller_format():
+    if 'user_id' not in session:
+        resp = make_response(url_for('login.login'))
+        user_id = None
+        
+    else:
+        user_id = session.get('user_id')
+        
+    resp = make_response(render_template('top/member_index.html', user_id = user_id))
+    return resp
 
 
 
