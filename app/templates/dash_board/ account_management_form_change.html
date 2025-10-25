@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DASHBOARD - 管理者アカウント管理</title>
-    <link rel="stylesheet" href=".././../static/css/account_management_form_change.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/account_management_form_change.css') }}">
-</head>
+{% extends "base.html" %}
+    <!-- <link rel="stylesheet" href="../../static/css/bankRegistration.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/account-management_form_change.css') }}">
+    
+{% extends "base.html" %}
+{% block title %}
+    管理者アカウント管理
+{% endblock %}
 
-
-<body>
+{% block content %}
     <div class="app-container">
         <div class="sidebar">
             <div class="sidebar-header">DASHBOARD</div>
@@ -107,8 +105,7 @@
         </div>
     </div>
     
-</body>
-</html>
+{% endblock %}
 
 
 
