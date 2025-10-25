@@ -27,7 +27,7 @@ def guest_index():
 def member_index():
     #sessionの登録資料確認   
     if 'user_id' not in session:
-        resp = make_response(url_for('auth.login'))
+        resp = make_response(url_for('login.login'))
         user_id = None
     else:
         user_id = session.get('user_id')

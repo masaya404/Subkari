@@ -18,7 +18,7 @@
             <div class="header-right">
                 {% if not user_id %}
                 <div class="header-login">
-                    <a href="#" class="">
+                    <a href="{{url_for('login.register_user')}}" class="">
                         <span>新規登録</span>
                     </a>
                     <a href="{{url_for('login.login')}}" class="">
@@ -49,6 +49,10 @@
                     <a href="#" class="icon-item">
                         <img src="{{ url_for('static', filename='img/deal.png') }}" class="icon"></img>
                         <span>取引</span>
+                    </a>
+                    <a href="{{url_for('login.logout')}}" class="icon-item">
+                        <img src="{{ url_for('static', filename='img/logout.png') }}" class="icon"></img>
+                        <span>ログアウト</span>
                     </a>
                     <a href="#" class="icon-item">
                         <img src="{{ url_for('static', filename='img/hamburger.png') }}" class="icon"></img>
