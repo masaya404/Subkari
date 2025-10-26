@@ -184,12 +184,12 @@ function handleDropOnThumbnails(e) {
 
 // Session保存
 function saveToSession() {
-    sessionStorage.setItem('images', JSON.stringify(images));
+    sessionStorage.setItem('uploadedImages', JSON.stringify(images));
 }
 
 // Session恢復
 function loadFromSession() {
-    const saved = sessionStorage.getItem('images');
+    const saved = sessionStorage.getItem('uploadedImages');
     if (saved) images = JSON.parse(saved);
     updateUI();
 }

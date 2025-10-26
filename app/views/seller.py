@@ -66,8 +66,9 @@ def seller_upload():
     image = Image.open(file)
     image.save(save_path,quality = 90)
     image_url = "/static/img/" + filename
-     
-    return render_template('seller/seller_format.html')
+    
+    return jsonify({'success': True, 'image_url': image_url}) 
+    # return render_template('seller/seller_format.html')
 
 
 
