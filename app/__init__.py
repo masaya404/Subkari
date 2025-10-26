@@ -15,7 +15,7 @@ def create_app():
 
     # --- Blueprintの登録 ---
     # viewsパッケージからproductsとauthのBlueprintをインポート
-    from .views import top,login,products,seller,dashboard,mypage,
+    from .views import top,login,products,seller,dashboard,mypage
     
     app.register_blueprint(top.top_bp)
     app.register_blueprint(login.login_bp)
