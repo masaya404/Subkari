@@ -9,13 +9,14 @@ import os
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
 
-
+# <<<<<<< HEAD
+# =======
 #@mypage_bp.route("mypage/ページまたは処理の名前")このようにかく　mypageはこのモジュールの名前
 #render_template("mypage/ページのhtml名前")このようにかく　mypageはこのモジュールの名前
 
 #userprfのページはmypageのモジュールにかくので、ここには不要
 # mypage_bp = Blueprint('userprf', __name__, url_prefix='/userprf')
-
+# >>>>>>> 3380b182aa575165ef27f84ca612b9c047078a8d
 
 
 #マイページトップ表示--------------------------------------------------
@@ -24,19 +25,27 @@ def mypage():
 
     
     return render_template("mypage/mypage.html")
-
+# <<<<<<< HEAD
 #--------------------------------------------------------------------
 
 #userprf表示--------------------------------------------------------------------
 @mypage_bp.route("mypage/userprf")
 def userprf():
     return render_template("mypage/mypage.html")
+#-------------------------------------------------------------------------------------------
 
-#editProfile表示--------------------------------------------------------------------
+#editProfile プロフィール編集ページ表示--------------------------------------------------------------------
 @mypage_bp.route("mypage/editProfile")
 def editProfile():
     return render_template("mypage/editProfile.html")
 
+#-------------------------------------------------------------------------------------------
+
+#edit プロフィール編集---------------------------
+@mypage_bp.route("mypage/edit")
+def edit():
+    return render_template("mypage/edit.html")
+#-----------------------------------------------
 
 
 
@@ -46,4 +55,4 @@ def editProfile():
 # {{ url_for('seller.seller_format') }}
 # {{ url_for('mypage.mypage') }}
 # {{ url_for('mypage.userprf') }}
-
+# >>>>>>> 3380b182aa575165ef27f84ca612b9c047078a8d

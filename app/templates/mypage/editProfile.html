@@ -10,7 +10,6 @@
 <body>
     <main>
         <h1></h1>
-        <!-- プロフィールヘッダー -->
         <div class="profile-header">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%231e3c72'/%3E%3Ctext x='50' y='60' font-size='40' fill='white' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E" alt="プロフィール画像" class="profile-image">
             
@@ -55,7 +54,7 @@
                 <a href="#" class="show-more" id="showLessBtn" onclick="toggleDescription(event)" style="display: none;">閉じる</a>
             </div>
             
-           <div class="profile-actions" ><a href="edit.html">
+           <div class="profile-actions" ><a href="{{url_for('mypage.edit')}}">
                 <button class="edit-profile-btn">プロフィールを編集</button>
             </div>
             </a>
