@@ -12,7 +12,7 @@
             <div class="bg-white rounded-lg shadow-lg mb-8 p-8">
                 <div class="flex items-center justify-center gap-6">
                     <!-- 左やじるし -->
-                   <button id="prevBtn" class="text-5xl text-gray-400 hover:text-gray-600 transition disabled:opacity-50" onclick="previousImage()">
+                   <button id="prevBtn" class="text-5xl text-gray-400 hover:text-gray-600 transition disabled:opacity-50 cusror-pointer" onclick="previousImage()">
                         &#10094;
                     </button>
                     <!-- 最新画像表示 -->
@@ -26,17 +26,17 @@
 
 
                     <!-- 右やじるし -->
-                     <button id="nextBtn" class="text-5xl text-gray-400 hover:text-gray-600 transition disabled:opacity-50" onclick="nextImage()">
+                     <button id="nextBtn" class="text-5xl text-gray-400 hover:text-gray-600 transition disabled:opacity-50 cursor-pointer" onclick="nextImage()">
                         &#10095;
                     </button>
                 </div>
 
                 <!-- 画像編集 -->
                 <div class="flex justify-center gap-4 mt-8">
-                    <button onclick="editImage()" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold">
+                    <button onclick="editImage()" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold cursor-pointer">
                         切り抜き
                     </button>
-                    <button onclick="deleteImage()" class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold">
+                    <button onclick="deleteImage()" class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold cursor-pointer">
                         削除
                     </button>
                 </div>
@@ -64,9 +64,11 @@
 
             <!-- 次へ　フォマットに戻る -->
               <div class="flex justify-end">
-                <button class="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition font-bold">
+                <a href="{{url_for("seller.seller_upload")}}">
+                <button class="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition font-bold cursor-pointer">
                     次へ
                 </button>
+                </a>
             </div>
         </div>
     </div>
