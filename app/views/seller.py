@@ -27,12 +27,22 @@ def seller_format():
     if 'user_id' not in session:
         resp = make_response(url_for('login.login'))
         user_id = None
-        
+    
+    else:
+        user_id = session.get('user_id')    
+    return render_template('seller/seller_format.html', user_id = user_id)
+
+#seller フォーマット画像アップロード----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/seller/uploadImage',methods=['GET'])
+def seller_uploadImage():
+    if 'user_id' not in session:
+        resp = make_response(url_for('login.login'))
+        user_id = None
+    
     else:
         user_id = session.get('user_id')
-        
-    resp = make_response(render_template('top/member_index.html', user_id = user_id))
-    return resp
+            
+    return render_template('seller/seller_format_uploadImage.html', user_id = user_id)
 
 
 

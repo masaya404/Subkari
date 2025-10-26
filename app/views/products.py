@@ -31,7 +31,7 @@ def product_detail(scode):
     #user確認
     if 'ID' in session:
     #商品資料を取得    
-        sql = "SELECT * FROM m_product WHERE scode= %s;"
+        sql = "SELECT * FROM m_product WHERE id= %s;"
         con = connect_db()
         cur = con.cursor(dictionary=True)
         cur.execute(sql,(scode,))
