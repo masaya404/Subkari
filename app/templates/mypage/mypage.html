@@ -58,7 +58,7 @@
 
         <section id="profile">
             <div>
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%231e3c72'/%3E%3Ctext x='50' y='60' font-size='40' fill='white' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E" alt="プロフィール画像" class="profile-image">
+                <img src="{{url_for('static' , filename='img/ ')}}" alt="プロフィール画像" class="profile-image">
                 
                 <div class="profile-name">
                     <p>haltalo</p>
@@ -147,12 +147,17 @@
             <h2>振込申請</h2>
             <ul class="menu-list">
                 <li class="menu-item"> <a href="bankRegistration.html" class="menu-link">銀行口座登録</a></li>
-                <li class="menu-item"> <a href="#" class="menu-link">振込申請</a></li>
+                <li class="menu-item"> <a href="transferApplication.html" class="menu-link">振込申請</a></li>
             </ul>
 
         </section>
+
         <section id=history>
-            <p>履歴</p>
+            <h2>履歴</h2>
+            <ul class="menu-list">
+                <li class="menu-item"> <a href="" class="menu-link">売上履歴</a></li>
+                <li class="menu-item"> <a href="" class="menu-link">振込履歴</a></li>
+            </ul>
         </section>
 
         <section id="contact">
