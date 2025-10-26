@@ -1,14 +1,15 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUBKARI - アカウント情報確認</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-</head>
-<body>
 
-    <main class="subkari-main-container">
+{% extends "base.html" %}
+    <!-- <link rel="stylesheet" href="../../static/css/login.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    
+{% extends "base.html" %}
+{% block title %}
+    アカウント情報確認
+{% endblock %}
+
+{% block content %}
+    <main class="subkari-main-container"> 
         <div class="subkari-main">
             <p class="subkari-main__message">
                 ご登録している電話番号宛にメールアドレスを送信しました。
@@ -24,7 +25,6 @@
                     新規アカウント作成
                 </a>
             </div>
-
             <div class="subkari-main__note">
                 <p>
                     <span class="subkari-main__note-star">※</span>
@@ -36,6 +36,4 @@
             </div>
         </div>
     </main>
-
-</body>
-</html>
+{% endblock %}
