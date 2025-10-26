@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="ja">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUBKARI - メインコンテンツのみ (デザイン再現)</title>
+{% extends "base.html" %}
+    <!-- <link rel="stylesheet" href="../../static/css/Address_registration.css"> -->
+    
+{% extends "base.html" %}
+{% block title %}
+    古物営業法に基づく表示
+{% endblock %}
 
+{% block content %}
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" type="text/css"
         href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
@@ -568,3 +570,5 @@ $('.center').slick({
 </body>
 
 </html>
+
+{% endblock %}
