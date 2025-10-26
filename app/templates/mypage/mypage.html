@@ -4,11 +4,11 @@
 {% endblock %}
 
 {% block content %}
-<!-- <link rel="stylesheet" href="../../static/css/mypage.css"> -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bankRegistration.css') }}">
+<link rel="stylesheet" href="../../static/css/mypage.css">
+
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bankRegistration.css') }}"> -->
 
 
-    <!-- ヘッダー -->
     <main>
         <section class="nav">
             <ul class="nav-section">
@@ -58,13 +58,13 @@
 
         
 
-        <section id="profile">
+        <section id="profile" class="active" class="sec"> 
             <div>
                 <img src="{{url_for('static' , filename='img/ ')}}" alt="プロフィール画像" class="profile-image">
                 
                 <div class="profile-name">
                     <p>haltalo</p>
-                    <a href="../../templates/editProfile/editProfile.html">
+                    <a href="../../templates/mypage/editProfile.html">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" >
                         
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -111,41 +111,41 @@
         </section>
 
         </section>
-        <section id="todo">
+        <section id="todo" class="sec">
             <p>やることリストの内容を表示</p>
         </section>
-        <section id="likes">
+        <section id="likes" class="sec">
             <p>いいねを押した商品を表示</p>
 
         </section>
-        <section id="follow-list">
+        <section id="follow-list" class="sec">
             <p>フォローリストを表示</p>
         </section>
-        <section id="listed-items">
+        <section id="listed-items" class="sec">
             <p>出品商品を表示</p>
 
         </section>
-        <section id="purchased-items">
+        <section id="purchased-items" class="sec">
             <p>レンタル購入した商品を表示</p>
         </section>
-        <section id="drafts">
+        <section id="drafts" class="sec">
             <p>下書き一覧</p>
         </section>
-        <section id="seller-center">
+        <section id="seller-center" class="sec">
             <p>セラーデータセンター</p>
         </section>
 
-        <section id="payment">
+        <section id="payment" class="sec">
             <p>支払い方法</p>
         </section>
-        <section id="privacy">
+        <section id="privacy" class="sec">
             <p>個人情報設定</p>
         </section>
-        <section id="notifications">
+        <section id="notifications" class="sec">
             <p>お知られ・機能設定</p>
         </section>
 
-        <section id="transfer-request">
+        <section id="transfer-request" class="sec">
             <h2>振込申請</h2>
             <ul class="menu-list">
                 <li class="menu-item"> <a href="bankRegistration.html" class="menu-link">銀行口座登録</a></li>
@@ -154,7 +154,7 @@
 
         </section>
 
-        <section id=history>
+        <section id=history class="sec">
             <h2>履歴</h2>
             <ul class="menu-list">
                 <li class="menu-item"> <a href="" class="menu-link">売上履歴</a></li>
@@ -162,31 +162,28 @@
             </ul>
         </section>
 
-        <section id="contact">
+        <section id="contact" class="sec">
 
         </section>
-        <section id="faq">
-
-        </section>
-
-        <section id="help-center">
+        <section id="faq" class="sec">
 
         </section>
 
-        <section id="terms">
-
-        </section>
-        <section id="policy">
+        <section id="help-center" class="sec">
 
         </section>
 
-        <section id="logout">
+        <section id="terms" class="sec">
 
         </section>
-        <section id="delete-account">
-            <p>アカウント削除を表示</p>
+        <section id="policy" class="sec">
 
         </section>
+
+        <section id="logout" class="sec">
+
+        </section>
+
     
     </main>
     <script src="../../static/js/mypage.js"></script>

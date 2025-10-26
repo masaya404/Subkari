@@ -30,7 +30,7 @@
                 </div>
                 {% else %}    
                 <div class="header-icons">
-                    <a href="../mypage/mypage.html" class="icon-item">
+                    <a href="{{url_for('mypage.mypage')}}" class="icon-item">
                         <img src="{{ url_for('static', filename='img/mypage.png') }}" class="icon"></img>
                         <span>マイページ</span>
                     </a>
