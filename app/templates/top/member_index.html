@@ -1,321 +1,29 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUBKARI - メインコンテンツのみ (デザイン再現)</title>
+{% block title %}
+    トップページ
+{% endblock %}
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+{% block content %}
+    <!-- Slick Carousel & Font Awesome -->
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" type="text/css"
         href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bankRegistration.css') }}">
 
-    <style>
-        /* === 基本スタイル === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
-            background: #fff;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* === メインビジュアル / カルーセル (縦長フィット・密着・約4枚表示) === */
-        .hero-section {
-            position: relative;
-            background-color: #fff;
-            padding: 0;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        .center {
-            width: 100%;
-            margin: 0 auto;
-            padding: 0;
-        }
-
-        .center .hero-slide-item {
-            overflow: hidden;
-            /* PC画面の約半分程度の高さに固定 (縦長感を維持) - 高く調整 */
-            height: 70vh;
-            max-height: 650px;
-        }
-
-        .center .hero-slide-item img {
-            width: 100%;
-            height: 100%;
-            /* ★【修正箇所】coverに戻すことで、枠を完全に埋める（切れる）表示を再現 */
-            object-fit: cover;
-            display: block;
-        }
-
-        /* カルーセル上のキャプションボックス */
-        .carousel-caption-overlay {
-            position: relative;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.95);
-            text-align: center;
-            padding: 25px 0;
-        }
-
-        .carousel-caption-overlay .caption-inner {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .carousel-caption-overlay strong {
-            font-weight: bold;
-            color: #000;
-            font-size: 16px;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .carousel-caption-overlay span {
-            display: block;
-            font-size: 14px;
-            color: #333;
-            line-height: 1.5;
-        }
-
-        .carousel-caption-overlay .view-more {
-            color: #4a9eff;
-            font-size: 13px;
-            display: block;
-            margin-top: 5px;
-            text-decoration: underline;
-        }
-
-        /* Slickの矢印スタイル */
-        .slick-prev,
-        .slick-next {
-            top: 50%;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 30px;
-            background: transparent;
-            border-radius: 50%;
-            /* ★【変更箇所】矢印を最前面に表示 */
-            z-index: 100;
-        }
-
-        .slick-prev:before,
-        .slick-next:before {
-            font-size: 20px;
-            color: #000;
-            opacity: 1;
-        }
-
-        .slick-prev {
-            left: 10px;
-        }
-
-        .slick-next {
-            right: 10px;
-        }
-
-        /* 画像の密着と右端見せのためのCSS調整 */
-        .slick-list {
-            margin: 0 !important;
-        }
-
-        .slick-slide {
-            padding: 0 !important;
-        }
-
-        .center .slick-slide {
-            padding-right: 1px; /* 画像間の隙間を非常に狭くする */
-        }
-
-        .center .slick-list {
-            overflow: visible; /* 右端スライドが切れずに半分見える */
-        }
-
-        /* === コンテンツラッパー (サイドバーと商品グリッド) === */
-        .content-wrapper {
-            display: flex;
-            max-width: 1300px;
-            margin: 40px auto;
-            padding: 0 20px;
-            gap: 30px;
-        }
-
-        .sidebar {
-            width: 200px;
-            flex-shrink: 0;
-            padding-top: 5px;
-        }
-
-        .sidebar-section {
-            margin-bottom: 25px;
-        }
-
-        .sidebar-section h3 {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #000;
-            color: #000;
-        }
-
-        .sidebar-section ul {
-            list-style: none;
-        }
-
-        .sidebar-section li {
-            padding: 5px 0;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #333;
-        }
-
-        .sidebar-section li::after {
-            content: ">";
-            color: #999;
-            font-size: 10px;
-        }
-
-        .main-content {
-            flex: 1;
-        }
-
-        .category-section {
-            margin-bottom: 40px;
-        }
-
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #000;
-        }
-
-        .category-header h2 {
-            font-size: 16px;
-            font-weight: bold;
-            color: #000;
-        }
-
-        .view-all {
-            color: #4a9eff;
-            font-size: 12px;
-            text-decoration: underline;
-            font-weight: 500;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-
-        .product-card {
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .product-image {
-            width: 100%;
-            aspect-ratio: 3/4;
-            background: #f0f0f0;
-            margin-bottom: 5px;
-            overflow: hidden;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            /* 商品画像も切れるようにobject-fit: cover;に変更 (必要に応じてcontainに戻してください) */
-            object-fit: cover;
-            display: block;
-        }
-
-        .product-info {
-            padding: 0;
-        }
-
-        .product-brand {
-            font-size: 10px;
-            color: #888;
-            margin-bottom: 1px;
-        }
-
-        .product-name {
-            font-size: 12px;
-            margin-bottom: 2px;
-            font-weight: 500;
-        }
-
-        .product-price {
-            font-size: 13px;
-            font-weight: bold;
-            color: #000;
-        }
-
-
-        /* レスポンシブデザインの調整 */
-        @media (max-width: 1024px) {
-            .product-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .center .hero-slide-item {
-                height: 50vh;
-                max-height: 550px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .content-wrapper {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-            }
-
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
-</head>
-
-<body>
-
+    <!-- Hero Section -->
     <div class="hero-section">
         <div class="center">
-            <div class="hero-slide-item"><img src="../../../app/static/img/image 22.png" alt="スライド1"></div>
-            <div class="hero-slide-item"><img src="../../../app/static/img/image 22.png" alt="スライド1"></div>
-            <div class="hero-slide-item"><img src="../../../app/static/img/image 22.png" alt="スライド1"></div>
-            <div class="hero-slide-item"><img src="../../../app/static/img/image 22.png" alt="スライド1"></div>
-            <div class="hero-slide-item"><img src="../../../app/static/img/image 22.png" alt="スライド1"></div>
-            <div class="hero-slide-item"><img src="../../../app/static/img/image 22.png" alt="スライド1"></div>
+            {% for i in range(6) %}
+            <div class="hero-slide-item">
+                <img src="{{ url_for('static', filename='img/image22.png') }}" alt="スライド{{ i+1 }}">
+            </div>
+            {% endfor %}
         </div>
 
         <div class="carousel-caption-overlay">
@@ -327,6 +35,7 @@
         </div>
     </div>
 
+    <!-- Main Content -->
     <div class="content-wrapper">
         <aside class="sidebar">
             <div class="sidebar-section brand-list">
@@ -348,6 +57,7 @@
                     <li>その他</li>
                 </ul>
             </div>
+
             <div class="sidebar-section">
                 <h3>カテゴリから探す</h3>
                 <ul>
@@ -364,207 +74,41 @@
         </aside>
 
         <main class="main-content">
+            <!-- カテゴリごとに繰り返しを使うことも可能 -->
+            {% set categories = [
+                {'title': 'コーデ', 'price': '¥4,500', 'brand': 'TRAVAS TOKYO', 'img': 'img/image26.png'},
+                {'title': 'トップス', 'price': '¥4,200', 'brand': 'TRAVAS TOKYO', 'img': 'img/image43.png'},
+                {'title': 'ボトムス', 'price': '¥4,600', 'brand': 'REFLEM', 'img': 'img/image39.png'},
+                {'title': 'アクセサリー', 'price': '¥4,000', 'brand': 'CIVARIZE', 'img': 'img/image51.png'}
+            ] %}
 
+            {% for cat in categories %}
             <section class="category-section">
                 <div class="category-header">
-                    <h2>コーデ</h2>
+                    <h2>{{ cat.title }}</h2>
                     <a href="#" class="view-all">すべて見る</a>
                 </div>
                 <div class="product-grid">
+                    {% for i in range(4) %}
                     <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 26.png" alt="コート1"></div>
+                        <div class="product-image">
+                            <img src="{{ url_for('static', filename=cat.img) }}" alt="{{ cat.title }}{{ i+1 }}">
+                        </div>
                         <div class="product-info">
-                            <div class="product-brand">TRAVAS TOKYO</div>
-                            <div class="product-name">コーデ</div>
-                            <div class="product-price">¥4,500</div>
+                            <div class="product-brand">{{ cat.brand }}</div>
+                            <div class="product-name">{{ cat.title }}</div>
+                            <div class="product-price">{{ cat.price }}</div>
                         </div>
                     </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 26.png" alt="コート2"></div>
-                        <div class="product-info">
-                            <div class="product-brand">TRAVAS TOKYO</div>
-                            <div class="product-name">コーデ</div>
-                            <div class="product-price">¥4,500</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 26.png" alt="コート3"></div>
-                        <div class="product-info">
-                            <div class="product-brand">TRAVAS TOKYO</div>
-                            <div class="product-name">コーデ</div>
-                            <div class="product-price">¥4,500</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 26.png" alt="コート4"></div>
-                        <div class="product-info">
-                            <div class="product-brand">TRAVAS TOKYO</div>
-                            <div class="product-name">コーデ</div>
-                            <div class="product-price">¥4,500</div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </section>
-
-            <section class="category-section">
-                <div class="category-header">
-                    <h2>トップス</h2>
-                    <a href="#" class="view-all">すべて見る</a>
-                </div>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 43.png" alt="トップス1"></div>
-                        <div class="product-info">
-                            <div class="product-brand">TRAVAS TOKYO</div>
-                            <div class="product-name">トップス</div>
-                            <div class="product-price">¥4,200</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 43.png" alt="トップス2"></div>
-                        <div class="product-info">
-                            <div class="product-brand">TRAVAS TOKYO</div>
-                            <div class="product-name">トップス</div>
-                            <div class="product-price">¥4,200</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 43.png" alt="トップス3"></div>
-                        <div class="product-info">
-                            <div class="product-brand">TRAVAS TOKYO</div>
-                            <div class="product-name">トップス</div>
-                            <div class="product-price">¥4,200</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 43.png" alt="トップス4"></div>
-                        <div class="product-info">
-                            <div class="product-brand">TRAVAS TOKYO</div>
-                            <div class="product-name">トップス</div>
-                            <div class="product-price">¥4,200</div>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <section class="category-section">
-                <div class="category-header">
-                    <h2>ボトムス</h2>
-                    <a href="#" class="view-all">すべて見る</a>
-                </div>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 39.png" alt="ボトムス"></div>
-                        <div class="product-info">
-                            <div class="product-brand">REFLEM</div>
-                            <div class="product-name">ボトムス</div>
-                            <div class="product-price">¥4,600</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 39.png" alt="コート6"></div>
-                        <div class="product-info">
-                            <div class="product-brand">REFLEM</div>
-                            <div class="product-name">ボトムス</div>
-                            <div class="product-price">¥4,600</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 39.png" alt="コート7"></div>
-                        <div class="product-info">
-                            <div class="product-brand">REFLEM</div>
-                            <div class="product-name">ボトムス</div>
-                            <div class="product-price">¥4,600</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 39.png" alt="コート8"></div>
-                        <div class="product-info">
-                            <div class="product-brand">REFLEM</div>
-                            <div class="product-name">ボトムス</div>
-                            <div class="product-price">¥4,600</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="category-section">
-                <div class="category-header">
-                    <h2>アクセサリー</h2>
-                    <a href="#" class="view-all">すべて見る</a>
-                </div>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 51.png" alt="トップス5"></div>
-                        <div class="product-info">
-                            <div class="product-brand">CIVARIZE</div>
-                            <div class="product-name">トップス</div>
-                            <div class="product-price">¥4,000</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 51.png" alt="トップス6"></div>
-                        <div class="product-info">
-                            <div class="product-brand">CIVARIZE</div>
-                            <div class="product-name">トップス</div>
-                            <div class="product-price">¥4,000</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 51.png" alt="トップス7"></div>
-                        <div class="product-info">
-                            <div class="product-brand">CIVARIZE</div>
-                            <div class="product-name">トップス</div>
-                            <div class="product-price">¥4,000</div>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image"><img src="../../../app/static/img/image 51.png" alt="トップス8"></div>
-                        <div class="product-info">
-                            <div class="product-brand">CIVARIZE</div>
-                            <div class="product-name">トップス</div>
-                            <div class="product-price">¥4,000</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
+            {% endfor %}
         </main>
     </div>
 
+    <!-- JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-
-    <script>
-$('.center').slick({
-    infinite: true,
-    centerMode: true,          // 中央モードON
-    centerPadding: '50px',     // 左右が少し見切れ、約4枚に見えるように調整
-    slidesToShow: 4,           // 表示枚数を4枚に設定
-    slidesToScroll: 1,
-    dots: false,
-    arrows: true,              // 矢印を表示
-    autoplay: true,
-    autoplaySpeed: 3000,
-    speed: 500,
-    responsive: [
-        {
-            breakpoint: 1024,
-            settings: { slidesToShow: 3, centerPadding: '40px' } // 中画面
-        },
-        {
-            breakpoint: 768,
-            settings: { slidesToShow: 2, arrows: false, centerPadding: '30px' } // 小画面 (矢印非表示)
-        },
-        {
-            breakpoint: 480,
-            settings: { slidesToShow: 1, arrows: false, centerPadding: '20px' } // スマホ (矢印非表示)
-        }
-    ]
-});
-    </script>
-
-</body>
-
-</html>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+{% endblock %}
