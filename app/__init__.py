@@ -23,4 +23,5 @@ def create_app():
     app.register_blueprint(seller.seller_bp)
     app.register_blueprint(dashboard.dashboard_bp)
     app.register_blueprint(mypage.mypage_bp)
+    
     return app

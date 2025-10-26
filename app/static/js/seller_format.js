@@ -1,5 +1,44 @@
+document.addEventListener('DOMContentLoaded', function() {
+            loadUploadedImages();
+        });
+
+        function loadUploadedImages() {
+            try {
+                const images = JSON.parse(sessionStorage.getItem('uploadedImages'));
+                
+                if (images && images.length > 0) {
+                    // 顯示最新上傳的圖片（第 0 位是最新的）
+                    const latestImage = images[0];
+                    const displayImage = document.getElementById('displayImage');
+                    const imageDataInput = document.getElementById('imageDataInput');
+                    
+                    displayImage.src = latestImage.src;
+                    imageDataInput.value = latestImage.src;
+                    
+                    // 顯示圖片區域，隱藏未上傳提示
+                    document.getElementById('imageDisplayArea').classList.remove('hidden');
+                    document.getElementById('noImageArea').classList.add('hidden');
+                    
+                    console.log('已載入上傳的圖片');
+                } else {
+                    // 沒有圖片時顯示未上傳提示
+                    document.getElementById('imageDisplayArea').classList.add('hidden');
+                    document.getElementById('noImageArea').classList.remove('hidden');
+                    console.log('沒有找到已上傳的圖片');
+                }
+            } catch (e) {
+                console.error('載入圖片失敗:', e);
+                document.getElementById('imageDisplayArea').classList.add('hidden');
+                document.getElementById('noImageArea').classList.remove('hidden');
+            }
+        }
+
+        function goToUploadPage() {
+            // 點擊圖片進入編輯頁面
+            window.location.href = "{{url_for('seller.seller_uploadImg')}}";
+        }
 // 価格トグル
- const rentalCheckbox = document.querySelector('.rentalCheckbox');
+const rentalCheckbox = document.querySelector('.rentalCheckbox');
 const purchaseCheckbox = document.querySelector('.purchaseCheckbox');
 const rentalPriceSection = document.getElementById('rentalPriceSection');
 const purchasePriceSection = document.getElementById('purchasePriceSection');
