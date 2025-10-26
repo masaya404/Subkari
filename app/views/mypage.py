@@ -8,6 +8,7 @@ import os
 
 
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
+mypage_bp = Blueprint('userprf', __name__, url_prefix='/userprf')
 
 
 #マイページトップ表示--------------------------------------------------
@@ -19,3 +20,4 @@ def mypage():
 #--------------------------------------------------------------------
 
 
+この辺に書く？
