@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,request,make_response,redirect,url_for,session
+from flask import Blueprint,render_template,request,make_response,redirect,url_for,jsonify,session
 from PIL import Image
 from werkzeug.utils import secure_filename
 from datetime import datetime , timedelta
@@ -33,16 +33,25 @@ def seller_format():
     return render_template('seller/seller_format.html', user_id = user_id)
 
 #seller フォーマット画像アップロード----------------------------------------------------------------------------------------------------------------------------------------------------------
-@seller_bp.route('/seller/uploadImage',methods=['GET'])
-def seller_uploadImage():
+@seller_bp.route('/seller/uploadImg',methods=['GET'])
+def seller_uploadImg():
     if 'user_id' not in session:
         resp = make_response(url_for('login.login'))
         user_id = None
     
     else:
         user_id = session.get('user_id')
+        file = request.files.get('file')
+        if not file:
+            return jsonify({'error': 'No file'}), 400
+        
+        # filename = secure_filename(file.filename)
+        # filepath = os.path.join(app.config['UPLOAD_FOLDER'], f"{int(time.time())}_{filename}")
+        # file.save(filepath)
+        
+    # return jsonify({'success': True, 'path': filepath})
             
-    return render_template('seller/seller_format_uploadImage.html', user_id = user_id)
+    return render_template('seller/seller_uploadImg.html', user_id = user_id)
 
 
 
