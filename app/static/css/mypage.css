@@ -218,11 +218,12 @@ h2{
 
 /* --------------------振込-------------------*/
 .menu-item {
-    border-bottom: 1px solid #f0f0f0;
+    /* border-bottom: 1px solid #867f7f; */
 }
 
 .menu-item:last-child {
     border-bottom: none;
+    
 }
 
 .menu-link {
@@ -234,6 +235,12 @@ h2{
     color: #333;
     font-size: 15px;
     transition: background 0.2s;
+    
+    /* border-top: 1px solid #999; */
+    /* border-bottom: 1px solid #999; */
+}
+.menu-link:last-of-type{
+    border-bottom: 1px solid #666;
 }
 
 .menu-link:hover {
@@ -245,6 +252,9 @@ h2{
     font-size: 24px;
     color: #999;
 }
+
+/* --------------履歴---------- */
+
 
 
 
