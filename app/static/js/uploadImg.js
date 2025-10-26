@@ -194,5 +194,11 @@ function loadFromSession() {
     updateUI();
 }
 
+
+const data = JSON.parse(localStorage.getItem('uploadedImages'));
+console.log('圖片數量:', data?.length);
+console.log('第一張圖片:', data?.[0].src.substring(0, 50) + '...');  // 只顯示前 50 個字符
+console.log('Base64 是否正確:', data?.[0].src.startsWith('data:image'));
+
 // 初期化
 loadFromSession();
