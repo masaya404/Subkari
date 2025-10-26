@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>振込金額</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background-color: #000;
+            color: #fff;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 4rem;
+            font-weight: bold;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #fff;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2196F3;
+        }
+
+        .form-note {
+            color: #666;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Info Box */
+        .info-box {
+            background-color: #fff;
+            border-left: 3px solid #2196F3;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            line-height: 1.8;
+        }
+
+        .info-box p {
+            color: #333;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Submit Button */
+        .submit-button {
+            width: 100%;
+            background-color: #757575;
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 3rem;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background-color: #616161;
+        }
+
+        .submit-button:disabled {
+            background-color: #bdbdbd;
+            cursor: not-allowed;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: #f44336;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #555;
+            color: #fff;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .copyright {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .info-box {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">SUBKARI</div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <h1>振込金額</h1>
+
+        <form id="transferForm">
+            <!-- Amount Input -->
+            <div class="form-group">
+                <label for="amount" class="form-label">金額</label>
+                <input 
+                    type="number" 
+                    id="amount" 
+                    name="amount" 
+                    class="form-input" 
+                    placeholder="金額を入力してください"
+                    min="0"
+                    max="1000000"
+                >
+                <p class="form-note">※一度に振り込める限度額は1,000,000円まで</p>
+                <p class="error-message" id="errorMessage"></p>
+            </div>∫
+
+            <!-- Information Box -->
+            <div class="info-box">
+                <p>※振込手数料は200円です。金融機関・申請金額に関わらず、都度発生いたします。</p>
+                <p>※お持ちの残高（売上金含む）の金額が振込手数料以下の場合、振込申請をすることはできません。</p>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-button">確定する</button>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">初めての方へ</a>
+            <a href="#">サイトマップ</a>
+            <a href="#">FAQ</a>
+            <a href="#">お問い合わせ</a>
+            <a href="#">利用規約</a>
+            <a href="#">プライバシーポリシー</a>
+            <a href="#">特定商取引法に基づく表記</a>
+            <a href="#">古物営業法に基づく表示</a>
+        </div>
+        <p class="copyright">© 2025 HAL OSAKA IA・IH Team 5</p>
+    </footer>
+
+    <script>
+        // フォーム要素の取得
+        const form = document.getElementById('transferForm');
+        const amountInput = document.getElementById('amount');
+        const errorMessage = document.getElementById('errorMessage');
+        const submitButton = document.querySelector('.submit-button');
+
+        // 金額入力時のバリデーション
+        amountInput.addEventListener('input', function() {
+            validateAmount();
+        });
+
+        // 金額のバリデーション関数
+        function validateAmount() {
+            const amount = parseInt(amountInput.value);
+            errorMessage.classList.remove('show');
+            
+            if (!amountInput.value) {
+                return false;
+            }
+
+            if (amount < 0) {
+                errorMessage.textContent = '金額は0円以上を入力してください。';
+                errorMessage.classList.add('show');
+                return false;
+            }
+
+            if (amount > 1000000) {
+                errorMessage.textContent = '一度に振り込める限度額は1,000,000円までです。';
+                errorMessage.classList.add('show');
+                return false;
+            }
+
+            // 手数料200円を考慮した最低金額チェック
+            if (amount > 0 && amount < 201) {
+                errorMessage.textContent = '振込手数料200円を含め、最低201円以上の金額を入力してください。';
+                errorMessage.classList.add('show');
+                return false;
+            }
+
+            return true;
+        }
+
+        // フォーム送信時の処理
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!amountInput.value) {
+                errorMessage.textContent = '金額を入力してください。';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            if (validateAmount()) {
+                const amount = parseInt(amountInput.value);
+                const fee = 200;
+                const total = amount + fee;
+
+                // 確認メッセージ
+                const confirmed = confirm(
+                    `振込金額: ${amount.toLocaleString()}円\n` +
+                    `振込手数料: ${fee.toLocaleString()}円\n` +
+                    `合計: ${total.toLocaleString()}円\n\n` +
+                    `この内容で振込申請を確定しますか？`
+                );
+
+                if (confirmed) {
+                    // 実際の処理ではここでサーバーにデータを送信
+                    console.log('振込金額:', amount);
+                    console.log('振込手数料:', fee);
+                    console.log('合計:', total);
+                    
+                    alert('振込申請が完了しました。');
+                    // 次のページへ遷移（実装時は適切なURLを指定）
+                    // window.location.href = 'next-page.html';
+                }
+            }
+        });
+
+        // 数字のみ入力を許可
+        amountInput.addEventListener('keypress', function(e) {
+            if (e.key === '-' || e.key === '+' || e.key === 'e' || e.key === 'E') {
+                e.preventDefault();
+            }
+        });
+
+        // カンマ区切りの表示（オプション）
+        amountInput.addEventListener('blur', function() {
+            if (this.value) {
+                const amount = parseInt(this.value);
+                if (!isNaN(amount)) {
+                    // カンマを追加して表示したい場合はここで処理
+                    // this.value = amount.toLocaleString();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

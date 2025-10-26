@@ -1,131 +1,44 @@
 {% extends "base.html" %}
+
 {% block title %}
     トップページ
 {% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
+    <!-- Slick Carousel & Font Awesome -->
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUBKARI</title>
-    <link rel="stylesheet" href="../../../app/static/css/top.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bankRegistration.css') }}">
 
-    <style>
-        /* ==================== スライダー用 CSS (一方向無限ループ & 左右矢印配置) ==================== */
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="center">
+            {% for i in range(6) %}
+            <div class="hero-slide-item">
+                <img src="{{ url_for('static', filename='img/image22.png') }}" alt="スライド{{ i+1 }}">
+            </div>
+            {% endfor %}
+        </div>
 
-        .hero {
-            /* スライダーコンテナの幅と位置を調整 */
-            width: 100%;
-            height: 550px;
-            margin: 0 auto;
-            position: relative;
-            overflow: hidden;
-            height: auto;
-            background: #d8d8d8;
-        }
-
-        .hero-slider {
-            overflow: hidden;
-            display: flex;
-            height: 100%;
-            transition: transform 0.5s ease;
-
-        }
-
-        .hero-slide {
-            display: flex;
-            transition: transform 0.8s ease;
-            min-width: 100%;
-            height: 100%;
-            
-
-        }
-
-        .hero-slide-item {
-            /* 4枚同時表示: 100%を4で割った幅 (25%) */
-            min-width: 25%;
-            height: 700px;
-            /* 画像の高さ（適宜調整） */
-            box-sizing: border-box;
-            padding: 5px;
-            flex-shrink: 0;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 8px;
-            
-        }
-
-        /* 制御ボタン (修正箇所) */
-        .slider-arrows {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            /* 修正点: ボタンを左右に配置 */
-            justify-content: space-between;
-            transform: translateY(-50%);
-            padding: 0 10px;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .slider-arrow {
-            pointer-events: auto;
-            /* 丸い背景と境界線を削除 */
-            background: none; 
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 0;
-            font-size: 1.5em;
-            line-height: 1;
-            opacity: 1; 
-            transition: opacity 0.3s;
-        }
-
-        .slider-arrow:hover {
-            opacity: 0.8; 
-        }
-
-
-        
-    </style>
-</head>
-
-<body>
-    <section class="hero">
-        <div class="hero-slider" id="heroSlider">
-            <div class="hero-slide">
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
-                <div class="hero-slide-item" style="background-image: url('../../../app/img/image 22.png');"></div>
+        <div class="carousel-caption-overlay">
+            <div class="caption-inner">
+                <strong>先月の人気セラーのコーディネート！</strong>
+                <span>今が流行りのコーデを気軽にレンタルしてみましょう。</span>
+                <a href="#" class="view-more">詳しくはこちら</a>
             </div>
         </div>
-        <div class="slider-arrows">
-            <button class="slider-arrow prev-arrow">◀</button>
-            <button class="slider-arrow next-arrow">▶</button>
-        </div>
-    </section>
+    </div>
 
-    <section class="hero-content">
-        <h2>先月の人気モデルのコーディネート！</h2>
-        <p>今が旬のコーデを毎号レンタルして楽しもう。</p>
-        <a href="#" class="hero-link">詳しくはこちら</a>
-    </section>
-
+    <!-- Main Content -->
     <div class="content-wrapper">
         <aside class="sidebar">
-            <div class="sidebar-section">
+            <div class="sidebar-section brand-list">
                 <h3>ブランドから探す</h3>
                 <ul>
                     <li>TRAVAS TOKYO</li>
@@ -155,330 +68,47 @@
                     <li>ボトムス</li>
                     <li>スカート</li>
                     <li>アクセサリー</li>
+                    <li>アウター</li>
                 </ul>
             </div>
         </aside>
 
         <main class="main-content">
-            <section class="category-section">
-                <div class="category-header">
-                    <h2>コート</h2>
-                    <a href="#" class="view-all">すべて見る</a>
-                </div>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 26.png" alt="コート">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">コート</div>
-                        <div class="product-price">¥4,500</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 26.png" alt="コート">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">コート</div>
-                        <div class="product-price">¥4,500</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 26.png" alt="コート">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">コート</div>
-                        <div class="product-price">¥4,500</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 26.png" alt="コート">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">コート</div>
-                        <div class="product-price">¥4,500</div>
-                    </div>
-                </div>
-            </section>
+            <!-- カテゴリごとに繰り返しを使うことも可能 -->
+            {% set categories = [
+                {'title': 'コーデ', 'price': '¥4,500', 'brand': 'TRAVAS TOKYO', 'img': 'img/image26.png'},
+                {'title': 'トップス', 'price': '¥4,200', 'brand': 'TRAVAS TOKYO', 'img': 'img/image43.png'},
+                {'title': 'ボトムス', 'price': '¥4,600', 'brand': 'REFLEM', 'img': 'img/image39.png'},
+                {'title': 'アクセサリー', 'price': '¥4,000', 'brand': 'CIVARIZE', 'img': 'img/image51.png'}
+            ] %}
 
+            {% for cat in categories %}
             <section class="category-section">
                 <div class="category-header">
-                    <h2>トップス</h2>
+                    <h2>{{ cat.title }}</h2>
                     <a href="#" class="view-all">すべて見る</a>
                 </div>
                 <div class="product-grid">
+                    {% for i in range(4) %}
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="../../../app/img/image 43.png" alt="トップス">
+                            <img src="{{ url_for('static', filename=cat.img) }}" alt="{{ cat.title }}{{ i+1 }}">
                         </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥1,500</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 43.png" alt="トップス">
+                        <div class="product-info">
+                            <div class="product-brand">{{ cat.brand }}</div>
+                            <div class="product-name">{{ cat.title }}</div>
+                            <div class="product-price">{{ cat.price }}</div>
                         </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥1,500</div>
                     </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 43.png" alt="トップス">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥1,500</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 43.png" alt="トップス">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥1,500</div>
-                    </div>
+                    {% endfor %}
                 </div>
             </section>
-
-            <section class="category-section">
-                <div class="category-header">
-                    <h2>ボトムス</h2>
-                    <a href="#" class="view-all">すべて見る</a>
-                </div>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 39.png" alt="ボトムズ">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥1,800</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 39.png" alt="ボトムズ">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥1,800</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 39.png" alt="ボトムズ">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥1,800</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 39.png" alt="ボトムズ">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥1,800</div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="category-section">
-                <div class="category-header">
-                    <h2>アクセサリー</h2>
-                    <a href="#" class="view-all">すべて見る</a>
-                </div>
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 51.png" alt="アクセサリー">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥1,300</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 51.png" alt="アクセサリー">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥1,300</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 51.png" alt="アクセサリー">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥1,300</div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="../../../app/img/image 51.png" alt="アクセサリー">
-                        </div>
-                        <div class="product-brand">ブランド名</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥1,300</div>
-                    </div>
-                </div>
-            </section>
+            {% endfor %}
         </main>
     </div>
 
-
-<script>
-        // ========== 一方向 無限ループ スライド制御 (ジャンプ抑制版) ==========
-
-        const slideContainer = document.querySelector('.hero-slide');
-        const slides = Array.from(document.querySelectorAll('.hero-slide-item'));
-        const SLIDES_TO_SHOW = 4; // 4枚同時表示
-        const totalSlides = slides.length; // 元のアイテム数 (ここでは8)
-        const slideWidthStep = 100 / SLIDES_TO_SHOW; // 1ステップあたりの移動幅 (25%)
-
-        let currentPosition = 0; // 開始位置は最初の本物のスライド (0)
-
-        // ------------------ 1. クローンの作成と挿入 (末尾のみ) ------------------
-
-        // 後方に挿入するクローン (最初の4枚) のみ
-        const lastClones = slides.slice(0, SLIDES_TO_SHOW).map(item => {
-            const clone = item.cloneNode(true);
-            clone.classList.add('clone', 'clone-end');
-            return clone;
-        });
-
-        // DOMに挿入
-        lastClones.forEach(clone => slideContainer.appendChild(clone));
-
-        // クローンを含めた全スライドの総数 (8 + 4 = 12)
-        const allSlidesCount = totalSlides + SLIDES_TO_SHOW;
-
-
-        // ------------------ 2. スライド表示関数 ------------------
-
-        /** スライド表示（クローンによる位置調整を行う） */
-        function showSlide(position, transition = true) {
-            if (transition) {
-                slideContainer.style.transition = 'transform 0.8s ease';
-            } else {
-                // 無限ループ時の瞬間移動用
-                slideContainer.style.transition = 'none';
-            }
-            // クローンを考慮した位置でtranslateXを計算
-            slideContainer.style.transform = `translateX(-${position * slideWidthStep}%)`;
-        }
-
-        /** 無限ループのための瞬間移動処理 */
-        function checkLoop() {
-            const transitionDuration = 800;
-
-            // クローンが表示された後 (currentPosition === totalSlides)
-            if (currentPosition === totalSlides) {
-                // アニメーション完了を待つ (800ms)
-                setTimeout(() => {
-                    // currentPositionを最初の本物のスライドインデックス (0) にリセット
-                    currentPosition = 0;
-                    // 瞬間移動を実行
-                    showSlide(currentPosition, false);
-                }, transitionDuration);
-            }
-        }
-
-        // ------------------ 3. ナビゲーション関数 ------------------
-
-        // 次へ (右方向)
-        function nextSlide() {
-            // スライドが最後のクローンセットまで移動するのを許可
-            if (currentPosition >= allSlidesCount) {
-                return;
-            }
-
-            currentPosition++;
-            showSlide(currentPosition);
-
-            // 最後の本物スライドから次のクローンへ移動した瞬間 (currentPosition = 8)
-            if (currentPosition === totalSlides) {
-                checkLoop();
-            }
-        }
-
-        // 前へ (左方向) - **機能は無効**
-        // 無限ループは右方向のみなので、この関数は中身を空にして維持します。
-        function prevSlide() {
-            // 左方向への移動ロジックは実装しない（要望「右方向だけにずっと流れる無限ループでできるようにして他はいじらないで」を維持するため）
-            return;
-        }
-
-        // ------------------ 4. 初期化とイベント設定 ------------------
-
-        // 初期表示: 最初の本物のスライド (0)
-        showSlide(currentPosition, false);
-
-        // 自動スライド
-        // 修正箇所: 4000ミリ秒 (4秒) を 5000ミリ秒 (5秒) に変更
-        let autoSlide = setInterval(nextSlide, 5000);
-
-        // hero要素のイベント (マウスホバーで停止/再開)
-        const hero = document.querySelector('.hero');
-        if (hero) {
-            hero.addEventListener('mouseenter', () => clearInterval(autoSlide));
-            hero.addEventListener('mouseleave', () => {
-                // 修正箇所: 4000ミリ秒 (4秒) を 5000ミリ秒 (5秒) に変更
-                autoSlide = setInterval(nextSlide, 5000);
-            });
-        }
-
-        // 手動操作ボタンのイベントリスナー設定
-        const nextButton = document.querySelector('.next-arrow');
-        // 修正箇所: prevButtonを取得
-        const prevButton = document.querySelector('.prev-arrow');
-
-        const handleManualClick = (direction) => {
-            // 手動操作時は自動スライドを一旦リセット
-            clearInterval(autoSlide);
-            
-            // 右矢印のみ機能させる
-            if (direction === 'next') {
-                if (currentPosition < totalSlides) { // クローンへの移動中はクリックを受け付ける
-                    nextSlide();
-                }
-            } else if (direction === 'prev') {
-                // 左矢印（戻る）は機能させない
-                prevSlide(); 
-            }
-
-            // 5秒後に自動スライドを再開
-            // 修正箇所: 4000ミリ秒 (4秒) を 5000ミリ秒 (5秒) に変更
-            autoSlide = setInterval(nextSlide, 5000);
-        };
-
-        if (nextButton) {
-            nextButton.addEventListener('click', () => handleManualClick('next'));
-        }
-        // 修正箇所: prevButtonのイベントリスナーを設定（機能は無効）
-        if (prevButton) {
-            prevButton.addEventListener('click', () => handleManualClick('prev'));
-        }
-        // ===========================================
-    </script></body>
-
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 {% endblock %}
