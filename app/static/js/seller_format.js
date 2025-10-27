@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function goToUploadPage() {
-            // 點擊圖片進入編輯頁面
+            // 画像編集
             window.location.href = "{{url_for('seller.seller_uploadImg')}}";
         }
 // 価格トグル
@@ -117,21 +117,7 @@ function createPurchasePriceSection() {
 }
 
 // ページ遷移（サイズ・洗濯）
-function openSizePage() {
-    const size = prompt('サイズを入力してください (例: M, L, XL):');
-    if (size) {
-        document.getElementById('sizeInput').value = size;
-        document.getElementById('sizeDisplay').textContent = `選択済み: ${size}`;
-    }
-}
 
-function openWashingPage() {
-    const washing = prompt('洗濯表示を入力してください:');
-    if (washing) {
-        document.getElementById('washingInput').value = washing;
-        document.getElementById('washingDisplay').textContent = `選択済み: ${washing}`;
-    }
-}
 
 // フォーム検証
 function validateForm() {
@@ -185,22 +171,22 @@ function validateForm() {
     }
 
     // サイズ
-    const size = form.querySelector('[name="size"]').value;
-    if (!size) {
-        document.getElementById('sizeError').classList.remove('hidden');
-        isValid = false;
-    } else {
-        document.getElementById('sizeError').classList.add('hidden');
-    }
+    // const size = form.querySelector('[name="size"]').value;
+    // if (!size) {
+    //     document.getElementById('sizeError').classList.remove('hidden');
+    //     isValid = false;
+    // } else {
+    //     document.getElementById('sizeError').classList.add('hidden');
+    // }
 
-    // 洗濯
-    const washing = form.querySelector('[name="washing"]').value;
-    if (!washing) {
-        document.getElementById('washingError').classList.remove('hidden');
-        isValid = false;
-    } else {
-        document.getElementById('washingError').classList.add('hidden');
-    }
+    // // 洗濯
+    // const washing = form.querySelector('[name="washing"]').value;
+    // if (!washing) {
+    //     document.getElementById('washingError').classList.remove('hidden');
+    //     isValid = false;
+    // } else {
+    //     document.getElementById('washingError').classList.add('hidden');
+    // }
 
     // 返却場所
     const returnLocation = form.querySelector('[name="returnLocation"]').value.trim();
