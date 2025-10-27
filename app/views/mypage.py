@@ -68,10 +68,45 @@ def transferApplication():
 #---------------------------------------------------------------------------------------------------
 
 #transferAmount 金額選択ページ表示--------------------------------------------------------------------
-@mypage_bp.route("mypage/transferAmount")
+@mypage_bp.route("/transferAmount", methods=["GET", "POST"])
 def transferAmount():
+    error_message = None
+
+    if request.method == "POST":
+        amount_str = request.form.get("amount")
+
+        if not amount_str:
+            error_message = "金額を入力してください。"
+        else:
+            try:
+                amount = int(amount_str)
+                if amount < 0:
+                    error_message = "金額は0円以上を入力してください。"
+                elif amount > 1000000:
+                    error_message = "一度に振り込める限度額は1,000,000円までです。"
+                elif amount < 201:
+                    error_message = "振込手数料200円を含め、最低201円以上を入力してください。"
+            except ValueError:
+                error_message = "正しい金額を入力してください。"
+
+        if error_message:
+            # 入力エラーがあれば同じページにエラーメッセージ付きで再表示
+            return render_template("mypage/transferAmount.html", error_message=error_message)
+
+        # ✅ 正常処理時はマイページ完了画面へリダイレクト
+        return redirect(url_for('mypage.amountComp'))
+
+    # ✅ GETアクセス時（初回表示）
     return render_template("mypage/transferAmount.html")
+
+
 #---------------------------------------------------------------------------------------------------
+
+
+
+@mypage_bp.route("/mypage/amountComp")
+def amountComp():
+    return render_template("mypage/amountComp.html")
 
 
 
