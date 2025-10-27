@@ -3,6 +3,7 @@ const form = document.getElementById('transferForm');
 const amountInput = document.getElementById('amount');
 const errorMessage = document.getElementById('errorMessage');
 const submitButton = document.querySelector('.submit-button');
+const mypageUrl = "{{ url_for('mypage.mypage') }}";
 
 // 金額入力時のバリデーション
 amountInput.addEventListener('input', function() {
@@ -61,9 +62,10 @@ form.addEventListener('submit', function(e) {
         );
 
         if (confirmed) {
-            // 振込処理が完了したらマイページへ遷移
             alert('振込申請が完了しました。');
-            window.location.href = "/mypage";  // Flaskのmypageルートへ戻る
+
+            // Flaskが生成した本物のURL（mypageUrl変数）に遷移させる
+            window.location.href = mypageUrl;
         }
     }
 });

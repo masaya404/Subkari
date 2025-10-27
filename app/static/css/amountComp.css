@@ -1,0 +1,229 @@
+/* リセット */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 全体レイアウト */
+body {
+    font-family: 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ヘッダー */
+header {
+    background-color: #000;
+    color: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+header .logo {
+    font-size: 24px;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+header nav a:hover {
+    color: #f0f0f0;
+    text-decoration: underline;
+}
+
+/* メインコンテンツ */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 20px;
+}
+
+.container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 800px;
+    padding: 60px 80px;
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* フェードイン */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* タイトル部分 */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h1 {
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 16px;
+}
+
+/* 金額表示部分 */
+.amount-section {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 40px;
+    margin: 40px 0;
+    text-align: center;
+}
+
+.amount-label {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.amount {
+    color: #000;
+    font-size: 56px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.amount-detail {
+    color: #999;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* 情報表示 */
+.info-section {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.info-label {
+    color: #666;
+    font-size: 15px;
+}
+
+.info-value {
+    color: #333;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* メッセージボックス */
+.message {
+    background: #e8f5e9;
+    border-left: 5px solid #4CAF50;
+    padding: 20px;
+    border-radius: 6px;
+    margin: 30px 0;
+}
+
+.message-text {
+    color: #2e7d32;
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+/* ボタン */
+.button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 15px 40px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #000;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #333;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* フッター */
+footer {
+    background: #111;
+    color: #ccc;
+    padding: 30px 40px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.footer-links {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #ccc;
+    margin: 0 8px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 40px 20px;
+    }
+
+    .amount {
+        font-size: 40px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+}

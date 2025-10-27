@@ -16,7 +16,7 @@
     <main>
         <h1>振込金額</h1>
 
-        <form id="transferForm">
+        <form id="transferForm" action="{{url_for('mypage.transferAmount')}}" method="post">
             <!-- Amount Input -->
             <div class="form-group">
                 <p for="amount">金額</p>
@@ -37,11 +37,11 @@
                 <p>金融機関・申請金額に関わらず、都度発生いたします。</p>
                 <p>※お持ちの残高（売上金含む）の金額が振込手数料以下の場合、振込申請をすることはできません。</p>
             </div>
-        </form>
-        <form action="{{url_for('mypage.mypage')}}">
-            <!-- Submit Button -->
             <button type="submit" class="submit-button">確定する</button>
         </form>
+        
+           
+        
         
     </main>
 
@@ -59,8 +59,12 @@
         </div>
         <p class="copyright">© 2025 HAL OSAKA IA・IH Team 5</p>
     </footer>
-    <script src="../../static/js/transferAmount.js"></script>
+    
 
+    <script>
+        const mypageUrl = "{{ url_for('mypage.mypage') }}"; // ← Flaskルート名に合わせて
+    </script>
+    <script src="../../static/js/transferAmount.js"></script>
 
 </body>
 </html>
