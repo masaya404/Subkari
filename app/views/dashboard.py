@@ -65,7 +65,7 @@ def dashboard():
 
     #6か月分の地域別新規ユーザー数
     cur.execute("select * from v_region_new_users;")
-    region_new_users=cur.fetchone()
+    region_new_users=cur.fetchall()
 
     #6か月分の年代別新規ユーザー数
     cur.execute("select * from v_age_group_new_users;")
