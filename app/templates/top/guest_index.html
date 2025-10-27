@@ -9,8 +9,6 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/member_index.css') }}">
-
 <div class="hero-section">
     <div class="center">
         {% for i in range(6) %}
@@ -74,9 +72,8 @@
                 <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=1から) #}
-                <a href="{{ url_for('products.product_details_stub', scode=1) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                {# 商品詳細ページへのリンクと、product_idへの修正済み #}
+                <a href="{{ url_for('products.product_details_stub', product_id=1) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
                                 alt="コーデ1">
@@ -88,8 +85,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=2) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=2) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
                                 alt="コーデ2">
@@ -101,8 +97,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=3) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=3) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
                                 alt="コーデ3">
@@ -114,8 +109,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=4) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=4) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
                                 alt="コーデ4">
@@ -136,9 +130,8 @@
                 <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=5から) #}
-                <a href="{{ url_for('products.product_details_stub', scode=5) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                {# 商品詳細ページへのリンクと、product_idへの修正済み #}
+                <a href="{{ url_for('products.product_details_stub', product_id=5) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
                                 alt="トップス1">
@@ -150,8 +143,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=6) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=6) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
                                 alt="トップス2">
@@ -163,8 +155,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=7) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=7) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
                                 alt="トップス3">
@@ -176,8 +167,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=8) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=8) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
                                 alt="トップス4">
@@ -198,9 +188,8 @@
                 <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=9から) #}
-                <a href="{{ url_for('products.product_details_stub', scode=9) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                {# 商品詳細ページへのリンクと、product_idへの修正済み #}
+                <a href="{{ url_for('products.product_details_stub', product_id=9) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
                                 alt="ボトムス1">
@@ -212,8 +201,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=10) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=10) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
                                 alt="ボトムス2">
@@ -225,8 +213,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=11) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=11) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
                                 alt="ボトムス3">
@@ -238,8 +225,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=12) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=12) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
                                 alt="ボトムス4">
@@ -260,9 +246,8 @@
                 <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=13から) #}
-                <a href="{{ url_for('products.product_details_stub', scode=13) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                {# 商品詳細ページへのリンクと、product_idへの修正済み #}
+                <a href="{{ url_for('products.product_details_stub', product_id=13) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
                                 alt="アクセサリー1">
@@ -274,8 +259,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=14) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=14) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
                                 alt="アクセサリー2">
@@ -287,8 +271,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=15) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=15) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
                                 alt="アクセサリー3">
@@ -300,8 +283,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ url_for('products.product_details_stub', scode=16) }}" 
-                   style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('products.product_details_stub', product_id=16) }}">
                     <div class="product-card">
                         <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
                                 alt="アクセサリー4">
@@ -324,7 +306,7 @@
         <div class="guidelines-subtitle">初めての方へ</div>
         <div class="guidelines-grid">
             <div class="guideline-card">
-                <a href="{{ url_for('top.about_subkari') }}" style="text-decoration: none; color: inherit; display: block;">
+                <a href="{{ url_for('top.about_subkari') }}">
                     <i class="fas fa-tshirt guideline-icon"></i>
                     <h3>SUBKARIについて</h3>
                 </a>
