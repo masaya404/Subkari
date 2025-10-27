@@ -1,15 +1,23 @@
-{% extends "base.html" %}
-    <!-- <link rel="stylesheet" href="../../static/css/bankRegistration.css"> -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/account-management_detail.css') }}">
+<!-- {% extends "base.html" %} -->
     
-{% extends "base.html" %}
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/account-management_detail.css') }}"> -->
+    
+<!-- {% extends "base.html" %}
 {% block title %}
     アカウント詳細
 {% endblock %}
 
-{% block content %}
-
-
+{% block content %} -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../static/css/account_management_detail.css">
+</head>
+<body>
+    
     <div class="app-container">
         <div class="sidebar">
             <div class="sidebar-header">DASHBOARD</div>
@@ -111,4 +119,7 @@
             </main>
         </div>
     </div>
-    {% endblock %}
+    <!-- {% endblock %} -->
+    <script src="../../static/js/account_management_detail.js"></script>
+</body>
+</html>

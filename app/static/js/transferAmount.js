@@ -1,4 +1,3 @@
-    
 // フォーム要素の取得
 const form = document.getElementById('transferForm');
 const amountInput = document.getElementById('amount');
@@ -15,9 +14,7 @@ function validateAmount() {
     const amount = parseInt(amountInput.value);
     errorMessage.classList.remove('show');
     
-    if (!amountInput.value) {
-        return false;
-    }
+    if (!amountInput.value) return false;
 
     if (amount < 0) {
         errorMessage.textContent = '金額は0円以上を入力してください。';
@@ -31,7 +28,6 @@ function validateAmount() {
         return false;
     }
 
-    // 手数料200円を考慮した最低金額チェック
     if (amount > 0 && amount < 201) {
         errorMessage.textContent = '振込手数料200円を含め、最低201円以上の金額を入力してください。';
         errorMessage.classList.add('show');
@@ -65,14 +61,9 @@ form.addEventListener('submit', function(e) {
         );
 
         if (confirmed) {
-            // 実際の処理ではここでサーバーにデータを送信
-            console.log('振込金額:', amount);
-            console.log('振込手数料:', fee);
-            console.log('合計:', total);
-            
+            // 振込処理が完了したらマイページへ遷移
             alert('振込申請が完了しました。');
-            // 次のページへ遷移（実装時は適切なURLを指定）
-            // window.location.href = 'next-page.html';
+            window.location.href = "/mypage";  // Flaskのmypageルートへ戻る
         }
     }
 });
@@ -81,16 +72,5 @@ form.addEventListener('submit', function(e) {
 amountInput.addEventListener('keypress', function(e) {
     if (e.key === '-' || e.key === '+' || e.key === 'e' || e.key === 'E') {
         e.preventDefault();
-    }
-});
-
-// カンマ区切りの表示（オプション）
-amountInput.addEventListener('blur', function() {
-    if (this.value) {
-        const amount = parseInt(this.value);
-        if (!isNaN(amount)) {
-            // カンマを追加して表示したい場合はここで処理
-            // this.value = amount.toLocaleString();
-        }
     }
 });
