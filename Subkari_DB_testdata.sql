@@ -56,7 +56,38 @@ NULL, 'hashed_password_3',
 '凍結', -- status (ダミー)
 NULL, 'hashed_password_5', 
 'img/dummy5.jpg' -- identifyImg (ダミー)
-);
+),
+(
+  -- ID 6
+  'watanabe_goro', '渡辺 五郎', '1992-03-10', '090-6666-6666', 'goro.watanabe@example.com', 
+  false, '古着が好きです。', 10000, '2023-07-11', NULL, 
+  '本人確認済み', NULL, 'pass_watanabe', 'img/identify/id_6.jpg'
+),
+(
+  -- ID 7
+  'yamamoto_rokuro', '山本 六郎', '1998-11-25', '090-7777-7777', 'rokuro.yamamoto@example.com', 
+  true, 'よろしくお願いします。', 0, '2023-08-01', NULL, 
+  '未確認', NULL, 'pass_yamamoto', 'img/identify/id_7.jpg'
+),
+(
+  -- ID 8
+  'nakamura_shichi', '中村 七', '2001-05-05', '090-8888-8888', 'shichi.nakamura@example.com', 
+  false, '迅速な対応を心がけます。', 30000, '2023-09-10', '2025-10-15 14:00:00', 
+  '本人確認済み', 1, 'pass_nakamura', 'img/identify/id_8.jpg'
+),
+(
+  -- ID 9
+  'kobayashi_hachi', '小林 八重', '1993-02-18', '090-9999-9999', 'yae.kobayashi@example.com', 
+  false, NULL, 5000, '2023-10-01', NULL, 
+  '未確認', NULL, 'pass_kobayashi', 'img/identify/id_9.jpg'
+),
+(
+  -- ID 10
+  'kato_kumi', '加藤 久美子', '1980-09-30', '080-1010-1010', 'kumiko.kato@example.com', 
+  false, '猫を飼っています。', 150000, '2023-11-05', '2025-10-10 08:00:00', 
+  '本人確認済み', 2, 'pass_kato', 'img/identify/id_10.jpg'
+)
+;
 
 
 
@@ -134,7 +165,43 @@ VALUES
   '2025-10-20', '公開', false, '2025-10-20 11:00:00', true, 
   true, NULL, 4, 3, 2, 
   'クリーニング必須。', false
-);
+),
+(
+  -- ID 6 (デニムパンツ用)
+  'img/products/denim_pants.jpg', 'スキニーデニムパンツ', 8000, 3000, 'M', 
+  '2025-10-21', '公開', false, '2025-10-21 10:00:00', true, 
+  true, 'ストレッチ素材のデニムです。', 1, 2, 4, -- category_id 4 をボトムスと仮定
+  '洗濯機可', false
+),
+(
+  -- ID 7 (ロングスカート用)
+  'img/products/long_skirt.jpg', 'プリーツロングスカート', 12000, 4000, 'フリーサイズ', 
+  '2025-10-22', '公開', false, '2025-10-22 14:30:00', true, 
+  true, 'ウエストゴムの楽なスカートです。', 2, 5, 4,
+  '手洗い推奨', false
+),
+(
+  -- ID 8 (スラックス用)
+  'img/products/slacks.jpg', 'テーパードスラックス', 15000, 5000, 'L', 
+  '2025-10-23', '公開', false, '2025-10-23 18:00:00', true, 
+  true, 'センタープレス入りのきれいめパンツ。', 3, 3, 4, 
+  'ドライクリーニングのみ', false
+),
+(
+  -- ID 9 (ショートパンツ用)
+  'img/products/short_pants.jpg', 'ハイウエストショートパンツ', 6000, NULL, 'S', 
+  '2025-10-24', '公開', false, '2025-10-24 09:15:00', true, 
+  false, '夏向けのショートパンツです。', 1, 8, 4, 
+  NULL, false
+),
+(
+  -- ID 10 (タイトスカート用)
+  'img/products/tight_skirt.jpg', 'レースタイトスカート', 9000, 3500, 'M', 
+  '2025-10-25', '公開', false, '2025-10-25 11:00:00', true, 
+  true, '裏地付きのレーススカート。', 4, 12, 4, 
+  '手洗い、陰干し', false
+)
+;
 
 -- 洗濯表示テーブルのテストデータ
 INSERT INTO `m_cleanSign` (`id`, `cleanName`, `cleanImg`, `cleanDetail`) VALUES
@@ -811,7 +878,7 @@ VALUES
   10, 5, 'またのご利用をお待ちしております。', '2025-10-28 10:30:00', 0, 2
 );
 
-洗濯テーブルテストデータ---------------------------------------------------------
+--洗濯テーブルテストデータ---------------------------------------------------------
 INSERT INTO `t_clean` (`product_id`, `cleanSign_id`)
 VALUES
 (
