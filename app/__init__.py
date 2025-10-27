@@ -26,4 +26,5 @@ def create_app():
     # app.register_blueprint(account_management_detail.account_management_detail_bp)
     app.register_blueprint(mypage.mypage_bp)
     
+    
     return app

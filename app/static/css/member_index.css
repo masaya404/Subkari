@@ -127,10 +127,6 @@
             padding-right: 1px; /* 画像間の隙間を非常に狭くする */
         }
 
-        .center .slick-list {
-            overflow: visible; /* 右端スライドが切れずに半分見える */
-        }
-
         /* === コンテンツラッパー (サイドバーと商品グリッド) === */
         .content-wrapper {
             display: flex;
@@ -351,8 +347,4 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .guidelines-grid {
-                /* 768px以下の場合、グリッドを2列に変更するなどレスポンシブな対応も考慮されるが、
-                   今回は指示がないため、元の3列を維持しつつ、画面サイズに応じて調整されると仮定 */
-            }
         }
