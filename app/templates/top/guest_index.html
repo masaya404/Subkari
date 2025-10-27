@@ -71,196 +71,248 @@
         <section class="category-section">
             <div class="category-header">
                 <h2>コーデ</h2>
-                <a href="#" class="view-all">すべて見る</a>
+                <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
-                            alt="コーデ1">
+                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=1から) #}
+                <a href="{{ url_for('products.product_details_stub', scode=1) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                                alt="コーデ1">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">コーデ</div>
+                            <div class="product-price">¥4,500</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">コーデ</div>
-                        <div class="product-price">¥4,500</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=2) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                                alt="コーデ2">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">コーデ</div>
+                            <div class="product-price">¥4,500</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
-                            alt="コーデ2">
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=3) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                                alt="コーデ3">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">コーデ</div>
+                            <div class="product-price">¥4,500</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">コーデ</div>
-                        <div class="product-price">¥4,500</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=4) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                                alt="コーデ4">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">コーデ</div>
+                            <div class="product-price">¥4,500</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
-                            alt="コーデ3">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">コーデ</div>
-                        <div class="product-price">¥4,500</div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
-                            alt="コーデ4">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">コーデ</div>
-                        <div class="product-price">¥4,500</div>
-                    </div>
-                </div>
+                </a>
             </div>
         </section>
 
         <section class="category-section">
             <div class="category-header">
                 <h2>トップス</h2>
-                <a href="#" class="view-all">すべて見る</a>
+                <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
-                            alt="トップス1">
+                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=5から) #}
+                <a href="{{ url_for('products.product_details_stub', scode=5) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                                alt="トップス1">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">トップス</div>
+                            <div class="product-price">¥4,200</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥4,200</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=6) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                                alt="トップス2">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">トップス</div>
+                            <div class="product-price">¥4,200</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
-                            alt="トップス2">
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=7) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                                alt="トップス3">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">トップス</div>
+                            <div class="product-price">¥4,200</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥4,200</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=8) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                                alt="トップス4">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">トップス</div>
+                            <div class="product-price">¥4,200</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
-                            alt="トップス3">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥4,200</div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
-                            alt="トップス4">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥4,200</div>
-                    </div>
-                </div>
+                </a>
             </div>
         </section>
 
         <section class="category-section">
             <div class="category-header">
                 <h2>ボトムス</h2>
-                <a href="#" class="view-all">すべて見る</a>
+                <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
-                            alt="ボトムス1">
+                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=9から) #}
+                <a href="{{ url_for('products.product_details_stub', scode=9) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                                alt="ボトムス1">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">REFLEM</div>
+                            <div class="product-name">ボトムス</div>
+                            <div class="product-price">¥4,600</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">REFLEM</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥4,600</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=10) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                                alt="ボトムス2">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">REFLEM</div>
+                            <div class="product-name">ボトムス</div>
+                            <div class="product-price">¥4,600</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
-                            alt="ボトムス2">
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=11) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                                alt="ボトムス3">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">REFLEM</div>
+                            <div class="product-name">ボトムス</div>
+                            <div class="product-price">¥4,600</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">REFLEM</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥4,600</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=12) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                                alt="ボトムス4">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">REFLEM</div>
+                            <div class="product-name">ボトムス</div>
+                            <div class="product-price">¥4,600</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
-                            alt="ボトムス3">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">REFLEM</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥4,600</div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
-                            alt="ボトムス4">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">REFLEM</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥4,600</div>
-                    </div>
-                </div>
+                </a>
             </div>
         </section>
 
         <section class="category-section">
             <div class="category-header">
                 <h2>アクセサリー</h2>
-                <a href="#" class="view-all">すべて見る</a>
+                <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
-                            alt="アクセサリー1">
+                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=13から) #}
+                <a href="{{ url_for('products.product_details_stub', scode=13) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                                alt="アクセサリー1">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">CIVARIZE</div>
+                            <div class="product-name">アクセサリー</div>
+                            <div class="product-price">¥4,000</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">CIVARIZE</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥4,000</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=14) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                                alt="アクセサリー2">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">CIVARIZE</div>
+                            <div class="product-name">アクセサリー</div>
+                            <div class="product-price">¥4,000</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
-                            alt="アクセサリー2">
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=15) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                                alt="アクセサリー3">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">CIVARIZE</div>
+                            <div class="product-name">アクセサリー</div>
+                            <div class="product-price">¥4,000</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">CIVARIZE</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥4,000</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', scode=16) }}" 
+                   style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                                alt="アクセサリー4">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">CIVARIZE</div>
+                            <div class="product-name">アクセサリー</div>
+                            <div class="product-price">¥4,000</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
-                            alt="アクセサリー3">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">CIVARIZE</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥4,000</div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
-                            alt="アクセサリー4">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">CIVARIZE</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥4,000</div>
-                    </div>
-                </div>
+                </a>
             </div>
         </section>
 
