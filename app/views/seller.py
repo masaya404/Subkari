@@ -67,6 +67,35 @@ def seller_upload():
     return jsonify({'success': True, 'image_url': image_url}) 
     # return render_template('seller/seller_format.html')
 
+#size選択----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/seller/size',methods=['GET'])
+def seller_size():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+               
+    return render_template('seller/seller_size.html', user_id = user_id)
+
+#size選択記録----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/seller/size/success',methods=['POST'])
+def seller_size_success():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+    size = request.form.get('size')
+    # #flashはerror message , 自動的にsessionに保存され、get_flashed_messages()で内容を取得できる
+    # if not size:
+    #     flash("sizeの選択が必要です。")
+    #     return redirect(url_for('seller.seller_size'))
+    session['size'] = size
+               
+    return render_template('seller/seller_format.html', user_id = user_id)
+
 #洗濯表示----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/clean',methods=['GET'])
 def seller_clean():
