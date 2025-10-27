@@ -16,7 +16,14 @@ def connect_db():
 
 account_bp = Blueprint('account',__name__,url_prefix='/account')
 
-sql='''
+
+
+
+
+#アカウント管理ページ ------------------------------------------------
+@account_bp.route("/account")
+def account():
+    sql='''
     select 
     a.id,
     a.username as アカウント名,
@@ -31,19 +38,12 @@ sql='''
     order by a.id
     ; 
     '''
-
-
-
-#アカウント管理ページ ------------------------------------------------
-@account_bp.route("/account")
-def account():
     con=connect_db()
     cur=con.cursor(dictionary=False)
 
     #アカウントの簡易表示情報取得 
     cur.execute(sql)   #今のままだと全件表示するようになってるから、何件表示するか検討の余地あり
     cur.close()
-    con.close()
     user_list=cur.fetchall()
     return render_template("account.html",user_list=user_list)
 
