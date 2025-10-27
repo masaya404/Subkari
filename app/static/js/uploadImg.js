@@ -146,8 +146,8 @@ function renderThumbnails() {
                 class="w-20 h-28 object-cover rounded-lg border-2 ${currentIndex === idx ? 'border-blue-500' : 'border-gray-300'} hover:border-blue-400 transition cursor-pointer"
                 onclick="currentIndex = ${idx}; updateMainImage();"
             >
-            <div class="absolute inset-0 rounded-lg bg-black bg-opacity-0 group-hover:bg-opacity-20 transition flex items-center justify-center">
-                <span class="text-xs text-white font-bold opacity-0 group-hover:opacity-100">Drag</span>
+            <div class="absolute inset-0 rounded-lg bg-opacity-0 group-hover:bg-opacity-20 transition flex items-center justify-center">
+                <span class="text-1xl text-white font-bold opacity-0 group-hover:opacity-100 text-stroke">Drag</span>
             </div>
         </div>
     `).join('');
@@ -184,21 +184,15 @@ function handleDropOnThumbnails(e) {
 
 // Session保存
 function saveToSession() {
-    sessionStorage.setItem('images', JSON.stringify(images));
+    sessionStorage.setItem('uploadedImages', JSON.stringify(images));
 }
 
 // Session恢復
 function loadFromSession() {
-    const saved = sessionStorage.getItem('images');
+    const saved = sessionStorage.getItem('uploadedImages');
     if (saved) images = JSON.parse(saved);
     updateUI();
 }
-
-
-const data = JSON.parse(localStorage.getItem('uploadedImages'));
-console.log('圖片數量:', data?.length);
-console.log('第一張圖片:', data?.[0].src.substring(0, 50) + '...');  // 只顯示前 50 個字符
-console.log('Base64 是否正確:', data?.[0].src.startsWith('data:image'));
 
 // 初期化
 loadFromSession();

@@ -1,5 +1,4 @@
-
-        /* === 基本スタイル === */
+/* === 基本スタイル === */
         * {
             margin: 0;
             padding: 0;
@@ -263,6 +262,69 @@
             color: #000;
         }
 
+/* ガイドライン */
+.guidelines {
+    background: #f9f9f9;
+    padding: 50px 20px;
+}
+
+.guidelines-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.guidelines h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.guidelines-subtitle {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 35px;
+}
+
+.guidelines-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.guideline-card {
+    background: #fff;
+    padding: 28px;
+    /* ⬇️ 縦中央配置のための修正 ⬇️ */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 縦方向の中央揃え */
+    align-items: center; /* 横方向の中央揃え (元々text-align: center;で実現されていたが、flexで強化) */
+    /* ⬆️ 縦中央配置のための修正 ⬆️ */
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    /* カード内のテキストも中央揃えにするためtext-alignを復活させるか、アイコンとテキストの間にマージンを適切に設定 */
+    text-align: center;
+    /* height: 100%; などを設定しない場合、中身を縦中央にする意味が薄いですが、見た目を再現するためpaddingはそのままにします。*/
+}
+
+.guideline-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.guideline-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    /* アイコンに個別のマージンがあったため、ここでflex-direction: column;でも中央配置を維持 */
+}
+
+.guideline-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    /* h3が複数行になる場合を考慮し、margin-top: auto; / margin-bottom: auto; は不要と判断。
+       justify-content: center; で全体が縦中央に寄ります。*/
+}
 
         /* レスポンシブデザインの調整 */
         @media (max-width: 1024px) {
@@ -287,5 +349,10 @@
 
             .product-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .guidelines-grid {
+                /* 768px以下の場合、グリッドを2列に変更するなどレスポンシブな対応も考慮されるが、
+                   今回は指示がないため、元の3列を維持しつつ、画面サイズに応じて調整されると仮定 */
             }
         }

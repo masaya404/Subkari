@@ -8,14 +8,28 @@
         <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
             <h1 class="text-3xl font-bold mb-8 text-center">出品する</h1>
 
-            <form id="sellerForm" method="POST" action="/seller/format" class="space-y-6">
+            <form id="sellerForm" method="POST" action="" class="space-y-6">
                 <!-- 商品画像 -->
                 <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+
+                    <div id="imageDisplayArea" class="mb-4 hidden">
+                        <div class="relative bg-gray-200 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition" style="width: 100%; height: 300px;" onclick="goToUploadPage()">
+                            <img id="displayImage" src="" alt="商品画像" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition">
+                                <span class="text-white font-semibold opacity-0 hover:opacity-100">クリックして編集</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="noImageArea" class="text-center">
                     <input type="file" id="productImage" accept="image/*" class="hidden">
                     <a href="{{url_for('seller.seller_uploadImg')}}">
                     <button type="button" class="text-gray-500 hover:text-gray-700 cursor-pointer">
                         画像をアップロード
                     </button>
+                    </a>
+                    </div>
+
                 </div>
 
                 <!-- 商品名（必須） -->

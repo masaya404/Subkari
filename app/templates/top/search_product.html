@@ -1,287 +1,17 @@
 {% extends "base.html" %}
 {% block title %}
-    トップページ
+    検索結果: {{ search_query or "すべて" }} | SUBKARI
 {% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search_product.css') }}">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SUBKARI</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
-      background: #fff;
-    }
-
-    .breadcrumb {
-      padding: 15px 30px;
-      font-size: 12px;
-      color: #666;
-      background: #f8f8f8;
-    }
-
-    .breadcrumb a {
-      color: #4a9eff;
-      text-decoration: none;
-    }
-
-    .container {
-      display: flex;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 30px;
-      gap: 180px;
-    }
-
-    /* --- サイドバー固定化 --- */
-    .sidebar {
-      width: auto;
-      flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      align-self: flex-start;
-      height: 100vh;
-      overflow-y: auto;
-      background: #fff;
-      border-right: 1px solid #eee;
-      padding-right: 10px;
-    }
-
-    .filter-section {
-      margin-bottom: 30px;
-    }
-
-    .filter-title {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .filter-options {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .filter-option {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      cursor: pointer;
-      padding: 5px 0;
-    }
-
-    .filter-option:hover {
-      color: #4a9eff;
-    }
-
-    .color-option {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      cursor: pointer;
-      padding: 5px 0;
-    }
-
-    .color-circle {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 1px solid #ddd;
-    }
-
-    .price-filter {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .price-filter input {
-      width: 70px;
-      padding: 5px;
-      border: 1px solid #ddd;
-      border-radius: 3px;
-      font-size: 11px;
-    }
-
-    .filter-btn {
-      display: flex;
-      gap: 5px;
-      margin-top: 10px;
-    }
-
-    .filter-btn button {
-      padding: 5px 15px;
-      border: 1px solid #ddd;
-      background: #f5f5f5;
-      font-size: 11px;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-
-    .filter-btn button:hover {
-      background: #e8e8e8;
-    }
-
-    /* --- メイン --- */
-    .main-content {
-      flex: 1;
-      height: calc(100vh - 100px);
-      overflow-y: auto;
-      scroll-behavior: smooth;
-      padding-right: 10px;
-    }
-
-    .page-title {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 30px;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 20px;
-    }
-
-    .product-card {
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .product-card:hover {
-      transform: translateY(-3px);
-    }
-
-    .product-image {
-      width: 100%;
-      aspect-ratio: 3/4;
-      background: #f0f0f0;
-      margin-bottom: 10px;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .product-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-brand {
-      font-size: 10px;
-      color: #666;
-      margin-bottom: 3px;
-    }
-
-    .product-name {
-      font-size: 12px;
-      margin-bottom: 5px;
-    }
-
-    .product-price {
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin: 50px 0;
-    }
-
-    .page-number {
-      width: 35px;
-      height: 35px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid #ddd;
-      background: #fff;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .page-number.active {
-      background: #000;
-      color: #fff;
-      border-color: #000;
-    }
-
-    .page-number:hover:not(.active) {
-      background: #f5f5f5;
-    }
-
-    .page-arrow {
-      width: 35px;
-      height: 35px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #666;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .page-arrow:hover {
-      background: #555;
-    }
-
-    @media (max-width:1200px) {
-      .product-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    @media (max-width:768px) {
-      .container {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        position: static;
-        width: 100%;
-        height: auto;
-        border-right: none;
-      }
-
-      .main-content {
-        height: auto;
-        overflow: visible;
-      }
-
-      .product-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  </style>
-</head>
-
-<body>
 
   <div class="breadcrumb">
-    <a href="index.html">SubKari</a> ＞ 検索結果
+    <a href="{{ url_for('top.guest_index') }}">SubKari</a> &gt; 検索結果
   </div>
 
   <div class="container">
-    <!-- 固定サイドバー -->
     <aside class="sidebar">
       <div class="filter-section">
         <div class="filter-title">種別</div>
@@ -388,49 +118,65 @@
       </div>
     </aside>
 
-    <!-- メインエリア -->
     <main class="main-content">
-      <h1 class="page-title">白 トップス</h1>
-      <div class="product-grid" id="productGrid"></div>
+      <h1 class="page-title">
+        {% if search_query %}
+          "{{ search_query }}" の検索結果 
+        {% else %}
+          全商品 
+        {% endif %}
+        ({{ products | length }} 件)
+      </h1>
+      
+      <div class="product-grid" id="productGrid">
+        {% for product in products %}
+        <div class="product-card" onclick="window.location.href = '/product-detail/{{ product.id }}'">
+          <div class="product-image">
+            <img src="{{ url_for('static', filename='img/' + product.image_path) }}" alt="{{ product.name }}">
+          </div>
+          <div class="product-brand">{{ product.brand }}</div>
+          <div class="product-name">{{ product.name }}</div>
+          <div class="product-price">¥{{ "{:,.0f}".format(product.price) }}</div>
+        </div>
+        {% endfor %}
+        
+        {% if not products %}
+        <p>該当する商品が見つかりませんでした。</p>
+        {% endif %}
+
+      </div>
+      
       <div class="pagination">
         <div class="page-number active">1</div>
         <div class="page-number">2</div>
         <div class="page-number">3</div>
         <div class="page-number">4</div>
-        <div class="page-arrow">＞</div>
+        <div class="page-arrow">&gt;</div>
       </div>
     </main>
   </div>
 
   <script>
-    // 商品カード生成
+    // ⚠ 注意: generateProducts() は削除します。商品カードはサーバー側で生成されました。
+    /*
     function generateProducts() {
-      const grid = document.getElementById('productGrid');
-      const imgSrc = '../../../app/img/image 67.png';
-      for (let i = 0; i < 40; i++) {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-          <div class="product-image">
-            <img src="${imgSrc}" alt="トップス">
-          </div>
-          <div class="product-brand">REFLEM</div>
-          <div class="product-name">トップス</div>
-          <div class="product-price">¥12,000</div>
-        `;
-        card.addEventListener('click', () => window.location.href = 'product-detail.html');
-        grid.appendChild(card);
-      }
+        // ... (省略)
     }
     generateProducts();
+    */
 
     // フィルター機能
     function clearFilter() {
-      document.querySelectorAll('.color-option input').forEach(i => i.checked = false);
+      // 全てのチェックボックス/ラジオボタンをクリア
+      document.querySelectorAll('.filter-options input').forEach(i => i.checked = false);
+      // 種別のラジオボタン（ユニセックス）はデフォルトでチェックを戻す (元のHTML設定に基づく)
+      document.querySelector('input[name="type"]').checked = true;
     }
 
     function applyFilter() {
-      alert('フィルターを適用しました');
+      // 実際には、サイドバーの全フィルター条件を取得し、
+      // /search_result エンドポイントにGETリクエストとして送信する処理を実装します。
+      alert('フィルターを適用しました (検索処理を実行してください)');
     }
 
     function clearPrice() {
@@ -440,15 +186,17 @@
     }
 
     function applyPrice() {
-      alert('価格フィルターを適用しました');
+      // 実際には、価格フィルター条件をサーバーに送信する処理を実装します。
+      alert('価格フィルターを適用しました (検索処理を実行してください)');
     }
 
-    // ページネーション
+    // ページネーションのインタラクション
     document.querySelectorAll('.page-number').forEach(page => {
       page.addEventListener('click', function () {
         document.querySelectorAll('.page-number').forEach(p => p.classList.remove('active'));
         this.classList.add('active');
         document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
+        // 実際のページ遷移またはAJAXコンテンツ読み込み処理を追加
       });
     });
 
@@ -462,19 +210,6 @@
       }
     });
   </script>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
 
 
 

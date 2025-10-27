@@ -1,114 +1,286 @@
 {% extends "base.html" %}
 
 {% block title %}
-    トップページ
+トップページ
 {% endblock %}
 
 {% block content %}
-    <!-- Slick Carousel & Font Awesome -->
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bankRegistration.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/member_index.css') }}">
 
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <div class="center">
-            {% for i in range(6) %}
-            <div class="hero-slide-item">
-                <img src="{{ url_for('static', filename='img/image22.png') }}" alt="スライド{{ i+1 }}">
-            </div>
-            {% endfor %}
+<div class="hero-section">
+    <div class="center">
+        {% for i in range(6) %}
+        <div class="hero-slide-item">
+            <img src="{{ url_for('static', filename='img/image_22.png') }}" alt="スライド">
         </div>
+        {% endfor %}
+    </div>
+</div>
 
-        <div class="carousel-caption-overlay">
-            <div class="caption-inner">
-                <strong>先月の人気セラーのコーディネート！</strong>
-                <span>今が流行りのコーデを気軽にレンタルしてみましょう。</span>
-                <a href="#" class="view-more">詳しくはこちら</a>
-            </div>
+    <div class="carousel-caption-overlay">
+        <div class="caption-inner">
+            <strong>先月の人気セラーのコーディネート！</strong>
+            <span>今が流行りのコーデを気軽にレンタルしてみましょう。</span>
+            <a href="#" class="view-more">詳しくはこちら</a>
         </div>
     </div>
+</div>
 
-    <!-- Main Content -->
-    <div class="content-wrapper">
-        <aside class="sidebar">
-            <div class="sidebar-section brand-list">
-                <h3>ブランドから探す</h3>
-                <ul>
-                    <li>TRAVAS TOKYO</li>
-                    <li>REFLEM</li>
-                    <li>CIVARIZE</li>
-                    <li>BRI</li>
-                    <li>Amilige</li>
-                    <li>VOLCAN & APHRODITE</li>
-                    <li>THCC PSYYNXX</li>
-                    <li>KINGLYMASK</li>
-                    <li>QY</li>
-                    <li>Ark Rouge</li>
-                    <li>LIZ LISA</li>
-                    <li>Mars</li>
-                    <li>No - Brand</li>
-                    <li>その他</li>
-                </ul>
+<div class="content-wrapper">
+    <aside class="sidebar">
+        <div class="sidebar-section brand-list">
+            <h3>ブランドから探す</h3>
+            <ul>
+                <li>TRAVAS TOKYO</li>
+                <li>REFLEM</li>
+                <li>CIVARIZE</li>
+                <li>BRI</li>
+                <li>Amilige</li>
+                <li>VOLCAN & APHRODITE</li>
+                <li>THCC PSYYNXX</li>
+                <li>KINGLYMASK</li>
+                <li>QY</li>
+                <li>Ark Rouge</li>
+                <li>LIZ LISA</li>
+                <li>Mars</li>
+                <li>No - Brand</li>
+                <li>その他</li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <h3>カテゴリから探す</h3>
+            <ul>
+                <li>コーディネックス</li>
+                <li>レディース</li>
+                <li>コーディネート</li>
+                <li>トップス</li>
+                <li>ボトムス</li>
+                <li>スカート</li>
+                <li>アクセサリー</li>
+                <li>アウター</li>
+            </ul>
+        </div>
+    </aside>
+
+<main class="main-content">
+
+        <section class="category-section">
+            <div class="category-header">
+                <h2>コーデ</h2>
+                <a href="#" class="view-all">すべて見る</a>
             </div>
-
-            <div class="sidebar-section">
-                <h3>カテゴリから探す</h3>
-                <ul>
-                    <li>コーディネックス</li>
-                    <li>レディース</li>
-                    <li>コーディネート</li>
-                    <li>トップス</li>
-                    <li>ボトムス</li>
-                    <li>スカート</li>
-                    <li>アクセサリー</li>
-                    <li>アウター</li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="main-content">
-            <!-- カテゴリごとに繰り返しを使うことも可能 -->
-            {% set categories = [
-                {'title': 'コーデ', 'price': '¥4,500', 'brand': 'TRAVAS TOKYO', 'img': 'img/image26.png'},
-                {'title': 'トップス', 'price': '¥4,200', 'brand': 'TRAVAS TOKYO', 'img': 'img/image43.png'},
-                {'title': 'ボトムス', 'price': '¥4,600', 'brand': 'REFLEM', 'img': 'img/image39.png'},
-                {'title': 'アクセサリー', 'price': '¥4,000', 'brand': 'CIVARIZE', 'img': 'img/image51.png'}
-            ] %}
-
-            {% for cat in categories %}
-            <section class="category-section">
-                <div class="category-header">
-                    <h2>{{ cat.title }}</h2>
-                    <a href="#" class="view-all">すべて見る</a>
-                </div>
-                <div class="product-grid">
-                    {% for i in range(4) %}
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="{{ url_for('static', filename=cat.img) }}" alt="{{ cat.title }}{{ i+1 }}">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-brand">{{ cat.brand }}</div>
-                            <div class="product-name">{{ cat.title }}</div>
-                            <div class="product-price">{{ cat.price }}</div>
-                        </div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                            alt="コーデ1">
                     </div>
-                    {% endfor %}
+                    <div class="product-info">
+                        <div class="product-brand">TRAVAS TOKYO</div>
+                        <div class="product-name">コーデ</div>
+                        <div class="product-price">¥4,500</div>
+                    </div>
                 </div>
-            </section>
-            {% endfor %}
-        </main>
-    </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                            alt="コーデ2">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">TRAVAS TOKYO</div>
+                        <div class="product-name">コーデ</div>
+                        <div class="product-price">¥4,500</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                            alt="コーデ3">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">TRAVAS TOKYO</div>
+                        <div class="product-name">コーデ</div>
+                        <div class="product-price">¥4,500</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                            alt="コーデ4">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">TRAVAS TOKYO</div>
+                        <div class="product-name">コーデ</div>
+                        <div class="product-price">¥4,500</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <!-- JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+        <section class="category-section">
+            <div class="category-header">
+                <h2>トップス</h2>
+                <a href="#" class="view-all">すべて見る</a>
+            </div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                            alt="トップス1">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">TRAVAS TOKYO</div>
+                        <div class="product-name">トップス</div>
+                        <div class="product-price">¥4,200</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                            alt="トップス2">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">TRAVAS TOKYO</div>
+                        <div class="product-name">トップス</div>
+                        <div class="product-price">¥4,200</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                            alt="トップス3">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">TRAVAS TOKYO</div>
+                        <div class="product-name">トップス</div>
+                        <div class="product-price">¥4,200</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                            alt="トップス4">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">TRAVAS TOKYO</div>
+                        <div class="product-name">トップス</div>
+                        <div class="product-price">¥4,200</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <div class="category-header">
+                <h2>ボトムス</h2>
+                <a href="#" class="view-all">すべて見る</a>
+            </div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                            alt="ボトムス1">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">REFLEM</div>
+                        <div class="product-name">ボトムス</div>
+                        <div class="product-price">¥4,600</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                            alt="ボトムス2">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">REFLEM</div>
+                        <div class="product-name">ボトムス</div>
+                        <div class="product-price">¥4,600</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                            alt="ボトムス3">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">REFLEM</div>
+                        <div class="product-name">ボトムス</div>
+                        <div class="product-price">¥4,600</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                            alt="ボトムス4">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">REFLEM</div>
+                        <div class="product-name">ボトムス</div>
+                        <div class="product-price">¥4,600</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <div class="category-header">
+                <h2>アクセサリー</h2>
+                <a href="#" class="view-all">すべて見る</a>
+            </div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                            alt="アクセサリー1">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">CIVARIZE</div>
+                        <div class="product-name">アクセサリー</div>
+                        <div class="product-price">¥4,000</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                            alt="アクセサリー2">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">CIVARIZE</div>
+                        <div class="product-name">アクセサリー</div>
+                        <div class="product-price">¥4,000</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                            alt="アクセサリー3">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">CIVARIZE</div>
+                        <div class="product-name">アクセサリー</div>
+                        <div class="product-price">¥4,000</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                            alt="アクセサリー4">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">CIVARIZE</div>
+                        <div class="product-name">アクセサリー</div>
+                        <div class="product-price">¥4,000</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main></div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.center').slick({
+            centerMode: true,
+            centerPadding: '160px',
+            slidesToShow: 3,
+            autoplay: true,
+            autoplaySpeed: 2000,
+        });
+    });
+</script>
+
 {% endblock %}
