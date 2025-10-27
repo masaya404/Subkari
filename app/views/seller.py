@@ -88,10 +88,10 @@ def seller_clean_success():
         user_id = session.get('user_id')
     
     clean = request.form.get('clean')
-    #flashはerror message , 自動的にsessionに保存され、get_flashed_messages()で内容を取得できる
-    if not clean:
-        flash("洗濯表示の選択が必要です。")
-        return redirect(url_for('seller.seller_clean'))
+    # #flashはerror message , 自動的にsessionに保存され、get_flashed_messages()で内容を取得できる
+    # if not clean:
+    #     flash("洗濯表示の選択が必要です。")
+    #     return redirect(url_for('seller.seller_clean'))
     session['clean'] = clean
                
     return render_template('seller/seller_format.html', user_id = user_id)
