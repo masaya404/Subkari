@@ -68,9 +68,10 @@ def transferApplication():
 #---------------------------------------------------------------------------------------------------
 
 #transferAmount 金額選択ページ表示--------------------------------------------------------------------
-@mypage_bp.route("/transferAmount" ,methods=["GET" , "POST"])
+@mypage_bp.route("/transferAmount", methods=["GET", "POST"])
 def transferAmount():
     error_message = None
+
     if request.method == "POST":
         amount_str = request.form.get("amount")
 
@@ -89,13 +90,23 @@ def transferAmount():
                 error_message = "正しい金額を入力してください。"
 
         if error_message:
+            # 入力エラーがあれば同じページにエラーメッセージ付きで再表示
             return render_template("mypage/transferAmount.html", error_message=error_message)
 
-        # OKならマイページにリダイレクト
-        return redirect(url_for("mypage.mypage"))
+        # ✅ 正常処理時はマイページ完了画面へリダイレクト
+        return redirect(url_for('mypage.amountComp'))
 
+    # ✅ GETアクセス時（初回表示）
     return render_template("mypage/transferAmount.html")
+
+
 #---------------------------------------------------------------------------------------------------
+
+
+
+@mypage_bp.route("/mypage/amountComp")
+def amountComp():
+    return render_template("mypage/amountComp.html")
 
 
 
