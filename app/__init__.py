@@ -27,4 +27,5 @@ def create_app():
     app.register_blueprint(mypage.mypage_bp)
     
     
+    
     return app
