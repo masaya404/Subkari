@@ -34,13 +34,15 @@
 
             <!-- Information Box -->
             <div class="info-box">
-                <p>※振込手数料は200円です。金融機関・申請金額に関わらず、都度発生いたします。</p>
+                <p>金融機関・申請金額に関わらず、都度発生いたします。</p>
                 <p>※お持ちの残高（売上金含む）の金額が振込手数料以下の場合、振込申請をすることはできません。</p>
             </div>
-
+        </form>
+        <form action="{{url_for('mypage.mypage')}}">
             <!-- Submit Button -->
             <button type="submit" class="submit-button">確定する</button>
         </form>
+        
     </main>
 
     <!-- Footer -->
