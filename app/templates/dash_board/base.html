@@ -6,13 +6,17 @@
     <title>{% block title %} {% endblock %}</title>
 </head>
 <body>
+    <div class="app-container">
+        <div class="sidebar">
     {%block header%}
-    {% include "header.html" %}
+    {% include "common.html" %}
    {% endblock %}
-   <main>
-    {% block content %}
-    
-    {% endblock %}
-   </main>
+            <main>
+                {% block content %}
+                
+                {% endblock %}
+            </main>
+        </div>
+    </div>
 </body>
 </html>
