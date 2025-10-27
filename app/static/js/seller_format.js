@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const images = JSON.parse(sessionStorage.getItem('uploadedImages'));
                 
                 if (images && images.length > 0) {
-                    // 顯示最新上傳的圖片（第 0 位是最新的）
+                    // 最新画像
                     const latestImage = images[0];
                     const displayImage = document.getElementById('displayImage');
                     const imageDataInput = document.getElementById('imageDataInput');
@@ -15,19 +15,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     displayImage.src = latestImage.src;
                     imageDataInput.value = latestImage.src;
                     
-                    // 顯示圖片區域，隱藏未上傳提示
+                    // 画像表示エリア　
                     document.getElementById('imageDisplayArea').classList.remove('hidden');
                     document.getElementById('noImageArea').classList.add('hidden');
                     
-                    console.log('已載入上傳的圖片');
+                    console.log('イメージローディング');
                 } else {
-                    // 沒有圖片時顯示未上傳提示
+                    
                     document.getElementById('imageDisplayArea').classList.add('hidden');
                     document.getElementById('noImageArea').classList.remove('hidden');
-                    console.log('沒有找到已上傳的圖片');
+                    console.log('画像がない');
                 }
             } catch (e) {
-                console.error('載入圖片失敗:', e);
+                console.error('失敗:', e);
                 document.getElementById('imageDisplayArea').classList.add('hidden');
                 document.getElementById('noImageArea').classList.remove('hidden');
             }

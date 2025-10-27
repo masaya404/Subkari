@@ -99,7 +99,9 @@
         </p>
 
         <!-- Submit Button -->
-        <button class="submit-button">選択する</button>
+        <form action="{{url_for('mypage.transferAmount')}}">
+            <button class="submit-button">選択する</button>
+        </form>
     </main>
 
     <!-- Error Modal -->
