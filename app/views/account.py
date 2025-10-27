@@ -14,15 +14,15 @@ def connect_db():
     return con
 
 
-account_bp = Blueprint('account',__name__,url_prefix='/account')
+account_manage_bp = Blueprint('account',__name__,url_prefix='/account')
 
 
 
 
 
 #アカウント管理ページ ------------------------------------------------
-@account_bp.route("/account")
-def account():
+@account_manage_bp.route("/account")
+def account_manage():
     sql='''
     select 
     a.id,
