@@ -12,10 +12,10 @@ admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 @admin_bp.route('/login',methods=['GET'])
 def login():
     #errorメッセージ
-    etbl={}
-    account={}
+    # etbl={}
+    # account={}
       
-    return render_template('admin/login.html',etbl=etbl,account=account)
+    return render_template('admin/login.html')
 
 #Login確認--------------------------------------------------------------------------------------------------------------------------------------------------------------
 @admin_bp.route('/login/admin',methods=['POST'])
