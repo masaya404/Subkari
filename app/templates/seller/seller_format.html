@@ -129,9 +129,11 @@
                             サイズ <span class="text-red-500">*</span>
                         </label>
                         <input type="hidden" name="size" id="sizeInput" value="">
-                        <button type="button" onclick="openSizePage()" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500">
-                            サイズを選択
-                        </button>
+                        <a href="{{url_for("seller.seller_size")}}">
+                            <button type="button" onclick="openSizePage()" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500">
+                                サイズを選択
+                            </button>
+                        </a>
                         <span class="text-sm text-gray-600 mt-1 block" id="sizeDisplay">未選択</span>
                         <span class="text-red-500 text-sm hidden" id="sizeError">サイズを選択してください</span>
                     </div>
@@ -139,10 +141,10 @@
                         <label class="block text-sm font-semibold mb-2">
                             洗濯表示 <span class="text-red-500">*</span>
                         </label>
-                        <input type="hidden" name="washing" id="washingInput" value="">
-                        <a href="{{url_for("seller.seller_clean")}}"><button type="button" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500">
-                            洗濯表示を選択
-                        </button>
+                        <a href="{{url_for("seller.seller_clean")}}">
+                            <button type="button" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500">
+                                洗濯表示を選択
+                            </button>
                         </a>
                         <span class="text-sm text-gray-600 mt-1 block" id="washingDisplay">未選択</span>
                         <span class="text-red-500 text-sm hidden" id="washingError">洗濯表示を選択してください</span>
