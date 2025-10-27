@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,request,make_response,redirect,url_for,jsonify,session
+from flask import Blueprint,render_template,request,make_response,redirect,url_for,jsonify,flash,session
 from PIL import Image
 from werkzeug.utils import secure_filename
 from datetime import datetime , timedelta
@@ -7,14 +7,13 @@ import json
 import os
 
 seller_bp = Blueprint('seller',__name__,url_prefix='/seller')
-
+# 処理方法：まず選択またはアップロードされたデータをsessionに保存され、最後にformatですべてのデータを一気にDBに登録 
 #seller TOP画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller',methods=['GET'])
 def seller():
     if 'user_id' not in session:
-        resp = make_response(url_for('login.login'))
         user_id = None
-        
+        return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
         
@@ -25,9 +24,8 @@ def seller():
 @seller_bp.route('/seller/format',methods=['GET'])
 def seller_format():
     if 'user_id' not in session:
-        resp = make_response(url_for('login.login'))
         user_id = None
-    
+        return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')    
     return render_template('seller/seller_format.html', user_id = user_id)
@@ -36,9 +34,8 @@ def seller_format():
 @seller_bp.route('/seller/uploadImg',methods=['GET'])
 def seller_uploadImg():
     if 'user_id' not in session:
-        resp = make_response(url_for('login.login'))
         user_id = None
-    
+        return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
     
@@ -70,14 +67,34 @@ def seller_upload():
     return jsonify({'success': True, 'image_url': image_url}) 
     # return render_template('seller/seller_format.html')
 
+#洗濯表示----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/seller/clean',methods=['GET'])
+def seller_clean():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+               
+    return render_template('seller/seller_clean.html', user_id = user_id)
 
-
-
-
-
-
-
-
+#洗濯表示記録----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/seller/clean/success',methods=['POST'])
+def seller_clean_success():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+    clean = request.form.get('clean')
+    #flashはerror message , 自動的にsessionに保存され、get_flashed_messages()で内容を取得できる
+    if not clean:
+        flash("洗濯表示の選択が必要です。")
+        return redirect(url_for('seller.seller_clean'))
+    session['clean'] = clean
+               
+    return render_template('seller/seller_format.html', user_id = user_id)
 
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
