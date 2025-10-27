@@ -48,6 +48,31 @@ def edit():
 #-----------------------------------------------
 
 
+#bankRegistration　振込口座登録ページ表示--------------------------------------------------------------
+@mypage_bp.route("/bankRegistration")
+def bankRegistration():
+    return render_template("mypage/bankRegistration.html")
+#----------------------------------------------------------------------------------------------------
+
+#bankComplete' 振込口座登録完了ページ------------------------------------------------------------------
+@mypage_bp.route("/bankComplete")
+def bankComplete():
+    return render_template("mypage/bankComplete.html")
+#----------------------------------------------------------------------------------------------------
+
+
+#bank_transfer 振込申請ページ表示---------------------------------------------------------------------
+@mypage_bp.route("mypage/bank_transfer")
+def bank_transfer():
+    return render_template("mypage/bank_transfer.html")
+#---------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 
 
 # htmlの画面遷移url_for

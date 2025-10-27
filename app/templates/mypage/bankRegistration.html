@@ -1,14 +1,14 @@
-{% extends "base.html" %}
-    <!-- <link rel="stylesheet" href="../../static/css/bankRegistration.css"> -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/bankRegistration.css') }}"> -->
-    
-{% extends "base.html" %}
-{% block title %}
-    振込先口座の登録
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>振込先口座の登録</title>
+    <link rel="stylesheet" href="../../static/css/bankRegistration.css">
+</head>
 
-{% block content %}
-<link rel="stylesheet" href="../../static/css/bankRegistration.css">
+
+
 <body>
     <header>
         <div class="logo">SUBKARI</div>
@@ -16,7 +16,7 @@
     <main class="container">
         <h1>振込先口座の登録</h1>
 
-        <form onsubmit="handleSubmit(event)">
+        <form onsubmit="handleSubmit(event)" action="{{ url_for('mypage.bankComplete') }}">
             <!-- 銀行 -->
             <section class="form-group">
                 <p class="form-label">銀行</p>
@@ -112,14 +112,15 @@
 
             <!-- 送信ボタン -->
             <section class="submit-section">
+                
                 <button type="submit" class="submit-btn">登録する</button>
+                
                 <div class="helplink">
                     <a href="#" class="help-link">
                     支店コードについて
                     <span class="help-icon">?</span>
                     </a>
                 </div>
-                
             </section>
         </form>
     </main>
@@ -138,4 +139,6 @@
     </footer>
     <script src="../../static/js/bankRegistration.js"></script>
     
-{% endblock %} 
+
+</body>
+</html>
