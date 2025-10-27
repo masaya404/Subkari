@@ -455,7 +455,7 @@ CREATE TABLE `t_clean` (
 
 -- お問い合わせテーブル ------------------------------------------
 CREATE TABLE `t_inquiry` (
-  `id` INT NOT NULL,
+  `id` INT AUTO_INCREMENT NOT NULL,
   `sender_id` INT NOT NULL,
   `content` TEXT NOT NULL,
   `timeSent` timestamp default current_timestamp ,
