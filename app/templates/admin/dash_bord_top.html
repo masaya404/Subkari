@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUBKARI Admin - ダッシュボード</title>
+{% extends "base.html" %}
+{% block title %}バックオフィストップ{% endblock %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard top.css') }}">
     <style>
 /* === Common Variables (共通スタイルから抜粋) === */
 :root {
@@ -289,10 +286,9 @@ a {
     font-weight: 500;
 }
     </style>
-</head>
-<body>
-    <div class="app-container">
-        <div class="sidebar">
+
+{% extends "base.html" %}
+{% block content %}
             <div class="sidebar-header">DASHBOARD</div>
             <nav class="sidebar-nav">
                 <ul>
@@ -396,20 +392,4 @@ a {
         </div>
     </div>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // ログアウト処理の例
-            const logoutLink = document.querySelector('.logout-link');
-            if (logoutLink) {
-                logoutLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (confirm('ログアウトしますか？')) {
-                        console.log('ログアウト処理を実行...');
-                        // 実際にはログアウト処理を記述
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+{% endblock %}
