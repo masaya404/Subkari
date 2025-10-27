@@ -63,10 +63,13 @@
                 {% endif %}
                 <div class="nav-container">
                     <nav>
-                        <a href="#">Coordinate</a>
+ <a href="{{ url_for('top.coordinate') }}" class="logo">Coordinate</a>
+    <a href="{{ url_for('top.tops') }}" class="logo">Tops</a>
+    <a href="{{ url_for('top.bottoms') }}" class="logo">Bottoms</a>
+    <a href="{{ url_for('top.accessories') }}" class="logo">Accessories</a>                        <!-- <a href="#">Coordinate</a>
                         <a href="#">Tops</a>
                         <a href="#">Bottoms</a>
-                        <a href="#">Accessories</a>
+                        <a href="#">Accessories</a> -->
                     </nav>
                 </div>
             </div>
