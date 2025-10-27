@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}
+    出品フォーマット
+{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="{{url_for("static",filename="css/seller_format.css")}}">
+    <div class="min-h-screen py-8 px-4">
+        <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
+            <h1 class="text-3xl font-bold mb-8 text-center">出品する</h1>
+
+            <form id="sellerForm" method="POST" action="" class="space-y-6">
+                <!-- 商品画像 -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+
+                    <div id="imageDisplayArea" class="mb-4 hidden">
+                        <div class="relative bg-gray-200 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition" style="width: 100%; height: 300px;" onclick="goToUploadPage()">
+                            <img id="displayImage" src="" alt="商品画像" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition">
+                                <span class="text-white font-semibold opacity-0 hover:opacity-100">クリックして編集</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="noImageArea" class="text-center">
+                    <input type="file" id="productImage" accept="image/*" class="hidden">
+                    <a href="{{url_for('seller.seller_uploadImg')}}">
+                    <button type="button" class="text-gray-500 hover:text-gray-700 cursor-pointer">
+                        画像をアップロード
+                    </button>
+                    </a>
+                    </div>
+
+                </div>
+
+                <!-- 商品名（必須） -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        商品名 <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="productName" placeholder="商品名を入力" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                    <span class="text-red-500 text-sm hidden" id="productNameError">商品名は必須です</span>
+                </div>
+
+                <!-- レンタル可能・購入可能 -->
+                <div>
+                    <div class="flex flex-col gap-4">
+                        <label class="flex items-start">
+                            <span class="mr-2">レンタル可能</span>
+                            <input type="checkbox" name="rental" value="true" class="rentalCheckbox cursor-pointer">        
+                        </label>
+
+                        <label class="flex items-start">
+                            <span class="mr-2">購入可能</span>
+                            <input type="checkbox" name="purchase" value="true" class="purchaseCheckbox cursor-pointer">                           
+                        </label>
+                    </div>
+
+                    
+                    <span class="text-red-500 text-sm hidden" id="rentalPurchaseError">レンタル可能または購入可能を選択してください</span>
+                </div>
+
+                <!-- 吸煙 -->
+                <div>
+                    <label class="block text-sm font-semibold mb-3">吸煙</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center">
+                            <input type="radio" name="smoking" value="no" checked class="w-4 h-4">
+                            <span class="ml-2">いいえ</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="smoking" value="yes" class="w-4 h-4">
+                            <span class="ml-2">はい</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 系統カラー（必須） -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        系統カラー <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="color" placeholder="白い系統" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                    <span class="text-red-500 text-sm hidden" id="colorError">系統カラーは必須です</span>
+                </div>
+
+                <!-- カテゴリー1（必須） -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        カテゴリー <span class="text-red-500">*</span>
+                    </label>
+                    <select name="category1" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                        <option value="">選択してください</option>
+                        <option value="tops">Tops</option>
+                        <option value="bottoms">Bottoms</option>
+                        <option value="accessories">Accessories</option>
+                    </select>
+                    <span class="text-red-500 text-sm hidden" id="category1Error">カテゴリーを選択してください</span>
+                </div>
+
+                <!-- カテゴリー2（必須） -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        カテゴリー2 <span class="text-red-500">*</span>
+                    </label>
+                    <select name="category2" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                        <option value="">選択してください</option>
+                        <option value="summer">Summer</option>
+                        <option value="winter">Winter</option>
+                    </select>
+                    <span class="text-red-500 text-sm hidden" id="category2Error">カテゴリー2を選択してください</span>
+                </div>
+
+                <!-- アイテム説明 -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">アイテム説明</label>
+                    <textarea name="itemDescription" rows="4" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+
+                <!-- 商品概要説明 -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">商品概要説明</label>
+                    <textarea name="productDescription" rows="4" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+
+                <!-- サイズ・洗濯（リンク） -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">
+                            サイズ <span class="text-red-500">*</span>
+                        </label>
+                        <input type="hidden" name="size" id="sizeInput" value="">
+                        <button type="button" onclick="openSizePage()" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500">
+                            サイズを選択
+                        </button>
+                        <span class="text-sm text-gray-600 mt-1 block" id="sizeDisplay">未選択</span>
+                        <span class="text-red-500 text-sm hidden" id="sizeError">サイズを選択してください</span>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">
+                            洗濯表示 <span class="text-red-500">*</span>
+                        </label>
+                        <input type="hidden" name="washing" id="washingInput" value="">
+                        <button type="button" onclick="openWashingPage()" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500">
+                            洗濯表示を選択
+                        </button>
+                        <span class="text-sm text-gray-600 mt-1 block" id="washingDisplay">未選択</span>
+                        <span class="text-red-500 text-sm hidden" id="washingError">洗濯表示を選択してください</span>
+                    </div>
+                </div>
+
+                <!-- 返却場所（必須） -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        返却場所 <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="returnLocation" placeholder="返却場所を入力" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                    <span class="text-red-500 text-sm hidden" id="returnLocationError">返却場所は必須です</span>
+                </div>
+
+                <!-- ボタン -->
+                <div class="flex gap-4 pt-6">
+                    <button type="submit" class="flex-1 border border-[#9a9a9a] text-white font-bold py-3 rounded bg-gray-700 hover:bg-white hover:text-gray-700 transition cursor-pointer">
+                        出品する
+                    </button>
+                    <button type="button" onclick="saveDraft()" class="flex-1 bg-white text-gray-800 font-bold py-3 rounded border border-[#9a9a9a] hover:bg-gray-700 hover:text-white transition cursor-pointer">
+                        下書き保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{url_for("static",filename='js/seller_format.js')}}"></script>
+{% endblock%}

@@ -1,12 +1,15 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUBKARI Admin - メッセージ送信</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/account_management.css') }}">
-</head>
-<body>
+
+{% extends "base.html" %}
+    <!-- <link rel="stylesheet" href="../../static/css/bankRegistration.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/account-management_message.css') }}">
+    
+{% extends "base.html" %}
+{% block title %}
+    メッセージ送信
+{% endblock %}
+
+{% block content %}
+
     <div class="app-container">
         <div class="sidebar">
             <div class="sidebar-header">DASHBOARD</div>
@@ -61,5 +64,19 @@
         </div>
     </div>
     
-</body>
-</html>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ログアウト処理の例
+            const logoutLink = document.querySelector('.logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (confirm('ログアウトしますか？')) {
+                        // ログアウト処理
+                        // window.location.href = 'login.html'; 
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

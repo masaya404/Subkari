@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>振込申請</title>
+    <link rel="stylesheet" href="../../static/css/transferApplication.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">SUBKARI</div>
+    </header>
+
+
+    <main>
+        <h1>振込申請</h1>
+
+        <!-- Edit Button -->
+        <div class="edit-button-container">
+            <button class="edit-button" id="editButton">編集する</button>
+        </div>
+
+        <!-- Bank List -->
+        <div class="bank-list" id="bankList">
+            <div class="bank-item" data-id="1">
+                <input type="radio" name="bank" value="1" checked>
+                <div class="bank-info">
+                    <div class="bank-details">
+                        <div class="bank-detail-row">
+                            <p class="bank-detail-label">銀行名</p>
+                            <p class="bank-detail-value">楽天銀行</p>
+                        </div>
+                        <div class="bank-detail-row">
+                            <p class="bank-detail-label">口座番号</p>
+                            <p class="bank-detail-value">****648</p>
+                        </div>
+                        <div class="bank-detail-row">
+                            <p class="bank-detail-label">支店番号</p>
+                            <p class="bank-detail-value">111</p>
+                        </div>
+                    </div>
+                    <button class="delete-button" onclick="deleteBank(1)">削除する</button>
+                </div>
+            </div>
+
+            <div class="bank-item" data-id="2">
+                <input type="radio" name="bank" value="2">
+                <div class="bank-info">
+                    <div class="bank-details">
+                        <div class="bank-detail-row">
+                            <span class="bank-detail-label">銀行名</span>
+                            <span class="bank-detail-value">三井住友銀行</span>
+                        </div>
+                        <div class="bank-detail-row">
+                            <span class="bank-detail-label">口座番号</span>
+                            <span class="bank-detail-value">****350</span>
+                        </div>
+                        <div class="bank-detail-row">
+                            <span class="bank-detail-label">支店番号</span>
+                            <span class="bank-detail-value">121</span>
+                        </div>
+                    </div>
+                    <button class="delete-button" onclick="deleteBank(2)">削除する</button>
+                </div>
+            </div>
+
+            <div class="bank-item" data-id="3">
+                <input type="radio" name="bank" value="3">
+                <div class="bank-info">
+                    <div class="bank-details">
+                        <div class="bank-detail-row">
+                            <span class="bank-detail-label">銀行名</span>
+                            <span class="bank-detail-value">ゆうちょ銀行</span>
+                        </div>
+                        <div class="bank-detail-row">
+                            <span class="bank-detail-label">口座番号</span>
+                            <span class="bank-detail-value">****098</span>
+                        </div>
+                        <div class="bank-detail-row">
+                            <span class="bank-detail-label">支店番号</span>
+                            <span class="bank-detail-value">131</span>
+                        </div>
+                    </div>
+                    <button class="delete-button" onclick="deleteBank(3)">削除する</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Bank Button -->
+        <button class="add-bank-button" id="addBankButton">
+            <span class="icon">⊕</span>
+            <span>新しい銀行を登録する</span>
+        </button>
+
+        <!-- Info Text -->
+        <p class="info-text">
+            ※登録できる送振込先は上限3つです。4つ目の以降の振込先を追加する場合は「編集する」ボタンから削除する振込先を削除してください。
+        </p>
+
+        <!-- Submit Button -->
+        <button class="submit-button">選択する</button>
+    </main>
+
+    <!-- Error Modal -->
+    <div class="modal" id="errorModal">
+        <div class="modal-content">
+            <p class="modal-text">
+                登録できるのは3個です。新規登録するには「編集する」から削除してください。
+            </p>
+            <div class="modal-buttons">
+                <button class="modal-ok-button" id="modalOkButton">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">初めての方へ</a>
+            <a href="#">サイトマップ</a>
+            <a href="#">FAQ</a>
+            <a href="#">お問い合わせ</a>
+            <a href="#">利用規約</a>
+            <a href="#">プライバシーポリシー</a>
+            <a href="#">特定商取引法に基づく表記</a>
+            <a href="#">古物営業法に基づく表示</a>
+        </div>
+        <p class="copyright">© 2025 HAL OSAKA IA・IH Team 5</p>
+    </footer>
+    <script src="../../static/js/transferApplication.js"></script>
+    
+</body>
+</html>

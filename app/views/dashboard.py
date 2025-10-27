@@ -5,6 +5,7 @@ import mysql.connector
 #passの概念理解してない
 #まだ未完成許して
 
+dashboard_bp = Blueprint('dashboard',__name__,url_prefix='/dashboard')
 
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
@@ -16,12 +17,13 @@ def connect_db():
     )
     return con
 
-app=Flask(__name__)        #アプリケーションの大枠を生成
-admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
+#routeの初期化コード、ルーティング（URLと関数の対応）や設定の登録など、すべてこの app を通じて行います。__init__.pyだけに書いている
+# app=Flask(__name__)        #アプリケーションの大枠を生成
+# admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 
 
-@admin_bp.route("/dashboard")
+@dashboard_bp.route("/dashboard")
 def dashboard():
     con=connect_db()
     cur=con.cursor(dictionary=True)
@@ -63,12 +65,15 @@ def dashboard():
 
     #6か月分の地域別新規ユーザー数
     cur.execute("select * from v_region_new_users;")
-    region_new_users=cur.fetchone()
+    region_new_users=cur.fetchall()
 
     #6か月分の年代別新規ユーザー数
     cur.execute("select * from v_age_group_new_users;")
     age_new_users=cur.fetchall()
 
+    cur.close()
+    con.close()
+    
     return render_template("dashboard.html",
                            new_users=new_users,
                            users_compare=users_compare,
@@ -82,8 +87,13 @@ def dashboard():
                            region_new_users=region_new_users,
                            age_new_users=age_new_users
                            )
-app.register_blueprint(admin_bp)
 
-if __name__ == "__main__":
-    app.run(debug=True)       #デバッグモードの切り替え
+# dashboardこういうモジュールを__init__.py（すべてのモジュールを管理する）に登録するため、__init__.pyだけに書いている
+# dashboard.register_blueprint(dashboard_bp)
+
+
+
+#サーバー起動するためのコード、起動の役割はrun.pyだけ書いている
+# if __name__ == "__main__":
+#     app.run(debug=True)       #デバッグモードの切り替え
 

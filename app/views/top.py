@@ -27,7 +27,7 @@ def guest_index():
 def member_index():
     #sessionの登録資料確認   
     if 'user_id' not in session:
-        resp = make_response(url_for('auth.login'))
+        resp = make_response(url_for('login.login'))
         user_id = None
     else:
         user_id = session.get('user_id')
@@ -35,7 +35,22 @@ def member_index():
     resp = make_response(render_template('top/member_index.html', user_id = user_id))
     return resp
 
+#subkariについての表示-----------------------------------------------------------------------------------------------------------------------------------------------------------
+@top_bp.route('/about_subkari', methods=['GET'])
+def about_subkari():
+    # sessionからuser_idを取得
+    if 'user_id' in session:
+        user_id = session.get('user_id')
+    else :
+        user_id = None
+    
+    # 'top/welcome_subkari.html' テンプレートをレンダリング
+    resp = make_response(render_template('top/welcome_subkari.html', user_id = user_id))
+    return resp
+#検索結果についての表示-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+# ... (connect_db 関数は省略)
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
     con=mysql.connector.connect(
