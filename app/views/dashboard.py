@@ -71,6 +71,9 @@ def dashboard():
     cur.execute("select * from v_age_group_new_users;")
     age_new_users=cur.fetchall()
 
+    cur.close()
+    con.close()
+    
     return render_template("dashboard.html",
                            new_users=new_users,
                            users_compare=users_compare,
