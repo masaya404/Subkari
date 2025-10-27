@@ -12,10 +12,10 @@ admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 @admin_bp.route('/login',methods=['GET'])
 def login():
     #errorメッセージ
-    # etbl={}
-    # account={}
+    etbl={}
+    account={}
       
-    return render_template('admin/login.html')
+    return render_template('admin/login.html',etbl=etbl,account=account)
 
 #Login確認--------------------------------------------------------------------------------------------------------------------------------------------------------------
 @admin_bp.route('/login/admin',methods=['POST'])
@@ -47,7 +47,7 @@ def login_admin():
     
     session['ID'] = account['ID']
     session['authority'] = userExist['authority']
-    return render_template('index.html',user = session.get('ID'),authority = session.get('authority'))
+    return render_template('admin/dashboard_top.html',user = session.get('ID'),authority = session.get('authority'))
     
 #Logout--------------------------------------------------------------------------------------------------------------------------------------------------------------
 @admin_bp.route('/logout',methods=['GET'])
