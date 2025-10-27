@@ -17,13 +17,13 @@ def connect_db():
 app=Flask(__name__)        #アプリケーションの大枠を生成
 
 #ここわからない
-account_manage_detail_bp = Blueprint('account', __name__, url_prefix='/account')
+account_management_detail_bp = Blueprint('account_management', __name__, url_prefix='/account_management')
 
 
 
 
 #アカウント詳細情報表示ページ ------------------------------------------------
-@account_manage_detail_bp.route("/account/id:<id>_detail")
+@account_management_detail_bp.route("/account_management/id:<id>_detail")
 def account_manage_detail(id):
     sql=f'''
     select  
@@ -50,6 +50,6 @@ def account_manage_detail(id):
     #アカウントの詳細情報取得 
     cur.execute(sql)
     user_info=cur.fetchall()
-    return render_template("account_detail.html",user_info=user_info)
+    return render_template("account_management_detail.html",user_info=user_info)
 
 

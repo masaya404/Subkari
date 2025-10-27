@@ -14,15 +14,15 @@ def connect_db():
     return con
 
 
-account_manage_bp = Blueprint('account',__name__,url_prefix='/account')
+account_management_bp = Blueprint('account_management',__name__,url_prefix='/account_management')
 
 
 
 
 
 #アカウント管理ページ ------------------------------------------------
-@account_manage_bp.route("/account")
-def account_manage():
+@account_management_bp.route("/account_management")
+def account_management():
     sql='''
     select 
     a.id,
@@ -45,5 +45,5 @@ def account_manage():
     cur.execute(sql)   #今のままだと全件表示するようになってるから、何件表示するか検討の余地あり
     cur.close()
     user_list=cur.fetchall()
-    return render_template("account.html",user_list=user_list)
+    return render_template("account_management.html",user_list=user_list)
 
