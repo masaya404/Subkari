@@ -11,3 +11,4 @@ app = create_app()
 if __name__ == '__main__':
     # アプリケーションをデバッグモードで実行
     app.run(host='localhost', port=5002, debug=True)
+    
