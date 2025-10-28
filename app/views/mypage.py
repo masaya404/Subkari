@@ -55,8 +55,10 @@ def bankRegistration():
 #----------------------------------------------------------------------------------------------------
 
 #bankComplete' 振込口座登録完了ページ------------------------------------------------------------------
-@mypage_bp.route("/bankComplete")
+@mypage_bp.route("/bankComplete",methods="POST")
 def bankComplete():
+    bank_info=request.form
+    
     return render_template("mypage/bankComplete.html")
 #----------------------------------------------------------------------------------------------------
 
