@@ -83,7 +83,7 @@ def bankComplete():
     
     #既に登録されていないか調べる 
     user_id=session["user_id"]
-    sql="select * from t_transfer t inner join m_account a on t.account_id=a.id where (a.mail=%s) and (t.branchName=%s) and (t.accountNumber=%s)"
+    sql="select * from t_transfer t inner join m_account a on t.account_id=a.id where (a.mail=%s) and (t.branchCode=%s) and (t.accountNumber=%s)"
     con=connect_db()
     cur=con.cursor(dictionary=True)
     cur.execute(sql,(user_id,bank_info['branchCode'],bank_info['accountNumber']))
@@ -91,12 +91,12 @@ def bankComplete():
 
     #登録されているのでエラー
     if userSame is not None:
-        return render_template('mypage/bankResistration.html')
+        return render_template('mypage/bankRegistration.html')
     
     accountHolder=bank_info['famillyName']+bank_info['firstName']
     #登録処理
     #account_idを取得
-    sql="select id from m_account where mail=%s"
+    sql="select id from m_account where mail=%s limit 1"
     cur.execute(sql,(user_id,))
     user_info=cur.fetchone()
     id=user_info["id"]
