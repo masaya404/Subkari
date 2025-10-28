@@ -6,6 +6,16 @@ import mysql.connector
 import json
 import os
 
+#DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
+def connect_db():
+    con=mysql.connector.connect(
+        host = 'localhost',
+        user = 'root',
+        passwd = '',
+        db ='db_subkari'
+    )
+    return con
+
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
 
@@ -57,8 +67,35 @@ def bankRegistration():
 #bankComplete' 振込口座登録完了ページ------------------------------------------------------------------
 @mypage_bp.route("/bankComplete",methods="POST")
 def bankComplete():
-    bank_info=request.form
+    #エラーチェック
+    #error回数とメッセージ
+    ecnt = 0
+    error_message={}
     
+    #空欄確認
+    for key,value in bank_info.items():
+        if not value:
+            ecnt+=1
+    #空欄あり、登録できない      
+    if ecnt !=0:
+        return render_template('mypage/bankResistration.html',bank_info=bank_info)
+    
+    #既に登録されていないか調べる (未完成,idわからない)
+    bank_info=request.form    #name,accountType,branchCode,accountNumber,firstName,famillyName
+    sql="select * from t_transfer where account_id=%s"
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    cur.execute(sql,session["user_id"])
+    accountHolder=bank_info['famillyName']+bank_info['firstName']
+    userSame=cur.fetchone()
+    
+
+
+    #登録処理
+    sql="INSERT INTO t_transfer (account_id,bankName,accountType,branchCode,accountNumber,accountHolder) VALUES(%s,%s,%s,%s,%s,%s)"
+    cur.execute(sql,  bank_info  ,(bank_info['name'],),(bank_info['accountType'],),(bank_info['branchCode'],),(bank_info['accountNumber'],),accountHolder)          #アカウントidがわからない
+    con.commit()
+    cur.close()
     return render_template("mypage/bankComplete.html")
 #----------------------------------------------------------------------------------------------------
 
