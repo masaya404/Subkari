@@ -17,7 +17,7 @@ main.main-content {
     flex: 1; /* ← コンテンツが少なくてもフッターを押し下げる */
     max-width: 800px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 60px 20px;
     display: flex;
     flex-direction: column;
     justify-content: center; /* 中央寄せ */
