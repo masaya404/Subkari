@@ -4,7 +4,9 @@
     padding: 0;
     box-sizing: border-box; /* すべての要素にbox-sizingを適用 */
 }
-
+.nav-container nav a{
+    font-family: unset;
+}
 html, body {
     overflow-x: hidden; /* 横スクロールを防ぐ */
     width: 100%; /* 横幅を100%に設定 */
@@ -214,7 +216,7 @@ a {
 .product-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px; /* 商品間の隙間を確保 */
+     /* 商品間の隙間を確保 */
 }
 
 .product-card {

@@ -8,6 +8,9 @@
       font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
       background: #fff;
     }
+    .nav-container nav a{
+      font-family: unset;
+    }
 
     .breadcrumb {
       padding: 15px 30px;

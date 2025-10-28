@@ -95,6 +95,10 @@ h2{
     background: #333; 
     color: #fff; 
 }
+    .nav-container nav a{
+      font-family: unset;
+    }
+
 /*------------------ サイドナビ終わり------------------ */
 
 .sec{
