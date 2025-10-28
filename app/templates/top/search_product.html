@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 {% block title %}
-    検索結果: {{ search_query or "すべて" }} | SUBKARI
+    検索結果: {{ search_query or "すべて" }} 
 {% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/search_product.css') }}">
-
-
   <div class="breadcrumb">
     <a href="{{ url_for('top.guest_index') }}">SubKari</a> &gt; 検索結果
   </div>

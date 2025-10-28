@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プロフィール編集</title>
-    <link rel="stylesheet" href="../../static/css/edit.css">
+{% extends "base.html" %}
+{% block title %}
+    プロフィール編集
+{% endblock %}
 
-</head>
-<body>
+{% block content %}
+<link rel="stylesheet" href="../../static/css/edit.css">
+<main>
     <div class="container">
         <h1>プロフィール編集</h1>
 
-        <form>
+        <form action="{{url_for('mypage.editProfile')}}">
             <!-- 画像 -->
             <div class="form-section">
                 <div class="section-title">画像</div>
@@ -60,6 +58,5 @@
         </form>
     </div>
     <script src="../../static/js/edit.js"></script>
-
-</body>
-</html>
+</main>
+{% endblock %} 
