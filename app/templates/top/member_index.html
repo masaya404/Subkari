@@ -8,28 +8,46 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
 <link rel="stylesheet" href="{{ url_for('static', filename='css/member_index.css') }}">
 
-<div class="hero-section">
-    <div class="center">
-        {% for i in range(6) %}
-        <div class="hero-slide-item">
-            <img src="{{ url_for('static', filename='img/image_22.png') }}" alt="スライド">
+<div class="hero-wrapper">
+
+    <div class="hero-section">
+        <div class="center">
+            {% for i in range(6) %}
+            <div class="hero-slide-item">
+                <img src="{{ url_for('static', filename='img/image_22.png') }}" alt="スライド">
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
-
-<div class="carousel-caption-overlay">
-    <div class="caption-inner">
-        <strong>先月の人気セラーのコーディネート！</strong>
-        <span>今が流行りのコーデを気軽にレンタルしてみましょう。</span>
-        <a href="#" class="view-more">詳しくはこちら</a>
+<div class="carousel-caption-container">
+    <div class="carousel-caption-wrapper">
+        <div class="carousel-caption-overlay">
+            <strong>先月の人気セラーのコーディネート！</strong>
+            <span>今が流行りのコーデを気軽にレンタルしてみましょう。</span>
+            <a href="#" class="view-more">詳しくはこちら</a>
+        </div>
+        <div class="carousel-caption-overlay">
+            <strong>新作登場！トレンドアイテムをチェック</strong>
+            <span>今すぐレンタルして、トレンドを先取り！</span>
+            <a href="#" class="view-more">詳しくはこちら</a>
+        </div>
+        <div class="carousel-caption-overlay">
+            <strong>人気ブランドのコーデを探そう！</strong>
+            <span>あなたにぴったりのコーディネートが見つかる!</span>
+            <a href="#" class="view-more">詳しくはこちら</a>
+        </div>
     </div>
+    <div class="caption-arrow caption-arrow-left">◀</div>
+    <div class="caption-arrow caption-arrow-right">▶</div>
 </div>
+  <!-- <div class="carousel-caption-overlay">
+      <strong>先月の人気セラーのコーディネート！</strong>
+      <span>今が流行りのコーデを気軽にレンタルしてみましょう。</span>
+      <a href="#" class="view-more">詳しくはこちら</a>
+    </div> -->
 </div>
-
 <div class="content-wrapper">
     <aside class="sidebar">
         <div class="sidebar-section brand-list">
@@ -67,212 +85,259 @@
     </aside>
 
     <main class="main-content">
-
         <section class="category-section">
             <div class="category-header">
                 <h2>コーデ</h2>
-                
-                <a href="#" class="view-all">すべて見る</a>
+                <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
-                            alt="コーデ1">
+                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=1から) #}
+                <a href="{{ url_for('products.product_details_stub', product_id=1) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                                alt="コーデ1">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">コーデ</div>
+                            <div class="product-price">¥4,500</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">コーデ</div>
-                        <div class="product-price">¥4,500</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=2) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                                alt="コーデ2">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">コーデ</div>
+                            <div class="product-price">¥4,500</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
-                            alt="コーデ2">
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=3) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                                alt="コーデ3">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">コーデ</div>
+                            <div class="product-price">¥4,500</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">コーデ</div>
-                        <div class="product-price">¥4,500</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=4) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
+                                alt="コーデ4">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">コーデ</div>
+                            <div class="product-price">¥4,500</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
-                            alt="コーデ3">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">コーデ</div>
-                        <div class="product-price">¥4,500</div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 26.png') }}"
-                            alt="コーデ4">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">コーデ</div>
-                        <div class="product-price">¥4,500</div>
-                    </div>
-                </div>
+                </a>
             </div>
         </section>
 
         <section class="category-section">
             <div class="category-header">
                 <h2>トップス</h2>
-                <a href="#" class="view-all">すべて見る</a>
+                <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
-                            alt="トップス1">
+                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=5から) #}
+                <a href="{{ url_for('products.product_details_stub', product_id=5) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                                alt="トップス1">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">トップス</div>
+                            <div class="product-price">¥4,200</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥4,200</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=6) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                                alt="トップス2">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">トップス</div>
+                            <div class="product-price">¥4,200</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
-                            alt="トップス2">
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=7) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                                alt="トップス3">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">トップス</div>
+                            <div class="product-price">¥4,200</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥4,200</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=8) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
+                                alt="トップス4">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">TRAVAS TOKYO</div>
+                            <div class="product-name">トップス</div>
+                            <div class="product-price">¥4,200</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
-                            alt="トップス3">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥4,200</div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 43.png') }}"
-                            alt="トップス4">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">TRAVAS TOKYO</div>
-                        <div class="product-name">トップス</div>
-                        <div class="product-price">¥4,200</div>
-                    </div>
-                </div>
+                </a>
             </div>
         </section>
 
         <section class="category-section">
             <div class="category-header">
                 <h2>ボトムス</h2>
-                <a href="#" class="view-all">すべて見る</a>
+                <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
-                            alt="ボトムス1">
+                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=9から) #}
+                <a href="{{ url_for('products.product_details_stub', product_id=9) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                                alt="ボトムス1">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">REFLEM</div>
+                            <div class="product-name">ボトムス</div>
+                            <div class="product-price">¥4,600</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">REFLEM</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥4,600</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=10) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                                alt="ボトムス2">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">REFLEM</div>
+                            <div class="product-name">ボトムス</div>
+                            <div class="product-price">¥4,600</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
-                            alt="ボトムス2">
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=11) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                                alt="ボトムス3">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">REFLEM</div>
+                            <div class="product-name">ボトムス</div>
+                            <div class="product-price">¥4,600</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">REFLEM</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥4,600</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=12) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
+                                alt="ボトムス4">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">REFLEM</div>
+                            <div class="product-name">ボトムス</div>
+                            <div class="product-price">¥4,600</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
-                            alt="ボトムス3">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">REFLEM</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥4,600</div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 39.png') }}"
-                            alt="ボトムス4">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">REFLEM</div>
-                        <div class="product-name">ボトムス</div>
-                        <div class="product-price">¥4,600</div>
-                    </div>
-                </div>
+                </a>
             </div>
         </section>
 
         <section class="category-section">
             <div class="category-header">
                 <h2>アクセサリー</h2>
-                <a href="#" class="view-all">すべて見る</a>
+                <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
             </div>
             <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
-                            alt="アクセサリー1">
+                {# 商品カードを商品詳細ページへ遷移するように修正 (scode=13から) #}
+                <a href="{{ url_for('products.product_details_stub', product_id=13) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                                alt="アクセサリー1">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">CIVARIZE</div>
+                            <div class="product-name">アクセサリー</div>
+                            <div class="product-price">¥4,000</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">CIVARIZE</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥4,000</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=14) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                                alt="アクセサリー2">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">CIVARIZE</div>
+                            <div class="product-name">アクセサリー</div>
+                            <div class="product-price">¥4,000</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
-                            alt="アクセサリー2">
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=15) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                                alt="アクセサリー3">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">CIVARIZE</div>
+                            <div class="product-name">アクセサリー</div>
+                            <div class="product-price">¥4,000</div>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <div class="product-brand">CIVARIZE</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥4,000</div>
+                </a>
+                <a href="{{ url_for('products.product_details_stub', product_id=16) }}"
+                    style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-card">
+                        <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
+                                alt="アクセサリー4">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">CIVARIZE</div>
+                            <div class="product-name">アクセサリー</div>
+                            <div class="product-price">¥4,000</div>
+                        </div>
                     </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
-                            alt="アクセサリー3">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">CIVARIZE</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥4,000</div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image"><img src="{{ url_for('static', filename='img/image 51.png') }}"
-                            alt="アクセサリー4">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-brand">CIVARIZE</div>
-                        <div class="product-name">アクセサリー</div>
-                        <div class="product-price">¥4,000</div>
-                    </div>
-                </div>
+                </a>
             </div>
         </section>
 
     </main>
 </div>
 
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-
+<script src="#"></script>
 <script>
     $(document).ready(function () {
         $('.center').slick({
@@ -281,8 +346,23 @@
             slidesToShow: 3,
             autoplay: true,
             autoplaySpeed: 2000,
+            // ★★★ 修正箇所2: 矢印を非表示にする設定を追加 ★★★
+            arrows: true,
         });
     });
+    $(document).ready(function () {
+    $('.carousel-caption-wrapper').slick({
+        infinite: true, // 無限ループ
+        slidesToShow: 1, // 1つずつスライド表示
+        autoplay: true, // 自動再生
+        autoplaySpeed: 3000, // 3秒ごとに切り替え
+        arrows: true, // 矢印を表示
+        prevArrow: '.caption-arrow-left', // 左矢印
+        nextArrow: '.caption-arrow-right', // 右矢印
+        fade: true, // フェード効果でスライド
+    });
+});
+
 </script>
 
 {% endblock %}
