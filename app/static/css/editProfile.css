@@ -11,85 +11,12 @@ body {
     color: #333;
 }
 
-/* ヘッダー */
-header {
-    background: #000;
-    color: #fff;
-    padding: 15px 0;
-}
-
-.header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    font-family: 'Georgia', serif;
-    font-size: 24px;
-    font-style: italic;
-}
-
-.search-bar {
-    flex: 1;
-    max-width: 400px;
-    margin: 0 30px;
-}
-
-.search-bar input {
+header, footer {
     width: 100%;
-    padding: 8px 15px;
-    border-radius: 20px;
-    border: none;
-    font-size: 13px;
 }
-
-.header-icons {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-}
-
-.icon-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 11px;
-    cursor: pointer;
-}
-
-.icon-item svg {
-    width: 24px;
-    height: 24px;
-    margin-bottom: 3px;
-}
-
-.nav-menu {
-    background: #000;
-    border-top: 1px solid #333;
-}
-
-.nav-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 12px 20px;
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-}
-
-.nav-content a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 14px;
-}
-
 /* プロフィールセクション */
 main {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 40px auto;
     padding: 0 20px;
 }
@@ -312,7 +239,7 @@ main {
     background: #b31c4c; /* ホバー時の色 */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 786px) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 15px;

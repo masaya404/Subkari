@@ -42,7 +42,7 @@ function validateAccountNumber() {
     // 数字のみ許可
     input.value = input.value.replace(/[^0-9]/g, '');
     
-    if (input.value === '' || input.value.length !== 7) {
+    if (input.value === '' || input.value.length !== 11) {
         input.classList.add('error');
         error.classList.add('show');
         return false;

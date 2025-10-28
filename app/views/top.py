@@ -95,7 +95,6 @@ def accessories():
     return render_template('top/search_product.html', search_query=None, products=DUMMY_PRODUCTS)
 
 # コーディネート
-# コーディネート
 @top_bp.route('/coordinate', methods=['GET'])
 def coordinate():
     # DUMMY_PRODUCTSから全ての商品を渡す（フィルタリングなし）

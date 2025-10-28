@@ -53,18 +53,6 @@ function validateBio() {
     }
 }
 
-// フォーム送信
-function handleSubmit(event) {
-    event.preventDefault();
-    
-    const isNameValid = validateAccountName();
-    const isBioValid = validateBio();
-    
-    if (isNameValid && isBioValid) {
-        alert('プロフィールを更新しました');
-        // ここで実際の更新処理を行う
-    }
-}
 
 // キャンセル機能を削除
 // function handleCancel() は不要になったため削除

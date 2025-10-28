@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>編集ボタンありプロフィール</title>
-    <link rel="stylesheet" href="../../static/css/editProfile.css">
+{% extends "base.html" %}
+{% block title %}
+    編集ボタンありプロフィール
+{% endblock %}
 
-</head>
-<body>
+{% block content %}
+<link rel="stylesheet" href="../../static/css/editProfile.css">
     <main>
         <h1></h1>
         <div class="profile-header">
@@ -152,5 +149,4 @@
 
 
     <script src="../../static/js/editProfile.js"></script>
-</body>
-</html>
+{% endblock %} 
