@@ -16,7 +16,7 @@
     <main class="container">
         <h1>振込先口座の登録</h1>
 
-        <form onsubmit="handleSubmit(event)" action="{{ url_for('mypage.bankComplete') }}">
+        <form onsubmit="handleSubmit(event)" action="{{ url_for('mypage.bankComplete') }}" method="post">
             <!-- 銀行 -->
             <section class="form-group">
                 <p class="form-label">銀行</p>

@@ -242,7 +242,7 @@ CREATE TABLE `t_transfer` (
   `account_id` INT NOT NULL,
   `bankName` VARCHAR(100) NOT NULL,
   `accountType` VARCHAR(20) NOT NULL,
-  `branchName` VARCHAR(10) NOT NULL,
+  `branchCode` CHAR(3) NOT NULL,
   `accountNumber` VARCHAR(20) NOT NULL,
   `accountHolder` VARCHAR(20) NOT NULL,
   
