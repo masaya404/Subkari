@@ -199,7 +199,46 @@ function validateForm() {
 
     return isValid;
 }
+//画像表示
+function loadUploadedImages() {
+    const saved = sessionStorage.getItem('uploadedImages');
+    if (saved) {
+        const images = JSON.parse(saved);
+        console.log('Loaded images:', images);
+        // ここで images を使用
+        displayFirstImage(images[0]);
+    }
+}
+
+function displayFirstImage(image) {
+    const displayArea = document.getElementById('imageDisplayArea');
+    const noImageArea = document.getElementById('noImageArea');
+    const displayImage = document.getElementById('displayImage');
+    
+    if (displayArea && displayImage) {
+        displayImage.src = image.src;  // Base64 データURLを設定
+        displayArea.classList.remove('hidden');
+        
+        if (noImageArea) {
+            noImageArea.classList.add('hidden');
+        }
+    }
+}
+
+// ページ読み込み時に実行
+// document.addEventListener('DOMContentLoaded', function() {
+//     loadUploadedImages();
+// });
+// ページ読み込み時に実行
+loadUploadedImages();
 // フォーム送信
+
+// function goToUploadPage(uploadUrl) {
+//     window.location.href = uploadUrl;
+// }
+
+// goToUploadPage();
+
 document.getElementById('sellerForm').addEventListener('submit', function(e) {
     e.preventDefault();
     if (validateForm()) {

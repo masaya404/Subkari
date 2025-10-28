@@ -2,34 +2,16 @@
    共通リセット
 =============================== */
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
 /* ===============================
    基本設定
 =============================== */
-body {
-  font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
-  background: #f5f5f5;
-}
 
 /* ===============================
    ヘッダー
 =============================== */
-header {
-  background: #000;
-  padding: 20px 40px;
-}
-
-.logo {
-  font-family: serif;
-  font-style: italic;
-  color: #fff;
-  font-size: 24px;
-  letter-spacing: 2px;
-}
 
 /* ===============================
    コンテナ
@@ -1265,25 +1247,6 @@ a {
     color: inherit;
 }
 
-/* -------------------------------------------------- */
-/* ヘッダー (subkari-header) */
-/* -------------------------------------------------- */
-
-.subkari-header {
-    background-color: #fff;
-    padding: 20px 0;
-    border-bottom: 1px solid #eee; /* 画像にはないが、デザインを安定させるため */
-}
-
-.subkari-header__logo {
-    margin: 0 auto;
-    width: 90%;
-    max-width: 1200px; /* 最大幅を設定 */
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    color: #333; /* ロゴの色 */
-}
 
 /* -------------------------------------------------- */
 /* メインコンテンツ (subkari-main-container / subkari-main) */
@@ -1379,45 +1342,7 @@ a {
 }
 
 /* -------------------------------------------------- */
-/* フッター (subkari-footer) */
-/* -------------------------------------------------- */
 
-.subkari-footer {
-    background-color: #333; /* 濃いグレー */
-    color: #aaa;
-    padding: 20px 10px;
-    font-size: 12px;
-    text-align: center;
-    border-top: 1px solid #444;
-}
-
-.subkari-footer__nav {
-    margin-bottom: 10px;
-    display: flex;
-    flex-wrap: wrap; /* 小さい画面で折り返す */
-    justify-content: center;
-    gap: 0 10px; /* アイテム間の左右スペース */
-}
-
-.subkari-footer__link {
-    white-space: nowrap; /* リンクが途中で改行されないように */
-    padding: 5px 0;
-}
-
-.subkari-footer__link:hover {
-    color: #fff;
-}
-
-.subkari-footer__separator {
-    color: #666; /* 区切り線の色 */
-    padding: 5px 0;
-}
-
-.subkari-footer__copyright {
-    margin: 0;
-    color: #666;
-    font-size: 11px;
-}
 /* ===============================
    登録フォームページ用 CSS (クラス名: regForm- プレフィックスに変更)
 =============================== */
@@ -1552,38 +1477,6 @@ body.registerForm-page {
 
 .regForm-btn:hover {
   background: #555;
-}
-
-/* フッター */
-.regForm-footer {
-  background: #4a4a4a;
-  color: #fff;
-  padding: 25px 40px;
-  margin-top: 80px;
-}
-
-.regForm-footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  flex-wrap: wrap;
-  margin-bottom: 15px;
-}
-
-.regForm-footer-links a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 11px;
-}
-
-.regForm-footer-links a:hover {
-  opacity: 0.7;
-}
-
-.regForm-copyright {
-  text-align: center;
-  font-size: 10px;
-  color: #999;
 }
 
 /* ===============================
