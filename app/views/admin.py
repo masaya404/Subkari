@@ -37,7 +37,7 @@ def login_admin():
     sql = "SELECT * FROM m_adminAccount WHERE fullname = %s;"
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    cur.execute(sql,account['name'],)
+    cur.execute(sql,(account['name'],))
     # 入力した資料がデータベースに存在するかどうかを確認
     userExist = cur.fetchone()
     #ユーザーが存在しない　、　パスワードが間違い 
