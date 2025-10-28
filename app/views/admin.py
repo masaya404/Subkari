@@ -18,7 +18,7 @@ def login():
     return render_template('admin/login.html',etbl=etbl,account=account)
 
 #Login確認--------------------------------------------------------------------------------------------------------------------------------------------------------------
-@admin_bp.route('/login/admin',methods=['POST'])
+@admin_bp.route('/login',methods=['POST'])
 def login_admin():
     account = request.form
     ecnt = 0
