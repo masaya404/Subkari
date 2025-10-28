@@ -74,7 +74,6 @@ CREATE TABLE `m_category` (
 -- 商品テーブル ------------------------------------
 CREATE TABLE `m_product` (
   `id` INT AUTO_INCREMENT NOT NULL,
-  `img` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `purchasePrice` INT NULL,
   `rentalPrice` INT NULL,
@@ -101,6 +100,18 @@ CREATE TABLE `m_product` (
     ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (`account_id`)
     REFERENCES `m_account`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+--商品写真テーブル ------------------------------------
+CREATE TABLE `m_productImg` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `product_id` INT NOT NULL,
+  `img` VARCHAR(255) NOT NULL,
+  
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`product_id`)
+    REFERENCES `m_product`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -242,7 +253,7 @@ CREATE TABLE `t_transfer` (
   `account_id` INT NOT NULL,
   `bankName` VARCHAR(100) NOT NULL,
   `accountType` VARCHAR(20) NOT NULL,
-  `branchName` VARCHAR(10) NOT NULL,
+  `branchCode` CHAR(3) NOT NULL,
   `accountNumber` VARCHAR(20) NOT NULL,
   `accountHolder` VARCHAR(20) NOT NULL,
   

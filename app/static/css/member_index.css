@@ -78,17 +78,19 @@ a {
     transform: translateY(-50%);
     z-index: 10;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 14px;
     color: #666;
     padding: 5px;
 }
-
+.carousel-caption-container{
+    margin: 50px 0;
+}
 .caption-arrow-left {
-    left: 30px;
+    left: 34%;
 }
 
 .caption-arrow-right {
-    right: 30px;
+    right: 34%;
 }
 
 .carousel-caption-overlay .caption-inner {

@@ -80,24 +80,39 @@ def register_user_complete():
     
     
     #同一user確認    
-    sql = "SELECT * FROM m_account WHERE mail = %s;"
-    con=connect_db()
-    cur=con.cursor(dictionary=True)
-    cur.execute(sql,(account['mail'],))
-    userSame = cur.fetchone()    
-    if userSame:
-        error_same = "このIDは既に使用されています。"
-        return render_template('login/new_account.html',error_same = error_same,account=account)
 
     #DBに登録
-    user = (account['mail'],account['password'])
-    sql = "INSERT INTO m_account (mail,password) VALUES(%s,%s)"
-    cur.execute(sql,user)  
-    con.commit()
-    cur.close()
-    con.close()
+    # user = (account['mail'],account['password'])
+    # sql = "INSERT INTO m_account (mail,password) VALUES(%s,%s)"
+    # cur.execute(sql,user)  
+    # con.commit()
+    # cur.close()
+    # con.close()
+@login_bp.route("/new_account", methods=["GET"])
+def show_register_user():
+    account = {}
+    return render_template("new_account.html", account=account)
 
-    return redirect(url_for('top.guest_index',account_id = account["mail"]))
+
+@login_bp.route("/register_user_complete", methods=["POST"])
+def handle_register_user_complete():
+    mail = request.form.get("mail")
+    password = request.form.get("password")
+    password_confirm = request.form.get("password_confirm")
+
+    if password != password_confirm:
+        error = "パスワードが一致しません。"
+        return render_template("register_user.html", error=error, account={"mail": mail})
+
+    session["user"] = {
+        "mail": mail,
+        "password": password
+    }
+
+    return redirect(url_for("login.register_complete"))
+
+
+    return redirect(url_for('top.new_account',account_id = account["mail"]))
 
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
@@ -137,3 +152,17 @@ def reset_password():
         success = "パスワードを更新しました。"
 
     return render_template('login/password_reset.html', error=error, success=success)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

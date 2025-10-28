@@ -1,9 +1,9 @@
 {% block header %}
-<header>
+<header class="fixed top-0 left-0 right-0 w-full z-50">
         <div class="header">
 
             <div class="header-left">
-            <a href="{{url_for('top.member_index')}}" class="logo">
+            <a href="{{url_for('top.member_index')}}" class="header-logo">
                         <div>SUBKARI</div>
                     </a>
                 
@@ -20,12 +20,12 @@
             <div class="header-right">
                 {% if not user_id %}
                 <div class="header-login">
-                    <a href="{{url_for('login.register_user')}}" class="">
-                        <span>新規登録</span>
-                    </a>
-                    <a href="{{url_for('login.login')}}" class="">
-                        <span>ログイン</span>
-                    </a>
+<a href="{{ url_for('login.show_register_user') }}" class="">
+    <span>新規登録</span>
+</a>
+<a href="{{ url_for('login.login') }}" class="">
+    <span>ログイン</span>
+</a>
                     <a href="#" class="icon-item">
                         <img src="{{ url_for('static', filename='img/hamburger.png') }}" class="icon"></img>
                     </a>
@@ -63,10 +63,10 @@
                 {% endif %}
                 <div class="nav-container">
                     <nav>
- <a href="{{ url_for('top.coordinate') }}" class="logo">Coordinate</a>
-    <a href="{{ url_for('top.tops') }}" class="logo">Tops</a>
-    <a href="{{ url_for('top.bottoms') }}" class="logo">Bottoms</a>
-    <a href="{{ url_for('top.accessories') }}" class="logo">Accessories</a>                        <!-- <a href="#">Coordinate</a>
+                        <a href="{{ url_for('top.coordinate') }}" class="header_list">Coordinate</a>
+                        <a href="{{ url_for('top.tops') }}" class="header_list">Tops</a>
+                        <a href="{{ url_for('top.bottoms') }}" class="header_list">Bottoms</a>
+                        <a href="{{ url_for('top.accessories') }}" class="header_list">Accessories</a>                        <!-- <a href="#">Coordinate</a>
                         <a href="#">Tops</a>
                         <a href="#">Bottoms</a>
                         <a href="#">Accessories</a> -->

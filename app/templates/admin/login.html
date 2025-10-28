@@ -99,9 +99,9 @@ body {
     <div class="login-container">
         <h1 class="logo">SUBKARI</h1>
         <p class="admin-text">Admin</p>
-        <form class="login-form" action="dashboard.html" method="get">
-            <input type="text" placeholder="ユーザー名を入力" required>
-            <input type="password" placeholder="パスワードを入力" required>
+        <form class="login-form" action="{{ url_for('admin.login_admin') }}" method="post">
+            <input type="text" name= "name" placeholder="ユーザー名を入力" required>
+            <input type="password" name="password" placeholder="パスワードを入力" required>
             <button type="submit" class="login-btn">ログイン</button>
         </form>
     </div>

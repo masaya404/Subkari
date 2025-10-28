@@ -194,5 +194,52 @@ function loadFromSession() {
     updateUI();
 }
 
+/**
+ * 次へボタン：画像をサーバーに送信してから遷移
+ */
+function proceedToNext(nextUrl) {
+    // if (images.length === 0) {
+    //     alert('最低1つの画像をアップロードしてください');
+    //     return;
+    // }
+
+    console.log('Images saved in sessionStorage:', images);
+    // 画像データをサーバーに送信
+    // sendImagesToServer(images);
+     // 次のページへ遷移（sessionStorage は自動的に保持される）
+    window.location.href = nextUrl;
+}
+/**
+ * 画像データをサーバーに送信
+ */
+// function sendImagesToServer(imageList) {
+//     // Base64画像をサーバーに送信
+//     fetch('/seller/save-images', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//             images: imageList.map(img => ({
+//                 id: img.id,
+//                 src: img.src, // Base64 データURL
+//                 order: img.order
+//             }))
+//         })
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.success) {
+//             // 次のページへ遷移
+//             window.location.href = "{{ url_for('seller.seller_format') }}";
+//         } else {
+//             alert('画像の保存に失敗しました: ' + data.error);
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//         alert('エラーが発生しました');
+//     });
+// }
 // 初期化
 loadFromSession();
