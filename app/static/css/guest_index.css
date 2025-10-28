@@ -12,6 +12,49 @@ body {
     line-height: 1.5;
     font-size: 13px;
 }
+.carousel-caption-container {
+    position: relative; /* 親要素にrelativeを追加 */
+    width: 100%;
+}
+
+.carousel-caption-wrapper {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+}
+
+.carousel-caption-overlay {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border-radius: 10px;
+    margin: 0 10px;
+    width: 100%;
+    text-align: center;
+    flex: 0 0 auto; /* 要素が横に並ぶように調整 */
+}
+
+/* 矢印のスタイル */
+.caption-arrow {
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 50%;
+    transform: translateY(-50%); /* 矢印を中央に配置 */
+}
+
+.caption-arrow-left {
+    left: 430px; /* 左側に10pxのスペース */
+}
+
+.caption-arrow-right {
+    right: 430px; /* 右側に10pxのスペース */
+}
 
 a {
     text-decoration: none;
