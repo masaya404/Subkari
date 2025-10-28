@@ -18,14 +18,14 @@ def login():
     return render_template('admin/login.html',etbl=etbl,account=account)
 
 #Login確認--------------------------------------------------------------------------------------------------------------------------------------------------------------
-@admin_bp.route('/login',methods=['POST'])
+@admin_bp.route('/login_auth',methods=['POST'])
 def login_admin():
     account = request.form
     ecnt = 0
     data = {}
     error = "を入力してください。"
     etbl={}
-    stbl={"ID":"ID","password":"パスワード"}
+    stbl={"name":"name","password":"パスワード"}
     
     for key,value in account.items():
         if not value:
@@ -34,20 +34,20 @@ def login_admin():
     if ecnt !=0:
         return render_template('admin/login.html',etbl=etbl,account=account)
     
-    sql = "SELECT * FROM user WHERE userid = %s;"
+    sql = "SELECT * FROM m_adminAccount WHERE fullname = %s;"
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    cur.execute(sql,(account['ID'],))
+    cur.execute(sql,account['name'],)
     # 入力した資料がデータベースに存在するかどうかを確認
     userExist = cur.fetchone()
     #ユーザーが存在しない　、　パスワードが間違い 
     if not userExist or userExist['password'] != account['password']:
-        etbl['ID'] = "IDまたはパスワードが間違がっています。"
-        return render_template('login.html',etbl = etbl,account=account)
+        etbl['name'] = "名前またはパスワードが間違がっています。"
+        return render_template('admin/login.html',etbl = etbl,account=account)
     
-    session['ID'] = account['ID']
+    session['name'] = account['name']
     session['authority'] = userExist['authority']
-    return render_template('admin/dashboard_top.html',user = session.get('ID'),authority = session.get('authority'))
+    return render_template('admin/dashboard_top.html',user = session.get('name'),authority = session.get('authority'))
     
 #Logout--------------------------------------------------------------------------------------------------------------------------------------------------------------
 @admin_bp.route('/logout',methods=['GET'])
