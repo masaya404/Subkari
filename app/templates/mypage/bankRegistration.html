@@ -16,11 +16,11 @@
     <main class="container">
         <h1>振込先口座の登録</h1>
 
-        <form onsubmit="handleSubmit(event)" action="{{ url_for('mypage.bankComplete') }}">
+        <form onsubmit="handleSubmit(event)" action="{{ url_for('mypage.bankComplete') }}" method="post">
             <!-- 銀行 -->
             <section class="form-group">
                 <p class="form-label">銀行</p>
-                <select class="form-select" id="bank" onchange="validateBank()">
+                <select class="form-select" id="bank" name="name" onchange="validateBank()">
                     <option value="">選択してください</option>
                     <option value="三菱UFJ銀行">三菱UFJ銀行</option>
                     <option value="みずほ銀行">みずほ銀行</option>
@@ -55,6 +55,7 @@
                     type="text" 
                     class="form-input" 
                     id="branchCode"
+                    name="branchCode"
                     placeholder="例) 123 (数字3桁)"
                     maxlength="3"
                     oninput="validateBranchCode()"
@@ -69,6 +70,7 @@
                     type="text" 
                     class="form-input" 
                     id="accountNumber"
+                    name="accountNumber"
                     placeholder="例) 1234567 (数字7桁)"
                     maxlength="7"
                     oninput="validateAccountNumber()"
@@ -84,6 +86,7 @@
                     type="text" 
                     class="form-input" 
                     id="accountNameSei"
+                    name="famillyName"
                     placeholder="例) ハル"
                     oninput="validateAccountNameSei()"
                 >
@@ -97,6 +100,7 @@
                     type="text" 
                     class="form-input" 
                     id="accountNameMei"
+                    name="fisrtName"
                     placeholder="例) オオサカ"
                     oninput="validateAccountNameMei()"
                 >
