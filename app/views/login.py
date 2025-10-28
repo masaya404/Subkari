@@ -1,7 +1,7 @@
-from flask import Blueprint , render_template ,request,make_response,redirect,url_for,session
+from flask import Blueprint, render_template, request, make_response, redirect, url_for, session
 from PIL import Image
 from werkzeug.utils import secure_filename
-from datetime import datetime , timedelta
+from datetime import datetime, timedelta
 import mysql.connector
 import json
 import os
@@ -9,129 +9,116 @@ import os
 login_bp = Blueprint('login', __name__, url_prefix='/login')
 
 
-#Login画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
-@login_bp.route('/login',methods=['GET'])
+# Login画面表示 ----------------------------------------------------------------------------------------------------------------------------------------------------------
+@login_bp.route('/login', methods=['GET'])
 def login():
-    #errorメッセージ
-    etbl={}
-    account={}
-      
-    return render_template('login/login.html',etbl=etbl,account=account)
+    # errorメッセージ
+    etbl = {}
+    account = {}
+    return render_template('login/login.html', etbl=etbl, account=account)
 
-#Login確認--------------------------------------------------------------------------------------------------------------------------------------------------------------
-@login_bp.route('/login/auth',methods=['POST'])
+
+# Login確認 --------------------------------------------------------------------------------------------------------------------------------------------------------------
+@login_bp.route('/login/auth', methods=['POST'])
 def login_auth():
-    #mail,password取得
+    # mail,password取得
     account = request.form
-    
-    #error回数とメッセージ
+
+    # error回数とメッセージ
     ecnt = 0
-    error_message={}
-    
-    #空欄確認
-    for key,value in account.items():
+    error_message = {}
+
+    # 空欄確認
+    for key, value in account.items():
         if not value:
-            ecnt+=1
-    #空欄あり、登録できない      
-    if ecnt !=0:
-        return render_template('login/login.html',account=account)
-    
+            ecnt += 1
+    # 空欄あり、登録できない
+    if ecnt != 0:
+        return render_template('login/login.html', account=account)
+
     # 入力した資料がデータベースに存在するかどうかを確認
     sql = "SELECT * FROM m_account WHERE mail = %s;"
-    con=connect_db()
-    cur=con.cursor(dictionary=True)
-    cur.execute(sql,(account['mail'],))
-    # ここで確認
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (account['mail'],))
     userExist = cur.fetchone()
-    #ユーザーが存在しないまたはパスワードが一致しない
+    # ユーザーが存在しないまたはパスワードが一致しない
     if not userExist or userExist['password'] != account['password']:
         error_message = "メールアドレスまたはパスワードが正しくありません。"
-        return render_template('login/login.html',account=account,error_message = error_message)
-    
-    #登録成功の処理
+        return render_template('login/login.html', account=account, error_message=error_message)
+
+    # 登録成功の処理
     session['user_id'] = userExist['mail']
 
     return redirect(url_for('top.member_index'))
-    
-#Logout--------------------------------------------------------------------------------------------------------------------------------------------------------------
-@login_bp.route('/login/logout',methods=['GET'])
+
+
+# Logout --------------------------------------------------------------------------------------------------------------------------------------------------------------
+@login_bp.route('/login/logout', methods=['GET'])
 def logout():
     session.pop('user_id', None)
     return render_template('top/guest_index.html')
 
-#Register-------------------------------------------------------------------------------------------------------------------------------------------------------------
-@login_bp.route('login/register_user',methods=['GET'])
-def register_user():
-    account = {}
-   
-    return render_template('login/new_account.html',account=account)
 
-#Register確認----------------------------------------------------------------------------------------------------------------------------------------------------------
-@login_bp.route('/register_user/complete',methods=['POST'])
-def register_user_complete():
-    account = request.form
-    error = ""
-    error_same = ""
-    # 入力確認
-   
-    if account['password'] != account['password_confirm']:
-        error = "パスワードと確認用パスワードが一致していません。"
-        return render_template('login/new_account.html', error=error, account=account)
-    
-    
-    #同一user確認    
+# Register確認 ----------------------------------------------------------------------------------------------------------------------------------------------------------
+@login_bp.route('/register', methods=['GET'])
+def show_register():
+    return render_template("login/new_account.html", account={}, error=None, error_same=None)
 
-    #DBに登録
-    # user = (account['mail'],account['password'])
-    # sql = "INSERT INTO m_account (mail,password) VALUES(%s,%s)"
-    # cur.execute(sql,user)  
-    # con.commit()
-    # cur.close()
-    # con.close()
-@login_bp.route("/new_account", methods=["GET"])
+
+@login_bp.route("/", methods=["GET"])
 def show_register_user():
     account = {}
-    return render_template("new_account.html", account=account)
+    return render_template("login/new_account.html", account=account, error=None, error_same=None)
 
 
 @login_bp.route("/register_user_complete", methods=["POST"])
-def handle_register_user_complete():
+def register_user_complete():
     mail = request.form.get("mail")
     password = request.form.get("password")
     password_confirm = request.form.get("password_confirm")
 
-    if password != password_confirm:
+    error = None
+    error_same = None
+
+    # バリデーション
+    if not mail or not password or not password_confirm:
+        error = "全ての項目を入力してください。"
+    elif password != password_confirm:
         error = "パスワードが一致しません。"
-        return render_template("register_user.html", error=error, account={"mail": mail})
+    else:
+        # 仮登録（セッションに保存）
+        users = session.get("users", {})
+        if mail in users:
+            error_same = "このメールアドレスはすでに登録されています。"
+        else:
+            users[mail] = password
+            session["users"] = users
+            # 登録成功 → register_form.html に遷移
+            return render_template("login/register_form.html", account={"mail": mail})
 
-    session["user"] = {
-        "mail": mail,
-        "password": password
-    }
-
-    return redirect(url_for("login.register_complete"))
+    # エラーがあった場合は再表示
+    return render_template("login/new_account.html", account={"mail": mail}, error=error, error_same=error_same)
 
 
-    return redirect(url_for('top.new_account',account_id = account["mail"]))
-
-#DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# DB設定 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
-    con=mysql.connector.connect(
-        host = 'localhost',
-        user = 'root',
-        passwd = '',
-        db ='db_subkari'
+    con = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        passwd='',
+        db='db_subkari'
     )
     return con
 
-#password-reset----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+# password-reset ----------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/password-reset', methods=['GET'])
 def password_reset():
-    # 初期表示用に空の辞書を渡す
     error = None
     success = None
     return render_template('login/password_reset.html', error=error, success=success)
+
 
 @login_bp.route('/password-reset', methods=['POST'])
 def reset_password():
@@ -152,17 +139,3 @@ def reset_password():
         success = "パスワードを更新しました。"
 
     return render_template('login/password_reset.html', error=error, success=success)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
