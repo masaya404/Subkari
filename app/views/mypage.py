@@ -80,20 +80,30 @@ def bankComplete():
     if ecnt !=0:
         return render_template('mypage/bankResistration.html',bank_info=bank_info)
     
-    #既に登録されていないか調べる (未完成,idわからない)
+    #既に登録されていないか調べる 
+    user_id=session["user_id"]
     bank_info=request.form    #name,accountType,branchCode,accountNumber,firstName,famillyName
-    sql="select * from t_transfer where account_id=%s"
+    sql="select * from t_transfer t inner join m_account a on t.account_id=a.id where (a.mail=%s) and (t.branchCode=%s) and (t.accountNumber=%s)"
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    cur.execute(sql,session["user_id"])
-    accountHolder=bank_info['famillyName']+bank_info['firstName']
+    cur.execute(sql,(user_id,),(bank_info['branchCode'],),(bank_info['accountNumber'],))
     userSame=cur.fetchone()
+
+    #登録されているのでエラー
+    if userSame is not None:
+        return render_template('mypage/bankResistration.html')
     
-
-
+    accountHolder=bank_info['famillyName']+bank_info['firstName']
     #登録処理
+    #account_idを取得
+    sql="select id from m_account where mail=%s"
+    cur.execute(sql,(user_id))
+    user_info=cur.fetchone()
+    id=user_info["id"]
+
+    #データを追加
     sql="INSERT INTO t_transfer (account_id,bankName,accountType,branchCode,accountNumber,accountHolder) VALUES(%s,%s,%s,%s,%s,%s)"
-    cur.execute(sql,  bank_info  ,(bank_info['name'],),(bank_info['accountType'],),(bank_info['branchCode'],),(bank_info['accountNumber'],),accountHolder)          #アカウントidがわからない
+    cur.execute(sql, (id,),(bank_info['name'],),(bank_info['accountType'],),(bank_info['branchCode'],),(bank_info['accountNumber'],),accountHolder)          #アカウントidがわからない
     con.commit()
     cur.close()
     return render_template("mypage/bankComplete.html")
