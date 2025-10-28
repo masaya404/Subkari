@@ -118,7 +118,7 @@ def seller_size():
                
     return render_template('seller/seller_size.html', user_id = user_id)
 
-#size選択記録----------------------------------------------------------------------------------------------------------------------------------------------------------
+#size選択を記録----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/size/success',methods=['POST'])
 def seller_size_success():
     if 'user_id' not in session:
@@ -127,16 +127,30 @@ def seller_size_success():
     else:
         user_id = session.get('user_id')
     
-    session['size1'] = request.form.get('size1')
-    session['size2'] = request.form.get('size2')
-    session['size3'] = request.form.get('size3')
-    session['size4'] = request.form.get('size4')
+    size_list = []
+    
+    size_field = ['shoulderWidth', 'bodyWidth', 'sleeveLength', 'bodyLength','notes']
+    # size_list = [request.form.get(s, '') for s in size_field]
+    
+    # size_list.append(request.form.get('shoulderWidth'))
+    # size_list.append(request.form.get('bodyWidth'))
+    # size_list.append(request.form.get('sleeveLength'))
+    # size_list.append(request.form.get('bodyLength'))
+
+    for s in size_field:
+        session[s] = request.form.get(s,'')
+    
+    # session['shoulderWidth'] = request.form.get('shoulderWidth')
+    # session['bodyWidth'] = request.form.get('bodyWidth')
+    # session['sleeveLength'] = request.form.get('sleeveLength')
+    # session['bodyLength'] = request.form.get('bodyLength')
+    
     # #flashはerror message , 自動的にsessionに保存され、get_flashed_messages()で内容を取得できる
     # if not size:
     #     flash("sizeの選択が必要です。")
     #     return redirect(url_for('seller.seller_size'))
                
-    return render_template('seller/seller_format.html', user_id = user_id)
+    return render_template('seller/seller_format.html', user_id = user_id )
 
 #洗濯表示----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/clean',methods=['GET'])
