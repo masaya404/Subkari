@@ -6,16 +6,16 @@
 {% block content %}
     <div class="max-w-3xl mx-auto px-4">
         <!-- タイトル -->
-        <h1 class="text-2xl font-bold text-center mb-12">出品済み</h1>
+        <h1 class="text-2xl font-bold text-center mb-12 pt-[100px]">出品済み</h1>
 
         <!-- メイン画像セクション -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
             <div class="flex flex-col md:flex-row gap-6 items-start">
                 <!-- 画像 -->
-                <div class="w-full md:w-64 flex-shrink-0">
-                    <img src="https://via.placeholder.com/300x200/666666/ffffff?text=Image+1" 
+                <div class="w-[450px] flex-shrink-0 overflow-hidden">
+                    <img src="{{url_for("static",filename="img/cloth000111.png")}}" 
                          alt="商品画像" 
-                         class="w-full rounded-lg">
+                         class="w-full rounded-lg object-cover">
                 </div>
                 
                 <!-- 詳細とボタン -->
@@ -38,7 +38,7 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <!-- 画像1 -->
             <div class="bg-white rounded-lg shadow-sm p-3">
-                <img src="https://via.placeholder.com/200x200/555555/ffffff?text=Image+2" 
+                <img src="{{url_for("static",filename="img/image 51.png")}}" 
                      alt="商品画像2" 
                      class="w-full rounded mb-3">
                 <button class="w-full px-4 py-2 mb-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition">
@@ -51,7 +51,7 @@
 
             <!-- 画像2 -->
             <div class="bg-white rounded-lg shadow-sm p-3">
-                <img src="https://via.placeholder.com/200x200/555555/ffffff?text=Image+3" 
+                <img src="{{url_for("static",filename="img/image 51.png")}}" 
                      alt="商品画像3" 
                      class="w-full rounded mb-3">
                 <button class="w-full px-4 py-2 mb-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition">
@@ -64,7 +64,7 @@
 
             <!-- 画像3 -->
             <div class="bg-white rounded-lg shadow-sm p-3">
-                <img src="https://via.placeholder.com/200x200/555555/ffffff?text=Image+4" 
+                <img src="{{url_for("static",filename="img/image 51.png")}}" 
                      alt="商品画像4" 
                      class="w-full rounded mb-3">
                 <button class="w-full px-4 py-2 mb-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition">
@@ -77,7 +77,7 @@
 
             <!-- 画像4 -->
             <div class="bg-white rounded-lg shadow-sm p-3">
-                <img src="https://via.placeholder.com/200x200/555555/ffffff?text=Image+5" 
+                <img src="{{url_for("static",filename="img/image 51.png")}}" 
                      alt="商品画像5" 
                      class="w-full rounded mb-3">
                 <button class="w-full px-4 py-2 mb-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition">
@@ -98,12 +98,16 @@
 
         <!-- アクションボタン -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button class="px-12 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition shadow-md">
-                出品する
-            </button>
-            <button class="px-12 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition shadow-sm">
+            <a href="{{ url_for('seller.seller_format') }}" class="block">
+                <button class="px-12 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition shadow-md cursor-pointer">
+                    出品する
+                </button>
+            </a>
+            <a href="{{ url_for('seller.seller') }}" class="block">
+            <button class="px-12 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition shadow-sm cursor-pointer">
                 出品トップページへ
             </button>
+            </a>
         </div>
     </div>
 

@@ -127,7 +127,6 @@ def seller_size_success():
     else:
         user_id = session.get('user_id')
     
-    size_list = []
     
     size_field = ['shoulderWidth', 'bodyWidth', 'sleeveLength', 'bodyLength','notes']
     # size_list = [request.form.get(s, '') for s in size_field]
@@ -160,8 +159,11 @@ def seller_clean():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-               
-    return render_template('seller/seller_clean.html', user_id = user_id)
+    
+    #cleanの辞書型データを確認し、なければ{}
+    selected = session.get('clean_selected', {})
+    return render_template('seller/seller_clean.html', selected=selected, user_id=user_id)           
+    # return render_template('seller/seller_clean.html', user_id = user_id)
 
 #洗濯表示記録----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/clean/success',methods=['POST'])
@@ -171,13 +173,9 @@ def seller_clean_success():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    
-    clean = request.form.get('clean')
-    # #flashはerror message , 自動的にsessionに保存され、get_flashed_messages()で内容を取得できる
-    # if not clean:
-    #     flash("洗濯表示の選択が必要です。")
-    #     return redirect(url_for('seller.seller_clean'))
-    session['clean'] = clean
+   
+    #取ってきたデータを辞書型で保存
+    session['clean_selected'] = request.form.to_dict()
                
     return render_template('seller/seller_format.html', user_id = user_id)
 
@@ -191,6 +189,7 @@ def format_submit():
         user_id = session.get('user_id')
     
     #メイｎ処理
+    # return render_template('seller/seller_products.html', user_id=user_id)
     try:
             # フォームデータ取得
             product_name = request.form.get('productName', '').strip()
@@ -321,7 +320,19 @@ def format_submit():
         flash('エラーが発生しました', 'error')
         return render_template('seller/seller_format.html', user_id=user_id)
 
+#出品一覧画面----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/seller/products',methods=['GET'])
+def seller_products():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     
+      
+            
+    return render_template('seller/seller_products.html', user_id = user_id)
+   
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
     con=mysql.connector.connect(

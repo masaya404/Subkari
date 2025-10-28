@@ -96,7 +96,7 @@
                         <option value="bottoms">Bottoms</option>
                         <option value="accessories">Accessories</option>
                     </select>
-                    <span class="text-red-500 text-sm hidden" id="category1Error">カテゴリーを選択してください</span>
+                    <span class="text-red-500 text-sm hidden" id="categoryError">カテゴリーを選択してください</span>
                 </div>
 
                 <!-- カテゴリー2（必須） -->
@@ -109,7 +109,7 @@
                         <option value="summer">Himemori</option>
                         <option value="winter">Luna</option>
                     </select>
-                    <span class="text-red-500 text-sm hidden" id="category2Error">ブランドを選択してください</span>
+                    <span class="text-red-500 text-sm hidden" id="brandError">ブランドを選択してください</span>
                 </div>
 
                 <!-- アイテム説明 -->
@@ -124,7 +124,7 @@
                     <textarea name="productDescription" rows="4" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500"></textarea>
                 </div>
 
-                <!-- サイズ・洗濯（リンク） -->
+                <!-- サイズ・洗濯 -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-semibold mb-2">
@@ -134,7 +134,7 @@
                         <a href="{{url_for("seller.seller_size")}}">
                             <button type="button" onclick="openSizePage()" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500 cursor-pointer">
                                 <span class="text-sm text-gray-600 mt-1 block" id="sizeDisplay">
-                                    {% if session.get('size4') %}{{ session.get('size4') }}{% else %}未選択{% endif %}
+                                    {% if session.get('shoulderWidth') %}選択済み{% else %}未選択{% endif %}
                                 </span>
                             </button>
                         </a>
@@ -149,7 +149,7 @@
                         <a href="{{url_for("seller.seller_clean")}}">
                             <button type="button" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500 cursor-pointer">
                                 <span class="text-sm text-gray-600 mt-1 block" id="washingDisplay">
-                                    {% if session.get('clean') %}{{ session.get('clean') }}{% else %}未選択{% endif %}
+                                    {% if session.get('clean_selected') %}選択済み{% else %}未選択{% endif %}
                                 </span>
                             </button>
                         </a>
