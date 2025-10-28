@@ -22,18 +22,26 @@
         </div>
     </div>
 <div class="carousel-caption-container">
-    <div class="caption-arrow caption-arrow-left">◀</div>
-
-    <div class="carousel-caption-overlay left-caption">
-        <div class="caption-inner">
+    <div class="carousel-caption-wrapper">
+        <div class="carousel-caption-overlay">
             <strong>先月の人気セラーのコーディネート！</strong>
             <span>今が流行りのコーデを気軽にレンタルしてみましょう。</span>
             <a href="#" class="view-more">詳しくはこちら</a>
         </div>
+        <div class="carousel-caption-overlay">
+            <strong>新作登場！トレンドアイテムをチェック</strong>
+            <span>今すぐレンタルして、トレンドを先取り！</span>
+            <a href="#" class="view-more">詳しくはこちら</a>
+        </div>
+        <div class="carousel-caption-overlay">
+            <strong>人気ブランドのコーデを探そう！</strong>
+            <span>あなたにぴったりのコーディネートが見つかる!</span>
+            <a href="#" class="view-more">詳しくはこちら</a>
+        </div>
     </div>
-
+    <div class="caption-arrow caption-arrow-left">◀</div>
     <div class="caption-arrow caption-arrow-right">▶</div>
-</div>  
+</div>
   <!-- <div class="carousel-caption-overlay">
       <strong>先月の人気セラーのコーディネート！</strong>
       <span>今が流行りのコーデを気軽にレンタルしてみましょう。</span>
@@ -378,6 +386,19 @@
             arrows: true,
         });
     });
+    $(document).ready(function () {
+    $('.carousel-caption-wrapper').slick({
+        infinite: true, // 無限ループ
+        slidesToShow: 1, // 1つずつスライド表示
+        autoplay: true, // 自動再生
+        autoplaySpeed: 3000, // 3秒ごとに切り替え
+        arrows: true, // 矢印を表示
+        prevArrow: '.caption-arrow-left', // 左矢印
+        nextArrow: '.caption-arrow-right', // 右矢印
+        fade: true, // フェード効果でスライド
+    });
+});
+
 </script>
 
 {% endblock %}
