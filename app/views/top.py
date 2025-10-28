@@ -26,7 +26,7 @@ DUMMY_PRODUCTS = [
         # 50個の異なる画像パスを使用
         'image_path': IMAGE_PATHS[i] 
     } 
-    for i in range(50) 
+    for i in range(40) 
 ]
 
 # =======================================================================
@@ -88,7 +88,6 @@ def bottoms():
     # ダミーデータを渡す場合は上記 tops() と同様の処理が必要です
     return render_template('top/search_product.html', search_query=None, products=DUMMY_PRODUCTS)
 
-# 商品についての表示 (アクセサリー)
 # 商品についての表示 (アクセサリー)
 @top_bp.route('/accessories', methods=['GET'])
 def accessories():

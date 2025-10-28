@@ -192,10 +192,14 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
 }
+/* .sidebar-section li a:hover{
+    color: blue;
+} */
 
-.sidebar-section li:hover {
-    color: #4a9eff;
+.sidebar-section li a:hover {
+    color: #ff2a2a;
 }
 
 .sidebar-section li::after {
