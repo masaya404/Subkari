@@ -5,6 +5,8 @@ from datetime import datetime , timedelta
 import mysql.connector
 import json
 import os
+import base64
+import io
 
 seller_bp = Blueprint('seller',__name__,url_prefix='/seller')
 # 処理方法：まず選択またはアップロードされたデータをsessionに保存され、最後にformatですべてのデータを一気にDBに登録 
@@ -43,7 +45,7 @@ def seller_uploadImg():
             
     return render_template('seller/seller_uploadImg.html', user_id = user_id)
 
-#s画像アップロード----------------------------------------------------------------------------------------------------------------------------------------------------------
+#画像アップロード----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/upload',methods=['POST'])
 def seller_upload():
     file = request.files.get('file')
@@ -65,8 +67,46 @@ def seller_upload():
     image_url = "/static/img/" + filename
     
     return jsonify({'success': True, 'image_url': image_url}) 
-    # return render_template('seller/seller_format.html')
 
+#画像アップロード----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/save-images', methods=['POST'])
+def seller_save_images():
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'error': 'ログインが必要です'}), 401
+    
+    data = request.get_json()
+    images = data.get('images', [])
+    
+    if not images:
+        return jsonify({'success': False, 'error': '画像がありません'}), 400
+    
+    saved_urls = []
+    
+    try:
+        for img_data in images:
+            # Base64 データを画像に変換
+            base64_str = img_data['src'].split(',')[1]  # Data URL から Base64 部分を抽出
+            image_bytes = base64.b64decode(base64_str)
+            image = Image.open(io.BytesIO(image_bytes))
+            
+            # ファイル名生成
+            filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{img_data['id']}.jpg"
+            
+            # パス生成と保存
+            current_filepath = os.path.abspath(__file__)
+            current_dictionary = os.path.dirname(current_filepath)
+            save_path = os.path.join(current_dictionary, "static", "img", filename)
+            
+            image.save(save_path, quality=90)
+            saved_urls.append(f"/static/img/{filename}")
+        
+        # session に保存
+        session['uploaded_images'] = saved_urls
+        
+        return jsonify({'success': True, 'image_urls': saved_urls})
+    
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 #size選択----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/size',methods=['GET'])
 def seller_size():

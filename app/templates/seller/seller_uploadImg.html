@@ -6,7 +6,7 @@
 {% block content %}
     <div class="min-h-screen p-8">
         <div class="max-w-5xl mx-auto">
-            <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">画像アップロード</h1>
+            <h1 class="text-3xl font-bold text-center pt-8 text-gray-800">画像アップロード</h1>
 
             <!-- 画像エリア -->
             <div class="bg-white rounded-lg shadow-lg mb-8 p-8">
@@ -64,12 +64,11 @@
 
             <!-- 次へ　フォマットに戻る -->
             <div class="flex justify-end">
-                <a href="{{ url_for('seller.seller_upload') }}">
-                <button type="button" class="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition font-bold cursor-pointer">
+                <button type="button" onclick="proceedToNext('{{ url_for('seller.seller_format') }}')" class="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition font-bold cursor-pointer">
                     次へ
                 </button>
-                </a>
             </div>
+            
         </div>
     </div>
     <!-- 切り抜き機能画面 -->
