@@ -165,6 +165,20 @@ def seller_clean_success():
                
     return render_template('seller/seller_format.html', user_id = user_id)
 
+#セラーフォマット登録----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/format/submit',methods=['GET','POST'])
+def format_submit():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+    #メイｎ処理
+
+    
+    return render_template('seller/seller_products.html',user_id = user_id)
+
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
     con=mysql.connector.connect(
