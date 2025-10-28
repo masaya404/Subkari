@@ -49,11 +49,11 @@ body {
 }
 
 .caption-arrow-left {
-    left: 430px; /* 左側に10pxのスペース */
+    left: 34%; /* 左側に10pxのスペース */
 }
 
 .caption-arrow-right {
-    right: 430px; /* 右側に10pxのスペース */
+    right: 34%; /* 右側に10pxのスペース */
 }
 
 a {
@@ -147,7 +147,7 @@ a {
     height: 35px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     color: #333;
 }
 
