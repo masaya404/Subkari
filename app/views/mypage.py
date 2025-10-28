@@ -67,9 +67,11 @@ def bankRegistration():
     con=connect_db()
     cur=con.cursor(dictionary=True)
 
-    sql="select count(*) as 登録数 from t_transfer t inner join m_account a on t.account_id=a.id where id=a.mail=%s group by a.mail"
-    cur.execute(sql,(user_id))
-    bank_count=["登録数"]
+    sql="select count(*) as 登録数 from t_transfer t inner join m_account a on t.account_id=a.id where a.mail=%s group by a.mail"
+    cur.execute(sql,(user_id,))
+    
+    bank_count=cur.fetchone()
+    bank_count=int(bank_count["登録数"])
     if bank_count>=3:
         return render_template("mypage/mypage.html")
 
