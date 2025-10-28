@@ -61,6 +61,18 @@ def edit():
 #bankRegistration　振込口座登録ページ表示--------------------------------------------------------------
 @mypage_bp.route("/bankRegistration")
 def bankRegistration():
+    bank_count=0
+    #三件すでに登録済みなら拒否する
+    user_id=session["user_id"]
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+
+    sql="select count(*) as 登録数 from t_transfer t inner join m_account a on t.account_id=a.id where id=a.mail=%s group by a.mail"
+    cur.execute(sql,(user_id))
+    bank_count=["登録数"]
+    if bank_count>=3:
+        return render_template("mypage/mypage.html")
+
     return render_template("mypage/bankRegistration.html")
 #----------------------------------------------------------------------------------------------------
 
