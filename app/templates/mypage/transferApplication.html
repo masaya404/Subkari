@@ -91,14 +91,16 @@
         </div>
 
         <!-- Add Bank Button -->
+         <form action="{{url_for('mypage.bankRegistration')}}">
         <button class="add-bank-button" id="addBankButton">
             <span class="icon">⊕</span>
             <span>新しい銀行を登録する</span>
         </button>
+        </form>
 
         <!-- Info Text -->
         <p class="info-text">
-            ※登録できる送振込先は上限3つです。4つ目の以降の振込先を追加する場合は「編集する」ボタンから削除する振込先を削除してください。
+            ※登録できる送振込先は上限3つです。4つ目の以降の振込先を追加する場合は「編集する」ボタンから振込先を削除してください。
         </p>
 
         <!-- Submit Button -->
