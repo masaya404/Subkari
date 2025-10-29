@@ -5,8 +5,8 @@
        }
 
         .search-container input[type="search"],
-        input[type="text"] {
-            width: 100%;
+        .search-container input[type="text"] {
+            width: 365px;
          
             color: #fff;
             font-size: 16px;
@@ -16,13 +16,13 @@
 
        
         .search-container input[type="search"]::placeholder,
-        input[type="text"]::placeholder {
+        .search-container input[type="text"]::placeholder {
             color: #888;
         }
 
       
         .search-container input[type="search"]:focus,
-        input[type="text"]:focus {
+        .search-container input[type="text"]:focus {
             outline: none;
            
             background-color: #1a1a1a;

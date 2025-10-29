@@ -150,23 +150,25 @@
                 </a>
             </div>
         </div>
-
-        <!-- ファイル選択エリア -->
-        <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8">
-            <div class="text-center">
-                <input type="file" id="fileInput" class="hidden" />
-                <button onclick="document.getElementById('fileInput').click()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-semibold">
-                    ファイルを選択
-                </button>
+        <form action="/" method="POST">
+            <!-- ファイル選択エリア -->
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8">
+                <div class="text-center">
+                    <input type="file" id="fileInput" class="hidden" />
+                    <button onclick="document.getElementById('fileInput').click()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-semibold cursor-pointer">
+                        ファイルを選択
+                    </button>
+                </div>
             </div>
-        </div>
 
         <!-- 送信ボタン -->
-        <div class="flex justify-center">
-            <button class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-12 py-3 rounded font-semibold">
-                送信する
-            </button>
-        </div>
+        
+            <div class="flex justify-center">
+                <button class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-12 py-3 rounded font-semibold cursor-pointer">
+                    送信する
+                </button>
+            </div>
+        </form>
     </div>
 {% endblock %}
   

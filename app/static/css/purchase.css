@@ -835,7 +835,7 @@ footer {
     color: #999;
 }
 
-        * {
+        /* * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -858,7 +858,7 @@ footer {
             font-weight: 300;
             letter-spacing: 3px;
             font-style: italic;
-        }
+        } */
 
         .container {
             max-width: 1000px;
