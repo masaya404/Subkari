@@ -176,11 +176,35 @@ def register_user_complete():
 
     # return redirect(url_for('top.new_account',account_id = account["mail"]))
 
+
+#入力フォーム確認-電話番号や住所
 @login_bp.route("register_user/form_complete", methods=["POST"])
 def registration_form_complete():
 
     return render_template('login/Phone_verification.html')
 
+
+#SMS確認
+@login_bp.route("register_user/phone_auth", methods=["POST"])
+def phone_auth():
+
+    return render_template('login/identity_verification.html')
+
+
+#SMS再送
+@login_bp.route("register_user/phone_auth_resend", methods=["POST"])
+def phone_auth_resend():
+
+    return render_template('login/Phone_verification.html')
+
+#本人確認-登録完了
+@login_bp.route("register_user/verification", methods=["POST"])
+def verification():
+
+    return render_template('login/registration_complete.html')
+
+
+#
 
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():

@@ -28,7 +28,6 @@ def getAccountInfo():
     cur.close()
     con.close()
     count=0
-    print(id)
     #口座がいくつ登録されているかを数える
     for i in bank_info:
         count+=1
@@ -224,7 +223,6 @@ def transferApplication():
     session["editmode"]=False
     bank_info,accountNumbers,count=getAccountInfo()
     editmode=session["editmode"]
-            
     return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 #---------------------------------------------------------------------------------------------------
 #transferApplication 削除ボタン表示 -----------------------------------------------------------------
@@ -242,17 +240,29 @@ def editActivate():
     return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 
 #transferApplication 登録口座削除 -------------------------------------------------------------------
-@mypage_bp.route("mypage/transferApplication")
+@mypage_bp.route("/transferApplication/removeBank",methods=['POST'])
 def removeBank():
-    select=request.form
+    #何番目が選択されたかを取得
+    bank_id = request.form.get("bank_id") 
+
     id=session["user_id"]
-    sql="select * from t_transfer  where (account_id=%s) and (branchCode=%s) and (accountNumber=%s)"
+    sql="select * from t_transfer  where account_id=%s"
     con=connect_db()
     cur=con.cursor(dictionary=True)
+    cur.execute(sql,(id,))
+    target=cur.fetchall()
+    #選択された口座のidを取得
+    target_id=target[int(bank_id)]["id"]
 
-
+    #削除
+    sql="delete from t_transfer where id=%s"
+    cur.execute(sql,(target_id,))
+    con.commit()
     cur.close()
     con.close()
+    bank_info,accountNumbers,count=getAccountInfo()
+    editmode=session["editmode"]
+    
     return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 
 
