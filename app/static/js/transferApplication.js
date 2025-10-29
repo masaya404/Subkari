@@ -6,19 +6,19 @@ const editButton = document.getElementById('editButton');
 const deleteButtons = document.querySelectorAll('.delete-button');
 const radioButtons = document.querySelectorAll('input[type="radio"]');
 
-editButton.addEventListener('click', function() {
-    isEditing = !isEditing;
+// editButton.addEventListener('click', function() {
+//     isEditing = !isEditing;
     
-    if (isEditing) {
-        editButton.textContent = '完了する';
-        deleteButtons.forEach(button => button.classList.add('show'));
-        radioButtons.forEach(radio => radio.disabled = true);
-    } else {
-        editButton.textContent = '編集する';
-        deleteButtons.forEach(button => button.classList.remove('show'));
-        radioButtons.forEach(radio => radio.disabled = false);
-    }
-});
+//     if (isEditing) {
+//         editButton.textContent = '完了する';
+//         deleteButtons.forEach(button => button.classList.add('show'));
+//         radioButtons.forEach(radio => radio.disabled = true);
+//     } else {
+//         editButton.textContent = '編集する';
+//         deleteButtons.forEach(button => button.classList.remove('show'));
+//         radioButtons.forEach(radio => radio.disabled = false);
+//     }
+// });
 
 // Delete bank functionality
 // function deleteBank(id) {
