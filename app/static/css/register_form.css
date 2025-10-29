@@ -9,7 +9,7 @@
 
 * {
     margin: 0;
-    padding: 0;
+    /* padding: 0; */
     box-sizing: border-box;
     font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
 }
@@ -26,9 +26,9 @@ body.registerForm-page {
 /* === Container & Header === */
 .rfo-container {
     width: 100%;
-    max-width: 45%;
+    max-width: 100%;
     /* background-color: #fff; */
-    padding: 40px;
+    padding: 20px 30%;
     border-radius: 8px;
     /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
 }

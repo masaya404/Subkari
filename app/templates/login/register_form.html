@@ -1,7 +1,6 @@
 
 {% extends "base.html" %}
     
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/register_form.css') }}">
     
 
 {% block title %}
@@ -9,6 +8,8 @@
 {% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register_form.css') }}">
+
 <form method="POST" action="{{ url_for('login.register_user_complete') }}">
 <div class="rfo-container">
   <h1>登録フォーム</h1>
@@ -99,5 +100,8 @@
   </form>
 </div>
 
-
+<script src="../../..//static/js/register_form.js"></script>
 {% endblock %}
+
+
+
