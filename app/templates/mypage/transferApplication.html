@@ -54,9 +54,9 @@
                         </div>
                     </div>
                     {% if editmode %}
-                    <form action="{{url_for('mypage.removeBank')}}">
+                    <form action="{{url_for('mypage.removeBank')}}" method='post'>
                         <input type="hidden" name="bank_id" value="{{ i }}">
-                    <button class="delete-button" name=>削除する</button>
+                    <button type="submit" class="delete-button" >削除する</button>
                     </form>
                     {% endif %}
                 </div>
