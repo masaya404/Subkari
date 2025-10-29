@@ -253,6 +253,8 @@ def removeBank():
 
     cur.close()
     con.close()
+    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+
 
 #transferAmount 金額選択ページ表示--------------------------------------------------------------------
 @mypage_bp.route("/transferAmount", methods=["GET", "POST"])
