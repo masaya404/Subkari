@@ -48,7 +48,7 @@ def login_auth():
         return render_template('login/login.html', account=account, error_message=error_message)
 
     # 登録成功の処理
-    session['user_id'] = userExist['username']
+    session['user_id'] = userExist['id']
     # 後始末
     cur.close()
     con.close()

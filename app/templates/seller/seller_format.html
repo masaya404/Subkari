@@ -174,7 +174,7 @@
                     <button type="button" onclick="submitForm()" class="flex-1 border border-[#9a9a9a] text-white font-bold py-3 rounded bg-gray-700 hover:bg-white hover:text-gray-700 transition cursor-pointer">
                         出品する
                     </button>
-                    <button type="button" onclick="saveDraft()" class="flex-1 bg-white text-gray-800 font-bold py-3 rounded border border-[#9a9a9a] hover:bg-gray-700 hover:text-white transition cursor-pointer">
+                    <button type="button" onclick="saveDraft('{{url_for('seller.seller_draft')}}')" class="flex-1 bg-white text-gray-800 font-bold py-3 rounded border border-[#9a9a9a] hover:bg-gray-700 hover:text-white transition cursor-pointer">
                         下書き保存
                     </button>
                 </div>

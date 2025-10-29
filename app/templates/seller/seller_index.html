@@ -25,16 +25,16 @@
 
         <div class="flex flex-row justify-around my-8">
 
-          <a href="/product/123" class="block">
+          <a href="{{url_for("seller.seller_draft")}}" class="block">
             <div class="w-[250px] h-[250px] relative rounded-lg border-2 border-gray-300 hover:opacity-80 transition cursor-pointer">
               <img class="w-full h-full object-cover rounded" src="{{url_for("static",filename="img/cloth.jpg")}}">
               <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-white font-bold text-2xl text-stroke">下書き</span>
+                <span class="text-white font-bold text-2xl text-stroke">下書き</span>
               </div>
             </div>
           </a>
 
-          <a href="/product/123" class="block">
+          <a href="{{url_for("seller.seller_products")}}" class="block">
             <div class="w-[250px] h-[250px] relative rounded-lg border-2 border-gray-300 hover:opacity-80 transition cursor-pointer">
               <img class="w-full h-full object-cover rounded" src="{{url_for("static",filename="img/cloth.jpg")}}">
               <div class="absolute inset-0 flex items-center justify-center">
@@ -57,6 +57,7 @@
       
         <div class="mt-10">
           <h2 class="text-lg font-bold mb-4">出品中の商品</h2>
+          <a href="{{url_for("seller.seller_products")}}">
           <div class="flex flex-row items-start gap-4 p-5 bg-white border border-[#B8B8B8] rounded-lg">
             <div class="w-[265px] h-[265px] bg-gray-300 rounded overflow-hidden hover:opacity-80 transition cursor-pointer">
                <img class="w-full h-full object-cover rounded" src="{{url_for("static",filename="img/cloth.jpg")}}">
@@ -68,6 +69,7 @@
                <img class="w-full h-full object-cover rounded" src="{{url_for("static",filename="img/cloth.jpg")}}">
             </div>
           </div>
+          </a>
         </div>
 
         <div class="flex flex-col gap-4 mb-[200px]">
@@ -83,7 +85,7 @@
                 出品する
               </button>
             </a>
-            <a href="{{ url_for('seller.seller_format') }}" class="block">
+            <a href="{{ url_for('seller.datacenter') }}" class="block">
               <button onclick="window.location.href='/seller/format'" class="w-[338px] bg-white text-[#826969] font-bold py-4 rounded border border-[#837575] hover:bg-gray-700 hover:text-white transition cursor-pointer">
                 データセンター
               </button>
