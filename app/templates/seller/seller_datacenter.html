@@ -6,7 +6,7 @@
 {% block content %}
     <!-- メインセクション -->
         <section class="bg-white border border-gray-300 rounded p-6 mb-8">
-            <div class="grid grid-cols-3 gap-4">
+            <div class="flex flex-row items-center justify-center gap-4">
                 <div class="col-span-2">
                     <div class="bg-gray-200 h-[420px] rounded flex items-center justify-center overflow-hidden">
                         <img src="{{url_for("static",filename='img/data_sample.png')}}" alt="データセンター" class="rounded">
@@ -66,9 +66,9 @@
             </div>
         </section>
 
-        <!-- 入室TOP3 -->
+        <!-- TOP3 -->
         <section class="mb-8">
-            <h2 class="text-lg font-bold mb-4">入室TOP３</h2>
+            <h2 class="text-lg font-bold mb-4">人気TOP３</h2>
             <div class="grid grid-cols-3 gap-4">
                 <div class="bg-gray-300 h-32 rounded flex items-center justify-center">
                     <span class="text-gray-500">Top 1</span>
