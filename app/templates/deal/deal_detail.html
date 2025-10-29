@@ -138,7 +138,7 @@
         <!-- 注意事項 -->
         <div class="bg-gray-50 border border-gray-200 rounded p-6 mb-8">
             <p class="text-gray-700 text-center mb-4">
-                お預かり証明書をクリーニング期間中に添付後、送信してください。
+                注意事項を必ずご確認の上、クリーニング期間中にお預かり証明書を添付して、送信してください。
             </p>
             <div class="text-center">
                 <a href="#" class="text-blue-500 hover:text-blue-600 text-sm">
@@ -150,7 +150,32 @@
                 </a>
             </div>
         </div>
-        <form action="{{}}" method="POST">
+        {% if upload_success %}
+        <div class="max-w-2xl mx-auto">
+            <div class="bg-green-50 border-2 border-green-300 rounded-lg p-12 text-center">
+                <div class="text-green-600 text-5xl mb-4">✓</div>
+                <h2 class="text-2xl font-bold text-green-700 mb-4">アップロード成功</h2>
+                <p class="text-gray-700 mb-6">ファイルが正常にアップロードされました。</p>
+                
+                {% if image_url %}
+                <div class="mb-6">
+                    <img src="{{ image_url }}" alt="アップロード画像" class="w-48 h-48 object-cover rounded-lg mx-auto">
+                </div>
+                {% endif %}
+                
+                <div class="space-y-3">
+                    <a href="{{ url_for('deal.deal') }}" class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
+                        一覧に戻る
+                    </a>
+                    <br>
+                    <a href="{{ url_for('deal.deal_list_imageUpload') }}" class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
+                        別のファイルをアップロード
+                    </a>
+                </div>
+            </div>
+        </div>
+        {%else%}
+        <form action="{{url_for('deal.deal_list_imageUpload')}}" method="POST" enctype="multipart/form-data">
             <!-- ファイル選択エリア -->
             <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8">
                 <div class="text-center">
@@ -158,14 +183,86 @@
                 </div>
             </div>
 
-        <!-- 送信ボタン -->
-        
+        <!-- 送信ボタン -->     
             <div class="flex justify-center">
-                <button class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-12 py-3 rounded font-semibold cursor-pointer">
-                    送信する
-                </button>
+                <input type="submit" VALUE="送信する" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-12 py-3 rounded font-semibold cursor-pointer">
             </div>
         </form>
+        {%endif%}
+
+          <!-- 出品者情報 -->
+        <div class="bg-white rounded-lg p-6 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-lg font-semibold">出品者</h2>
+                <button class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <!-- image -->
+                    <div class="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+                        <img src="https://via.placeholder.com/64" alt="haltaro" class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- text -->
+                    <div>
+                        <p class="font-semibold text-lg">haltaro</p>
+                        <div class="flex items-center gap-2 mt-1">
+                            <!-- 評価 -->
+                            <div class="flex gap-1">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star-half-alt text-yellow-400"></i>
+                            </div>
+                            <span class="text-sm text-gray-600">255</span>
+                        </div>
+                        <div class="flex items-center gap-2 mt-1">
+                            <i class="fas fa-check-circle text-green-500 text-sm"></i>
+                            <span class="text-xs text-gray-600">本人確認済</span>
+                            <span class="text-xs text-gray-600">喧嘩者</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- やじるし -->
+                <button class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-chevron-right text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 質問 -->
+        <div class="bg-white rounded-lg p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">質問・相談</h3>
+            
+            <!-- テキストインプット -->
+            <textarea 
+                class="w-full border border-gray-300 rounded-lg p-4 mb-4 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"
+                rows="4"
+                placeholder="何か分からないことがあれば質問してみましょう。">
+            </textarea>
+
+            <!-- 送信 -->
+            <button class="w-full bg-white border-2 border-gray-800 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-800 hover:text-white transition duration-200">
+                取引｜メッセージを送る
+            </button>
+        </div>
+
+        <!-- 注意事項 -->
+        <div class="bg-gray-50 border-l-4 border-yellow-500 p-4 text-sm text-gray-700">
+            <p class="mb-2">
+                ※取引メッセージの内容は、不正トラブル防止のため事務局で確認する場合があります。上記ボタンを押すことにこれに同意したものとします
+            </p>
+            <p>
+                ※お困りの際は<a href="#" class="text-blue-500 hover:text-blue-600 underline">こちら質問</a>をご確認ください
+            </p>
+        </div>
+
+    </div>
     </div>
 {% endblock %}
   
