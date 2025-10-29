@@ -28,6 +28,7 @@ def getAccountInfo():
     cur.close()
     con.close()
     count=0
+    print(id)
     #口座がいくつ登録されているかを数える
     for i in bank_info:
         count+=1
@@ -131,7 +132,12 @@ def bankRegistration():
     cur.execute(sql,(id,))
     
     bank_count=cur.fetchone()
-    bank_count=int(bank_count["登録数"])
+    if bank_count==None:
+        bank_count=0
+    else:
+        bank_count=int(bank_count["登録数"])
+    
+    
     cur.close()
     con.close()
     #3件すでに登録済みなら拒否する
