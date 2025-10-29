@@ -150,6 +150,8 @@ def bankComplete():
 def transferApplication():
     accountNumbers=[]                 #口座番号下位三桁を格納
     id=session["user_id"]
+
+    
     con=connect_db()
     cur=con.cursor(dictionary=True)
     sql="select bankName,accountNumber,branchCode from t_transfer  where account_id=%s limit 3"
