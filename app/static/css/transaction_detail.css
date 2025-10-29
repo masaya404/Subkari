@@ -121,7 +121,7 @@ header {
 .transaction-container {
     display: flex;
     max-width: 1000px;
-    margin: 40px auto;
+    margin: 140px auto;
     padding: 0 20px;
     gap: 40px; /* ２つのブロック間のスペース */
 }
