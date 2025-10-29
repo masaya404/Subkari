@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block title %}
+    取引トップページ
+{% endblock %}
+
+{% block content %}
+
+  <div class="max-w-6xl mx-auto p-4">
+        <!-- Tabs -->
+        <div class="flex gap-0 mb-6">
+            <button class="bg-gray-500 text-white px-6 py-3 rounded-t-lg font-medium hover:bg-gray-600 transition">
+                購入・レンタル
+            </button>
+            <button class="bg-white border-2 border-gray-300 px-6 py-3 rounded-tr-lg font-medium text-gray-700 hover:bg-gray-50 transition">
+                出品
+            </button>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Column - Items List -->
+            <div class="lg:col-span-2 space-y-4">
+                <!-- Item Card 1 -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
+                    <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
+                        👨
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-800 text-sm">ファーバーカー</h3>
+                        <div class="flex items-center gap-3 mt-2">
+                            <span class="text-lg font-bold text-gray-900">¥8,900</span>
+                            <span class="text-red-500 text-xs font-medium">レンタル</span>
+                        </div>
+                        <p class="text-gray-500 text-xs mt-2">支払い待ち</p>
+                    </div>
+                </div>
+
+                <!-- Item Card 2 -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
+                    <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
+                        👨
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-800 text-sm">ファーバーカー</h3>
+                        <div class="flex items-center gap-3 mt-2">
+                            <span class="text-lg font-bold text-gray-900">¥8,900</span>
+                            <span class="text-red-500 text-xs font-medium">配送中</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item Card 3 -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
+                    <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
+                        👨
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-800 text-sm">スーパーファー...クリーニング期間</h3>
+                        <div class="flex items-center gap-3 mt-2">
+                            <span class="text-lg font-bold text-gray-900">¥8,900</span>
+                            <span class="text-red-500 text-xs font-medium">レンタル</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-6">
+                <!-- Timeline -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4">
+                    <div class="space-y-4">
+                        <!-- Timeline Item 1 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center flex-shrink-0">
+                                <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold text-sm">
+                                    ✓
+                                </div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-gray-700 font-medium text-sm">支払い待ち</span>
+                                    <span class="text-gray-600 text-xs">2025/09/16</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 2 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center flex-shrink-0">
+                                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold text-sm">
+                                    2
+                                </div>
+                                <div class="w-0.5 h-6 bg-gray-300 my-1"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-gray-700 font-medium text-sm">発送待ち</span>
+                                    <span class="text-gray-600 text-xs">2025/09/16</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 3 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center flex-shrink-0">
+                                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold text-sm">
+                                    3
+                                </div>
+                                <div class="w-0.5 h-6 bg-gray-300 my-1"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <span class="text-gray-700 font-medium text-sm">配送中</span>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 4 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center flex-shrink-0">
+                                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold text-sm">
+                                    4
+                                </div>
+                                <div class="w-0.5 h-6 bg-gray-300 my-1"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <span class="text-gray-700 font-medium text-sm">到着</span>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 5 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center flex-shrink-0">
+                                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold text-sm">
+                                    5
+                                </div>
+                                <div class="w-0.5 h-6 bg-gray-300 my-1"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <span class="text-gray-700 font-medium text-sm">レンタル中</span>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 6 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center flex-shrink-0">
+                                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold text-sm">
+                                    6
+                                </div>
+                                <div class="w-0.5 h-6 bg-gray-300 my-1"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-gray-700 font-medium text-sm">クリーニング期間</span>
+                                    <span class="text-gray-900 font-bold text-xs font-mono" id="timer">12:59:59</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 7 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center flex-shrink-0">
+                                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold text-sm">
+                                    7
+                                </div>
+                                <div class="w-0.5 h-6 bg-gray-300 my-1"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <span class="text-gray-700 font-medium text-sm">発送待ち</span>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 8 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center flex-shrink-0">
+                                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold text-sm">
+                                    8
+                                </div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <span class="text-gray-700 font-medium text-sm">取引完了</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="bg-white border border-gray-200 rounded-lg p-4">
+                    <div class="w-full h-40 bg-gray-300 rounded-lg mb-4 flex items-center justify-center text-6xl">
+                        👩
+                    </div>
+                    <p class="text-sm text-gray-700 leading-relaxed">
+                        冬に大活躍わわもこファーバーカーゆったりシルエットで体型カバー効果
+                    </p>
+                </div>
+
+                <!-- Buttons -->
+                <div class="space-y-3">
+                    <button class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition">
+                        取引詳細へ
+                    </button>
+                    <button class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition">
+                        レンタル中購入
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+  

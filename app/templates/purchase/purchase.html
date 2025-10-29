@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block content %}
-    <link hrer="{{url_for('static',filename="css/purchase.css")}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='css/purchase.css')}}" rel="stylesheet">
     <div class="container">
         <h1>購入の確認</h1>
 
@@ -13,7 +13,7 @@
                 <!-- 商品情報 -->
                 <div class="section">
                     <div class="product-info">
-                        <div class="product-image"></div>
+                        <div class="product-image"><img src="{{url_for('static',filename='img/image_22.png')}}"></div>
                         <div class="product-details">
                             <div class="product-name">ファーパーカー</div>
                             <div class="product-price">¥9,900</div>

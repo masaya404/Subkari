@@ -95,8 +95,12 @@ def product_details_stub(product_id):
 #purchase
 @products_bp.route('/purchase', methods=['GET'])
 def purchase():
-    
-    return render_template("purchase/purchase.html")
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    return render_template("purchase/purchase.html",user_id = user_id)
 
 # DB接続設定
 def connect_db():
