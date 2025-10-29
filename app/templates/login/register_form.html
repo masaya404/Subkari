@@ -7,7 +7,11 @@
 {% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register_form.css') }}">
+=======
 <link rel="stylesheet" href="{{ url_for('static', filename='css/register_form.css') }}">
+>>>>>>> de71ae5ddcda9b2f27cee575ca00959954c38055
 
 <form method="POST" action="{{ url_for('login.registration_form_complete') }}">
 <div class="rfo-container">
@@ -99,5 +103,8 @@
   </form>
 </div>
 
-
+<script src="../../..//static/js/register_form.js"></script>
 {% endblock %}
+
+
+
