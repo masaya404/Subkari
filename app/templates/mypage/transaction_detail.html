@@ -1,43 +1,11 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUBKARI - 取引詳細</title>
-    <link rel="stylesheet" href="../../../app/static/css/transaction_detail.css"> 
-</head>
-<body>
+{% extends "base.html" %}
 
-    <!-- <header>
-        <div class="header-content">
-            <div class="header-left">
-                <div class="logo">SUBKARI</div>
-                <div class="search-bar">
-                    <input type="text" placeholder="すべてのアイテムから探す">
-                </div>
-            </div>
-            
-            <div class="header-right">
-                <div class="nav-icon-group">
-                    <a href="#" class="nav-icon"><span class="nav-icon-item">👤</span>マイページ</a>
-                    <a href="#" class="nav-icon"><span class="nav-icon-item">❤️</span>いいね</a>
-                    <a href="#" class="nav-icon"><span class="nav-icon-item">🔔</span>通知</a>
-                    <a href="#" class="nav-icon"><span class="nav-icon-item">📤</span>出品</a>
-                    <a href="#" class="nav-icon"><span class="nav-icon-item">🔄</span>取引</a>
-                </div>
-                <a href="#" class="nav-icon"><span class="nav-icon-item">☰</span></a>
-            </div>
-        </div>
-        
-        <div class="header-content">
-            <div class="nav-links-sub">
-                <a href="#" class="nav-link">Coordinate</a>
-                <a href="#" class="nav-link">Tops</a>
-                <a href="#" class="nav-link">Bottoms</a>
-                <a href="#" class="nav-link">accessories</a>
-            </div>
-        </div>
-    </header> -->
+{% block title %}取引詳細{% endblock %}
+
+{% block content %}
+    <!-- <link rel="stylesheet" href="../../../app/static/css/transaction_detail.css">  -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/transaction_detail.css') }}">
+
 
     <main class="container">
         <div class="transaction-container">
@@ -104,44 +72,5 @@
         </div>
     </main>
 
-    <!-- <footer>
-        <div class="footer-content">
-            <div class="footer-top">
-                <div class="footer-logo-info">
-                    <div class="footer-logo">SUBKARI</div>
-                    〒530-0001 大阪府大阪市北区梅田３丁目３−１<br>
-                    日曜定休 / 営業時間 10:30 - 19:00<br>
-                    TEL 06-6347-0001
-                </div>
-                
-                <div class="footer-links-social">
-                    <div class="footer-links">
-                        <a href="#">初めての方へ</a>
-                        <a href="#">サイトマップ</a>
-                        <a href="#">FAQ</a>
-                        <a href="#">お問い合わせ</a>
-                        <a href="#">利用規約</a>
-                    </div>
-                    <div class="footer-links">
-                        <a href="#">プライバシーポリシー</a>
-                        <a href="#">特定商取引法に基づく表記</a>
-                        <a href="#">古物営業法に基づく表示</a>
-                    </div>
-                    
-                    <div class="contact-info-footer">
-                        <div class="footer-links">
-                            </div>
-                        <div class="sns-icons">
-                            X / Insta </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-copyright">
-                © 2025 HAL OSAKA IA・IH Team 5
-            </div>
-        </div>
-    </footer> -->
 
-</body>
-</html>
+{% endblock %}
