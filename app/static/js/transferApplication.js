@@ -21,29 +21,29 @@ editButton.addEventListener('click', function() {
 });
 
 // Delete bank functionality
-function deleteBank(id) {
-    const bankItem = document.querySelector(`.bank-item[data-id="${id}"]`);
-    if (bankItem) {
-        bankItem.remove();
-    }
-}
+// function deleteBank(id) {
+//     const bankItem = document.querySelector(`.bank-item[data-id="${id}"]`);
+//     if (bankItem) {
+//         bankItem.remove();
+//     }
+// }
 
 // Add bank functionality
-const addBankButton = document.getElementById('addBankButton');
-const errorModal = document.getElementById('errorModal');
-const modalOkButton = document.getElementById('modalOkButton');
+// const addBankButton = document.getElementById('addBankButton');
+// const errorModal = document.getElementById('errorModal');
+// const modalOkButton = document.getElementById('modalOkButton');
 
-addBankButton.addEventListener('click', function() {
-    const bankItems = document.querySelectorAll('.bank-item');
+// addBankButton.addEventListener('click', function() {
+//     const bankItems = document.querySelectorAll('.bank-item');
     
-    if (bankItems.length >= 3) {
-        errorModal.classList.add('show');
-    } else {
-        // 新しい銀行追加のロジック
-        console.log('新しい銀行を追加');
-        alert('新しい銀行登録画面へ遷移します');
-    }
-});
+//     if (bankItems.length >= 3) {
+//         errorModal.classList.add('show');
+//     } else {
+//         // 新しい銀行追加のロジック
+//         console.log('新しい銀行を追加');
+//         alert('新しい銀行登録画面へ遷移します');
+//     }
+// });
 
 // Close modal
 modalOkButton.addEventListener('click', function() {

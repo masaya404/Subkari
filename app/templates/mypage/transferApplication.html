@@ -23,28 +23,29 @@
 
         <!-- Bank List -->
         <div class="bank-list" id="bankList">
-            <div class="bank-item" data-id="1">
-                <input type="radio" name="bank" value="1" checked>
+            {% for i in range(len(accountNumbers)) %}
+            <div class="bank-item" data-id=1>
+                <input type="radio" name="bank" value="1">
                 <div class="bank-info">
                     <div class="bank-details">
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">銀行名</p>
-                            <p class="bank-detail-value">楽天銀行</p>
+                            <p class="bank-detail-value">{{bank_info['bankName'][i]}}</p>
                         </div>
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">口座番号</p>
-                            <p class="bank-detail-value">****648</p>
+                            <p class="bank-detail-value">{{accountNumbers[i]}}</p>
                         </div>
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">支店番号</p>
-                            <p class="bank-detail-value">111</p>
+                            <p class="bank-detail-value">{{bank_info['branchCode'][i]}}</p>
                         </div>
                     </div>
-                    <button class="delete-button" onclick="deleteBank(1)">削除する</button>
+                    <button class="delete-button">削除する</button>
                 </div>
             </div>
 
-            <div class="bank-item" data-id="2">
+            <!-- <div class="bank-item" data-id="2">
                 <input type="radio" name="bank" value="2">
                 <div class="bank-info">
                     <div class="bank-details">
@@ -61,7 +62,7 @@
                             <span class="bank-detail-value">121</span>
                         </div>
                     </div>
-                    <button class="delete-button" onclick="deleteBank(2)">削除する</button>
+                    <button class="delete-button">削除する</button>
                 </div>
             </div>
 
@@ -82,9 +83,10 @@
                             <span class="bank-detail-value">131</span>
                         </div>
                     </div>
-                    <button class="delete-button" onclick="deleteBank(3)">削除する</button>
+                    <button class="delete-button">削除する</button>
                 </div>
-            </div>
+            </div> -->
+
         </div>
 
         <!-- Add Bank Button -->

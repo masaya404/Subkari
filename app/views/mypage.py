@@ -61,7 +61,7 @@ def edit():
 #bankRegistration　振込口座登録ページ表示--------------------------------------------------------------
 @mypage_bp.route("/bankRegistration")
 def bankRegistration():
-    
+
     #登録されている口座数を取得
     bank_count=0
     user_id=session["user_id"]
@@ -73,10 +73,12 @@ def bankRegistration():
     
     bank_count=cur.fetchone()
     bank_count=int(bank_count["登録数"])
+    cur.close()
+    con.close()
     #3件すでに登録済みなら拒否する
     if bank_count>=3:
         return render_template("mypage/mypage.html")
-
+    
     return render_template("mypage/bankRegistration.html")
 #----------------------------------------------------------------------------------------------------
 
@@ -88,7 +90,6 @@ def bankComplete():
     ecnt = 0
     error_message={}
     bank_info=request.form    #name,accountType,branchCode,accountNumber,firstName,famillyName
-    print(bank_info)
     #空欄確認
     for key,value in bank_info.items():
         if not value:
@@ -129,7 +130,41 @@ def bankComplete():
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
 def transferApplication():
-    return render_template("mypage/transferApplication.html")
+    accountNumbers=[]                 #口座番号下位三桁を格納
+    user_id=session["user_id"]
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select t.bankName,t.accountNumber,t.branchCode from t_transfer t inner join m_account a on t.account_id=a.id where a.mail=%s limit 3"
+    cur.execute(sql,(user_id,))
+    bank_info=cur.fetchall()
+
+    count=0
+    #口座がいくつ登録されているかを数える
+    for i in bank_info:
+        count+=1
+    cur.close()
+    con.close()
+
+    #口座番号マスク処理のために口座番号の桁数と下位三桁を抽出し配列に入れる
+    for i in range(count):
+        num=int(bank_info['bankNumber'][i])
+
+        tmp=0
+        length=0
+        mask=""
+        #口座番号の桁数を取得
+        while tmp>0:
+            tmp=tmp//10
+            length+=1
+        for i in range(length-3):
+            mask+="*"
+
+        num=str(num%1000)
+        num=mask+num                #マスク処理を施した口座番号
+        accountNumbers.append(num)
+
+            
+    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers)
 #---------------------------------------------------------------------------------------------------
 
 #transferAmount 金額選択ページ表示--------------------------------------------------------------------
