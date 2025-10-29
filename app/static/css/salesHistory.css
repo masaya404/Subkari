@@ -28,8 +28,9 @@
 
 .sales-item {
     display: flex;
-    justify-content: space-between; /* 左右に要素を分ける */
+    justify-content: center; /* 左右に要素を分ける */
     align-items: center;
+    gap: 320px;
     padding: 15px 0; /* 上下のパディングで項目間の余白を確保 */
     border-bottom: 1px solid #eee; /* 項目間の薄い区切り線 */
 }

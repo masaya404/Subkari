@@ -1,147 +1,89 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUBKARI - 取引詳細</title>
-    <link rel="stylesheet" href="../../../app/static/css/transaction_detail.css"> 
-</head>
-<body>
+{% extends "base.html" %}
 
-    <!-- <header>
-        <div class="header-content">
-            <div class="header-left">
-                <div class="logo">SUBKARI</div>
-                <div class="search-bar">
-                    <input type="text" placeholder="すべてのアイテムから探す">
-                </div>
-            </div>
-            
-            <div class="header-right">
-                <div class="nav-icon-group">
-                    <a href="#" class="nav-icon"><span class="nav-icon-item">👤</span>マイページ</a>
-                    <a href="#" class="nav-icon"><span class="nav-icon-item">❤️</span>いいね</a>
-                    <a href="#" class="nav-icon"><span class="nav-icon-item">🔔</span>通知</a>
-                    <a href="#" class="nav-icon"><span class="nav-icon-item">📤</span>出品</a>
-                    <a href="#" class="nav-icon"><span class="nav-icon-item">🔄</span>取引</a>
-                </div>
-                <a href="#" class="nav-icon"><span class="nav-icon-item">☰</span></a>
-            </div>
-        </div>
+{% block title %}
+取引詳細
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/transaction_detail.css') }}">
+
+<main class="container">
+    <div class="transaction-container">
         
-        <div class="header-content">
-            <div class="nav-links-sub">
-                <a href="#" class="nav-link">Coordinate</a>
-                <a href="#" class="nav-link">Tops</a>
-                <a href="#" class="nav-link">Bottoms</a>
-                <a href="#" class="nav-link">accessories</a>
-            </div>
-        </div>
-    </header> -->
-
-    <main class="container">
-        <div class="transaction-container">
+        <!-- 取引情報 -->
+        <section class="transaction-info">
+            <h2>取引情報</h2>
             
-            <section class="transaction-info">
-                <h2>取引情報</h2>
-                
-                <div class="product-detail">
-                    <div class="product-image" role="img" aria-label="商品画像">
-                        </div>
-                    <div class="product-name">ファーパーカー</div>
+            <div class="product-detail">
+                <div class="product-image" role="img" aria-label="商品画像">
+                    {% if transaction.image %}
+                        <img src="{{ url_for('static', filename='img/' + transaction.image) }}" alt="{{ transaction.name }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='img/noimage.png') }}" alt="No Image">
+                    {% endif %}
                 </div>
-                
-                <div class="info-list">
-                    <div class="info-row">
-                        <div class="info-label">商品代金</div>
-                        <div class="info-value">¥2,222</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">販売手数料</div>
-                        <div class="info-value">¥222</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">販売利益</div>
-                        <div class="info-value">¥2,000</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">購入日時</div>
-                        <div class="info-value">2020年6月4日 20:22</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">配送の方法</div>
-                        <div class="info-value">普通郵便</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">商品ID</div>
-                        <div class="info-value">46478853465</div>
-                    </div>
+                <div class="product-name">{{ transaction.name }}</div>
+            </div>
+            
+            <div class="info-list">
+                <div class="info-row">
+                    <div class="info-label">商品代金</div>
+                    <div class="info-value">¥{{ "{:,}".format(transaction.price) }}</div>
                 </div>
-            </section>
+                <div class="info-row">
+                    <div class="info-label">販売手数料</div>
+                    <div class="info-value">¥{{ "{:,}".format(transaction.fee) }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">販売利益</div>
+                    <div class="info-value">¥{{ "{:,}".format(transaction.profit) }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">購入日時</div>
+                    <div class="info-value">{{ transaction.purchase_date.strftime('%Y年%m月%d日 %H:%M') }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">配送の方法</div>
+                    <div class="info-value">{{ transaction.shipping_method }}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">商品ID</div>
+                    <div class="info-value">{{ transaction.id }}</div>
+                </div>
+            </div>
+        </section>
 
-            <section class="buyer-info">
-                <h2>購入者情報</h2>
-                
-                <a href="#" class="buyer-profile">
-                    <div class="buyer-left">
-                        <div class="buyer-avatar">
-                            </div>
-                        <div class="buyer-name-rating">
-                            <div class="buyer-name">haltaro</div>
-                            <div class="rating-badges">
-                                <span class="rating-star">⭐⭐⭐⭐⭐</span>
-                                <span class="rating-count">255</span>
+        <!-- 購入者情報 -->
+        <section class="buyer-info">
+            <h2>購入者情報</h2>
+            
+            <a href="{{ url_for('user.profile', username=buyer.username) }}" class="buyer-profile">
+                <div class="buyer-left">
+                    <div class="buyer-avatar">
+                        {% if buyer.avatar %}
+                            <img src="{{ url_for('static', filename='img/' + buyer.avatar) }}" alt="{{ buyer.username }}">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/default_user.png') }}" alt="No Avatar">
+                        {% endif %}
+                    </div>
+                    <div class="buyer-name-rating">
+                        <div class="buyer-name">{{ buyer.username }}</div>
+                        <div class="rating-badges">
+                            <span class="rating-star">{{ '⭐' * buyer.rating }}</span>
+                            <span class="rating-count">{{ buyer.review_count }}</span>
+                            {% if buyer.verified %}
                                 <span class="badge-verified">本人確認済</span>
-                                <span class="badge-other">喫煙者</span>
-                            </div>
+                            {% endif %}
+                            {% if buyer.other_info %}
+                                <span class="badge-other">{{ buyer.other_info }}</span>
+                            {% endif %}
                         </div>
                     </div>
-                    <div class="list-item-arrow">
-                        &gt; </div>
-                </a>
-            </section>
-            
-        </div>
-    </main>
-
-    <!-- <footer>
-        <div class="footer-content">
-            <div class="footer-top">
-                <div class="footer-logo-info">
-                    <div class="footer-logo">SUBKARI</div>
-                    〒530-0001 大阪府大阪市北区梅田３丁目３−１<br>
-                    日曜定休 / 営業時間 10:30 - 19:00<br>
-                    TEL 06-6347-0001
                 </div>
-                
-                <div class="footer-links-social">
-                    <div class="footer-links">
-                        <a href="#">初めての方へ</a>
-                        <a href="#">サイトマップ</a>
-                        <a href="#">FAQ</a>
-                        <a href="#">お問い合わせ</a>
-                        <a href="#">利用規約</a>
-                    </div>
-                    <div class="footer-links">
-                        <a href="#">プライバシーポリシー</a>
-                        <a href="#">特定商取引法に基づく表記</a>
-                        <a href="#">古物営業法に基づく表示</a>
-                    </div>
-                    
-                    <div class="contact-info-footer">
-                        <div class="footer-links">
-                            </div>
-                        <div class="sns-icons">
-                            X / Insta </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-copyright">
-                © 2025 HAL OSAKA IA・IH Team 5
-            </div>
-        </div>
-    </footer> -->
-
-</body>
-</html>
+                <div class="list-item-arrow">&gt;</div>
+            </a>
+        </section>
+        
+    </div>
+</main>
+{% endblock %}
