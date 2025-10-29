@@ -123,23 +123,18 @@ def bankComplete():
     
     #既に登録されていないか調べる 
     id=session["user_id"]
-    sql="select * from t_transfer t inner join m_account a on t.account_id=a.id where (a.id=%s) and (t.branchCode=%s) and (t.accountNumber=%s)"
+    sql="select * from t_transfer  where (account_id=%s) and (branchCode=%s) and (accountNumber=%s)"
     con=connect_db()
     cur=con.cursor(dictionary=True)
     cur.execute(sql,(id,bank_info['branchCode'],bank_info['accountNumber']))
-    userSame=cur.fetchone()
+    bankSame=cur.fetchone()
 
     #登録されているのでエラー
-    if userSame is not None:
+    if bankSame is not None:
         return render_template('mypage/bankRegistration.html')
     
     accountHolder=bank_info['famillyName']+bank_info['firstName']
     #登録処理
-    #account_idを取得
-    sql="select id from m_account where mail=%s limit 1"
-    cur.execute(sql,(user_id,))
-    user_info=cur.fetchone()
-    id=user_info["id"]
 
     #データを追加
     sql="INSERT INTO t_transfer (account_id,bankName,accountType,branchCode,accountNumber,accountHolder) VALUES(%s,%s,%s,%s,%s,%s)"
@@ -154,19 +149,18 @@ def bankComplete():
 @mypage_bp.route("mypage/transferApplication")
 def transferApplication():
     accountNumbers=[]                 #口座番号下位三桁を格納
-    user_id=session["user_id"]
+    id=session["user_id"]
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    sql="select t.bankName,t.accountNumber,t.branchCode from t_transfer t inner join m_account a on t.account_id=a.id where a.mail=%s limit 3"
-    cur.execute(sql,(user_id,))
+    sql="select bankName,accountNumber,branchCode from t_transfer  where account_id limit 3"
+    cur.execute(sql,(id,))
     bank_info=cur.fetchall()
-
+    cur.close()
+    con.close()
     count=0
     #口座がいくつ登録されているかを数える
     for i in bank_info:
         count+=1
-    cur.close()
-    con.close()
 
     #口座番号マスク処理のために口座番号の桁数と下位三桁を抽出し配列に入れる
     for i in range(count):
