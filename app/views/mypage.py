@@ -122,11 +122,11 @@ def bankComplete():
         return render_template('mypage/bankRegistration.html')
     
     #既に登録されていないか調べる 
-    user_id=session["user_id"]
-    sql="select * from t_transfer t inner join m_account a on t.account_id=a.id where (a.mail=%s) and (t.branchCode=%s) and (t.accountNumber=%s)"
+    id=session["user_id"]
+    sql="select * from t_transfer t inner join m_account a on t.account_id=a.id where (a.id=%s) and (t.branchCode=%s) and (t.accountNumber=%s)"
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    cur.execute(sql,(user_id,bank_info['branchCode'],bank_info['accountNumber']))
+    cur.execute(sql,(id,bank_info['branchCode'],bank_info['accountNumber']))
     userSame=cur.fetchone()
 
     #登録されているのでエラー
