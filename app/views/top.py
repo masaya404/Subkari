@@ -6,8 +6,11 @@ from datetime import datetime , timedelta
 import json
 import os
 
+
 # /app/views/top.py のファイルの先頭に追加
 top_bp = Blueprint('top', __name__)
+
+
 
 # =======================================================================
 #  修正点: 50件のダミー商品データと画像パスを定義

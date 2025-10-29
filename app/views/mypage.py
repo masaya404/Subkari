@@ -28,6 +28,7 @@ def getAccountInfo():
     cur.close()
     con.close()
     count=0
+    print(id)
     #口座がいくつ登録されているかを数える
     for i in bank_info:
         count+=1
@@ -75,7 +76,15 @@ def mypage():
         user_id = session.get('user_id')
 
     
-    return render_template("mypage/mypage.html" , user_id=user_id)
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (user_id,))  # ← タプルで渡す！
+    result = cur.fetchone()
+    image_path = result["identifyImg"] if result else None
+    return render_template("mypage/mypage.html", user_id=user_id, image_path=image_path ,result=result)
+    
+    
 # <<<<<<< HEAD
 #------------------------------------------------------------------------------------------------
 
@@ -98,8 +107,20 @@ def editProfile():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+
+
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (user_id,))  # ← タプルで渡す！
+    result = cur.fetchone()
+
+
+    image_path = result["identifyImg"] if result else None
+    smoker = result["smoking"] if result and "smoking" in result else 0
+
+    return render_template("mypage/editProfile.html", user_id=user_id, image_path=image_path ,result=result,smoker=smoker)
     
-    return render_template("mypage/editProfile.html" , user_id=user_id)
 
 #--------------------------------------------------------------------------------------------------
 
@@ -111,8 +132,19 @@ def edit():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    return render_template("mypage/edit.html" , user_id=user_id)
 
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (user_id,))  # ← タプルで渡す！
+    result = cur.fetchone()
+
+
+    image_path = result["identifyImg"] if result else None
+    smoker = result["smoking"] if result and "smoking" in result else 0
+
+    return render_template("mypage/edit.html", user_id=user_id, image_path=image_path ,result=result,smoker=smoker)
+    
 
 #---------------------------------------------------------------------------------------------------
 
@@ -131,7 +163,12 @@ def bankRegistration():
     cur.execute(sql,(id,))
     
     bank_count=cur.fetchone()
-    bank_count=int(bank_count["登録数"])
+    if bank_count==None:
+        bank_count=0
+    else:
+        bank_count=int(bank_count["登録数"])
+    
+    
     cur.close()
     con.close()
     #3件すでに登録済みなら拒否する
@@ -348,7 +385,7 @@ def transferHistory():
 
     # HTMLへ渡す
     # return render_template("mypage/salesHistory.html", sales_list=sales_list)
-    return render_template("mypage/transferHistory" ,  user_id=user_id)
+    return render_template("mypage/transferHistory.html" ,  user_id=user_id)
 #------------------------------------------------------------------------------------------------
 
 # htmlの画面遷移url_for
