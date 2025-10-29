@@ -71,7 +71,7 @@ header{
     padding:20px 0px 0 0 ;
     display: flex;
     flex-direction: column;
-    margin:0 auto;
+    margin: auto;
     gap:20px;
     justify-content: flex-end;
     box-sizing: border-box;
