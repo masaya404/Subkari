@@ -8,16 +8,16 @@
         <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
             <h1 class="text-3xl font-bold mb-8 text-center">出品する</h1>
 
-            <form id="sellerForm" method="POST" action="" class="space-y-6">
+            <form id="sellerForm" method="POST" action="{{url_for('seller.format_submit')}}" class="space-y-6">
                 <!-- 商品画像 -->
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <div class="border-2 border-dashed border-gray-300 rounded-lg text-center overflow-hidden">
 
-                    <div id="imageDisplayArea" class="mb-4 hidden">
+                    <div id="imageDisplayArea" class="hidden">
                         <a href="{{url_for('seller.seller_uploadImg')}}">
                         <div class="relative bg-gray-200 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition" style="width: 100%; height: 300px;">
                             <img id="displayImage" src="" alt="商品画像" class="w-full h-full object-cover">
                             <div class="absolute inset-0 flex items-center justify-center bg-opacity-0 hover:bg-opacity-20 transition">
-                                <span class="text-white font-semibold opacity-0 hover:opacity-100">クリックして編集</span>
+                                <span class="text-white font-semibold opacity-0 hover:opacity-100 text-stroke text-2xl">クリックして編集</span>
                             </div>
                         </div>
                         </a>
@@ -90,26 +90,26 @@
                     <label class="block text-sm font-semibold mb-2">
                         カテゴリー <span class="text-red-500">*</span>
                     </label>
-                    <select name="category1" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                    <select name="category" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
                         <option value="">選択してください</option>
                         <option value="tops">Tops</option>
                         <option value="bottoms">Bottoms</option>
                         <option value="accessories">Accessories</option>
                     </select>
-                    <span class="text-red-500 text-sm hidden" id="category1Error">カテゴリーを選択してください</span>
+                    <span class="text-red-500 text-sm hidden" id="categoryError">カテゴリーを選択してください</span>
                 </div>
 
                 <!-- カテゴリー2（必須） -->
                 <div>
                     <label class="block text-sm font-semibold mb-2">
-                        カテゴリー2 <span class="text-red-500">*</span>
+                        ブランド <span class="text-red-500">*</span>
                     </label>
-                    <select name="category2" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                    <select name="brand" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
                         <option value="">選択してください</option>
-                        <option value="summer">Summer</option>
-                        <option value="winter">Winter</option>
+                        <option value="summer">Himemori</option>
+                        <option value="winter">Luna</option>
                     </select>
-                    <span class="text-red-500 text-sm hidden" id="category2Error">カテゴリー2を選択してください</span>
+                    <span class="text-red-500 text-sm hidden" id="brandError">ブランドを選択してください</span>
                 </div>
 
                 <!-- アイテム説明 -->
@@ -124,7 +124,7 @@
                     <textarea name="productDescription" rows="4" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500"></textarea>
                 </div>
 
-                <!-- サイズ・洗濯（リンク） -->
+                <!-- サイズ・洗濯 -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-semibold mb-2">
@@ -132,11 +132,14 @@
                         </label>
                         <input type="hidden" name="size" id="sizeInput" value="">
                         <a href="{{url_for("seller.seller_size")}}">
-                            <button type="button" onclick="openSizePage()" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500">
-                                サイズを選択
+                            <button type="button" onclick="openSizePage()" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500 cursor-pointer">
+                                <span class="text-sm text-gray-600 mt-1 block" id="sizeDisplay">
+                                    {% if session.get('shoulderWidth') %}選択済み{% else %}未選択{% endif %}
+                                </span>
                             </button>
                         </a>
-                        <span class="text-sm text-gray-600 mt-1 block" id="sizeDisplay">未選択</span>
+                      
+                    <!--    <span class="text-sm text-gray-600 mt-1 block" id="sizeDisplay">未選択</span> -->
                         <span class="text-red-500 text-sm hidden" id="sizeError">サイズを選択してください</span>
                     </div>
                     <div>
@@ -144,11 +147,14 @@
                             洗濯表示 <span class="text-red-500">*</span>
                         </label>
                         <a href="{{url_for("seller.seller_clean")}}">
-                            <button type="button" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500">
-                                洗濯表示を選択
+                            <button type="button" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500 cursor-pointer">
+                                <span class="text-sm text-gray-600 mt-1 block" id="washingDisplay">
+                                    {% if session.get('clean_selected') %}選択済み{% else %}未選択{% endif %}
+                                </span>
                             </button>
                         </a>
-                        <span class="text-sm text-gray-600 mt-1 block" id="washingDisplay">未選択</span>
+                        
+                    <!--    <span class="text-sm text-gray-600 mt-1 block" id="washingDisplay">未選択</span> -->
                         <span class="text-red-500 text-sm hidden" id="washingError">洗濯表示を選択してください</span>
                     </div>
                 </div>
@@ -163,8 +169,9 @@
                 </div>
 
                 <!-- ボタン -->
+                <input type="hidden" id="imagesData" name="images_data" value="[]" >
                 <div class="flex gap-4 pt-6">
-                    <button type="submit" class="flex-1 border border-[#9a9a9a] text-white font-bold py-3 rounded bg-gray-700 hover:bg-white hover:text-gray-700 transition cursor-pointer">
+                    <button type="button" onclick="submitForm()" class="flex-1 border border-[#9a9a9a] text-white font-bold py-3 rounded bg-gray-700 hover:bg-white hover:text-gray-700 transition cursor-pointer">
                         出品する
                     </button>
                     <button type="button" onclick="saveDraft()" class="flex-1 bg-white text-gray-800 font-bold py-3 rounded border border-[#9a9a9a] hover:bg-gray-700 hover:text-white transition cursor-pointer">
