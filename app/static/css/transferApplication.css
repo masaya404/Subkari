@@ -118,6 +118,9 @@ h1 {
     white-space: nowrap;
     /* display: none; */
 }
+.none{
+    display: none;
+}
 
 .delete-button:hover {
     background-color: #ffebee;
