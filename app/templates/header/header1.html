@@ -47,18 +47,18 @@
                     <a href="{{url_for('seller.seller')}}" class="icon-item">
                         <img src="{{ url_for('static', filename='img/camera.png') }}" class="icon"></img>
                         <span>出品</span>
-                    </a>
+                    </a> 
                     <a href="{{url_for('deal.deal')}}" class="icon-item">
                         <img src="{{ url_for('static', filename='img/deal.png') }}" class="icon"></img>
                         <span>取引</span>
                     </a>
-                    <a href="{{url_for('login.logout')}}" class="icon-item">
-                        <img src="{{ url_for('static', filename='img/logout.png') }}" class="icon"></img>
+                    <a href="{{url_for('login.logout')}}" class="icon-item overflow-hidden">
+                        <img src="{{ url_for('static', filename='img/logout.png') }}" class="icon "></img>
                         <span>ログアウト</span>
                     </a>
-                    <a href="#" class="icon-item">
+                <!-- <a href="#" class="icon-item">
                         <img src="{{ url_for('static', filename='img/hamburger.png') }}" class="icon"></img>
-                    </a>
+                    </a>-->
                 </div>
                 {% endif %}
                 <div class="nav-container">

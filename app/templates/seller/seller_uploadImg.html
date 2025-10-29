@@ -16,11 +16,11 @@
                         &#10094;
                     </button>
                     <!-- 最新画像表示 -->
-                    <div class="relative bg-gray-300 rounded-lg overflow-hidden shadow-md cursor-pointer hover:opacity-90 transition" style="width: 380px; height: 480px;" onclick="editImage()">
-                        <img id="mainImage" src="" alt="main" class="w-full h-full object-cover" style="display: none;">
+                    <div class="relative bg-white border-2 border-dotted border-gray-400 rounded-sm overflow-hidden shadow-md cursor-pointer hover:opacity-90 transition w-[640px] h-[360px]" onclick="editImage()">
+                        <img id="mainImage" src="" alt="main" class="w-full h-full object-contain" style="display: none;">
                         <div id="emptyState" class="absolute inset-0 flex items-center justify-center bg-gray-300 text-gray-500 text-lg flex-col gap-2">
                             <p>画像を選択してください</p>
-                            <p class="text-sm text-gray-400">下のエリアで画像をアップロード</p>
+                            <p class="text-sm text-gray-400">下のボタンで画像をアップロード</p>
                         </div>
                     </div>
 
@@ -33,17 +33,17 @@
 
                 <!-- 画像編集 -->
                 <div class="flex justify-center gap-4 mt-8">
-                    <button onclick="editImage()" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold cursor-pointer">
+                    <button onclick="editImage()" class="w-[200px] border-1 border-solid border-black px-6 py-2 text-black bg-white rounded-sm hover:bg-black hover:text-white transition font-semibold cursor-pointer">
                         切り抜き
                     </button>
-                    <button onclick="deleteImage()" class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold cursor-pointer">
+                    <button onclick="deleteImage()" class="w-[200px] border-1 border-solid border-red-500 px-6 py-2 text-red-500 bg-white rounded-sm hover:bg-red-500 hover:text-white transition font-semibold cursor-pointer">
                         削除
                     </button>
                 </div>
             </div>
 
             <!-- Dropzone アップロード -->
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8 w-[600px] mx-auto">
                 <form id="uploadForm" class="dropzone" action="/upload" method="post" enctype="multipart/form-data">
                     <div class="dz-message">
                         <p class="text-lg font-semibold text-gray-700">📁 フォルダから</p>

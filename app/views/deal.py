@@ -30,6 +30,6 @@ def deal_list():
     else:
         user_id = session.get('user_id')
         
-    return render_template('deal/deal_list.html', user_id = user_id)
+    return render_template('deal/deal_detail.html', user_id = user_id)
 
 
