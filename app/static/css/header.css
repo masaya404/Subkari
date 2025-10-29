@@ -1,5 +1,45 @@
 /* import font family*/
 @import url('https://fonts.cdnfonts.com/css/informal-roman');
+       .search-container{
+        padding-top:10px;
+       }
+
+        .search-container input[type="search"],
+        input[type="text"] {
+            width: 100%;
+         
+            color: #fff;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+       
+        .search-container input[type="search"]::placeholder,
+        input[type="text"]::placeholder {
+            color: #888;
+        }
+
+      
+        .search-container input[type="search"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+           
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+     
+        .search-container input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+            -webkit-text-fill-color: #fff !important;
+            caret-color: #fff;
+        }
+
+        .search-container input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset !important;
+            -webkit-text-fill-color: #fff !important;
+        }
 
 /********************************************* header **********************************************************/
 .header-logo{
