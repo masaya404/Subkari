@@ -17,7 +17,6 @@ def login():
     account = {}
     return render_template('login/login.html', etbl=etbl, account=account)
 
-
 # Login確認 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/login/auth', methods=['POST'])
 def login_auth():
