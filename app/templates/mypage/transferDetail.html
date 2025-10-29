@@ -41,8 +41,9 @@
                 <div class="detail-label">振込時間</div>
                 <div class="detail-value">2022/04/03 11:50</div>
             </div>
-
-            <button class="resubmit-btn" id="resubmit-button">再度振込申請する</button>
+            <form action="{{url_for('mypage.transferApplication')}}">
+                <button class="resubmit-btn" id="resubmit-button">再度振込申請する</button>
+            </form>
         </div>
         
         </div>
