@@ -5,9 +5,9 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{url_for('static',filename='css/tab.css')}}">
-  <div class="max-w-6xl mx-auto p-4">
+  <div class="max-w-6xl mx-auto px-4 py-20">
         <!-- Main Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Left Column - Items List -->
              <!-- Tabs -->
             <div class ="flex flex-col">
@@ -228,7 +228,7 @@
             <!-- Right Area -->
             <div class="flex flex-col gap-3">
                 <div class="bg-white border border-gray-200 rounded-lg p-4">
-                    <h1>取引情報</h1>
+                    <h1 class="text-xl mb-[32px]">取引情報</h1>
                     <div class="w-full h-60 bg-gray-300 rounded-lg mb-4 flex items-center justify-center text-6xl overflow-hidden">
                         <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
                     </div>
@@ -237,13 +237,13 @@
                     </p>
                 </div>
                 
-                <div class="space-y-3">
+                <div class="flex flex-col justify-center items-center">
                     <a href="{{url_for('deal.deal_list')}}">
-                    <button class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition mb-3 cursor-pointer">
+                    <button class="w-[192px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition mb-3 cursor-pointer">
                         取引詳細へ
                     </button>
                     </a>
-                    <button class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition cursor-pointer">
+                    <button class="w-[192px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition cursor-pointer">
                         レンタル中購入
                     </button>
                 </div>
