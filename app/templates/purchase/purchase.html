@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>購入の確認 - SUBKARI</title>
-    <link rel="stylesheet" href="../../static/css/purchase.css">
-    
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}
+    購入の確認
+{% endblock %}
 
+{% block content %}
+    <link hrer="{{url_for('static',filename="css/purchase.css")}}" rel="stylesheet">
     <div class="container">
         <h1>購入の確認</h1>
 
@@ -83,22 +79,6 @@
         </div>
     </div>
 
-    <!-- <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#">初めての方へ</a>
-                <a href="#">サイトマップ</a>
-                <a href="#">FAQ</a>
-                <a href="#">お問い合わせ</a>
-                <a href="#">利用規約／プライバシーポリシー</a>
-                <a href="#">特定商取引法に基づく表記</a>
-            </div>
-            <div class="footer-copyright">
-                © 2025 HAL OSAKA IA・IH Team 5
-            </div>
-        </div>
-    </footer>
- -->
     <!-- カード登録ページオーバーレイ -->
     <div class="card-register-overlay" id="cardRegisterPage">
         <div class="card-register-header">
@@ -456,7 +436,6 @@
             </div>
         </div>
     </div>
-    <script src="../../static/js/purchase.js"></script>
-    
-</body>
-</html>
+    <script src="{{url_for('static',filename='js/purchase.js')}}"></script>
+
+{% endblock %}

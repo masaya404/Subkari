@@ -1,10 +1,10 @@
 {% block footer %}
 <footer>
     <div class="footer-top">
-        <div class="footer-logo">    
-                    <a href="{{url_for('top.member_index')}}" class="logo">
-
+         <a href="{{url_for('top.member_index')}}">
+        <div class="footer-logo pointer-events-none">    
             SUBKARI</div>
+        </a>
         <nav class="footer-nav">
             <div class="footer-li">
                 <a href="">はじめての方へ</a>
@@ -39,7 +39,7 @@
         </div>
         
     </div>
-    <p class="copyright">&copy; 2025 HAL OSAKA IA・IH Team 5</p>
+    <p class="copyright pointer-events-none">&copy; 2025 HAL OSAKA IA・IH Team 5</p>
 
 </footer>
 {% endblock%}
