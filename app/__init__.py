@@ -24,7 +24,14 @@ def create_app():
     app.register_blueprint(dashboard.dashboard_bp)
     app.register_blueprint(mypage.mypage_bp)
     app.register_blueprint(deal.deal_bp)
+  
 
-    
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('error.html'), 404
+
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template('error.html'), 500
     
     return app
