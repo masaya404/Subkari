@@ -42,7 +42,7 @@ def search_result():
 @products_bp.route('/<int:product_id>', methods=['GET'])
 def product_details_stub(product_id):
     # sessionからuser_idを取得
-    user = session.get('user_id')
+    user_id = session.get('user_id')
 
     result = None
     comments = []  # コメントリストを初期化
@@ -87,11 +87,20 @@ def product_details_stub(product_id):
     # 取得した商品情報 (result) とコメント (comments) をテンプレートに渡す
     resp = make_response(render_template(
         'products/product_details.html',
-        user=user,
+        user_id=user_id,
         result=result,
         comments=comments
     ))
     return resp
+#purchase
+@products_bp.route('/purchase', methods=['GET'])
+def purchase():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    return render_template("purchase/purchase.html",user_id = user_id)
 
 # DB接続設定
 def connect_db():

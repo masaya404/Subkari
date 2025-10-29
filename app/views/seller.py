@@ -328,8 +328,7 @@ def seller_products():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    
-      
+
             
     return render_template('seller/seller_products.html', user_id = user_id)
 

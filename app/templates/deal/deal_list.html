@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% block title %}
+   取引一覧
+{% endblock %}
+
+{% block content %}
+  <div class="max-w-6xl mx-auto p-4">
+        <!-- Header -->
+        <h1 class="text-2xl font-bold mb-6">取引一覧</h1>
+
+        <!-- Tabs -->
+        <div class="flex gap-2 mb-6 border-b border-gray-300">
+            <button class="px-6 py-2 border-b-2 border-gray-400 font-medium text-gray-700 bg-white">出品</button>
+            <button class="px-6 py-2 border-b-2 border-transparent font-medium text-gray-600">レンタル</button>
+            <button class="px-6 py-2 border-b-2 border-transparent font-medium text-gray-600">購入</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Left - Transaction List -->
+            <div class="lg:col-span-1 space-y-3">
+                <div class="bg-white border border-gray-300 rounded p-3 cursor-pointer hover:shadow-md transition">
+                    <div class="flex gap-2">
+                        <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
+                        <div class="flex-1">
+                            <p class="font-semibold text-sm">商品名</p>
+                            <p class="text-xs text-gray-600">支払い待ち</p>
+                            <p class="text-xs text-gray-500">[レンタル]</p>
+                            <p class="text-sm font-bold">¥●●●●</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-300 rounded p-3 cursor-pointer hover:shadow-md transition">
+                    <div class="flex gap-2">
+                        <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
+                        <div class="flex-1">
+                            <p class="font-semibold text-sm">商品名</p>
+                            <p class="text-xs text-gray-600">配送中</p>
+                            <p class="text-xs text-gray-500">[レンタル]</p>
+                            <p class="text-sm font-bold">¥●●●●</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-300 rounded p-3 cursor-pointer hover:shadow-md transition">
+                    <div class="flex gap-2">
+                        <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
+                        <div class="flex-1">
+                            <p class="font-semibold text-sm">商品名</p>
+                            <p class="text-xs text-gray-600">返送待ち</p>
+                            <p class="text-xs text-gray-500">[レンタル]</p>
+                            <p class="text-sm font-bold">¥●●●●</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center & Right - Transaction Details -->
+            <div class="lg:col-span-3 space-y-6">
+                <!-- Transaction Header -->
+                <div class="bg-white border border-gray-300 rounded-lg p-6">
+                    <div class="flex justify-between items-start mb-6">
+                        <h2 class="text-xl font-bold">取引詳細</h2>
+                        <span class="bg-gray-100 border border-gray-400 px-4 py-2 rounded font-medium text-sm">支払い待ち</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Product Info -->
+                        <div>
+                            <h3 class="font-bold mb-3 text-sm">商品情報</h3>
+                            <div class="flex gap-3">
+                                <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
+                                <div>
+                                    <p class="font-bold">ファーバーカー</p>
+                                    <p class="text-gray-600 text-sm">購入 ¥9000</p>
+                                    <p class="text-gray-600 text-sm">レンタル ¥1000</p>
+                                    <p class="text-gray-600 text-sm">[操入]</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seller Info -->
+                        <div>
+                            <h3 class="font-bold mb-3 text-sm">取引相手情報</h3>
+                            <div class="flex gap-3">
+                                <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
+                                <div class="text-sm">
+                                    <p class="font-semibold">合口　昌哉</p>
+                                    <p class="text-gray-600">★4.3 (100件)</p>
+                                    <p class="text-blue-600 text-xs cursor-pointer">プロフィールを見る</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <button class="border-2 border-gray-400 px-4 py-2 rounded font-medium text-sm hover:bg-gray-50">支払い</button>
+                    <button class="border-2 border-gray-400 px-4 py-2 rounded font-medium text-sm hover:bg-gray-50">レンタル中購入</button>
+                    <button class="border-2 border-gray-400 px-4 py-2 rounded font-medium text-sm hover:bg-gray-50">取引をキャンセル</button>
+                    <button class="border-2 border-gray-400 px-4 py-2 rounded font-medium text-sm hover:bg-gray-50">評価する</button>
+                    <button class="border-2 border-gray-400 px-4 py-2 rounded font-medium text-sm hover:bg-gray-50">お預かり書を送る</button>
+                    <button class="border-2 border-gray-400 px-4 py-2 rounded font-medium text-sm hover:bg-gray-50">発送証明書を送る</button>
+                </div>
+
+                <!-- Timeline -->
+                <div class="bg-white border border-gray-300 rounded-lg p-6">
+                    <h3 class="font-bold mb-6 text-lg">取引進捗</h3>
+                    <div class="space-y-6">
+                        <!-- Step 1 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold">✓</div>
+                                <div class="w-0.5 h-12 bg-gray-400 my-2"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <p class="font-semibold text-sm">支払い待ち</p>
+                                <p class="text-gray-600 text-xs">2025/09/16</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold">✓</div>
+                                <div class="w-0.5 h-12 bg-gray-400 my-2"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <p class="font-semibold text-sm">発送待ち</p>
+                                <p class="text-gray-600 text-xs">2025/09/16</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold">✓</div>
+                                <div class="w-0.5 h-12 bg-gray-400 my-2"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <p class="font-semibold text-sm">配送中</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold">✓</div>
+                                <div class="w-0.5 h-12 bg-gray-400 my-2"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <p class="font-semibold text-sm">到着</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold">✓</div>
+                                <div class="w-0.5 h-12 bg-gray-400 my-2"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <p class="font-semibold text-sm">レンタル中</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 6 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold">6</div>
+                                <div class="w-0.5 h-12 bg-gray-400 my-2"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <div class="flex justify-between">
+                                    <p class="font-semibold text-sm">クリーニング期間</p>
+                                    <p class="font-mono font-bold text-sm" id="timer">あと12:59:59</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 7 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold">7</div>
+                                <div class="w-0.5 h-12 bg-gray-400 my-2"></div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <p class="font-semibold text-sm">発送待ち</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 8 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold">8</div>
+                            </div>
+                            <div class="flex-1 pt-1">
+                                <p class="font-semibold text-sm">取引完了</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message Section -->
+                <div class="bg-white border border-gray-300 rounded-lg p-6">
+                    <h3 class="font-bold mb-4">メッセージ</h3>
+                    <div class="space-y-4 mb-4 h-40 border border-gray-200 rounded p-4 overflow-y-auto bg-gray-50">
+                        <!-- Messages will appear here -->
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" placeholder="メッセージを入力" class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm">
+                        <button class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">→</button>
+                    </div>
+                </div>
+
+                <!-- Transaction Summary -->
+                <div class="bg-white border border-gray-300 rounded-lg p-6">
+                    <h3 class="font-bold mb-4">取引概要</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span>商品名</span>
+                            <span class="font-semibold">¥●●●●</span>
+                        </div>
+                        <div class="flex justify-between py-1 border-t border-gray-200">
+                            <span>レンタル期間</span>
+                            <span class="flex gap-2">
+                                <span class="px-2 py-1 bg-gray-100">■日曜</span>
+                                <span class="px-2 py-1 bg-gray-100">●月曜</span>
+                                <span class="px-2 py-1 bg-gray-100">●火曜</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{url_for('static',filename='js/deal.js')}}"></script>
+{% endblock %}
+  

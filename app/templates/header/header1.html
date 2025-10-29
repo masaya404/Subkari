@@ -20,12 +20,12 @@
             <div class="header-right">
                 {% if not user_id %}
                 <div class="header-login">
-<a href="{{ url_for('login.show_register_user') }}" class="">
-    <span>新規登録</span>
-</a>
-<a href="{{ url_for('login.login') }}" class="">
-    <span>ログイン</span>
-</a>
+                    <a href="{{ url_for('login.show_register_user') }}" class="">
+                        <span>新規登録</span>
+                    </a>
+                    <a href="{{ url_for('login.login') }}" class="">
+                        <span>ログイン</span>
+                    </a>
                     <a href="#" class="icon-item">
                         <img src="{{ url_for('static', filename='img/hamburger.png') }}" class="icon"></img>
                     </a>
@@ -48,7 +48,7 @@
                         <img src="{{ url_for('static', filename='img/camera.png') }}" class="icon"></img>
                         <span>出品</span>
                     </a>
-                    <a href="#" class="icon-item">
+                    <a href="{{url_for('deal.deal')}}" class="icon-item">
                         <img src="{{ url_for('static', filename='img/deal.png') }}" class="icon"></img>
                         <span>取引</span>
                     </a>

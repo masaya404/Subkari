@@ -1,7 +1,7 @@
 /* --- セクション切り替え --- */
-main {
+.mypage_main {
     max-width: 1280px;
-  
+    padding-top:50px;
     /* margin-top: 20px; */
     margin-bottom: 50px;
     margin-left: auto;
@@ -14,14 +14,14 @@ main {
     height: calc(100vh - 80px); 
 }
 
-main > section:not(.nav) {
+.mypage_main > section:not(.nav) {
     display: none;
     overflow-y: auto;             /* ← コンテンツエリアも独立してスクロール可能に */
     height: 100%;                 /* ← グリッド内で全高 */
     padding-right: 16px;          /* ← スクロールバーが被らないように */
     box-sizing: border-box;
 }
-main > section.active {
+.mypage_main > section.active {
     display: block;
 }
 

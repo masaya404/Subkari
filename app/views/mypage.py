@@ -307,7 +307,49 @@ def salesHistory():
     return render_template("mypage/salesHistory.html" ,  user_id=user_id)
 #-------------------------------------------------------------------------------------------------
 
+#振込履歴-----------------------------------------------------------------------------------------
+@mypage_bp.route("/transferHistory")
+def transferHistory():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+    # try:
+    #     conn = mysql.connector.connect(
+    #         host="localhost",
+    #         user="root",
+    #         password="あなたのパスワード",
+    #         database="db_subkari",   # ←実際のDB名に変更
+    #         charset="utf8mb4"
+    #     )
+    #     cursor = conn.cursor(dictionary=True)
 
+    #     # ログイン中のユーザーIDを使用する場合（例）
+    #     user_id = session.get("user_id", 1)  # 仮で1番ユーザー
+
+    #     # 売上履歴を取得（新しい順）
+    #     sql = """
+    #         SELECT id, type, DATE_FORMAT(date, '%%Y/%%m/%%d %%H:%%i') AS date, amount
+    #         FROM sales_history
+    #         WHERE user_id = %s
+    #         ORDER BY date DESC
+    #     """
+    #     cursor.execute(sql, (user_id,))
+    #     sales_list = cursor.fetchall()
+
+    # except mysql.connector.Error as err:
+    #     print("DBエラー:", err)
+    #     sales_list = []
+    # finally:
+    #     cursor.close()
+    #     conn.close()
+
+    # HTMLへ渡す
+    # return render_template("mypage/salesHistory.html", sales_list=sales_list)
+    return render_template("mypage/transferHistory" ,  user_id=user_id)
+#------------------------------------------------------------------------------------------------
 
 # htmlの画面遷移url_for
 # {{ url_for('モジュール名.関数名') }}
