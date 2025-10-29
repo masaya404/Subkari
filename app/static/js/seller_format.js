@@ -1,42 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
+    //このページ入る同時に、画像を表示する（あった場合）
             loadUploadedImages();
         });
-
-        function loadUploadedImages() {
-            try {
-                const images = JSON.parse(sessionStorage.getItem('uploadedImages'));
-                
-                if (images && images.length > 0) {
-                    // 最新画像
-                    const latestImage = images[0];
-                    const displayImage = document.getElementById('displayImage');
-                    const imageDataInput = document.getElementById('imageDataInput');
-                    
-                    displayImage.src = latestImage.src;
-                    imageDataInput.value = latestImage.src;
-                    
-                    // 画像表示エリア　
-                    document.getElementById('imageDisplayArea').classList.remove('hidden');
-                    document.getElementById('noImageArea').classList.add('hidden');
-                    
-                    console.log('イメージローディング');
-                } else {
-                    
-                    document.getElementById('imageDisplayArea').classList.add('hidden');
-                    document.getElementById('noImageArea').classList.remove('hidden');
-                    console.log('画像がない');
-                }
-            } catch (e) {
-                console.error('失敗:', e);
-                document.getElementById('imageDisplayArea').classList.add('hidden');
-                document.getElementById('noImageArea').classList.remove('hidden');
-            }
-        }
-
-        function goToUploadPage() {
-            // 画像編集
-            window.location.href = "{{url_for('seller.seller_uploadImg')}}";
-        }
+// 画像編集へ
+function goToUploadPage() {          
+window.location.href = "{{url_for('seller.seller_uploadImg')}}";
+}
 // 価格トグル
 const rentalCheckbox = document.querySelector('.rentalCheckbox');
 const purchaseCheckbox = document.querySelector('.purchaseCheckbox');
@@ -116,8 +85,33 @@ function createPurchasePriceSection() {
     document.getElementById('purchasePrice').focus();
 }
 
-// ページ遷移（サイズ・洗濯）
+//画像表示
+function loadUploadedImages() {
+    const saved = sessionStorage.getItem('uploadedImages');
+    if (saved) {
+        const images = JSON.parse(saved);
+        console.log('Loaded images:', images);
+        // ここで images を使用
+        displayFirstImage(images[0]);
+    }
+}
 
+function displayFirstImage(image) {
+    const displayArea = document.getElementById('imageDisplayArea');
+    const noImageArea = document.getElementById('noImageArea');
+    const displayImage = document.getElementById('displayImage');
+    
+    if (displayArea && displayImage) {
+        displayImage.src = image.src;  // Base64 データURLを設定
+        displayArea.classList.remove('hidden');
+        
+        if (noImageArea) {
+            noImageArea.classList.add('hidden');
+        }
+    }
+}
+
+loadUploadedImages();
 
 // フォーム検証
 function validateForm() {
@@ -153,40 +147,40 @@ function validateForm() {
     }
 
     // カテゴリー1
-    const category1 = form.querySelector('[name="category1"]').value;
-    if (!category1) {
-        document.getElementById('category1Error').classList.remove('hidden');
+    const category = form.querySelector('[name="category"]').value;
+    if (!category) {
+        document.getElementById('categoryError').classList.remove('hidden');
         isValid = false;
     } else {
-        document.getElementById('category1Error').classList.add('hidden');
+        document.getElementById('categoryError').classList.add('hidden');
     }
 
     // カテゴリー2
-    const category2 = form.querySelector('[name="category2"]').value;
-    if (!category2) {
-        document.getElementById('category2Error').classList.remove('hidden');
+    const brand = form.querySelector('[name="brand"]').value;
+    if (!brand) {
+        document.getElementById('brandError').classList.remove('hidden');
         isValid = false;
     } else {
-        document.getElementById('category2Error').classList.add('hidden');
+        document.getElementById('brandError').classList.add('hidden');
     }
 
     // サイズ
-    // const size = form.querySelector('[name="size"]').value;
-    // if (!size) {
-    //     document.getElementById('sizeError').classList.remove('hidden');
-    //     isValid = false;
-    // } else {
-    //     document.getElementById('sizeError').classList.add('hidden');
-    // }
+    const sizeDisplay = document.getElementById('sizeDisplay').innerText.trim();
+    if (sizeDisplay === '未選択') {
+        document.getElementById('sizeError').classList.remove('hidden');
+        isValid = false;
+    } else {
+        document.getElementById('sizeError').classList.add('hidden');
+    }
 
-    // // 洗濯
-    // const washing = form.querySelector('[name="washing"]').value;
-    // if (!washing) {
-    //     document.getElementById('washingError').classList.remove('hidden');
-    //     isValid = false;
-    // } else {
-    //     document.getElementById('washingError').classList.add('hidden');
-    // }
+    // 洗濯表示
+    const washingDisplay = document.getElementById('washingDisplay').innerText.trim();
+    if (washingDisplay === '未選択') {
+        document.getElementById('washingError').classList.remove('hidden');
+        isValid = false;
+    } else {
+        document.getElementById('washingError').classList.add('hidden');
+    }
 
     // 返却場所
     const returnLocation = form.querySelector('[name="returnLocation"]').value.trim();
@@ -199,59 +193,68 @@ function validateForm() {
 
     return isValid;
 }
-//画像表示
-function loadUploadedImages() {
-    const saved = sessionStorage.getItem('uploadedImages');
-    if (saved) {
-        const images = JSON.parse(saved);
-        console.log('Loaded images:', images);
-        // ここで images を使用
-        displayFirstImage(images[0]);
-    }
-}
 
-function displayFirstImage(image) {
-    const displayArea = document.getElementById('imageDisplayArea');
-    const noImageArea = document.getElementById('noImageArea');
-    const displayImage = document.getElementById('displayImage');
-    
-    if (displayArea && displayImage) {
-        displayImage.src = image.src;  // Base64 データURLを設定
-        displayArea.classList.remove('hidden');
-        
-        if (noImageArea) {
-            noImageArea.classList.add('hidden');
-        }
-    }
-}
-
-// ページ読み込み時に実行
-// document.addEventListener('DOMContentLoaded', function() {
-//     loadUploadedImages();
-// });
-// ページ読み込み時に実行
-loadUploadedImages();
-// フォーム送信
-
-// function goToUploadPage(uploadUrl) {
-//     window.location.href = uploadUrl;
+ //サイズと洗濯表示を sessionStorage から読み込む
+// function loadSizeAndWashing() {
+//     // サイズ
+//     const sizeFromSession = sessionStorage.getItem('size');
+//     if (sizeFromSession && sizeFromSession !== '未選択') {
+//         document.getElementById('sizeDisplay').innerText = sizeFromSession;
+//     }
+//     else{
+//         isValid = false;
+//     }
+//     // 洗濯表示
+//     const washingFromSession = sessionStorage.getItem('washing');
+//     if (washingFromSession && washingFromSession !== '未選択') {
+//         document.getElementById('washingDisplay').innerText = washingFromSession;
+//     }
+//     else{
+//         isValid = false;
+//     }
 // }
 
-// goToUploadPage();
-
-document.getElementById('sellerForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (validateForm()) {
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData);
-        console.log('送信データ:', data);
-        // 実際はここでサーバーに送信
-        alert('フォームが送信されました');
-    } else {
-        alert('すべての必須項目を入力してください');
+/**
+ * フォーム送信
+ */
+// document.getElementById('sellerForm').addEventListener('submit', function(e) {
+//     e.preventDefault();
+//     //検証成功
+//     if (validateForm()) {
+//         const formData = new FormData(this);
+//         const data = Object.fromEntries(formData);
+//         console.log('送信データ:', data);
+//         // 実際はここでサーバーに送信
+//         alert('フォームが送信されました');
+//     } 
+//     //検証失敗
+//     else {
+//         alert('すべての必須項目を入力してください');
+//     }
+// });
+/**
+ * フォーム送信
+ */
+function submitForm() {
+    // バリデーション
+    if (!validateForm()) {
+        return;
     }
-});
 
+    // sessionStorage から画像を取得
+    const uploadedImages = JSON.parse(sessionStorage.getItem('uploadedImages') || '[]');
+    
+    if (uploadedImages.length === 0) {
+        alert('最低1つの画像をアップロードしてください');
+        return;
+    }
+
+    // hidden input に JSON を設定
+    document.getElementById('imagesData').value = JSON.stringify(uploadedImages);
+    
+    // フォーム送信
+    document.getElementById('sellerForm').submit();
+}
 // 下書き保存
 function saveDraft() {
     const form = document.getElementById('sellerForm');

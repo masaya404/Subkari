@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box; /* すべての要素にbox-sizingを適用 */
+    position: relative;
 }
 .nav-container nav a{
     font-family: unset;

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+売上履歴
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="../../static/css/salesHistory.css">
+    <main class="main-content">
+        <h1 class="page-title">売上履歴</h1>
+
+        <div class="sales-list">
+            {% if sales_list %}
+                {% for item in sales_list %}
+                    <div class="sales-item">
+                        <div class="sales-info">
+                            <div class="sales-type">{{ item.type }}</div>
+                            <div class="sales-date">{{ item.date }}</div>
+                        </div>
+                        <div class="sales-amount">¥{{ "{:,}".format(item.amount) }}</div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>売上履歴はまだありません。</p>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %} 

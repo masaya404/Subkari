@@ -32,29 +32,52 @@ mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
 #マイページトップ表示-----------------------------------------------------------------------------
 @mypage_bp.route("/mypage")
 def mypage():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
 
     
-    return render_template("mypage/mypage.html")
+    return render_template("mypage/mypage.html" , user_id=user_id)
 # <<<<<<< HEAD
 #------------------------------------------------------------------------------------------------
 
 #userprf表示--------------------------------------------------------------------------------------
 @mypage_bp.route("mypage/userprf")
 def userprf():
-    return render_template("mypage/mypage.html")
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    return render_template("mypage/mypage.html" , user_id=user_id)
 #-------------------------------------------------------------------------------------------------
 
 #editProfile プロフィール編集ページ表示--------------------------------------------------------------
-@mypage_bp.route("mypage/editProfile")
+@mypage_bp.route("/editProfile")
 def editProfile():
-    return render_template("mypage/editProfile.html")
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+    return render_template("mypage/editProfile.html" , user_id=user_id)
 
 #--------------------------------------------------------------------------------------------------
 
 #edit プロフィール編集-------------------------------------------------------------------------------
 @mypage_bp.route("mypage/edit")
 def edit():
-    return render_template("mypage/edit.html")
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    return render_template("mypage/edit.html" , user_id=user_id)
+
+
 #---------------------------------------------------------------------------------------------------
 
 
@@ -204,9 +227,58 @@ def transferAmount():
 
 
 
+#金額確定ページ------------------------------------------------------------------------------------
 @mypage_bp.route("/mypage/amountComp")
 def amountComp():
     return render_template("mypage/amountComp.html")
+#---------------------------------------------------------------------------------------------------
+
+
+#salesHistory 売上履歴------------------------------------------------------------------------------
+@mypage_bp.route("/salesHistory")
+def salesHistory():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+
+    
+    # try:
+    #     conn = mysql.connector.connect(
+    #         host="localhost",
+    #         user="root",
+    #         password="あなたのパスワード",
+    #         database="db_subkari",   # ←実際のDB名に変更
+    #         charset="utf8mb4"
+    #     )
+    #     cursor = conn.cursor(dictionary=True)
+
+    #     # ログイン中のユーザーIDを使用する場合（例）
+    #     user_id = session.get("user_id", 1)  # 仮で1番ユーザー
+
+    #     # 売上履歴を取得（新しい順）
+    #     sql = """
+    #         SELECT id, type, DATE_FORMAT(date, '%%Y/%%m/%%d %%H:%%i') AS date, amount
+    #         FROM sales_history
+    #         WHERE user_id = %s
+    #         ORDER BY date DESC
+    #     """
+    #     cursor.execute(sql, (user_id,))
+    #     sales_list = cursor.fetchall()
+
+    # except mysql.connector.Error as err:
+    #     print("DBエラー:", err)
+    #     sales_list = []
+    # finally:
+    #     cursor.close()
+    #     conn.close()
+
+    # HTMLへ渡す
+    # return render_template("mypage/salesHistory.html", sales_list=sales_list)
+    return render_template("mypage/salesHistory.html" ,  user_id=user_id)
+#-------------------------------------------------------------------------------------------------
 
 
 
