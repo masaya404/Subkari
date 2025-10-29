@@ -23,14 +23,14 @@
 
         <!-- Bank List -->
         <div class="bank-list" id="bankList">
-            {% for i in range(len(accountNumbers)) %}
+            {% for i in range(count) %}
             <div class="bank-item" data-id=1>
                 <input type="radio" name="bank" value="1">
                 <div class="bank-info">
                     <div class="bank-details">
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">銀行名</p>
-                            <p class="bank-detail-value">{{bank_info['bankName'][i]}}</p>
+                            <p class="bank-detail-value">{{bank_info[i]['bankName']}}</p>
                         </div>
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">口座番号</p>
@@ -38,12 +38,13 @@
                         </div>
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">支店番号</p>
-                            <p class="bank-detail-value">{{bank_info['branchCode'][i]}}</p>
+                            <p class="bank-detail-value">{{bank_info[i]['branchCode']}}</p>
                         </div>
                     </div>
                     <button class="delete-button">削除する</button>
                 </div>
             </div>
+            {% endfor %}
 
             <!-- <div class="bank-item" data-id="2">
                 <input type="radio" name="bank" value="2">
@@ -90,14 +91,16 @@
         </div>
 
         <!-- Add Bank Button -->
+         <form action="{{url_for('mypage.bankRegistration')}}">
         <button class="add-bank-button" id="addBankButton">
             <span class="icon">⊕</span>
             <span>新しい銀行を登録する</span>
         </button>
+        </form>
 
         <!-- Info Text -->
         <p class="info-text">
-            ※登録できる送振込先は上限3つです。4つ目の以降の振込先を追加する場合は「編集する」ボタンから削除する振込先を削除してください。
+            ※登録できる送振込先は上限3つです。4つ目の以降の振込先を追加する場合は「編集する」ボタンから振込先を削除してください。
         </p>
 
         <!-- Submit Button -->
