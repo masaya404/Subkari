@@ -87,12 +87,13 @@ def bankRegistration():
 
     #登録されている口座数を取得
     bank_count=0
-    user_id=session["user_id"]
+    id=session["user_id"]
+    print(id)
     con=connect_db()
     cur=con.cursor(dictionary=True)
 
-    sql="select count(*) as 登録数 from t_transfer t inner join m_account a on t.account_id=a.id where a.mail=%s group by a.mail"
-    cur.execute(sql,(user_id,))
+    sql="select count(*) as 登録数 from t_transfer t inner join m_account a on t.account_id=a.id where a.id=%s group by a.id"
+    cur.execute(sql,(id,))
     
     bank_count=cur.fetchone()
     bank_count=int(bank_count["登録数"])
