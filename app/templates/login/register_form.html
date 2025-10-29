@@ -1,7 +1,6 @@
 
 {% extends "base.html" %}
     
-    
 
 {% block title %}
     登録フォーム
@@ -10,7 +9,7 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/register_form.css') }}">
 
-<form method="POST" action="{{ url_for('login.register_user_complete') }}">
+<form method="POST" action="{{ url_for('login.registration_form_complete') }}">
 <div class="rfo-container">
   <h1>登録フォーム</h1>
 
