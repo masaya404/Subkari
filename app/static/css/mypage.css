@@ -109,6 +109,11 @@ h2{
     text-align: center;
 }
 
+.img-name{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
 .profile-image {
     width: 120px;
     height: 120px;

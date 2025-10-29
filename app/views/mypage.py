@@ -76,7 +76,15 @@ def mypage():
         user_id = session.get('user_id')
 
     
-    return render_template("mypage/mypage.html" , user_id=user_id)
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (user_id,))  # ← タプルで渡す！
+    result = cur.fetchone()
+    image_path = result["identifyImg"] if result else None
+    return render_template("mypage/mypage.html", user_id=user_id, image_path=image_path ,result=result)
+    
+    
 # <<<<<<< HEAD
 #------------------------------------------------------------------------------------------------
 
@@ -99,8 +107,20 @@ def editProfile():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+
+
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (user_id,))  # ← タプルで渡す！
+    result = cur.fetchone()
+
+
+    image_path = result["identifyImg"] if result else None
+    smoker = result["smoking"] if result and "smoking" in result else 0
+
+    return render_template("mypage/editProfile.html", user_id=user_id, image_path=image_path ,result=result,smoker=smoker)
     
-    return render_template("mypage/editProfile.html" , user_id=user_id)
 
 #--------------------------------------------------------------------------------------------------
 
@@ -112,8 +132,19 @@ def edit():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    return render_template("mypage/edit.html" , user_id=user_id)
 
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (user_id,))  # ← タプルで渡す！
+    result = cur.fetchone()
+
+
+    image_path = result["identifyImg"] if result else None
+    smoker = result["smoking"] if result and "smoking" in result else 0
+
+    return render_template("mypage/edit.html", user_id=user_id, image_path=image_path ,result=result,smoker=smoker)
+    
 
 #---------------------------------------------------------------------------------------------------
 
@@ -354,7 +385,7 @@ def transferHistory():
 
     # HTMLへ渡す
     # return render_template("mypage/salesHistory.html", sales_list=sales_list)
-    return render_template("mypage/transferHistory" ,  user_id=user_id)
+    return render_template("mypage/transferHistory.html" ,  user_id=user_id)
 #------------------------------------------------------------------------------------------------
 
 # htmlの画面遷移url_for
