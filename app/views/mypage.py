@@ -28,6 +28,7 @@ def getAccountInfo():
     cur.close()
     con.close()
     count=0
+    print(id)
     #口座がいくつ登録されているかを数える
     for i in bank_info:
         count+=1
@@ -162,7 +163,12 @@ def bankRegistration():
     cur.execute(sql,(id,))
     
     bank_count=cur.fetchone()
-    bank_count=int(bank_count["登録数"])
+    if bank_count==None:
+        bank_count=0
+    else:
+        bank_count=int(bank_count["登録数"])
+    
+    
     cur.close()
     con.close()
     #3件すでに登録済みなら拒否する
@@ -236,17 +242,21 @@ def editActivate():
     return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 
 #transferApplication 登録口座削除 -------------------------------------------------------------------
-@mypage_bp.route("mypage/transferApplication")
+@mypage_bp.route("mypage/transferApplication",methods=["POST"])
 def removeBank():
     select=request.form
+    select['bank_id']
     id=session["user_id"]
     sql="select * from t_transfer  where (account_id=%s) and (branchCode=%s) and (accountNumber=%s)"
     con=connect_db()
     cur=con.cursor(dictionary=True)
-
-
     cur.close()
     con.close()
+    bank_info,accountNumbers,count=getAccountInfo()
+    editmode=session["editmode"]
+    
+    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+
 
 #transferAmount 金額選択ページ表示--------------------------------------------------------------------
 @mypage_bp.route("/transferAmount", methods=["GET", "POST"])

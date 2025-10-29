@@ -49,7 +49,7 @@ def login_auth():
         return render_template('login/login.html',account=account,error_message = error_message)
     
     #登録成功の処理
-    session['user_id'] = userExist['mail']
+    session['user_id'] = userExist['id']
 
     return redirect(url_for('top.member_index'))
     
@@ -90,9 +90,8 @@ def register_user_complete():
     
     
     #同一user確認    
-    #同一user確認
-    con = None  # データベース接続オブジェクトを初期化
-    cur = None  # カーソルオブジェクトを初期化
+    # con = None  # データベース接続オブジェクトを初期化
+    # cur = None  # カーソルオブジェクトを初期化
     
 
     # 参考コードをここに応用します
@@ -116,7 +115,7 @@ def register_user_complete():
 
         cur.close()
         con.close()
-        return render_template('login/new_account.html', error=error, error_same=error_same, account=account)
+        return render_template('login/new_account.html', error=error, error_same=error_same)
 
     #ここからセッション登録して次の画面にせんいする
     # account の中身（イメージ）
@@ -126,10 +125,24 @@ def register_user_complete():
     #   'password_confirm': 'password123'
     # }
 
-    
+    # データをセッションに登録
+    # request.form (ImmutableMultiDict) を通常の辞書 (dict) に変換して保存
+    session_data = dict(account)
+    # セッションに 'registration_data' というキーで保存
+    #このキーをつくってログイン状態のセッションと区別する(user_id)。
+    # session オブジェクト全体の中身（イメージ）
+    # {
+    #   'registration_data': {
+    #     'mail': 'test@example.com',
+    #     'password': 'password123',
+    #     'password_confirm': 'password123'
+    #   }
+    session['registration_data'] = session_data
 
-
-    return render_template('login/register_form.html', error=error, error_same=error_same, account=account)
+    # ◆ 処理が正常終了した場合もDB接続をクローズします
+    cur.close()
+    con.close()
+    return render_template('login/register_form.html', error=error, error_same=error_same)
 
 
 
@@ -163,6 +176,12 @@ def register_user_complete():
 
     # return redirect(url_for('top.new_account',account_id = account["mail"]))
 
+@login_bp.route("register_user/form_complete", methods=["POST"])
+def registration_form_complete():
+
+    return render_template('login/Phone_verification.html')
+
+
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
     con=mysql.connector.connect(
@@ -172,6 +191,8 @@ def connect_db():
         db ='db_subkari'
     )
     return con
+    
+
 
 #password-reset----------------------------------------------------------------------------------------------------------------------------------------------------------
 
