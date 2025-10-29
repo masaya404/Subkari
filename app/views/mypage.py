@@ -88,7 +88,6 @@ def bankRegistration():
     #登録されている口座数を取得
     bank_count=0
     id=session["user_id"]
-    print(id)
     con=connect_db()
     cur=con.cursor(dictionary=True)
 
@@ -153,7 +152,7 @@ def transferApplication():
     id=session["user_id"]
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    sql="select bankName,accountNumber,branchCode from t_transfer  where account_id limit 3"
+    sql="select bankName,accountNumber,branchCode from t_transfer  where account_id=%s limit 3"
     cur.execute(sql,(id,))
     bank_info=cur.fetchall()
     cur.close()
@@ -165,9 +164,9 @@ def transferApplication():
 
     #口座番号マスク処理のために口座番号の桁数と下位三桁を抽出し配列に入れる
     for i in range(count):
-        num=int(bank_info['bankNumber'][i])
+        num=int(bank_info[i]['accountNumber'])
 
-        tmp=0
+        tmp=num
         length=0
         mask=""
         #口座番号の桁数を取得
@@ -175,6 +174,7 @@ def transferApplication():
             tmp=tmp//10
             length+=1
         for i in range(length-3):
+        
             mask+="*"
 
         num=str(num%1000)
@@ -182,7 +182,7 @@ def transferApplication():
         accountNumbers.append(num)
 
             
-    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers)
+    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count)
 #---------------------------------------------------------------------------------------------------
 
 #transferAmount 金額選択ページ表示--------------------------------------------------------------------

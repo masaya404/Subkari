@@ -23,14 +23,14 @@
 
         <!-- Bank List -->
         <div class="bank-list" id="bankList">
-            {% for i in range(len(accountNumbers)) %}
+            {% for i in range(count) %}
             <div class="bank-item" data-id=1>
                 <input type="radio" name="bank" value="1">
                 <div class="bank-info">
                     <div class="bank-details">
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">銀行名</p>
-                            <p class="bank-detail-value">{{bank_info['bankName'][i]}}</p>
+                            <p class="bank-detail-value">{{bank_info[i]['bankName']}}</p>
                         </div>
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">口座番号</p>
@@ -38,12 +38,13 @@
                         </div>
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">支店番号</p>
-                            <p class="bank-detail-value">{{bank_info['branchCode'][i]}}</p>
+                            <p class="bank-detail-value">{{bank_info[i]['branchCode']}}</p>
                         </div>
                     </div>
                     <button class="delete-button">削除する</button>
                 </div>
             </div>
+            {% endfor %}
 
             <!-- <div class="bank-item" data-id="2">
                 <input type="radio" name="bank" value="2">
