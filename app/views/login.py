@@ -49,7 +49,7 @@ def login_auth():
         return render_template('login/login.html',account=account,error_message = error_message)
     
     #登録成功の処理
-    session['user_id'] = userExist['mail']
+    session['user_id'] = userExist['id']
 
     return redirect(url_for('top.member_index'))
     

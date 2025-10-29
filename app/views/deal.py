@@ -32,4 +32,15 @@ def deal_list():
         
     return render_template('deal/deal_detail.html', user_id = user_id)
 
+# 取引詳細の画像添付 ----------------------------------------------------------------------------------------------------------------------------------------------------------
+@deal_bp.route('/deal/list/imageUpload', methods=['POST'])
+def deal_list_imageUpload():
+    # euser検証成功
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+        
+    return render_template('deal/deal_detail.html', user_id = user_id)
 
