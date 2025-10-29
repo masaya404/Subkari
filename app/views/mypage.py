@@ -242,17 +242,19 @@ def editActivate():
     return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 
 #transferApplication 登録口座削除 -------------------------------------------------------------------
-@mypage_bp.route("mypage/transferApplication")
+@mypage_bp.route("mypage/transferApplication",methods=["POST"])
 def removeBank():
     select=request.form
+    select['bank_id']
     id=session["user_id"]
     sql="select * from t_transfer  where (account_id=%s) and (branchCode=%s) and (accountNumber=%s)"
     con=connect_db()
     cur=con.cursor(dictionary=True)
-
-
     cur.close()
     con.close()
+    bank_info,accountNumbers,count=getAccountInfo()
+    editmode=session["editmode"]
+    
     return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 
 
