@@ -225,7 +225,10 @@ def password_reset():
     # 初期表示用に空の辞書を渡す
     error = None
     success = None
-    return render_template('login/password_reset.html', error=error, success=success)
+    return render_template('login/forgot_password.html', error=error, success=success)
+
+
+
 
 @login_bp.route('/password-reset', methods=['POST'])
 def reset_password():
@@ -241,16 +244,28 @@ def reset_password():
         error = "パスワードが一致しません。"
     elif len(password) < 8:
         error = "パスワードは8文字以上で入力してください。"
+        return render_template('login/password_reset.html', error=error, success=success)
+
     else:
         # 実際にはここでDBにパスワードを更新
         success = "パスワードを更新しました。"
 
-    return render_template('login/password_reset.html', error=error, success=success)
+    return render_template('login/password_update.html', error=error, success=success)
 
 
+# パスワード再設定画面の遷移
+@login_bp.route('/forgot_password', methods=['POST'])
+def forgot_password():
+
+    return render_template('login/password_reset.html')
 
 
+#メールアドレス忘れ画面の遷移
+@login_bp.route('/forgot_email', methods=['GET'])
+def forgot_email():
 
+
+    return render_template('login/forgot_email.html')
 
 
 

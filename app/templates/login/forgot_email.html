@@ -1,8 +1,8 @@
 (% extends "base.html"%)
-{% blocktitle %}
+{% block title %}
 メールアドレス忘れ
 {% endblock %}
-{% blockcontent%}
+{% block content%}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 <body>
   <div class="container--forgot-email forgot-email-page">
@@ -12,7 +12,7 @@
       登録された電話番号に紐づいたメールアドレスがSMSで送信されます。
     </p>
 
-    <form method="POST" action="{{ url_for('forgot_email') }}">
+    <form method="POST" action="{{ url_for('login.forgot_email') }}">
       <div class="form-group">
         <label for="phone">電話番号</label>
         <input type="tel" id="phone" name="phone" placeholder="09012345678" required pattern="[0-9]{10,11}">
