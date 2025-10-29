@@ -1,13 +1,4 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-body {
-    font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
-    background-color: #F8F8F8;
-}
 
 .container {
     max-width: 1280px;
@@ -126,7 +117,7 @@ body {
     margin-bottom: 40px;
 }
 
-.btn {
+.action-buttons a {
     flex: 1;
     padding: 15px;
     border: 2px solid #000;
@@ -136,9 +127,10 @@ body {
     border-radius: 4px;
     font-weight: bold;
     transition: all 0.3s;
+    text-align: center;
 }
 
-.btn:hover {
+.action-buttons a:hover {
     background: #000;
     color: #fff;
 }

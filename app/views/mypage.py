@@ -15,6 +15,43 @@ def connect_db():
         db ='db_subkari'
     )
     return con
+#アカウントの口座情報を取得する ------------------------------------------------------------------------------
+def getAccountInfo():
+    accountNumbers=[]                 #口座番号下位三桁を格納
+    id=session["user_id"]
+    editmode=session["editmode"]
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select bankName,accountNumber,branchCode from t_transfer  where account_id=%s limit 3"
+    cur.execute(sql,(id,))
+    bank_info=cur.fetchall()
+    cur.close()
+    con.close()
+    count=0
+    print(id)
+    #口座がいくつ登録されているかを数える
+    for i in bank_info:
+        count+=1
+
+    #口座番号マスク処理のために口座番号の桁数と下位三桁を抽出し配列に入れる
+    for i in range(count):
+        num=int(bank_info[i]['accountNumber'])
+
+        tmp=num
+        length=0
+        mask=""
+        #口座番号の桁数を取得
+        while tmp>0:
+            tmp=tmp//10
+            length+=1
+        for i in range(length-3):
+        
+            mask+="*"
+
+        num=str(num%1000)
+        num=mask+num                #マスク処理を施した口座番号
+        accountNumbers.append(num)
+    return bank_info,accountNumbers,count
 
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
@@ -39,7 +76,15 @@ def mypage():
         user_id = session.get('user_id')
 
     
-    return render_template("mypage/mypage.html" , user_id=user_id)
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (user_id,))  # ← タプルで渡す！
+    result = cur.fetchone()
+    image_path = result["identifyImg"] if result else None
+    return render_template("mypage/mypage.html", user_id=user_id, image_path=image_path ,result=result)
+    
+    
 # <<<<<<< HEAD
 #------------------------------------------------------------------------------------------------
 
@@ -62,21 +107,44 @@ def editProfile():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+
+
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (user_id,))  # ← タプルで渡す！
+    result = cur.fetchone()
+
+
+    image_path = result["identifyImg"] if result else None
+    smoker = result["smoking"] if result and "smoking" in result else 0
+
+    return render_template("mypage/editProfile.html", user_id=user_id, image_path=image_path ,result=result,smoker=smoker)
     
-    return render_template("mypage/editProfile.html" , user_id=user_id)
 
 #--------------------------------------------------------------------------------------------------
 
 #edit プロフィール編集-------------------------------------------------------------------------------
-@mypage_bp.route("mypage/edit")
+@mypage_bp.route("/edit")
 def edit():
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    return render_template("mypage/edit.html" , user_id=user_id)
 
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (user_id,))  # ← タプルで渡す！
+    result = cur.fetchone()
+
+
+    image_path = result["identifyImg"] if result else None
+    smoker = result["smoking"] if result and "smoking" in result else 0
+
+    return render_template("mypage/edit.html", user_id=user_id, image_path=image_path ,result=result,smoker=smoker)
+    
 
 #---------------------------------------------------------------------------------------------------
 
@@ -84,22 +152,29 @@ def edit():
 #bankRegistration　振込口座登録ページ表示--------------------------------------------------------------
 @mypage_bp.route("/bankRegistration")
 def bankRegistration():
-    
+
     #登録されている口座数を取得
     bank_count=0
-    user_id=session["user_id"]
+    id=session["user_id"]
     con=connect_db()
     cur=con.cursor(dictionary=True)
 
-    sql="select count(*) as 登録数 from t_transfer t inner join m_account a on t.account_id=a.id where a.mail=%s group by a.mail"
-    cur.execute(sql,(user_id,))
+    sql="select count(*) as 登録数 from t_transfer t inner join m_account a on t.account_id=a.id where a.id=%s group by a.id"
+    cur.execute(sql,(id,))
     
     bank_count=cur.fetchone()
-    bank_count=int(bank_count["登録数"])
+    if bank_count==None:
+        bank_count=0
+    else:
+        bank_count=int(bank_count["登録数"])
+    
+    
+    cur.close()
+    con.close()
     #3件すでに登録済みなら拒否する
     if bank_count>=3:
         return render_template("mypage/mypage.html")
-
+    
     return render_template("mypage/bankRegistration.html")
 #----------------------------------------------------------------------------------------------------
 
@@ -111,7 +186,6 @@ def bankComplete():
     ecnt = 0
     error_message={}
     bank_info=request.form    #name,accountType,branchCode,accountNumber,firstName,famillyName
-    print(bank_info)
     #空欄確認
     for key,value in bank_info.items():
         if not value:
@@ -121,24 +195,19 @@ def bankComplete():
         return render_template('mypage/bankRegistration.html')
     
     #既に登録されていないか調べる 
-    user_id=session["user_id"]
-    sql="select * from t_transfer t inner join m_account a on t.account_id=a.id where (a.mail=%s) and (t.branchCode=%s) and (t.accountNumber=%s)"
+    id=session["user_id"]
+    sql="select * from t_transfer  where (account_id=%s) and (branchCode=%s) and (accountNumber=%s)"
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    cur.execute(sql,(user_id,bank_info['branchCode'],bank_info['accountNumber']))
-    userSame=cur.fetchone()
+    cur.execute(sql,(id,bank_info['branchCode'],bank_info['accountNumber']))
+    bankSame=cur.fetchone()
 
     #登録されているのでエラー
-    if userSame is not None:
+    if bankSame is not None:
         return render_template('mypage/bankRegistration.html')
     
     accountHolder=bank_info['famillyName']+bank_info['firstName']
     #登録処理
-    #account_idを取得
-    sql="select id from m_account where mail=%s limit 1"
-    cur.execute(sql,(user_id,))
-    user_info=cur.fetchone()
-    id=user_info["id"]
 
     #データを追加
     sql="INSERT INTO t_transfer (account_id,bankName,accountType,branchCode,accountNumber,accountHolder) VALUES(%s,%s,%s,%s,%s,%s)"
@@ -152,8 +221,38 @@ def bankComplete():
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
 def transferApplication():
-    return render_template("mypage/transferApplication.html")
+    session["editmode"]=False
+    bank_info,accountNumbers,count=getAccountInfo()
+    editmode=session["editmode"]
+            
+    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 #---------------------------------------------------------------------------------------------------
+#transferApplication 削除ボタン表示 -----------------------------------------------------------------
+@mypage_bp.route("/transferApplication")
+def editActivate():
+    editmode=session["editmode"]
+    if not editmode:
+        session["editmode"]=True
+    else:
+        session["editmode"]=False
+    editmode=session["editmode"]
+    bank_info,accountNumbers,count=getAccountInfo()
+   
+    
+    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+
+#transferApplication 登録口座削除 -------------------------------------------------------------------
+@mypage_bp.route("mypage/transferApplication")
+def removeBank():
+    select=request.form
+    id=session["user_id"]
+    sql="select * from t_transfer  where (account_id=%s) and (branchCode=%s) and (accountNumber=%s)"
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+
+
+    cur.close()
+    con.close()
 
 #transferAmount 金額選択ページ表示--------------------------------------------------------------------
 @mypage_bp.route("/transferAmount", methods=["GET", "POST"])
@@ -245,7 +344,49 @@ def salesHistory():
     return render_template("mypage/salesHistory.html" ,  user_id=user_id)
 #-------------------------------------------------------------------------------------------------
 
+#振込履歴-----------------------------------------------------------------------------------------
+@mypage_bp.route("/transferHistory")
+def transferHistory():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+    # try:
+    #     conn = mysql.connector.connect(
+    #         host="localhost",
+    #         user="root",
+    #         password="あなたのパスワード",
+    #         database="db_subkari",   # ←実際のDB名に変更
+    #         charset="utf8mb4"
+    #     )
+    #     cursor = conn.cursor(dictionary=True)
 
+    #     # ログイン中のユーザーIDを使用する場合（例）
+    #     user_id = session.get("user_id", 1)  # 仮で1番ユーザー
+
+    #     # 売上履歴を取得（新しい順）
+    #     sql = """
+    #         SELECT id, type, DATE_FORMAT(date, '%%Y/%%m/%%d %%H:%%i') AS date, amount
+    #         FROM sales_history
+    #         WHERE user_id = %s
+    #         ORDER BY date DESC
+    #     """
+    #     cursor.execute(sql, (user_id,))
+    #     sales_list = cursor.fetchall()
+
+    # except mysql.connector.Error as err:
+    #     print("DBエラー:", err)
+    #     sales_list = []
+    # finally:
+    #     cursor.close()
+    #     conn.close()
+
+    # HTMLへ渡す
+    # return render_template("mypage/salesHistory.html", sales_list=sales_list)
+    return render_template("mypage/transferHistory.html" ,  user_id=user_id)
+#------------------------------------------------------------------------------------------------
 
 # htmlの画面遷移url_for
 # {{ url_for('モジュール名.関数名') }}

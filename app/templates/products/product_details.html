@@ -33,9 +33,13 @@
                             送料込み</span></span>
                 </div>
             </div>
-            <div class="action-buttons">
+            <div class="action-buttons cursor-pointer">
+                <a href="{{url_for("products.purchase")}}">
                 <button class="btn">購入する</button>
+                </a>
+                <a href="{{url_for("products.purchase")}}">
                 <button class="btn">レンタル</button>
+                </a>
             </div>
         </div>
     </div>

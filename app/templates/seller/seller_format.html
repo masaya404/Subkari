@@ -15,7 +15,7 @@
                     <div id="imageDisplayArea" class="hidden">
                         <a href="{{url_for('seller.seller_uploadImg')}}">
                         <div class="relative bg-gray-200 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition" style="width: 100%; height: 300px;">
-                            <img id="displayImage" src="" alt="商品画像" class="w-full h-full object-cover">
+                            <img id="displayImage" src="" alt="商品画像" class="w-full h-full object-contain">
                             <div class="absolute inset-0 flex items-center justify-center bg-opacity-0 hover:bg-opacity-20 transition">
                                 <span class="text-white font-semibold opacity-0 hover:opacity-100 text-stroke text-2xl">クリックして編集</span>
                             </div>
@@ -174,7 +174,7 @@
                     <button type="button" onclick="submitForm()" class="flex-1 border border-[#9a9a9a] text-white font-bold py-3 rounded bg-gray-700 hover:bg-white hover:text-gray-700 transition cursor-pointer">
                         出品する
                     </button>
-                    <button type="button" onclick="saveDraft()" class="flex-1 bg-white text-gray-800 font-bold py-3 rounded border border-[#9a9a9a] hover:bg-gray-700 hover:text-white transition cursor-pointer">
+                    <button type="button" onclick="saveDraft('{{url_for('seller.seller_draft')}}')" class="flex-1 bg-white text-gray-800 font-bold py-3 rounded border border-[#9a9a9a] hover:bg-gray-700 hover:text-white transition cursor-pointer">
                         下書き保存
                     </button>
                 </div>

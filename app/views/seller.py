@@ -328,11 +328,35 @@ def seller_products():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+
+            
+    return render_template('seller/seller_products.html', user_id = user_id)
+
+#下書き一覧画面----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/seller/draft',methods=['GET'])
+def seller_draft():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     
       
             
-    return render_template('seller/seller_products.html', user_id = user_id)
-   
+    return render_template('seller/seller_draft.html', user_id = user_id)  
+ 
+#データセンター覧画面----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/datacenter',methods=['GET'])
+def datacenter():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+      
+            
+    return render_template('seller/seller_datacenter.html', user_id = user_id)   
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
     con=mysql.connector.connect(

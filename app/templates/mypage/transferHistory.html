@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 
 {% block title %}
-売上履歴
+振込履歴
 {% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="../../static/css/salesHistory.css">
     <main class="main-content">
-        <h1 class="page-title">売上履歴</h1>
-
+        <h1 class="page-title">振込履歴</h1>
         <div class="sales-list">
             {% if sales_list %}
                 {% for item in sales_list %}
@@ -23,7 +22,7 @@
                     </form>
                 {% endfor %}
             {% else %}
-                <p>売上履歴はまだありません。</p>
+                <p>振込履歴はまだありません。</p>
             {% endif %}
         </div>
     </main>

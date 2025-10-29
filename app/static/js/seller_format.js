@@ -256,9 +256,10 @@ function submitForm() {
     document.getElementById('sellerForm').submit();
 }
 // 下書き保存
-function saveDraft() {
-    const form = document.getElementById('sellerForm');
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
-    alert('下書きが保存されました');
+function saveDraft(url) {
+    // const form = document.getElementById('sellerForm');
+    // const formData = new FormData(form);
+    // const data = Object.fromEntries(formData);
+    // alert('下書きが保存されました');
+    window.location.href = url;
 }

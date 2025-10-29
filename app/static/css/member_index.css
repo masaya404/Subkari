@@ -1,30 +1,4 @@
-/* === 基本スタイル === */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box; /* すべての要素にbox-sizingを適用 */
-    position: relative;
-}
-.nav-container nav a{
-    font-family: unset;
-}
-html, body {
-    overflow-x: hidden; /* 横スクロールを防ぐ */
-    width: 100%; /* 横幅を100%に設定 */
-    height: 100%; /* 高さも100%に設定 */
-}
 
-body {
-    font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
-    background: #fff;
-    color: #333;
-    line-height: 1.6;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
 
 /* === メインビジュアル / カルーセル (縦長フィット・密着・約4枚表示) === */
 .hero-section {

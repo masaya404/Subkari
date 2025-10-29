@@ -16,35 +16,51 @@
     <main>
         <h1>振込申請</h1>
 
+        {% if not editmode %}
         <!-- Edit Button -->
-        <div class="edit-button-container">
-            <button class="edit-button" id="editButton">編集する</button>
-        </div>
+        <form action="{{url_for('mypage.editActivate')}}">
+            <div class="edit-button-container">
+                <button class="edit-button" id="editButton" >編集する</button>
+            </div>
+        </form>
+        {% else  %}
+        <form>
+            <div class="edit-button-container">
+                <form action="{{url_for('mypage.editActivate')}}">
+
+                <button class="edit-button" id="editButton" >完了する</button>
+            </div>
+        </form>
+        {% endif %}
 
         <!-- Bank List -->
         <div class="bank-list" id="bankList">
-            <div class="bank-item" data-id="1">
-                <input type="radio" name="bank" value="1" checked>
+            {% for i in range(count) %}
+            <div class="bank-item" data-id=1>
+                <input type="radio" name="bank" value="1">
                 <div class="bank-info">
                     <div class="bank-details">
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">銀行名</p>
-                            <p class="bank-detail-value">楽天銀行</p>
+                            <p class="bank-detail-value">{{bank_info[i]['bankName']}}</p>
                         </div>
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">口座番号</p>
-                            <p class="bank-detail-value">****648</p>
+                            <p class="bank-detail-value">{{accountNumbers[i]}}</p>
                         </div>
                         <div class="bank-detail-row">
                             <p class="bank-detail-label">支店番号</p>
-                            <p class="bank-detail-value">111</p>
+                            <p class="bank-detail-value">{{bank_info[i]['branchCode']}}</p>
                         </div>
                     </div>
-                    <button class="delete-button" onclick="deleteBank(1)">削除する</button>
+                    {% if editmode %}
+                    <button class="delete-button">削除する</button>
+                    {% endif %}
                 </div>
             </div>
+            {% endfor %}
 
-            <div class="bank-item" data-id="2">
+            <!-- <div class="bank-item" data-id="2">
                 <input type="radio" name="bank" value="2">
                 <div class="bank-info">
                     <div class="bank-details">
@@ -61,7 +77,7 @@
                             <span class="bank-detail-value">121</span>
                         </div>
                     </div>
-                    <button class="delete-button" onclick="deleteBank(2)">削除する</button>
+                    <button class="delete-button">削除する</button>
                 </div>
             </div>
 
@@ -82,20 +98,23 @@
                             <span class="bank-detail-value">131</span>
                         </div>
                     </div>
-                    <button class="delete-button" onclick="deleteBank(3)">削除する</button>
+                    <button class="delete-button">削除する</button>
                 </div>
-            </div>
+            </div> -->
+
         </div>
 
         <!-- Add Bank Button -->
+         <form action="{{url_for('mypage.bankRegistration')}}">
         <button class="add-bank-button" id="addBankButton">
             <span class="icon">⊕</span>
             <span>新しい銀行を登録する</span>
         </button>
+        </form>
 
         <!-- Info Text -->
         <p class="info-text">
-            ※登録できる送振込先は上限3つです。4つ目の以降の振込先を追加する場合は「編集する」ボタンから削除する振込先を削除してください。
+            ※登録できる送振込先は上限3つです。4つ目の以降の振込先を追加する場合は「編集する」ボタンから振込先を削除してください。
         </p>
 
         <!-- Submit Button -->

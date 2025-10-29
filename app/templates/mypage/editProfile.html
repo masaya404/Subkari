@@ -5,18 +5,22 @@
 
 {% block content %}
 <link rel="stylesheet" href="../../static/css/editProfile.css">
-    <main>
+    <main class="editProfile_main">
         <h1></h1>
         <div class="profile-header">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%231e3c72'/%3E%3Ctext x='50' y='60' font-size='40' fill='white' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E" alt="プロフィール画像" class="profile-image">
-            
+            <img src="{{url_for('static' , filename='image_path')}}" alt="プロフィール画像" class="profile-image">
             <div class="profile-info">
-                <h1 class="profile-name">haltaro</h1>
+                <h1 class="profile-name">{{result.username}}</h1>
                 
                 <div class="profile-rating">
                     <span class="stars">★★★★☆</span>
                     <span class="rating-count">255</span>
-                    <span class="reviewer-badge">喫煙者</span>
+                    {% if smoker == 1%}
+                        <span class="reviewer-badge">喫煙者</span>
+                    {% else %}
+                        <span class="reviewer-badge">非喫煙者</span>
+                    {% endif %}
+                    
                 </div>
                 
                 <div class="profile-stats">
@@ -35,10 +39,8 @@
                 </div>
                 
                 <div class="profile-description" id="profileDescription">
-                    猫アレルギーの人はごめんなさい。<br>
-                    猫の毛がついてるかもです。<br>
-                    よろしくお願いします。<br>
-                    柄→柄選択します。
+                    {{result.introduction}}
+                    <!-- 何文字以上でを作る -->
                     <span id="moreText" style="display: none;">
                         <br><br>
                         【取引について】<br>
