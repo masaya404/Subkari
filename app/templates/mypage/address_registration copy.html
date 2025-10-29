@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUBKARI - 取引詳細</title>
+    <style>
+        /* グローバルリセットと基本スタイル (省略 - 変更なし) */
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* ヘッダーのスタイル (省略 - 変更なし) */
+        .header {
+            background-color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-right: 30px;
+            color: #333;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 8px 15px 8px 40px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 300px;
+            font-size: 14px;
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .nav-item {
+            margin-left: 20px;
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .nav-item-icon {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        
+        /* --- メインコンテンツのスタイル (ここを修正) --- */
+        .main-content {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 40px; /* セクション間のスペース */
+            /* flex-wrap: wrap; を削除またはコメントアウト */
+        }
+
+        .section-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            /* flex: 1; を変更 */
+            /* min-width: 350px; を削除 */
+        }
+
+        .section-container h2 {
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* 取引情報セクション: 狭い幅を設定 */
+        .transaction-info {
+            flex-basis: 40%; /* 40%の幅 */
+        }
+        
+        .item-summary {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-image {
+            width: 60px;
+            height: 60px;
+            background-color: #ccc; /* プレースホルダ */
+            border-radius: 4px;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .item-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .detail-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .detail-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .detail-list li span:last-child {
+            text-align: right;
+        }
+
+        /* 購入者情報セクション: 広い幅を設定 */
+        .buyer-info {
+            flex-basis: 60%; /* 残りの60%の幅 */
+        }
+
+        .buyer-card {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .buyer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #3498db; /* プレースホルダの色 */
+            margin-right: 15px;
+            overflow: hidden;
+        }
+        
+        .buyer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .buyer-details {
+            display: flex;
+            align-items: center;
+        }
+
+        .buyer-details > div {
+            margin-right: 15px;
+        }
+
+        .buyer-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .rating-stars {
+            color: gold;
+            font-size: 18px;
+        }
+
+        .rating-count {
+            font-size: 14px;
+            color: #666;
+            margin-left: 5px;
+        }
+
+        .verified-badge {
+            background-color: #2ecc71;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-tag {
+            background-color: #f39c12;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .arrow-icon {
+            margin-left: auto;
+            font-size: 20px;
+            color: #ccc;
+        }
+
+        /* フッターのスタイル (省略 - 変更なし) */
+        .footer {
+            background-color: #333;
+            color: #ccc;
+            padding: 40px 0 20px;
+            font-size: 12px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .footer-nav a {
+            color: #ccc;
+            white-space: nowrap;
+        }
+
+        .footer-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px solid #444;
+            padding-top: 15px;
+        }
+
+        .contact-info {
+            line-height: 1.8;
+        }
+
+        .copyright {
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .sns-icons {
+            font-size: 24px;
+        }
+        
+        .sns-icons span {
+            margin-left: 10px;
+        }
+        
+        /* レスポンシブ対応 (モバイルでは縦並びに戻す設定を維持) */
+        @media (max-width: 768px) {
+            .header-right {
+                display: none; 
+            }
+            
+            .header-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .search-box input {
+                width: 180px;
+            }
+            
+            .main-content {
+                flex-direction: column; /* スマホでは縦並び */
+                gap: 20px;
+            }
+            
+            .section-container {
+                /* モバイルでは100%幅に戻す */
+                flex-basis: 100% !important; 
+            }
+
+            .footer-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .sns-icons {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">SUBKARI</div>
+            <div class="search-box">
+                <input type="text" placeholder="すべてのアイテムから探す">
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">👤</span>
+                マイページ
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">❤️</span>
+                いいね
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">🔔</span>
+                通知
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">📤</span>
+                出品
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">🔄</span>
+                取引
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">☰</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="main-content">
+        
+        <section class="section-container transaction-info">
+            <h2>取引情報</h2>
+            
+            <div class="item-summary">
+                <div class="item-image" role="img" aria-label="商品画像">
+                    </div>
+                <div class="item-name">ファーパーカー</div>
+            </div>
+            
+            <ul class="detail-list">
+                <li><span>商品代金</span><span>¥2,222</span></li>
+                <li><span>販売手数料</span><span>¥222</span></li>
+                <li><span>販売利益</span><span>¥2,000</span></li>
+                <li><span>購入日時</span><span>2020年6月4日 20:22</span></li>
+                <li><span>配送の方法</span><span>普通郵便</span></li>
+                <li><span>商品ID</span><span>46478853465</span></li>
+            </ul>
+        </section>
+
+        <section class="section-container buyer-info">
+            <h2>購入者情報</h2>
+            
+            <a href="#" class="buyer-card">
+                <div class="buyer-avatar">
+                    <img src="https://i.pravatar.cc/50?img=1" alt="haitaroのアバター">
+                </div>
+                
+                <div class="buyer-details">
+                    <div class="buyer-name">haitaro</div>
+                    <div>
+                        <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-count">255</span>
+                    </div>
+                    <div class="verified-badge">本人確認済</div>
+                    <div class="status-tag">喫煙者</div>
+                </div>
+                
+                <span class="arrow-icon">&gt;</span>
+            </a>
+        </section>
+        
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">SUBKARI</div>
+            
+            <div class="footer-nav">
+                <a href="#">初めての方へ</a>
+                <a href="#">サイトマップ</a>
+                <a href="#">FAQ</a>
+                <a href="#">お問い合わせ</a>
+                <a href="#">利用規約</a>
+            </div>
+                        
+            <div class="footer-nav">
+                <a href="#">プライバシーポリシー</a>
+                <a href="#">特定商取引法に基づく表記</a>
+                <a href="#">古物営業法に基づく表示</a>
+            </div>
+
+            <div class="footer-info">
+                <div class="contact-info">
+                    〒530-0001 大阪府大阪市北区梅田３丁目３−１<br>
+                    日曜定休 / 営業時間 10:30 - 19:00<br>
+                    TEL 06-6347-0001
+                </div>
+                <div class="sns-icons">
+                    <span>X</span>
+                    <span><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" style="width: 20px; vertical-align: middle;"></span>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                © 2025 HAL OSAKA IA・IH Team 5
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

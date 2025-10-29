@@ -11,24 +11,21 @@
     <header>
         <div class="logo">SUBKARI</div>
     </header>
-
-
     <main>
         <h1>振込申請</h1>
-
         {% if not editmode %}
         <!-- Edit Button -->
         <form action="{{url_for('mypage.editActivate')}}">
             <div class="edit-button-container">
-                <button class="edit-button" id="editButton" >編集する</button>
+                <button class="edit-button" id="editButton">編集する</button>
             </div>
         </form>
-        {% else  %}
+        {% else %}
         <form>
             <div class="edit-button-container">
                 <form action="{{url_for('mypage.editActivate')}}">
 
-                <button class="edit-button" id="editButton" >完了する</button>
+                    <button class="edit-button" id="editButton">完了する</button>
             </div>
         </form>
         {% endif %}
@@ -56,7 +53,11 @@
                     {% if editmode %}
                     <form action="{{url_for('mypage.removeBank')}}" method='post'>
                         <input type="hidden" name="bank_id" value="{{ i }}">
+<<<<<<< HEAD
                     <button type="submit" class="delete-button" >削除する</button>
+=======
+                        <button class="delete-button" name=>削除する</button>
+>>>>>>> afee6b5f5dcbfdec3086d94c323a3ce7155a1e88
                     </form>
                     {% endif %}
                 </div>
@@ -108,11 +109,11 @@
         </div>
 
         <!-- Add Bank Button -->
-         <form action="{{url_for('mypage.bankRegistration')}}">
-        <button class="add-bank-button" id="addBankButton">
-            <span class="icon">⊕</span>
-            <span>新しい銀行を登録する</span>
-        </button>
+        <form action="{{url_for('mypage.bankRegistration')}}">
+            <button class="add-bank-button" id="addBankButton">
+                <span class="icon">⊕</span>
+                <span>新しい銀行を登録する</span>
+            </button>
         </form>
 
         <!-- Info Text -->
@@ -153,6 +154,7 @@
         <p class="copyright">© 2025 HAL OSAKA IA・IH Team 5</p>
     </footer>
     <script src="../../static/js/transferApplication.js"></script>
-    
+
 </body>
+
 </html>
