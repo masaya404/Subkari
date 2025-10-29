@@ -48,3 +48,16 @@ function startTimer() {
 }
 
 startTimer();
+
+ function switchTab(tabIndex) {
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+    
+    tabs.forEach((tab, index) => {
+        tab.classList.toggle('active', index === tabIndex);
+    });
+    
+    contents.forEach((content, index) => {
+        content.classList.toggle('active', index === tabIndex);
+    });
+}
