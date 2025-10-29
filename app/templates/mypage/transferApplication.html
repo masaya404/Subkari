@@ -53,7 +53,9 @@
                             <p class="bank-detail-value">{{bank_info[i]['branchCode']}}</p>
                         </div>
                     </div>
+                    {% if editmode %}
                     <button class="delete-button">削除する</button>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
