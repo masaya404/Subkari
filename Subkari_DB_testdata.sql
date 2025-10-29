@@ -17,78 +17,97 @@ INSERT INTO `m_account` (
   `identifyImg` -- 不足していた NOT NULL カラム
 ) 
 VALUES
-('taniguchi', '谷口 昌哉', '1990-04-15', 
-'090-1111-1111', -- tel (ダミー)
-'test@gmail.com', true, 'よろしくお願いします。趣味は読書です。', 50000, 
-'2023-01-10', '2023-10-26 15:30:00', 
-'本人確認済み', -- status (ダミー)
-1, '1234', 
-'img/dummy1.jpg' -- identifyImg (ダミー)
+(
+  'taniguchi', '谷口 昌哉', '1990-04-15', 
+  '090-1111-1111', -- tel (ダミー)
+  'test@gmail.com', true, 'よろしくお願いします。趣味は読書です。', 50000, 
+  '2023-01-10', '2023-10-26 15:30:00', 
+  '本人確認済み', -- status (ダミー)
+  1, 
+  '12345678', -- 修正済み
+  'img/dummy1.jpg' -- identifyImg (ダミー)
 ),
-('suzuki_hanako', '鈴木 花子', '1995-08-20', 
-'090-2222-2222', -- tel (ダミー)
-'hanako.suzuki@example.com', false, 'はじめまして！旅行が好きです。', 120000, 
-'2023-02-05', '2023-11-01 09:00:00', 
-'本人確認済み', -- status (ダミー)
-2, 'hashed_password_2', 
-'img/dummy2.jpg' -- identifyImg (ダミー)
+(
+  'suzuki_hanako', '鈴木 花子', '1995-08-20', 
+  '090-2222-2222', -- tel (ダミー)
+  'hanako.suzuki@example.com', false, 'はじめまして！旅行が好きです。', 120000, 
+  '2023-02-05', '2023-11-01 09:00:00', 
+  '本人確認済み', -- status (ダミー)
+  2, 
+  'pass0002', -- 修正済み
+  'img/dummy2.jpg' -- identifyImg (ダミー)
 ),
-('sato_jiro', '佐藤 次郎', '1988-12-01', 
-'090-3333-3333', -- tel (ダミー)
-'jiro.sato@example.com', true, NULL, 80000, 
-'2023-03-20', NULL, 
-'未確認', -- status (ダミー)
-NULL, 'hashed_password_3', 
-'img/dummy3.jpg' -- identifyImg (ダミー)
+(
+  'sato_jiro', '佐藤 次郎', '1988-12-01', 
+  '090-3333-3333', -- tel (ダミー)
+  'jiro.sato@example.com', true, NULL, 80000, 
+  '2023-03-20', NULL, 
+  '未確認', -- status (ダミー)
+  NULL, 
+  'pass0003', -- 修正済み
+  'img/dummy3.jpg' -- identifyImg (ダミー)
 ),
-('takahashi_saburo', '高橋 三郎', '2000-01-30', 
-'090-4444-4444', -- tel (ダミー)
-'saburo.takahashi@example.com', false, 'プログラミングを勉強中です。', NULL, 
-'2023-05-15', '2023-09-10 18:45:00', 
-'未確認', -- status (ダミー)
-1, 'hashed_password_4', 
-'img/dummy4.jpg' -- identifyImg (ダミー)
+(
+  'takahashi_saburo', '高橋 三郎', '2000-01-30', 
+  '090-4444-4444', -- tel (ダミー)
+  'saburo.takahashi@example.com', false, 'プログラミングを勉強中です。', NULL, 
+  '2023-05-15', '2023-09-10 18:45:00', 
+  '未確認', -- status (ダミー)
+  1, 
+  'pass0004', -- 修正済み
+  'img/dummy4.jpg' -- identifyImg (ダミー)
 ),
-('ito_shiro', '伊藤 四朗', '1985-07-07', 
-'090-5555-5555', -- tel (ダミー)
-'shiro.ito@example.com', false, '北海道の美味しいものを探しています。', 250000, 
-'2023-06-01', NULL, 
-'凍結', -- status (ダミー)
-NULL, 'hashed_password_5', 
-'img/dummy5.jpg' -- identifyImg (ダミー)
+(
+  'ito_shiro', '伊藤 四朗', '1985-07-07', 
+  '090-5555-5555', -- tel (ダミー)
+  'shiro.ito@example.com', false, '北海道の美味しいものを探しています。', 250000, 
+  '2023-06-01', NULL, 
+  '凍結', -- status (ダミー)
+  NULL, 
+  'pass0005', -- 修正済み
+  'img/dummy5.jpg' -- identifyImg (ダミー)
 ),
 (
   -- ID 6
   'watanabe_goro', '渡辺 五郎', '1992-03-10', '090-6666-6666', 'goro.watanabe@example.com', 
   false, '古着が好きです。', 10000, '2023-07-11', NULL, 
-  '本人確認済み', NULL, 'pass_watanabe', 'img/identify/id_6.jpg'
+  '本人確認済み', NULL, 
+  'pass0006', -- 修正済み
+  'img/identify/id_6.jpg'
 ),
 (
   -- ID 7
   'yamamoto_rokuro', '山本 六郎', '1998-11-25', '090-7777-7777', 'rokuro.yamamoto@example.com', 
   true, 'よろしくお願いします。', 0, '2023-08-01', NULL, 
-  '未確認', NULL, 'pass_yamamoto', 'img/identify/id_7.jpg'
+  '未確認', NULL, 
+  'pass0007', -- 修正済み
+  'img/identify/id_7.jpg'
 ),
 (
   -- ID 8
   'nakamura_shichi', '中村 七', '2001-05-05', '090-8888-8888', 'shichi.nakamura@example.com', 
   false, '迅速な対応を心がけます。', 30000, '2023-09-10', '2025-10-15 14:00:00', 
-  '本人確認済み', 1, 'pass_nakamura', 'img/identify/id_8.jpg'
+  '本人確認済み', 1, 
+  'pass0008', -- 修正済み
+  'img/identify/id_8.jpg'
 ),
 (
   -- ID 9
   'kobayashi_hachi', '小林 八重', '1993-02-18', '090-9999-9999', 'yae.kobayashi@example.com', 
   false, NULL, 5000, '2023-10-01', NULL, 
-  '未確認', NULL, 'pass_kobayashi', 'img/identify/id_9.jpg'
+  '未確認', NULL, 
+  'pass0009', -- 修正済み
+  'img/identify/id_9.jpg'
 ),
 (
   -- ID 10
   'kato_kumi', '加藤 久美子', '1980-09-30', '080-1010-1010', 'kumiko.kato@example.com', 
   false, '猫を飼っています。', 150000, '2023-11-05', '2025-10-10 08:00:00', 
-  '本人確認済み', 2, 'pass_kato', 'img/identify/id_10.jpg'
+  '本人確認済み', 2, 
+  'pass0010', -- 修正済み
+  'img/identify/id_10.jpg'
 )
 ;
-
 
 
 -- 住所テーブルのテストデータ

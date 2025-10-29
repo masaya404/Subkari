@@ -1,13 +1,4 @@
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
 
-    body {
-      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
-      background: #fff;
-    }
     .nav-container nav a{
       font-family: unset;
     }

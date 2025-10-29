@@ -15,6 +15,42 @@ def connect_db():
         db ='db_subkari'
     )
     return con
+#アカウントの口座情報を取得する ------------------------------------------------------------------------------
+def getAccountInfo():
+    accountNumbers=[]                 #口座番号下位三桁を格納
+    id=session["user_id"]
+    editmode=session["editmode"]
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select bankName,accountNumber,branchCode from t_transfer  where account_id=%s limit 3"
+    cur.execute(sql,(id,))
+    bank_info=cur.fetchall()
+    cur.close()
+    con.close()
+    count=0
+    #口座がいくつ登録されているかを数える
+    for i in bank_info:
+        count+=1
+
+    #口座番号マスク処理のために口座番号の桁数と下位三桁を抽出し配列に入れる
+    for i in range(count):
+        num=int(bank_info[i]['accountNumber'])
+
+        tmp=num
+        length=0
+        mask=""
+        #口座番号の桁数を取得
+        while tmp>0:
+            tmp=tmp//10
+            length+=1
+        for i in range(length-3):
+        
+            mask+="*"
+
+        num=str(num%1000)
+        num=mask+num                #マスク処理を施した口座番号
+        accountNumbers.append(num)
+    return bank_info,accountNumbers,count
 
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
@@ -179,44 +215,38 @@ def bankComplete():
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
 def transferApplication():
-    accountNumbers=[]                 #口座番号下位三桁を格納
-    id=session["user_id"]
-
+    session["editmode"]=False
+    bank_info,accountNumbers,count=getAccountInfo()
+    editmode=session["editmode"]
+            
+    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+#---------------------------------------------------------------------------------------------------
+#transferApplication 削除ボタン表示 -----------------------------------------------------------------
+@mypage_bp.route("/transferApplication")
+def editActivate():
+    editmode=session["editmode"]
+    if not editmode:
+        session["editmode"]=True
+    else:
+        session["editmode"]=False
+    editmode=session["editmode"]
+    bank_info,accountNumbers,count=getAccountInfo()
+   
     
+    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+
+#transferApplication 登録口座削除 -------------------------------------------------------------------
+@mypage_bp.route("mypage/transferApplication")
+def removeBank():
+    select=request.form
+    id=session["user_id"]
+    sql="select * from t_transfer  where (account_id=%s) and (branchCode=%s) and (accountNumber=%s)"
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    sql="select bankName,accountNumber,branchCode from t_transfer  where account_id=%s limit 3"
-    cur.execute(sql,(id,))
-    bank_info=cur.fetchall()
+
+
     cur.close()
     con.close()
-    count=0
-    #口座がいくつ登録されているかを数える
-    for i in bank_info:
-        count+=1
-
-    #口座番号マスク処理のために口座番号の桁数と下位三桁を抽出し配列に入れる
-    for i in range(count):
-        num=int(bank_info[i]['accountNumber'])
-
-        tmp=num
-        length=0
-        mask=""
-        #口座番号の桁数を取得
-        while tmp>0:
-            tmp=tmp//10
-            length+=1
-        for i in range(length-3):
-        
-            mask+="*"
-
-        num=str(num%1000)
-        num=mask+num                #マスク処理を施した口座番号
-        accountNumbers.append(num)
-
-            
-    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count)
-#---------------------------------------------------------------------------------------------------
 
 #transferAmount 金額選択ページ表示--------------------------------------------------------------------
 @mypage_bp.route("/transferAmount", methods=["GET", "POST"])
