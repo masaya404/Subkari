@@ -13,7 +13,7 @@
         <div class="sales-list">
             {% if sales_list %}
                 {% for item in sales_list %}
-                    <form action="{{url_for('mypage.')}}">
+                    <form action="{{url_for('mypage.transaction_detail')}}">
                         <div class="sales-item" >
                             <div class="sales-info">
                                 <div class="sales-type">{{ item.type }}</div>
