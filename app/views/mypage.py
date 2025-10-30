@@ -77,16 +77,42 @@ def mypage():
         user_id = session.get('user_id')
 
     
-    sql = "SELECT * FROM m_account WHERE id = %s"
+    
+    #アカウントテーブルからユーザー情報を取得
+    user_info=get_user_info(user_id)
+
+    #アカウントテーブルからは取れない情報を取得
     con = connect_db()
     cur = con.cursor(dictionary=True)
-    cur.execute(sql, (user_id,))  # ← タプルで渡す！
-    result = cur.fetchone()
+      
+    #フォロワー数、フォロー数、評価、総評価件数、出品数を取得
+    #フォロー数
+    sql="select count(*) from t_connection where execution_id=%s and type='フォロー' group by execution_id"
+    cur.execute(sql, (user_id,))
+    follows=cur.fetchone()
+    #フォロワー数
+    sql="select count(*) from t_connection where target_id=%s and type='フォロー' group by target_id"
+    cur.execute(sql, (user_id,))
+    followers=cur.fetchone()
+    #評価
+    sql="select avg(score) from t_evaluation where recipient_id=%s group by recipient_id"
+    cur.execute(sql, (user_id,))
+    evaluation=cur.fetchone()
+    #総評価件数
+    sql="select count(*) from t_evaluation where recipient_id=%s group by recipient_id"
+    cur.execute(sql, (user_id,))
+    evaluationCount=cur.fetchone()
+    #出品数
+    sql="select count(*) from m_product where account_id=%s"
+    cur.execute(sql, (user_id,))
+    products=cur.fetchone()
 
-    image_path = result["identifyImg"] if result else None
-    smoker = result["smoking"] if result and "smoking" in result else 0
+    #評価を変形
+    evaluation=round(float(evaluation))     #小数点型にしてから四捨五入
+    
 
-    return render_template("mypage/mypage.html", user_id=user_id, image_path=image_path ,result=result , smoker=smoker)
+
+    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,user_info=user_info)
     
     
 # <<<<<<< HEAD
