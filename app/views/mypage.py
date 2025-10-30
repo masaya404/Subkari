@@ -62,8 +62,52 @@ def get_user_info(id):
     user_info = cur.fetchone()
     return user_info
 
+#プロフィールに表示する取引情報を取得する ------------------------------------------------------------------------------------
+#引数として受け取ったidを持つユーザーの情報を取得
+def get_transaction_info(id):
+    #アカウントテーブルからは取れない情報を取得
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+      
+    #フォロワー数、フォロー数、評価、総評価件数、出品数を取得
+    #フォロー数
+    sql="select count(*) as フォロー数 from t_connection where execution_id=%s and type='フォロー' group by execution_id"
+    cur.execute(sql, (id,))
+    follows=cur.fetchone()
+    #フォロワー数
+    sql="select count(*) as フォロワー数 from t_connection where target_id=%s and type='フォロー' group by target_id"
+    cur.execute(sql, (id,))
+    followers=cur.fetchone()
+    #評価
+    sql="select avg(score) as 評価 from t_evaluation where recipient_id=%s group by recipient_id"
+    cur.execute(sql, (id,))
+    evaluation=cur.fetchone()
+    #総評価件数
+    sql="select count(*) as 評価件数 from t_evaluation where recipient_id=%s group by recipient_id"
+    cur.execute(sql, (id,))
+    evaluationCount=cur.fetchone()
+    #出品数
+    sql="select count(*) as 出品数 from m_product where account_id=%s"
+    cur.execute(sql, (id,))
+    products=cur.fetchone()
+
+    #評価を変形
+    evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
+   
+    return evaluation,evaluationCount,follows,followers,products
+#商品データを取得 --------------------------------------------------
+def get_product_info(id):
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+
+    #商品名を取得
+    #画像を取得 
+
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
+
+
+# ---------------------------------------------------------------------------------------------
 
 
 
@@ -80,39 +124,9 @@ def mypage():
     
     #アカウントテーブルからユーザー情報を取得
     user_info=get_user_info(user_id)
+    evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
 
-    #アカウントテーブルからは取れない情報を取得
-    con = connect_db()
-    cur = con.cursor(dictionary=True)
-      
-    #フォロワー数、フォロー数、評価、総評価件数、出品数を取得
-    #フォロー数
-    sql="select count(*) from t_connection where execution_id=%s and type='フォロー' group by execution_id"
-    cur.execute(sql, (user_id,))
-    follows=cur.fetchone()
-    #フォロワー数
-    sql="select count(*) from t_connection where target_id=%s and type='フォロー' group by target_id"
-    cur.execute(sql, (user_id,))
-    followers=cur.fetchone()
-    #評価
-    sql="select avg(score) from t_evaluation where recipient_id=%s group by recipient_id"
-    cur.execute(sql, (user_id,))
-    evaluation=cur.fetchone()
-    #総評価件数
-    sql="select count(*) from t_evaluation where recipient_id=%s group by recipient_id"
-    cur.execute(sql, (user_id,))
-    evaluationCount=cur.fetchone()
-    #出品数
-    sql="select count(*) from m_product where account_id=%s"
-    cur.execute(sql, (user_id,))
-    products=cur.fetchone()
-
-    #評価を変形
-    evaluation=round(float(evaluation))     #小数点型にしてから四捨五入
-    
-
-
-    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,user_info=user_info)
+    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info)
     
     
 # <<<<<<< HEAD
@@ -140,8 +154,8 @@ def editProfile():
     
     #user情報を取得
     user_info=get_user_info(user_id)
-
-    return render_template("mypage/editProfile.html",smoker=user_info['smoker'],username=user_info['username'],introduction=user_info['introduction'])
+    evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
+    return render_template("mypage/editProfile.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])
