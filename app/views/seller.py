@@ -149,10 +149,8 @@ def seller_size_success():
     # size_list.append(request.form.get('bodyWidth'))
     # size_list.append(request.form.get('sleeveLength'))
     # size_list.append(request.form.get('bodyLength'))
-
-    for s in size_field:
-        session[s] = request.form.get(s,'')
-    
+    size_data = {s: request.form.get(s, '') for s in size_field}
+    session['size_selected'] = size_data 
     # session['shoulderWidth'] = request.form.get('shoulderWidth')
     # session['bodyWidth'] = request.form.get('bodyWidth')
     # session['sleeveLength'] = request.form.get('sleeveLength')
@@ -162,17 +160,15 @@ def seller_size_success():
     # if not size:
     #     flash("sizeの選択が必要です。")
     #     return redirect(url_for('seller.seller_size'))
-    
-    #  保存セッション
-    save_form_data_to_session(request.form)
-    
-    session.modified = True
-    
     #  format 画面遷移
     return redirect(url_for('seller.seller_format'))
                
     # return render_template('seller/seller_format.html', user_id = user_id )
-
+    
+#サイズ記録----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/get_size_selected')
+def get_size_selected():
+    return jsonify(session.get('size_selected', {}))
 #洗濯表示----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/clean',methods=['GET'])
 def seller_clean():
@@ -205,6 +201,11 @@ def seller_clean_success():
     session.modified = True
     return redirect(url_for('seller.seller_format'))          
     # return render_template('seller/seller_format.html', user_id = user_id)
+
+#洗濯表示記録----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/get_clean_selected')
+def get_clean_selected():
+    return jsonify(session.get('clean_selected', {}))
 
 #セラーフォマットの内容をDB登録----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/format/submit',methods=['POST'])
