@@ -1,11 +1,14 @@
 console.log("uploadImg is loaded.");
 
+//初期化処理
 let images = [];
 let currentIndex = 0;
+//切り抜き
 let cropper = null;
+//ドラグ
 let draggedIndex = null;
 
-//  Dropzone配置
+//  Dropzone配置 アップロードした画像を表示するためのフィールド
 Dropzone.options.uploadForm = {
     maxFilesize: 5,
     acceptedFiles: 'image/*',
@@ -31,16 +34,20 @@ Dropzone.options.uploadForm = {
 
 //  UI更新
 function updateUI() {
+    //main画像フィールド
     updateMainImage();
+    //サムネイルフィールド
     renderThumbnails();
+    //sessionに保存
     saveToSession();
 }
 
-// 今編集したい画像を選択
+// 今編集したい画像を選択ためのフィールド
 function updateMainImage() {
     const mainImage = document.getElementById('mainImage');
     const emptyState = document.getElementById('emptyState');
-    
+
+    //画像は一つだけのみ、prev next ボタンが無効化される
     if (images.length === 0) {
         mainImage.style.display = 'none';
         emptyState.style.display = 'flex';
@@ -55,7 +62,7 @@ function updateMainImage() {
     }
 }
 
-// 前の画像
+// 前の画像と切り替え
 function previousImage() {
     if (images.length > 0) {
         currentIndex = (currentIndex - 1 + images.length) % images.length;
@@ -63,7 +70,7 @@ function previousImage() {
     }
 }
 
-// 後ろの画像
+// 後ろの画像と切り替え
 function nextImage() {
     if (images.length > 0) {
         currentIndex = (currentIndex + 1) % images.length;
@@ -73,8 +80,12 @@ function nextImage() {
 
 // 画像削除
 function deleteImage() {
+    //画像がなければ、なにもしない
     if (images.length === 0) return;
+
+    //images.splice(start削除したい位置, deleteCount数量);
     images.splice(currentIndex, 1);
+    //末尾の要素を削除したあと、インデックスが配列の範囲外になっていないか確認して調整する処理
     if (currentIndex >= images.length && currentIndex > 0) {
         currentIndex--;
     }
@@ -123,7 +134,7 @@ function cancelCrop() {
     }
 }
 
-// アップロード済み画像表示
+// アップロード済み画像表示するためのフィールド
 function renderThumbnails() {
     const container = document.getElementById('thumbnailContainer');
     
@@ -153,7 +164,7 @@ function renderThumbnails() {
     `).join('');
 }
 
-// 並び順変える
+// サムネイルで並び順変える
 function startDrag(e, idx) {
     draggedIndex = idx;
     e.dataTransfer.effectAllowed = 'move';
@@ -190,13 +201,13 @@ function saveToSession() {
 // Session恢復
 function loadFromSession() {
     const saved = sessionStorage.getItem('uploadedImages');
+
+    //アップロード済み画像あった場合
     if (saved) images = JSON.parse(saved);
     updateUI();
 }
 
-/**
- * 次へボタン：画像をサーバーに送信してから遷移
- */
+/**次へボタン：画像をサーバーに送信してから遷移 */
 function proceedToNext(nextUrl) {
     // if (images.length === 0) {
     //     alert('最低1つの画像をアップロードしてください');
@@ -209,6 +220,10 @@ function proceedToNext(nextUrl) {
      // 次のページへ遷移（sessionStorage は自動的に保持される）
     window.location.href = nextUrl;
 }
+
+// sessionの資料を出力
+loadFromSession();
+
 /**
  * 画像データをサーバーに送信
  */
@@ -241,5 +256,4 @@ function proceedToNext(nextUrl) {
 //         alert('エラーが発生しました');
 //     });
 // }
-// 初期化
-loadFromSession();
+
