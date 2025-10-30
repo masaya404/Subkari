@@ -63,87 +63,14 @@
         </div>
 
         <!-- 商品グリッド -->
+
         <div class="products-grid">
+            {% for name in productName %}
             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
+                <img src="{{productImg[loop.index0]['img']}}" alt="スカート" class="product-image">
+                <div class="product-name">{{name}}</div>
             </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1562137369-1a1a0bc66744?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1560243563-062bfc001d68?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1578932750355-5eb30ece2a83?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1558769132-cb1aea8f2c57?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1544441893-675973e31985?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1555529902-5261145633bf?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
+            {% endfor %}
         </div>
 
         <!-- もっと見るボタン -->
