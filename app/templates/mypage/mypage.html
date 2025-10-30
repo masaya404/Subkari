@@ -13,7 +13,7 @@
             <ul class="nav-section">
                 <li class="nav-section-title">アカウント情報</li>
                 <li class="nav-item">プロフィール</li>
-                <li class="nav-item">やることリスト</li>
+                <li class="nav-item" ><a href="">やることリスト</a></li>
                 <li class="nav-item">いいね一覧</li>
                 <li class="nav-item">フォローリスト</li>
                 <li class="nav-item">出品した商品</li>
@@ -51,7 +51,6 @@
             <ul class="nav-section">
                 <li class="nav-section-title">アカウント管理</li>
                 <li class="nav-item">ログアウト</li>
-                <li class="nav-item">アカウント削除</li>
             </ul>
         </section>
 
@@ -59,12 +58,19 @@
 
         <section id="profile" class="active" class="sec"> 
             <div class="img-name">
-                <img src="{{url_for('static' , filename='image_path')}}" alt="プロフィール画像" class="profile-image">
+                <img 
+                    src="{% if image_path %}
+                            {{ url_for('static', filename=image_path) }}
+                        {% else %}
+                            {{ url_for('static', filename='imag/default_profile.jng') }}
+                        {% endif %}" 
+                    alt="プロフィール画像" 
+                    class="profile-image" 
+                >
                 <div class="profile-name">
-                    <p>{{result.username}}</p>
+                    <p>{{user_info.username}}</p>
                     <a href="{{ url_for('mypage.editProfile') }}">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" >
-                        
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" > 
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </div>
@@ -73,8 +79,10 @@
                 
                 
             <div class="profile-rating">
-                <span class="stars">★★★★☆</span>
-                <span class="rating-count">255</span>
+                <span class="stars">
+                    {% for i in range(evaluation)%}★{% endfor %}
+                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                <span class="rating-count">{{evaluationCount}}</span>
             </div>
             
             <div class="badge-group">
@@ -82,29 +90,37 @@
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <p>本人確認済</p>
+                    {% if user_info.status == "本人確認済み" %}
+                        <p>本人確認済</p>
+                    {% else %}
+                        <p>未承認</p>
+                    {% endif %}
                 </div>
-                <div class="badge">喫煙者</div>
+                {% if user_info.smoker == 0 %}
+                    <span class="badge">喫煙者</span>
+                {% else %}
+                    <span class="badge">非喫煙者</span>
+                {% endif %}
             </div>
             
             <div class="profile-stats">
                 <div class="stat-item">
-                    <span class="stat-number">80</span>
+                    <span class="stat-number">{{products}}</span>
                     <span class="stat-label">出品数</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">10</span>
+                    <span class="stat-number">{{follows}}</span>
                     <span class="stat-label">フォロー</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">5</span>
+                    <span class="stat-number">{{followers}}</span>
                     <span class="stat-label">フォロワー</span>
                 </div>
             </div>
             
             <div class="sold-info">
                 <div class="sold-label">売上金</div>
-                <div class="sold-amount">¥ 0</div>
+                <div class="sold-amount">¥ 2</div>
             </div>
         </section>
 
