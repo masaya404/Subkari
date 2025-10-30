@@ -46,9 +46,9 @@ main.main-content {
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     border-radius: 10px;
-    background: #fafafa;
+    /* background: #fafafa; */
 }
 
 /* テキスト */
