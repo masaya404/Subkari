@@ -15,6 +15,12 @@ def connect_db():
         db ='db_subkari'
     )
     return con
+#------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
 #アカウントの口座情報を取得する ------------------------------------------------------------------------------
 def getAccountInfo():
     accountNumbers=[]                 #口座番号下位三桁を格納
@@ -126,10 +132,8 @@ def mypage():
     user_info=get_user_info(user_id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
 
-    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info)
+    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id)
     
-    
-# <<<<<<< HEAD
 #------------------------------------------------------------------------------------------------
 
 #userprf表示--------------------------------------------------------------------------------------
@@ -462,6 +466,21 @@ def transferHistory():
     # return render_template("mypage/salesHistory.html", sales_list=sales_list)
     return render_template("mypage/transferHistory.html" ,  user_id=user_id)
 #------------------------------------------------------------------------------------------------
+
+#todo.html やることリスト-------------------------------------------------------------------------
+@mypage_bp.route("/todo")
+def todo():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+
+    return render_template("mypage/todo.html" ,  user_id=user_id)
+#------------------------------------------------------------------------------------------------
+
+
 
 # htmlの画面遷移url_for
 # {{ url_for('モジュール名.関数名') }}
