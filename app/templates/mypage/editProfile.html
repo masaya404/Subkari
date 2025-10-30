@@ -4,6 +4,8 @@
 {% endblock %}
 
 {% block content %}
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/editProfile.css') }}"> -->
+
 <link rel="stylesheet" href="../../static/css/editProfile.css">
     <main class="editProfile_main">
         <h1></h1>
@@ -19,8 +21,7 @@
                         <span class="reviewer-badge">喫煙者</span>
                     {% else %}
                         <span class="reviewer-badge">非喫煙者</span>
-                    {% endif %}
-                    
+                    {% endif %} 
                 </div>
                 
                 <div class="profile-stats">

@@ -82,8 +82,11 @@ def mypage():
     cur = con.cursor(dictionary=True)
     cur.execute(sql, (user_id,))  # ← タプルで渡す！
     result = cur.fetchone()
+
     image_path = result["identifyImg"] if result else None
-    return render_template("mypage/mypage.html", user_id=user_id, image_path=image_path ,result=result)
+    smoker = result["smoking"] if result and "smoking" in result else 0
+
+    return render_template("mypage/mypage.html", user_id=user_id, image_path=image_path ,result=result , smoker=smoker)
     
     
 # <<<<<<< HEAD
