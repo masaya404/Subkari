@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     //このページ入る同時に、画像を表示する（あった場合）
             loadUploadedImages();
+
         });
-// 画像編集へ
-function goToUploadPage() {          
-window.location.href = "{{url_for('seller.seller_uploadImg')}}";
-}
+
 // 価格トグル
 const rentalCheckbox = document.querySelector('.rentalCheckbox');
 const purchaseCheckbox = document.querySelector('.purchaseCheckbox');
@@ -88,6 +86,7 @@ function createPurchasePriceSection() {
 //画像表示
 function loadUploadedImages() {
     const saved = sessionStorage.getItem('uploadedImages');
+    //アップロードした画像があった場合
     if (saved) {
         const images = JSON.parse(saved);
         console.log('Loaded images:', images);
@@ -95,7 +94,7 @@ function loadUploadedImages() {
         displayFirstImage(images[0]);
     }
 }
-
+//画像フィールドで表示 画像アップロード提示フィールドを隠す
 function displayFirstImage(image) {
     const displayArea = document.getElementById('imageDisplayArea');
     const noImageArea = document.getElementById('noImageArea');
@@ -112,6 +111,41 @@ function displayFirstImage(image) {
 }
 
 loadUploadedImages();
+
+//sessionに記録の関数
+function saveToSessionStorage(){
+    const name = document.getElementById("name").value;
+    const rental = document.getElementById("rental").value;
+    const purchase = document.getElementById("purchase").value;
+    const rentalPrice = document.getElementById("rentalPrice").value;
+    const purchasePrice = document.getElementById("purchasePrice").value;
+    const smokingValue = document.querySelector('input[name="smoking"]:checked').value;
+    
+}
+//他の資料をsessionStorage裡面保存 その後size画面遷移/////////////////////////////////////////////////////////////////////////////////////////
+function goToSize(){
+    saveToSessionStorage();
+
+}
+
+document.getElementById("saveBtn").addEventListener("click", function() {
+  // 各 input 欄位的值を取得
+  const name = document.getElementById("nameInput").value;
+  const email = document.getElementById("emailInput").value;
+  const comment = document.getElementById("commentInput").value;
+
+  // 一個物件包起來
+  const formData = {
+    name: name,
+    email: email,
+    comment: comment
+  };
+
+  // 轉成 JSON 字串保存
+  sessionStorage.setItem("formData", JSON.stringify(formData));
+
+  alert("入力データを sessionStorage に保存しました！");
+});
 
 // フォーム検証
 function validateForm() {

@@ -8,7 +8,7 @@
         <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
             <h1 class="text-3xl font-bold mb-8 text-center">出品する</h1>
 
-            <form id="sellerForm" method="POST" action="{{url_for('seller.format_submit')}}" class="space-y-6">
+            <form id="sellerForm" method="POST" action="{{url_for('seller.format_submit')}}" class="space-y-6" enctype="multipart/form-data">
                 <!-- 商品画像 -->
                 <div class="border-2 border-dashed border-gray-300 rounded-lg text-center overflow-hidden">
 
@@ -40,7 +40,7 @@
                         商品名 <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="productName" placeholder="商品名を入力" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" 
-                    value="{{ form_data.get('productName', '') }}" required>
+                    value="{{ form_data.get('productName', '') }}" id="name">
                     <span class="text-red-500 text-sm hidden" id="productNameError">商品名は必須です</span>
                 </div>
 
@@ -49,13 +49,13 @@
                     <div class="flex flex-col gap-4">
                         <label class="flex items-start">
                             <span class="mr-2">レンタル可能</span>
-                            <input type="checkbox" name="rental" value="true" class="rentalCheckbox cursor-pointer"
+                            <input type="checkbox" name="rental" value="true" class="rentalCheckbox cursor-pointer" id="rental"
                             {% if form_data.get('rental') %}checked{% endif %}>        
                         </label>
 
                         <label class="flex items-start">
                             <span class="mr-2">購入可能</span>
-                            <input type="checkbox" name="purchase" value="true" class="purchaseCheckbox cursor-pointer"
+                            <input type="checkbox" name="purchase" value="true" class="purchaseCheckbox cursor-pointer" id="purchase"
                             {% if form_data.get('purchase') %}checked{% endif %}>                           
                         </label>
                     </div>
@@ -69,13 +69,13 @@
                     <label class="block text-sm font-semibold mb-3">吸煙</label>
                     <div class="flex gap-4">
                         <label class="flex items-center">
-                            <input type="radio" name="smoking" value="no" 
-                            {% if form_data.get('smoking', 'no') == 'no' %}checked{% endif %} class="w-4 h-4">
+                            <input type="radio" name="smoking" value="no"
+                            checked class="w-4 h-4">
                             <span class="ml-2">いいえ</span>
                         </label>
                         <label class="flex items-center">
                             <input type="radio" name="smoking" value="yes"
-                            {% if form_data.get('smoking') == 'yes' %}checked{% endif %} class="w-4 h-4">
+                            class="w-4 h-4">
                             <span class="ml-2">はい</span>
                         </label>
                     </div>
@@ -87,7 +87,7 @@
                         系統カラー <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="color" placeholder="白い系統"
-                    value="{{ form_data.get('color', '') }}" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                    value="{{ form_data.get('color', '') }}" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" id="">
                     <span class="text-red-500 text-sm hidden" id="colorError">系統カラーは必須です</span>
                 </div>
 
@@ -140,7 +140,7 @@
                             サイズ <span class="text-red-500">*</span>
                         </label>
                         <!--  form 　-->
-                        <form method="POST" action="{{ url_for('seller.seller_size_page') }}">
+                        <form method="POST" action="{{ url_for('seller.seller_size') }}">
                             <input type="hidden" name="productName" value="{{ form_data.get('productName', '') }}">
                             <input type="hidden" name="rental" value="{% if form_data.get('rental') %}on{% endif %}">
                             <input type="hidden" name="purchase" value="{% if form_data.get('purchase') %}on{% endif %}">
@@ -166,7 +166,7 @@
                             洗濯表示 <span class="text-red-500">*</span>
                         </label>
                         <!--  form 　-->
-                        <form method="POST" action="{{ url_for('seller.seller_clean_page') }}">
+                        <form method="POST" action="{{ url_for('seller.seller_clean') }}">
                             <input type="hidden" name="productName" value="{{ form_data.get('productName', '') }}">
                             <input type="hidden" name="rental" value="{% if form_data.get('rental') %}on{% endif %}">
                             <input type="hidden" name="purchase" value="{% if form_data.get('purchase') %}on{% endif %}">

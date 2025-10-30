@@ -14,8 +14,7 @@ use db_subkari
 -- アカウントテーブル ------------------------------
 CREATE TABLE `m_account` (
   `id` INT AUTO_INCREMENT NOT NULL,
-  `username` VARCHAR(100) NOT NULL,
-  `fullName` VARCHAR(100) NOT NULL,
+  `username` VARCHAR(12) NOT NULL,
   `birthday` DATE NOT NULL,
   `tel` VARCHAR(20) NOT NULL,
   `mail` VARCHAR(255) NOT NULL,
@@ -35,6 +34,12 @@ CREATE TABLE `m_account` (
   `mailFollowAnnounce` boolean,
   `mailSystemAnnounce` boolean,
   `autoLogin` boolean,
+  `last_name` VARCHAR(50) NOT NULL,
+  `first_name` VARCHAR(50) NOT NULL,
+  `last_name_kana` VARCHAR(50) NOT NULL,
+  `first_name_kana` VARCHAR(50) NOT NULL,
+
+
   
   PRIMARY KEY (`id`)
 );
@@ -43,11 +48,11 @@ CREATE TABLE `m_account` (
 CREATE TABLE `m_address` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `account_id` INT NOT NULL,
-  `zip` CHAR(8) NOT NULL,
-  `pref` VARCHAR (255) NOT NULL,
-  `address1` VARCHAR(255) NOT NULL,
-  `address2` VARCHAR(255) NOT NULL,
-  `address3` VARCHAR(255) NOT NULL,
+  `zip` CHAR(7) NOT NULL,
+  `pref` VARCHAR (10) NOT NULL,
+  `address1` VARCHAR(20) NOT NULL,
+  `address2` VARCHAR(20) NOT NULL,
+  `address3` VARCHAR(40) NULL,
   
   PRIMARY KEY (`id`,`account_id`),
   FOREIGN KEY (`account_id`)
