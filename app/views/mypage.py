@@ -515,6 +515,30 @@ def todo():
     return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
 
+#privacy_policy プライバシーポリシー---------------------------------------------------------------
+@mypage_bp.route("/privacy_policy")
+def privacy_policy():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select content_detail from m_admin_contents  where id=2"
+    cur.execute(sql)
+    result=cur.fetchone()
+    cur.close()
+    con.close()
+    
+
+    return render_template("mypage/privacy_policy.html" ,  user_id=user_id , result=result)
+#--------------------------------------------------------------------------------------------------------------------
+
+
+    
+    
 
 
 # htmlの画面遷移url_for
