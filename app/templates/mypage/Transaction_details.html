@@ -1,0 +1,92 @@
+
+{% extends "base.html" %}
+    <!-- <link rel="stylesheet" href="../../static/css/Address_registration.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Transaction_details.css') }}">
+    
+{% extends "base.html" %}
+{% block title %}
+    取引詳細
+{% endblock %}
+
+{% block content %}
+
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">SUBKARI</div>
+            <div class="search-box">
+                <input type="text" placeholder="すべてのアイテムから探す">
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">👤</span>
+                マイページ
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">❤️</span>
+                いいね
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">🔔</span>
+                通知
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">📤</span>
+                出品
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">🔄</span>
+                取引
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-item-icon">☰</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="main-content">
+        
+        <section class="section-container transaction-info">
+            <h2>取引情報</h2>
+            
+            <div class="item-summary">
+                <div class="item-image" role="img" aria-label="商品画像">
+                    </div>
+                <div class="item-name">ファーパーカー</div>
+            </div>
+            
+            <ul class="detail-list">
+                <li><span>商品代金</span><span>¥2,222</span></li>
+                <li><span>販売手数料</span><span>¥222</span></li>
+                <li><span>販売利益</span><span>¥2,000</span></li>
+                <li><span>購入日時</span><span>2020年6月4日 20:22</span></li>
+                <li><span>配送の方法</span><span>普通郵便</span></li>
+                <li><span>商品ID</span><span>46478853465</span></li>
+            </ul>
+        </section>
+
+        <section class="section-container buyer-info">
+            <h2>購入者情報</h2>
+            
+            <a href="#" class="buyer-card">
+                <div class="buyer-avatar">
+                    <img src="https://i.pravatar.cc/50?img=1" alt="haitaroのアバター">
+                </div>
+                
+                <div class="buyer-details">
+                    <div class="buyer-name">haitaro</div>
+                    <div>
+                        <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                        <span class="rating-count">255</span>
+                    </div>
+                    <div class="verified-badge">本人確認済</div>
+                    <div class="status-tag">喫煙者</div>
+                </div>
+                
+                <span class="arrow-icon">&gt;</span>
+            </a>
+        </section>
+        
+    </main>
+
+{% endblock %}
