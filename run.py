@@ -12,4 +12,4 @@ if __name__ == '__main__':
     # アプリケーションをデバッグモードで実行
     app.run(host='localhost', port=5002, debug=True)
     
-    # m_admin_contentsz
+    # m_admin_contents
