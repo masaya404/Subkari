@@ -5,17 +5,19 @@
 
 {% block content %}
 <link rel="stylesheet" href="../../static/css/notice.css">
-<body class="screen1-style">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/salesHistory.css') }}"> -->
+<body>
     <div class="container">
         <h2>お知らせ</h2>
         <div class="notification-list" id="notification-list">
+            <form action="post">
             <div class="list-item">
                 <div class="list-item-left">
                     <div class="list-item-title">【重要】事務局から大切なお知らせがあります (1/20)</div>
                     <div class="list-item-date">1日前</div>
                 </div>
                 <div class="list-item-arrow"><i class="fas fa-chevron-right"></i></div>
-            </div>
+            </div></form>
             <div class="list-item">
                 <div class="list-item-left">
                     <div class="list-item-title">【重要】事務局から大切なお知らせがあります (2/20)</div>
