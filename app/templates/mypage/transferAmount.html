@@ -1,12 +1,8 @@
 {% extends "base.html" %}
-
 {% block title %}振込金額{% endblock %}
-
 {% block content %}
 <!-- <link rel="stylesheet" href="../../../app/static/css/transaction_detail.css">  -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/transferAmount.css') }}">
-
-
 <main>
     <h1>振込金額</h1>
 
@@ -26,9 +22,7 @@
         </div>
         <button type="submit" class="submit-button">確定する</button>
     </form>
-
 </main>
-
 <!-- Footer -->
 <script>
     const mypageUrl = "{{ url_for('mypage.mypage') }}"; // ← Flaskルート名に合わせて
