@@ -176,11 +176,35 @@ def register_user_complete():
 
     # return redirect(url_for('top.new_account',account_id = account["mail"]))
 
+
+#入力フォーム確認-電話番号や住所
 @login_bp.route("register_user/form_complete", methods=["POST"])
 def registration_form_complete():
 
     return render_template('login/Phone_verification.html')
 
+
+#SMS確認
+@login_bp.route("register_user/phone_auth", methods=["POST"])
+def phone_auth():
+
+    return render_template('login/identity_verification.html')
+
+
+#SMS再送
+@login_bp.route("register_user/phone_auth_resend", methods=["POST"])
+def phone_auth_resend():
+
+    return render_template('login/Phone_verification.html')
+
+#本人確認-登録完了
+@login_bp.route("register_user/verification", methods=["POST"])
+def verification():
+
+    return render_template('login/registration_complete.html')
+
+
+#
 
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
@@ -201,7 +225,10 @@ def password_reset():
     # 初期表示用に空の辞書を渡す
     error = None
     success = None
-    return render_template('login/password_reset.html', error=error, success=success)
+    return render_template('login/forgot_password.html', error=error, success=success)
+
+
+
 
 @login_bp.route('/password-reset', methods=['POST'])
 def reset_password():
@@ -217,16 +244,28 @@ def reset_password():
         error = "パスワードが一致しません。"
     elif len(password) < 8:
         error = "パスワードは8文字以上で入力してください。"
+        return render_template('login/password_reset.html', error=error, success=success)
+
     else:
         # 実際にはここでDBにパスワードを更新
         success = "パスワードを更新しました。"
 
-    return render_template('login/password_reset.html', error=error, success=success)
+    return render_template('login/password_update.html', error=error, success=success)
 
 
+# パスワード再設定画面の遷移
+@login_bp.route('/forgot_password', methods=['POST'])
+def forgot_password():
+
+    return render_template('login/password_reset.html')
 
 
+#メールアドレス忘れ画面の遷移
+@login_bp.route('/forgot_email', methods=['GET'])
+def forgot_email():
 
+
+    return render_template('login/forgot_email.html')
 
 
 
