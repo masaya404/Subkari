@@ -102,6 +102,7 @@ def get_transaction_info(id):
     return evaluation,evaluationCount,follows,followers,products
 #商品データを取得 --------------------------------------------------
 def get_product_info(id):
+
     con = connect_db()
     cur = con.cursor(dictionary=True)
 
@@ -112,11 +113,15 @@ def get_product_info(id):
     #各商品1枚目の画像を取得 
     sql="SELECT  i.* FROM m_productImg i INNER JOIN (SELECT  product_id,MIN(id) AS first_image_id FROM m_productImg GROUP BY product_id) AS first_img ON i.id = first_img.first_image_id INNER JOIN m_product p ON p.id = i.product_id WHERE p.account_id = %s"
     cur.execute(sql,(id,))
-    img=cur.fetchall()
+
     cur.close()
     con.close()
+    img_id=cur.fetchall()
+    
+    #パスを取得
+    # sql=
+    # return name,img
 
-    return name,img
 
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
@@ -498,7 +503,16 @@ def todo():
         user_id = session.get('user_id')
 
 
-    return render_template("mypage/todo.html" ,  user_id=user_id)
+    # con=connect_db()
+    # cur=con.cursor(dictionary=True)
+    # sql="select bankName,accountNumber,branchCode from t_transfer  where account_id=%s limit 3"
+    # cur.execute(sql,(id,))
+    # todo=cur.fetchall()
+    # cur.close()
+    # con.close()
+
+
+    return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
 
 
