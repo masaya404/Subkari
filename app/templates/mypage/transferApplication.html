@@ -1,67 +1,63 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>振込申請</title>
-    <link rel="stylesheet" href="../../static/css/transferApplication.css">
-</head>
-<body>
+{% extends "base.html" %}
 
-    <header>
-        <div class="logo">SUBKARI</div>
-    </header>
-    <main>
-        <h1>振込申請</h1>
-        {% if not editmode %}
-        <!-- Edit Button -->
-        <form action="{{url_for('mypage.editActivate')}}">
-            <div class="edit-button-container">
-                <button class="edit-button" id="editButton">編集する</button>
-            </div>
-        </form>
-        {% else %}
-        <form>
-            <div class="edit-button-container">
-                <form action="{{url_for('mypage.editActivate')}}">
+{% block title %}取引詳細{% endblock %}
 
-                    <button class="edit-button" id="editButton">完了する</button>
-            </div>
-        </form>
-        {% endif %}
+{% block content %}
+<!-- <link rel="stylesheet" href="../../../app/static/css/transaction_detail.css">  -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/transferApplication.css') }}">
 
-        <!-- Bank List -->
-        <div class="bank-list" id="bankList">
-            {% for i in range(count) %}
-            <div class="bank-item" data-id=1>
-                <input type="radio" name="bank" value="1">
-                <div class="bank-info">
-                    <div class="bank-details">
-                        <div class="bank-detail-row">
-                            <p class="bank-detail-label">銀行名</p>
-                            <p class="bank-detail-value">{{bank_info[i]['bankName']}}</p>
-                        </div>
-                        <div class="bank-detail-row">
-                            <p class="bank-detail-label">口座番号</p>
-                            <p class="bank-detail-value">{{accountNumbers[i]}}</p>
-                        </div>
-                        <div class="bank-detail-row">
-                            <p class="bank-detail-label">支店番号</p>
-                            <p class="bank-detail-value">{{bank_info[i]['branchCode']}}</p>
-                        </div>
+
+<main>
+    <h1>振込申請</h1>
+    {% if not editmode %}
+    <!-- Edit Button -->
+    <form action="{{url_for('mypage.editActivate')}}">
+        <div class="edit-button-container">
+            <button class="edit-button" id="editButton">編集する</button>
+        </div>
+    </form>
+    {% else %}
+    <form>
+        <div class="edit-button-container">
+            <form action="{{url_for('mypage.editActivate')}}">
+
+                <button class="edit-button" id="editButton">完了する</button>
+        </div>
+    </form>
+    {% endif %}
+
+    <!-- Bank List -->
+    <div class="bank-list" id="bankList">
+        {% for i in range(count) %}
+        <div class="bank-item" data-id=1>
+            <input type="radio" name="bank" value="1">
+            <div class="bank-info">
+                <div class="bank-details">
+                    <div class="bank-detail-row">
+                        <p class="bank-detail-label">銀行名</p>
+                        <p class="bank-detail-value">{{bank_info[i]['bankName']}}</p>
                     </div>
-                    {% if editmode %}
-                    <form action="{{url_for('mypage.removeBank')}}" method='post'>
-                        <input type="hidden" name="bank_id" value="{{ i }}">
-
-                    <button type="submit" class="delete-button" >削除する</button>
-                    </form>
-                    {% endif %}
+                    <div class="bank-detail-row">
+                        <p class="bank-detail-label">口座番号</p>
+                        <p class="bank-detail-value">{{accountNumbers[i]}}</p>
+                    </div>
+                    <div class="bank-detail-row">
+                        <p class="bank-detail-label">支店番号</p>
+                        <p class="bank-detail-value">{{bank_info[i]['branchCode']}}</p>
+                    </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% if editmode %}
+                <form action="{{url_for('mypage.removeBank')}}" method='post'>
+                    <input type="hidden" name="bank_id" value="{{ i }}">
 
-            <!-- <div class="bank-item" data-id="2">
+                    <button type="submit" class="delete-button">削除する</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- <div class="bank-item" data-id="2">
                 <input type="radio" name="bank" value="2">
                 <div class="bank-info">
                     <div class="bank-details">
@@ -103,55 +99,53 @@
                 </div>
             </div> -->
 
-        </div>
-
-        <!-- Add Bank Button -->
-        <form action="{{url_for('mypage.bankRegistration')}}">
-            <button class="add-bank-button" id="addBankButton">
-                <span class="icon">⊕</span>
-                <span>新しい銀行を登録する</span>
-            </button>
-        </form>
-
-        <!-- Info Text -->
-        <p class="info-text">
-            ※登録できる送振込先は上限3つです。4つ目の以降の振込先を追加する場合は「編集する」ボタンから振込先を削除してください。
-        </p>
-
-        <!-- Submit Button -->
-        <form action="{{url_for('mypage.transferAmount')}}">
-            <button class="submit-button">選択する</button>
-        </form>
-    </main>
-
-    <!-- Error Modal -->
-    <div class="modal" id="errorModal">
-        <div class="modal-content">
-            <p class="modal-text">
-                登録できるのは3個です。新規登録するには「編集する」から削除してください。
-            </p>
-            <div class="modal-buttons">
-                <button class="modal-ok-button" id="modalOkButton">OK</button>
-            </div>
-        </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-links">
-            <a href="#">初めての方へ</a>
-            <a href="#">サイトマップ</a>
-            <a href="#">FAQ</a>
-            <a href="#">お問い合わせ</a>
-            <a href="#">利用規約</a>
-            <a href="#">プライバシーポリシー</a>
-            <a href="#">特定商取引法に基づく表記</a>
-            <a href="#">古物営業法に基づく表示</a>
+    <!-- Add Bank Button -->
+    <form action="{{url_for('mypage.bankRegistration')}}">
+        <button class="add-bank-button" id="addBankButton">
+            <span class="icon">⊕</span>
+            <span>新しい銀行を登録する</span>
+        </button>
+    </form>
+
+    <!-- Info Text -->
+    <p class="info-text">
+        ※登録できる送振込先は上限3つです。4つ目の以降の振込先を追加する場合は「編集する」ボタンから振込先を削除してください。
+    </p>
+
+    <!-- Submit Button -->
+    <form action="{{url_for('mypage.transferAmount')}}">
+        <button class="submit-button">選択する</button>
+    </form>
+</main>
+
+<!-- Error Modal -->
+<div class="modal" id="errorModal">
+    <div class="modal-content">
+        <p class="modal-text">
+            登録できるのは3個です。新規登録するには「編集する」から削除してください。
+        </p>
+        <div class="modal-buttons">
+            <button class="modal-ok-button" id="modalOkButton">OK</button>
         </div>
-        <p class="copyright">© 2025 HAL OSAKA IA・IH Team 5</p>
-    </footer>
-    <script src="../../static/js/transferApplication.js"></script>
+    </div>
+</div>
 
-</body>
+<!-- Footer -->
+<footer>
+    <div class="footer-links">
+        <a href="#">初めての方へ</a>
+        <a href="#">サイトマップ</a>
+        <a href="#">FAQ</a>
+        <a href="#">お問い合わせ</a>
+        <a href="#">利用規約</a>
+        <a href="#">プライバシーポリシー</a>
+        <a href="#">特定商取引法に基づく表記</a>
+        <a href="#">古物営業法に基づく表示</a>
+    </div>
+    <p class="copyright">© 2025 HAL OSAKA IA・IH Team 5</p>
+</footer>
+<script src="../../static/js/transferApplication.js"></script>
 
-</html>
+{% endblock %}

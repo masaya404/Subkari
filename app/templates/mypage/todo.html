@@ -1,41 +1,28 @@
 {% extends "base.html" %}
 {% block title %}
-    振込履歴
+    やることリスト
 {% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/todo.css') }}">
-    <div class="container">
-        <h2>振込履歴</h2>
-        <div class="transfer-history-list">
-            <a href="screen5_transfer_detail.html" class="list-item" id="transfer-item-1">
-                <div class="list-item-left">
-                    <div class="list-item-title">楽天銀行</div>
-                    <div class="list-item-date">2022/04/03 11:50</div>
-                </div>
-                <div class="list-item-right">¥ 18,100</div>
-            </a>
-            <a href="#" class="list-item">
-                <div class="list-item-left">
-                    <div class="list-item-title">楽天銀行</div>
-                    <div class="list-item-date">2021/03/05 13:59</div>
-                </div>
-                <div class="list-item-right">¥ 6,890</div>
-            </a>
-            <a href="#" class="list-item">
-                <div class="list-item-left">
-                    <div class="list-item-title">三井住友銀行</div>
-                    <div class="list-item-date">2021/08/03 13:43</div>
-                </div>
-                <div class="list-item-right">¥ 1,340</div>
-            </a>
-            <a href="#" class="list-item">
-                <div class="list-item-left">
-                    <div class="list-item-title">楽天銀行</div>
-                    <div class="list-item-date">2021/04/01 07:50</div>
-                </div>
-                <div class="list-item-right">¥ 2,280</div>
-            </a>
-        </div>
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/todo.css') }}"> -->
+<link rel="stylesheet" href="../../static/css/todo.css">
+<main class="main-content">
+    <h1 class="page-title">やることリスト</h1>
+    <div class="sales-list">
+        {% if  %}
+            {% for item in sales_list %}
+                <form action="{{url_for('mypage.transaction_detail')}}">
+                    <div class="sales-item" >
+                        <div class="sales-info">
+                            <div class="sales-type">{{ item.type }}</div>
+                            <div class="sales-date">{{ item.date }}</div>
+                        </div>
+                        <div class="sales-amount">¥{{ "{:,}".format(item.amount) }}</div>
+                    </div>
+                </form>
+            {% endfor %}
+        {% else %}
+            <p>お知らせはありません。</p>
+        {% endif %}
     </div>
-    <link rel="stylesheet" href="{{ url_for('static', filename='js/todo.js') }}">
-{ %% endblock }
+</main>
+    

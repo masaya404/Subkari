@@ -5,38 +5,39 @@
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/salesHistory.css') }}">
-
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/transfer_history.css') }}"> -->
+    <link rel="stylesheet" href="../../../app/static/css/transfer_history.css">
     <main class="main-content">
         <h1 class="page-title">売上履歴</h1>
-
         <div class="sales-list">
-            {% set sales_list = [
-                {'type': '販売利益', 'date': '2022/04/03 11:50', 'amount': 2222},
-                {'type': '販売利益', 'date': '2022/04/06 13:59', 'amount': 6335},
-                {'type': '事務局より', 'date': '2021/08/03 13:43', 'amount': 1210},
-                {'type': '事務局より', 'date': '2021/04/01 07:50', 'amount': 4440},
-                {'type': '販売利益', 'date': '2020/09/15 09:12', 'amount': 3240},
-                {'type': '販売利益', 'date': '2020/08/09 13:10', 'amount': 2424},
-                {'type': '事務局より', 'date': '2020/05/29 15:30', 'amount': 1100},
-                {'type': '販売利益', 'date': '2020/03/29 19:30', 'amount': 6000},
-                {'type': '販売利益', 'date': '2020/03/23 21:50', 'amount': 3350},
-                {'type': '販売利益', 'date': '2020/03/03 22:38', 'amount': 1800},
-            ] %}
-            
             {% if sales_list %}
-                {% for item in sales_list %}
-                    <div class="sales-item">
-                        <div class="sales-info-left">
-                            <div class="sales-type">{{ item.type }}</div>
-                            <div class="sales-date">{{ item.date }}</div>
+                {% for item in sales_list %}                      
+            <a href="transaction_detail.html">
+
+                <form action="{{url_for('mypage.')}}">
+                <div class="sales-item">
+                    <div class="sales-info">
+                        <div class="sales-type">
+                            {{ item.type }}
                         </div>
-                        <div class="sales-amount">¥{{ "{:,}".format(item.amount) }}</div>
+                        <div class="sales-date">
+                            {{ item.date }}
+                        </div>
                     </div>
-                {% endfor %}
+                    <div class="sales-amount">
+                        ¥{{ "{:,}".format(item.amount) }}
+                    </div>
+                </div>
+                </form>
+            </a>
+            {% endfor %}
             {% else %}
-                <p>売上履歴はまだありません。</p>
+            <p>売上履歴はまだありません。</p>
             {% endif %}
         </div>
     </main>
-{% endblock %}
+</body>
+
+</html>
+
+{% endblock %} 
