@@ -103,6 +103,7 @@ def get_transaction_info(id):
     return evaluation,evaluationCount,follows,followers,products
 #商品データを取得 --------------------------------------------------
 def get_product_info(id):
+
     con = connect_db()
     cur = con.cursor(dictionary=True)
 
@@ -114,6 +115,8 @@ def get_product_info(id):
     #1枚目の画像のidを取得
     sql="select min(i.id) from m_productImg i inner join m_product p on i.product_id=p.id  where p.account_id=%s group by p.id"
     cur.execute(sql,(id,))
+    cur.close()
+    con.close()
     img_id=cur.fetchall()
     
     #パスを取得
@@ -490,7 +493,16 @@ def todo():
         user_id = session.get('user_id')
 
 
-    return render_template("mypage/todo.html" ,  user_id=user_id)
+    # con=connect_db()
+    # cur=con.cursor(dictionary=True)
+    # sql="select bankName,accountNumber,branchCode from t_transfer  where account_id=%s limit 3"
+    # cur.execute(sql,(id,))
+    # todo=cur.fetchall()
+    # cur.close()
+    # con.close()
+
+
+    return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
 
 
