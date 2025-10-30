@@ -117,8 +117,8 @@ def get_product_info(id):
     img_id=cur.fetchall()
     
     #パスを取得
-    sql=
-    return name,img
+    # sql=
+    # return name,img
 
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
