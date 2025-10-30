@@ -13,7 +13,7 @@
             <ul class="nav-section">
                 <li class="nav-section-title">アカウント情報</li>
                 <li class="nav-item">プロフィール</li>
-                <li class="nav-item" ><a href="">やることリスト</a></li>
+                <li class="nav-item" ><a href="{{url_for('mypage.todo')}}">やることリスト</a></li>
                 <li class="nav-item">いいね一覧</li>
                 <li class="nav-item">フォローリスト</li>
                 <li class="nav-item">出品した商品</li>
@@ -125,9 +125,9 @@
         </section>
 
         </section>
-        <section id="todo" class="sec">
-            <p>やることリストの内容を表示</p>
-        </section>
+        <!-- <section id="todo" class="sec">
+            
+        </section> -->
         <section id="likes" class="sec">
             <p>いいねを押した商品を表示</p>
 
@@ -159,13 +159,13 @@
             <p>お知られ・機能設定</p>
         </section>
 
+
         <section id="transfer-request" class="sec">
             <h2>振込申請</h2>
             <ul class="menu-list">
                 <li class="menu-item"> <a href="{{url_for('mypage.bankRegistration')}}" class="menu-link">銀行口座登録</a></li>
                 <li class="menu-item"> <a href="{{url_for('mypage.transferApplication')}}" class="menu-link">振込申請</a></li>
             </ul>
-
         </section>
 
         <section id=history class="sec">
