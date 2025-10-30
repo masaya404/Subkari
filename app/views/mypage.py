@@ -106,17 +106,22 @@ def editProfile():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-
-
-    sql = "SELECT * FROM m_account WHERE id = %s"
+    new_profile=request.form   #username,smoker,introduction
+    id=session['user_id']
     con = connect_db()
     cur = con.cursor(dictionary=True)
-    cur.execute(sql, (user_id,))  # ← タプルで渡す！
+    print(new_profile['username'])
+    sql="update table set username =%s,smoker=%s ,introduction=%s where id=%s"
+    cur.execute(sql, (new_profile['username'],new_profile['smoker'],new_profile['introduction'],user_id,))  # ← タプルで渡す！
+    con.commit()
+
+    sql="select * from m_account where id=%s"
+    cur.execute(sql,(id,))
     result = cur.fetchone()
-
-
     image_path = result["identifyImg"] if result else None
     smoker = result["smoking"] if result and "smoking" in result else 0
+    cur.close()
+    con.close()
 
     return render_template("mypage/editProfile.html", user_id=user_id, image_path=image_path ,result=result,smoker=smoker)
     

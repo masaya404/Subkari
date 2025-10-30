@@ -47,15 +47,15 @@
             <!-- アカウント名 -->
             <div class="form-group">
                 <label class="form-label">アカウント名</label>
-                <input type="text" class="form-input" id="accountName" value="{{result.username}}" maxlength="20" oninput="updateCharCount('accountName', 'nameCount', 20); validateAccountName()">
-                <div class="error-message" id="nameError">ニックネームを入力してください</div>
+                <input type="text" class="form-input" id="accountName" name="username"value="{{result.username}}" maxlength="20" oninput="updateCharCount('accountName', 'nameCount', 20); validateAccountName()">
+                <div class="error-message" id="nameError" >ニックネームを入力してください</div>
                 <div class="char-count"><span id="nameCount">0</span> / 20</div>
             </div>
 
             <!-- 自己紹介 -->
             <div class="form-group">
                 <label class="form-label">自己紹介</label>
-                <textarea class="form-textarea" id="bio" maxlength="1000" oninput="updateCharCount('bio', 'bioCount', 1000); validateBio()" >{{result.introduction}}</textarea>
+                <textarea class="form-textarea" id="bio" maxlength="1000" oninput="updateCharCount('bio', 'bioCount', 1000); validateBio()" name="introduction">{{result.introduction}}</textarea>
                 <div class="error-message" id="bioError">1000文字以下で入力してください</div>
                 <div class="char-count" id="bioCountWrapper"><span id="bioCount">0</span> / 1000</div>
             </div>
