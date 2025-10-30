@@ -1,308 +1,20 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends "base.html" %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>規約・ポリシー - SUBKARI</title>
-  <style>
-    /* ------------------------------------- */
-    /* CSS: 全体設定とリセット */
-    /* ------------------------------------- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy_policy.css') }}">
+{% endblock %}
 
-    body {
-      font-family: 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', Meiryo, メイリオ, sans-serif;
-      background-color: #f5f5f5;
-      font-size: 12px;
-      line-height: 1.8;
-    }
+{% block title %}
+    規約・ポリシー
+{% endblock %}
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    /* ------------------------------------- */
-    /* CSS: ヘッダー */
-    /* ------------------------------------- */
-    header {
-      background-color: #000;
-      color: white;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 18px;
-      font-style: italic;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-
-    .search-bar {
-      flex-grow: 1;
-      max-width: 400px;
-      margin: 0 40px;
-    }
-
-    .search-bar input {
-      width: 100%;
-      padding: 6px 12px;
-      border-radius: 3px;
-      border: none;
-      font-size: 12px;
-    }
-
-    .header-icons {
-      display: flex;
-      gap: 20px;
-      font-size: 11px;
-    }
-
-    .header-icon {
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .nav-menu {
-      background-color: #000;
-      padding: 8px 20px;
-      display: flex;
-      justify-content: flex-end;
-      gap: 30px;
-      font-size: 12px;
-      color: white;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .nav-menu a {
-      color: white;
-      text-decoration: none;
-    }
-
-    /* ------------------------------------- */
-    /* CSS: レイアウト (Container & Sidebar) */
-    /* ------------------------------------- */
-    .container {
-      display: flex;
-      max-width: 1200px;
-      margin: 20px auto;
-      background-color: white;
-      min-height: 80vh; /* 最低限の高さを確保 */
-    }
-
-    .sidebar {
-      width: 180px;
-      background-color: #f8f8f8;
-      padding: 20px 15px;
-      border-right: 1px solid #ddd;
-      flex-shrink: 0; /* 縮まないようにする */
-    }
-
-    .profile-section {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .profile-icon {
-      width: 60px;
-      height: 60px;
-      background-color: #ddd; /* 黒からグレーに変更して視認性アップ */
-      border-radius: 50%;
-      margin: 0 auto 10px;
-    }
-
-    .sidebar-menu {
-      list-style: none;
-    }
-
-    .sidebar-menu>li {
-      margin-bottom: 15px;
-    }
-
-    .mypage_top {
-      font-weight: bold;
-      margin-bottom: 8px;
-      font-size: 13px;
-      border-bottom: 1px solid black;
-      display: block;
-      padding-bottom: 3px;
-    }
-    
-    .sidebar-menu>li>div {
-      font-weight: bold;
-      margin-bottom: 8px;
-      font-size: 13px;
-      cursor: default;
-    }
-
-    .sidebar-submenu {
-      list-style: none;
-      padding-left: 10px;
-            font-weight: bold;
-      margin-bottom: 8px;
-      font-size: 13px;
-      cursor: default;
-
-    }
-
-    .sidebar-submenu li {
-      margin-bottom: 5px;
-      font-size: 12px;
-      color: #666;
-    }
-
-    .sidebar-submenu li a {
-        display: block;
-        padding: 2px 0;
-        cursor: pointer;
-    }
-
-    .sidebar-submenu li a:hover {
-      color: #000;
-    }
-    
-    /* アクティブな項目 */
-    .sidebar-menu .active a {
-        font-weight: bold;
-        color: #000;
-        background-color: #e0e0e0;
-        padding: 2px 5px;
-        margin-left: -5px;
-        border-radius: 3px;
-    }
-
-
-    /* ------------------------------------- */
-    /* CSS: メインコンテンツ (規約本文) */
-    /* ------------------------------------- */
-    .main-content {
-      flex: 1;
-      padding: 30px 40px;
-    }
-
-    h1 {
-      font-size: 20px;
-      font-weight: normal;
-      margin-bottom: 30px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #000;
-    }
-
-    h2 {
-      font-size: 18px; /* 添付画像に合わせ少し大きく */
-      font-weight: bold;
-      margin-top: 30px;
-      margin-bottom: 15px;
-    }
-
-    h3 {
-      font-size: 13px;
-      font-weight: bold;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
-
-    .section {
-      margin-bottom: 40px;
-    }
-
-    .section p {
-      margin-bottom: 12px;
-      font-size: 12px; /* 基本フォントサイズを再設定 */
-    }
-
-    ol {
-      padding-left: 20px;
-      margin-bottom: 15px;
-    }
-
-    ol li {
-      margin-bottom: 8px;
-      font-size: 12px;
-    }
-
-    .divider {
-      border-top: 1px solid #ddd;
-      margin: 40px 0;
-    }
-
-    /* ------------------------------------- */
-    /* CSS: フッター */
-    /* ------------------------------------- */
-    footer {
-      background-color: #333;
-      color: #999;
-      padding: 30px 20px;
-      margin-top: 40px;
-    }
-
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .footer-logo {
-      font-size: 20px;
-      font-style: italic;
-      font-weight: bold;
-      color: white;
-      letter-spacing: 2px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 30px;
-      font-size: 11px;
-    }
-
-    .footer-links a {
-      color: #999;
-      text-decoration: none;
-    }
-
-    .footer-info {
-      margin-top: 20px;
-      font-size: 10px;
-      line-height: 1.6;
-    }
-
-    .footer-bottom {
-      max-width: 1200px;
-      margin: 20px auto 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 10px;
-    }
-
-    .social-icons {
-      display: flex;
-      gap: 15px;
-    }
-  </style>
-</head>
-
-<body>
-
-
+{% block content %}
   <div class="container">
     <aside class="sidebar">
       <div class="profile-section">
         <div class="profile-icon"></div>
         <div>ねこ</div>
       </div>
-
       <ul class="sidebar-menu">
         <li>
           <a href="#" class="mypage_top">マイページTOP</a>
@@ -311,8 +23,11 @@
           <div>アカウント情報</div>
           <ul class="sidebar-submenu">
             <li><a href="#">プロフィール</a></li>
+          </ul>
+        </li>
+        <li>
           <div>振込</div>
-
+          <ul class="sidebar-submenu">
             <li><a href="#">銀行登録</a></li>
             <li><a href="#">銀行申請</a></li>
           </ul>
@@ -334,11 +49,10 @@
             <li><a href="#">ブロック一覧</a></li>
           </ul>
         </li>
-        <li>
-          <div>規約・ポリシー</div>
+        <li class="active-category"> <div>規約・ポリシー</div>
           <ul class="sidebar-submenu">
-            <li class="active"><a href="#">利用規約</a></li>
-            <li><a href="#">プライバシーポリシー</a></li>
+            <li class="active"><a href="#rules">利用規約</a></li> 
+            <li><a href="#policy">プライバシーポリシー</a></li>
           </ul>
         </li>
         <li>
@@ -362,183 +76,19 @@
     <main class="main-content">
       <h1>規約・ポリシー</h1>
 
-      <div class="section">
+      <div class="section" id="rules">
         <h2>利用規約</h2>
-
-        <p>本利用規約（以下「本規約」といいます。）は、ファッションレンタルサービス「SUBKARI」（以下「本サービス」といいます。）の利用条件を定めるものです。<br>
-          本サービスをご利用されるすべての方（以下「ユーザー」といいます。）は、本規約に同意の上、本サービスをご利用いただきます。</p>
-
-        <h3>第1条（適用）</h3>
-        <ol>
-          <li>本規約は、ユーザーと株式会社SUBKARI（以下「当社」といいます。）との間の本サービスの利用に関わる一切の関係に適用されます。</li>
-          <li>当社は、本規約の外に、本サービスの利用に関するガイドライン、ポリシー等を定める場合があります。これらは、本規約の一部を構成するものとします。</li>
-        </ol>
-
-        <h3>第2条（会員登録）</h3>
-        <ol>
-          <li>本サービスにおいて、会員登録を希望する者は、本規約に同意し、当社が定める方法によって会員登録を申請するものとします。</li>
-          <li>当社は、前項の申請があった場合、所定の審査を行い、当社が認める場合は、会員登録を承認するものとします。</li>
-        </ol>
-
-        <h3>第3条（サービス内容）</h3>
-        <p>本サービスは、ユーザーが本サービス上で会員登録したアカウントを通じて、ファッションアイテムをレンタル・利用できるプラットフォームを提供します。<br>
-          ユーザーは、本規約の内容を理解し、各種情報の入力に同意をした上で本サービスを利用するものとします。</p>
-
-        <h3>第4条（利用者の制限）</h3>
-        <p>ユーザーは、以下のいずれかに該当する場合、本サービスを利用できません。</p>
-        <ol>
-          <li>未成年者の方で親権者または法定代理人の同意を得られていない方</li>
-          <li>過去に本規約または当社との他の契約に違反したことのある方</li>
-          <li>登録情報に虚偽、誤記または記載漏れがあった方</li>
-          <li>反社会的勢力等に該当する、または関係すると当社が判断した場合</li>
-        </ol>
-
-        <h3>第5条（レンタル商品の配送）</h3>
-        <ol>
-          <li>ユーザーは、当社が定める方法により、レンタル商品を受け取ることができます。初回レンタル時の送料は当社が負担します。</li>
-          <li>レンタル商品の配送・返却時に住所地の変更があった場合、速やかに届出をしなければなりません。</li>
-          <li>当社は、住所変更の届け出がされなかったことにより配送・返却ができない場合、その責任を負わないものとします。</li>
-        </ol>
-
-        <h3>第6条（料金・支払い）</h3>
-        <ol>
-          <li>本サービスの利用料金は、別途定める料金表に基づき、ユーザーは当社が定める方法で支払うものとします。</li>
-          <li>未成年の会員は、親権者等または法定代理人の同意を得た場合に限り、本サービスの有料部分を利用することができます。</li>
-          <li>未成年の保護者等によって追加料金などの申し込みに対する承認をいただければ、その申し込みを取り消すことはできません。</li>
-        </ol>
-
-        <h3>第7条（商品の破損・紛失）</h3>
-        <ol>
-          <li>当社は、本サービスに基づき提供する商品について、通常の使用による損耗を除き、一切の責任を負いません。</li>
-          <li>ユーザーの故意または過失によりレンタル品が破損、汚損または紛失した場合、当社はユーザーに対し、その損傷・紛失費用を請求することができます。</li>
-        </ol>
-
-        <h3>第8条（アカウント削除等）</h3>
-        <ol>
-          <li>返却時の送料については、別途定める規定に基づき、ユーザーまたは当社が負担することになります。</li>
-          <li>ユーザーが本規約に違反した場合は、当社は該当の会員のアカウント削除を当社の裁量で認定することができます。</li>
-        </ol>
-
-        <h3>第9条（禁止事項）</h3>
-        <p>ユーザーは、本サービスの利用に、以下の行為をしてはなりません。</p>
-        <ol>
-          <li>法令または公序良俗に違反する行為</li>
-          <li>犯罪行為に関連する行為</li>
-          <li>当社の知的財産権、肖像権、プライバシー、名誉などの第三者の権利を侵害する行為</li>
-          <li>本サービスのネットワークまたはシステム等に過度な負荷をかける行為、または損害を与える行為</li>
-          <li>本サービスの運営を妨害するおそれのある行為</li>
-          <li>不正アクセスをし、またはこれを試みる行為</li>
-          <li>第三者になりすます行為</li>
-          <li>サービスに関連して、反社会的勢力に対して直接または間接に利益を供与する行為</li>
-          <li>本サービスで掲載されている第三者の情報を不正に利用する行為</li>
-          <li>その他、当社が不適切と判断する行為</li>
-        </ol>
-
-        <h3>第10条（免責事項）</h3>
-        <p>当社は、本サービスに起因してユーザーに生じたあらゆる損害について、当社の故意または重過失による場合を除き、一切の責任を負いません。</p>
-        <ol>
-          <li>本サービスに入力した情報・データが消失したことによる損害</li>
-          <li>本サービスに対して送信された情報に由来する損害</li>
-          <li>天災地変、不可抗力に起因する損害</li>
-          <li>特別損害、間接損害、偶発的損害、逸失利益、または生活費など</li>
-          <li>その他、サービスを通じて得られた情報等により生じた損害</li>
-        </ol>
-
-        <h3>第11条（業務委託）</h3>
-        <p>当社は、本サービスの提供に必要な業務の全部または一部を、他の事業者に対して委託することができます。</p>
-
-        <h3>第12条（利用内容等）</h3>
-        <ol>
-          <li>当社は、ユーザーに対して通知やご説明することなく、本サービスの内容を変更することができます。</li>
-          <li>本サービスに関連して、ユーザーと他のユーザーまたは第三者との間で生じた紛争等については、当社は責任を負わないものとし、ユーザーの費用と責任をもって解決することとします。</li>
-        </ol>
-
-        <h3>第13条（商標・知的財産権）</h3>
-        <p>本サービスに関する著作物、商標、知的財産権は、所有者または当社に帰属し、または当社が正当なライセンスを受けています。<br>
-          当社の著作物は、日本及び外国の著作権法により保護されます。<br>
-          ユーザーは、当社の事前の許可なく、本サイトのロゴその他商号を無許可で使用することはできません。</p>
-
-        <h3>第14条（保証の否認）</h3>
-        <p>当社は、本サービスについて、その完全性、正確性、有用性、特定の目的への適合性、バグがないこと等、いかなる保証もいたしません。</p>
-
-        <h3>第15条（Cookie等の利用）</h3>
-        <p>当社は、利用者が本サービスを利用する際、Cookie（クッキー）等の技術を使用することがあります。<br>
-          当社は、Cookie等により得た情報を用いて、サービス運営上の不具合の解消、またはサービスの向上のための分析を行うことがあります。<br>
-          利用者は、ブラウザの設定によりCookie等の提供を拒否することができます。</p>
-
-        <h3>第16条（本規約の変更）</h3>
-        <p>当社は、必要に応じて本規約を変更することがあります。変更後の規約は、当社ホームページ上で告知した時点から効力を生じるものとします。</p>
-
-        <h3>第17条（お問い合わせ窓口）</h3>
-        <p>本サービスに関するお問い合わせは、以下までご連絡ください。</p>
-
-        <p>【SUBKARI】<br>
-          E-mail：xxxxxx@example.com<br>
-          営業：9:00~20:00 定休日 土・日・祝日<br>
-          ※ お問い合わせいただいた内容について順次ご回答いたします。</p>
+        
+        
       </div>
 
       <div class="divider"></div>
 
-      <div class="section">
+      <div class="section" id="policy">
         <h2>プライバシーポリシー</h2>
 
-        <p>このプライバシーポリシー（以下「本ポリシー」といいます。）は、株式会社SUBKARI（以下「当社」といいます。）が提供するサービスプラットフォーム（以下「本サービス」といいます。）における、個人情報の収集、利用、管理について定めます。</p>
 
-        <h3>第1条（収集する情報）</h3>
-        <p>当社は、本サービスを利用するユーザーから、以下の情報を収集することができます。</p>
-        <ol>
-          <li>氏名、住所、電話番号、メールアドレス、生年月日、性別、プロフィール画像、支払情報など、会員登録時や取引時に提供される情報。</li>
-          <li>本サービスの利用状況、アクセス日時、IPアドレス、閲覧履歴、Cookie等を通じて収集される情報。</li>
-        </ol>
-
-        <h3>第2条（使用目的）</h3>
-        <p>当社は、収集した個人情報を、以下の目的に利用します。</p>
-        <ol>
-          <li>本サービスの提供、運営、維持、管理のため。</li>
-          <li>ユーザーからのお問い合わせに対応するため。</li>
-          <li>当社または第三者の商品・サービスに関する広告、宣伝、その他有益な情報を提供するため。</li>
-          <li>ユーザーの属性や行動履歴に応じた広告を配信するため。</li>
-          <li>サービス利用状況に関する統計データの作成、通知、またはご協力を求めるため。</li>
-          <li>本サービスの改善、新サービスの開発、リニューアルのための調査・分析のため。</li>
-          <li>その他、上記利用目的に付随する目的のため。</li>
-        </ol>
-
-        <h3>第3条（第三者提供）</h3>
-        <p>当社は、法令で認められる場合を除き、あらかじめユーザーの同意を得ることなく、個人情報を第三者に提供しません。</p>
-        <ol>
-          <li>ユーザーの同意を得た場合。</li>
-          <li>法令に基づき提供する場合。</li>
-          <li>人の生命、身体または財産の保護のために必要があり、本人の同意を得ることが困難な場合。</li>
-          <li>公衆衛生の向上または児童の健全な育成の推進のために特に必要があり、本人の同意を得ることが困難な場合。</li>
-        </ol>
-
-        <h3>第4条（委託又は共同利用）</h3>
-        <p>当社は、利用目的の達成に必要な範囲内において、個人情報の取り扱いの全部または一部を委託することがあります。この場合、委託先に対して適切な管理を指導・監督します。</p>
-
-        <h3>第5条（個人情報の開示・訂正・削除）</h3>
-        <ol>
-          <li>本サービスは、保有する個人情報の正確性の維持に努めます。会社は、本人から個人情報の開示を求められた場合、本人確認後、速やかに対応します。</li>
-          <li>会社は、本人から訂正、追加または削除を求められた場合、事実確認を行い、適切に対応します。</li>
-        </ol>
-
-        <h3>第6条（Cookie等の仕組み）</h3>
-        <p>当社は、本サービスで利用者により良いサービスを提供するため、Cookie等の技術を使用します。利用者はブラウザの設定によりCookie等の機能を無効にすることができます。</p>
-
-        <h3>第7条（プライバシーポリシーの改変）</h3>
-        <p>当社は、必要に応じて本ポリシーを変更することがあります。変更後の本ポリシーは、当社ホームページで告知した時点から効力を生じるものとします。</p>
-
-        <h3>第8条（お問い合わせ窓口）</h3>
-        <p>本ポリシーに関するお問い合わせは、以下までご連絡ください。</p>
-
-        <p>【SUBKARI】<br>
-          E-mail：xxxxxx@example.com<br>
-          営業：9:00~20:00 定休日 土・日・祝日<br>
-          ※ お問い合わせいただいた内容について順次ご回答いたします。</p>
       </div>
     </main>
   </div>
-
-</body>
-
-</html>
+{% endblock %}

@@ -96,7 +96,6 @@ def get_transaction_info(id):
     sql="select count(*) as 出品数 from m_product where account_id=%s"
     cur.execute(sql, (id,))
     products=cur.fetchone()
-
     #評価を変形
     evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
    
@@ -295,7 +294,15 @@ def bankComplete():
     cur.close()
     return render_template("mypage/bankComplete.html")
 #----------------------------------------------------------------------------------------------------
+# @mypage_bp.route("mypage/transferApplication")
+# def transferApplication():
+#     session["editmode"]=False
+#     sql = "SELECT * FROM content_detail WHERE id = 2"
+#     con=connect_db()
+#     cur=con.cursor(dictionary=True)
 
+#     return render_template("mypage/bankComplete.html")
+        
 
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
@@ -444,7 +451,6 @@ def transferHistory():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    
     # try:
     #     conn = mysql.connector.connect(
     #         host="localhost",
