@@ -10,12 +10,12 @@
         <div class="profile-header">
             <img src="{{url_for('static' , filename='image_path')}}" alt="プロフィール画像" class="profile-image">
             <div class="profile-info">
-                <h1 class="profile-name">{{result.username}}</h1>
+                <h1 class="profile-name">{{username}}</h1>
                 
                 <div class="profile-rating">
                     <span class="stars">★★★★☆</span>
                     <span class="rating-count">255</span>
-                    {% if smoker == 1%}
+                    {% if smoker == 0%}
                         <span class="reviewer-badge">喫煙者</span>
                     {% else %}
                         <span class="reviewer-badge">非喫煙者</span>
@@ -39,7 +39,7 @@
                 </div>
                 
                 <div class="profile-description" id="profileDescription">
-                    {{result.introduction}}
+                    {{introduction}}
                     <!-- 何文字以上でを作る -->
                     <span id="moreText" style="display: none;">
                         <br><br>

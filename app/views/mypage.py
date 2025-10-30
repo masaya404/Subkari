@@ -52,17 +52,19 @@ def getAccountInfo():
         accountNumbers.append(num)
     return bank_info,accountNumbers,count
 
+#ユーザー情報を取得する ------------------------------------------------------------------------------------
+#引数として受け取ったidを持つユーザーの情報を取得
+def get_user_info(id):
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (id,))  # ← タプルで渡す！
+    user_info = cur.fetchone()
+    return user_info
+
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
 
-# <<<<<<< HEAD
-# =======
-#@mypage_bp.route("mypage/ページまたは処理の名前")このようにかく　mypageはこのモジュールの名前
-#render_template("mypage/ページのhtml名前")このようにかく　mypageはこのモジュールの名前
-
-#userprfのページはmypageのモジュールにかくので、ここには不要
-# mypage_bp = Blueprint('userprf', __name__, url_prefix='/userprf')
-# >>>>>>> 3380b182aa575165ef27f84ca612b9c047078a8d
 
 
 #マイページトップ表示-----------------------------------------------------------------------------
@@ -106,25 +108,41 @@ def editProfile():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+    
+    #user情報を取得
+    user_info=get_user_info(user_id)
+
+    return render_template("mypage/editProfile.html",smoker=user_info['smoker'],username=user_info['username'],introduction=user_info['introduction'])
+
+#updateProfile プロフィール更新--------------------------------------------------------------
+@mypage_bp.route("/updateProfile",methods=['POST'])
+def updateProfile():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    #更新内容を取得
     new_profile=request.form   #username,smoker,introduction
+    print(new_profile)
     id=session['user_id']
+
+    #dbに更新をかける 
     con = connect_db()
     cur = con.cursor(dictionary=True)
-    print(new_profile['username'])
-    sql="update table set username =%s,smoker=%s ,introduction=%s where id=%s"
-    cur.execute(sql, (new_profile['username'],new_profile['smoker'],new_profile['introduction'],user_id,))  # ← タプルで渡す！
+    sql="update m_account set username=%s,smoker=%s,introduction=%s where id=%s"
+    cur.execute(sql,(new_profile['username'],new_profile['smoker'],new_profile['introduction'],id))
     con.commit()
-
-    sql="select * from m_account where id=%s"
-    cur.execute(sql,(id,))
-    result = cur.fetchone()
-    image_path = result["identifyImg"] if result else None
-    smoker = result["smoking"] if result and "smoking" in result else 0
     cur.close()
     con.close()
 
-    return render_template("mypage/editProfile.html", user_id=user_id, image_path=image_path ,result=result,smoker=smoker)
+    #更新後のユーザー情報を取得 
+    user_info=get_user_info(id)
+
+    return render_template("mypage/editProfile.html",smoker=user_info['smoker'],username=user_info['username'],introduction=user_info['introduction'])
+
     
+
 
 #--------------------------------------------------------------------------------------------------
 
@@ -137,17 +155,14 @@ def edit():
     else:
         user_id = session.get('user_id')
 
-    sql = "SELECT * FROM m_account WHERE id = %s"
-    con = connect_db()
-    cur = con.cursor(dictionary=True)
-    cur.execute(sql, (user_id,))  # ← タプルで渡す！
-    result = cur.fetchone()
+    #ユーザー情報を取得
+    user_info=get_user_info(user_id)
 
+    
+    # image_path = result["identifyImg"] if result else None
+    # smoker = result["smoking"] if result and "smoking" in result else 0
 
-    image_path = result["identifyImg"] if result else None
-    smoker = result["smoking"] if result and "smoking" in result else 0
-
-    return render_template("mypage/edit.html", user_id=user_id, image_path=image_path ,result=result,smoker=smoker)
+    return render_template("mypage/edit.html", username=user_info['username'],  smoker=user_info['smoker'],introduction=user_info['introduction'])
     
 
 #---------------------------------------------------------------------------------------------------
