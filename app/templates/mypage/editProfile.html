@@ -12,14 +12,14 @@
         <div class="profile-header">
             <img src="{{url_for('static' , filename='image_path')}}" alt="プロフィール画像" class="profile-image">
             <div class="profile-info">
-                <h1 class="profile-name">{{user_info.username}}</h1>
+                <h1 class="profile-name">{{username}}</h1>
                 
                 <div class="profile-rating">
                     <span class="stars">
                     {% for i in range(evaluation)%}★{% endfor %}
                     {% for i in range(5-evaluation)%}☆{% endfor %}</span>
                     <span class="rating-count">{{evaluationCount}}</span>
-                    {% if user_info.smoker == 0%}
+                    {% if smoker == 0%}
                         <span class="reviewer-badge">喫煙者</span>
                     {% else %}
                         <span class="reviewer-badge">非喫煙者</span>
@@ -42,7 +42,7 @@
                 </div>
                 
                 <div class="profile-description" id="profileDescription">
-                    {{user_info.introduction}}
+                    {{introduction}}
                     <!-- 何文字以上でを作る -->
                     <span id="moreText" style="display: none;">
                         <br><br>
@@ -68,7 +68,7 @@
             {% for name in productName %}
             <div class="product-card">
                 <img src="{{productImg[loop.index0]['img']}}" alt="スカート" class="product-image">
-                <div class="product-name">{{name}}</div>
+                <div class="product-name">{{name.name}}</div>
             </div>
             {% endfor %}
         </div>

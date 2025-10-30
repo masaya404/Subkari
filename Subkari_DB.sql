@@ -83,7 +83,7 @@ CREATE TABLE `m_product` (
   `purchasePrice` INT NULL,
   `rentalPrice` INT NULL,
   `size` VARCHAR(255) NOT NULL,
-  `color` VARCHAR(255)  NULL,
+  `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','ピンク','レッド','オレンジ')  NULL,
   `upload` DATE NOT NULL,
   `showing` ENUM('公開','非公開','非表示') NOT NULL,
   `draft` boolean NOT NULL,
