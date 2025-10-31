@@ -14,7 +14,8 @@
             <div class="form-section">
                 <div class="section-title">画像</div>
                 <div class="image-upload">
-                    <img>
+                    <img src="{{url_for('static' , filename='img/'+user_info.identifyImg)}}" alt="プロフィール画像" class="profile-image">
+
                     <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="previewImage(event)">
                     <button type="button" class="upload-btn" onclick="document.getElementById('imageInput').click()">画像を選択</button>
                 </div>
@@ -26,12 +27,12 @@
                 <div class="radio-group">
                     <div class="radio-item">
                         <input type="radio" id="smoking1" name="smoker" value="0" 
-                            {% if smoker == 0 %}checked{% endif %}>
+                            {% if user_info.smoker == 0 %}checked{% endif %}>
                         <label for="smoking1">喫煙者</label>
                     </div>
                     <div class="radio-item">
                         <input type="radio" id="smoking2" name="smoker" value="1" 
-                            {% if smoker == 1 %}checked{% endif %}>
+                            {% if user_info.smoker == 1 %}checked{% endif %}>
                         <label for="smoking2">非喫煙者</label>
                     </div>
                 </div>
@@ -39,7 +40,7 @@
             <!-- アカウント名 -->
             <div class="form-group">
                 <label class="form-label">アカウント名</label>
-                <input type="text" class="form-input" id="accountName" name="username"value="{{username}}" maxlength="20" oninput="updateCharCount('accountName', 'nameCount', 20); validateAccountName()">
+                <input type="text" class="form-input" id="accountName" name="username"value="{{user_info.username}}" maxlength="20" oninput="updateCharCount('accountName', 'nameCount', 20); validateAccountName()">
                 <div class="error-message" id="nameError" >ニックネームを入力してください</div>
                 <div class="char-count"><span id="nameCount">0</span> / 20</div>
             </div>
@@ -47,7 +48,7 @@
             <!-- 自己紹介 -->
             <div class="form-group">
                 <label class="form-label">自己紹介</label>
-                <textarea class="form-textarea" id="bio" maxlength="1000" oninput="updateCharCount('bio', 'bioCount', 1000); validateBio()" name="introduction">{{introduction}}</textarea>
+                <textarea class="form-textarea" id="bio" maxlength="1000" oninput="updateCharCount('bio', 'bioCount', 1000); validateBio()" name="user_info.introduction">{{introduction}}</textarea>
                 <div class="error-message" id="bioError">1000文字以下で入力してください</div>
                 <div class="char-count" id="bioCountWrapper"><span id="bioCount">0</span> / 1000</div>
             </div>

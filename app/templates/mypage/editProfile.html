@@ -10,7 +10,7 @@
     <main class="editProfile_main">
         <h1></h1>
         <div class="profile-header">
-            <img src="{{url_for('static' , filename='image_path')}}" alt="プロフィール画像" class="profile-image">
+            <img src="{{url_for('static' , filename='img/'+user_info.identifyImg)}}" alt="プロフィール画像" class="profile-image">
             <div class="profile-info">
                 <h1 class="profile-name">{{user_info.username}}</h1>
                 
@@ -42,7 +42,7 @@
                 </div>
                 
                 <div class="profile-description" id="profileDescription">
-                    {{introduction}}
+                    {{user_info.introduction}}
                     <!-- 何文字以上でを作る -->
                     <span id="moreText" style="display: none;">
                         <br><br>

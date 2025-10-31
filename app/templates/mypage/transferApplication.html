@@ -6,7 +6,6 @@
 <!-- <link rel="stylesheet" href="../../../app/static/css/transaction_detail.css">  -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/transferApplication.css') }}">
 
-
 <main>
     <h1>振込申請</h1>
     {% if not editmode %}
@@ -56,49 +55,6 @@
             </div>
         </div>
         {% endfor %}
-
-        <!-- <div class="bank-item" data-id="2">
-                <input type="radio" name="bank" value="2">
-                <div class="bank-info">
-                    <div class="bank-details">
-                        <div class="bank-detail-row">
-                            <span class="bank-detail-label">銀行名</span>
-                            <span class="bank-detail-value">三井住友銀行</span>
-                        </div>
-                        <div class="bank-detail-row">
-                            <span class="bank-detail-label">口座番号</span>
-                            <span class="bank-detail-value">****350</span>
-                        </div>
-                        <div class="bank-detail-row">
-                            <span class="bank-detail-label">支店番号</span>
-                            <span class="bank-detail-value">121</span>
-                        </div>
-                    </div>
-                    <button class="delete-button">削除する</button>
-                </div>
-            </div>
-
-            <div class="bank-item" data-id="3">
-                <input type="radio" name="bank" value="3">
-                <div class="bank-info">
-                    <div class="bank-details">
-                        <div class="bank-detail-row">
-                            <span class="bank-detail-label">銀行名</span>
-                            <span class="bank-detail-value">ゆうちょ銀行</span>
-                        </div>
-                        <div class="bank-detail-row">
-                            <span class="bank-detail-label">口座番号</span>
-                            <span class="bank-detail-value">****098</span>
-                        </div>
-                        <div class="bank-detail-row">
-                            <span class="bank-detail-label">支店番号</span>
-                            <span class="bank-detail-value">131</span>
-                        </div>
-                    </div>
-                    <button class="delete-button">削除する</button>
-                </div>
-            </div> -->
-
     </div>
 
     <!-- Add Bank Button -->

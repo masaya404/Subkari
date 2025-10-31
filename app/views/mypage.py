@@ -173,7 +173,7 @@ def editProfile():
     #商品情報を取得
     productName,productImg=get_product_info(user_id)
 
-    return render_template("mypage/editProfile.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
+    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])
@@ -201,7 +201,7 @@ def updateProfile():
     user_info=get_user_info(id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(id)
     productName,productImg=get_product_info(id)
-    return render_template("mypage/editProfile.html",smoker=user_info['smoker'],username=user_info['username'],introduction=user_info['introduction'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg)
+    return render_template("mypage/editProfile.html",user_info=user_info,evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg)
 
     
 
@@ -224,7 +224,7 @@ def edit():
     # image_path = result["identifyImg"] if result else None
     # smoker = result["smoking"] if result and "smoking" in result else 0
 
-    return render_template("mypage/edit.html", username=user_info['username'],  smoker=user_info['smoker'],introduction=user_info['introduction'])
+    return render_template("mypage/edit.html", user_info=user_info)
     
 
 #---------------------------------------------------------------------------------------------------
