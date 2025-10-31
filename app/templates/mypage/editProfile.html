@@ -68,7 +68,8 @@
                 {% for name in productName %}
                 <div class="product-card">
                     <button><img src="{{productImg[loop.index0]['img']}}" alt="{{name.name}}の画像" class="product-image"></button>
-                    <div class="product-name">{{name.name}}</div>
+                    <div class="product-name" name="product_name">{{name.name}}</div>
+                    
                 </div>
                 {% endfor %}
             </div>

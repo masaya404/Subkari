@@ -498,7 +498,8 @@ def todo():
     return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
 
-#privacy_policy プライバシーポリシー---------------------------------------------------------------
+
+#privacy_policy プライバシーポリシー表示---------------------------------------------------------------
 @mypage_bp.route("/privacy_policy")
 def privacy_policy():
     if 'user_id' not in session:
@@ -519,6 +520,26 @@ def privacy_policy():
     return render_template("mypage/privacy_policy.html" ,  user_id=user_id , result=result)
 #--------------------------------------------------------------------------------------------------------------------
 
+#terms 利用規約表示  ----------------------------------------------------------------------------------------
+@mypage_bp.route("/terms")
+def terms():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select content_detail from m_admin_contents  where id=1"
+    cur.execute(sql)
+    result=cur.fetchone()
+    cur.close()
+    con.close()
+    
+
+    return render_template("mypage/terms.html" ,  user_id=user_id , result=result)
+#--------------------------------------------------------------------------------------------------------------------
 
     
     
