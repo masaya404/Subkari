@@ -96,13 +96,13 @@ def get_transaction_info(id):
     sql="select count(*) as 出品数 from m_product where account_id=%s"
     cur.execute(sql, (id,))
     products=cur.fetchone()
-
     #評価を変形
     evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
    
     return evaluation,evaluationCount,follows,followers,products
 #商品データを取得 --------------------------------------------------
 def get_product_info(id):
+
     con = connect_db()
     cur = con.cursor(dictionary=True)
 
@@ -113,11 +113,15 @@ def get_product_info(id):
     #各商品1枚目の画像を取得 
     sql="SELECT  i.* FROM m_productImg i INNER JOIN (SELECT  product_id,MIN(id) AS first_image_id FROM m_productImg GROUP BY product_id) AS first_img ON i.id = first_img.first_image_id INNER JOIN m_product p ON p.id = i.product_id WHERE p.account_id = %s"
     cur.execute(sql,(id,))
-    img=cur.fetchall()
+
     cur.close()
     con.close()
+    img_id=cur.fetchall()
+    
+    #パスを取得
+    # sql=
+    # return name,img
 
-    return name,img
 
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
@@ -297,7 +301,15 @@ def bankComplete():
     cur.close()
     return render_template("mypage/bankComplete.html")
 #----------------------------------------------------------------------------------------------------
+# @mypage_bp.route("mypage/transferApplication")
+# def transferApplication():
+#     session["editmode"]=False
+#     sql = "SELECT * FROM content_detail WHERE id = 2"
+#     con=connect_db()
+#     cur=con.cursor(dictionary=True)
 
+#     return render_template("mypage/bankComplete.html")
+        
 
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
@@ -446,7 +458,6 @@ def transferHistory():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    
     # try:
     #     conn = mysql.connector.connect(
     #         host="localhost",
@@ -492,9 +503,42 @@ def todo():
         user_id = session.get('user_id')
 
 
-    return render_template("mypage/todo.html" ,  user_id=user_id)
+    # con=connect_db()
+    # cur=con.cursor(dictionary=True)
+    # sql="select bankName,accountNumber,branchCode from t_transfer  where account_id=%s limit 3"
+    # cur.execute(sql,(id,))
+    # todo=cur.fetchall()
+    # cur.close()
+    # con.close()
+
+
+    return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
 
+#privacy_policy プライバシーポリシー---------------------------------------------------------------
+@mypage_bp.route("/privacy_policy")
+def privacy_policy():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select content_detail from m_admin_contents  where id=2"
+    cur.execute(sql)
+    result=cur.fetchone()
+    cur.close()
+    con.close()
+    
+
+    return render_template("mypage/privacy_policy.html" ,  user_id=user_id , result=result)
+#--------------------------------------------------------------------------------------------------------------------
+
+
+    
+    
 
 
 # htmlの画面遷移url_for
