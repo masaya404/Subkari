@@ -113,14 +113,11 @@ def get_product_info(id):
     #各商品1枚目の画像を取得 
     sql="SELECT  i.* FROM m_productImg i INNER JOIN (SELECT  product_id,MIN(id) AS first_image_id FROM m_productImg GROUP BY product_id) AS first_img ON i.id = first_img.first_image_id INNER JOIN m_product p ON p.id = i.product_id WHERE p.account_id = %s"
     cur.execute(sql,(id,))
-
+    img=cur.fetchall()
     cur.close()
     con.close()
-    img_id=cur.fetchall()
-    
-    #パスを取得
-    # sql=
-    # return name,img
+
+    return name,img
 
 
 #mypageこういう名前のモジュール
@@ -175,7 +172,6 @@ def editProfile():
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
     #商品情報を取得
     productName,productImg=get_product_info(user_id)
-    print(productName)
 
     return render_template("mypage/editProfile.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
 
@@ -515,6 +511,30 @@ def todo():
     return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
 
+#privacy_policy プライバシーポリシー---------------------------------------------------------------
+@mypage_bp.route("/privacy_policy")
+def privacy_policy():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select content_detail from m_admin_contents  where id=2"
+    cur.execute(sql)
+    result=cur.fetchone()
+    cur.close()
+    con.close()
+    
+
+    return render_template("mypage/privacy_policy.html" ,  user_id=user_id , result=result)
+#--------------------------------------------------------------------------------------------------------------------
+
+
+    
+    
 
 
 # htmlの画面遷移url_for

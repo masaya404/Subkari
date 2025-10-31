@@ -1,94 +1,13 @@
 {% extends "base.html" %}
 
-{% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy_policy.css') }}">
-{% endblock %}
 
 {% block title %}
-    規約・ポリシー
+    プライバシーポリシー
 {% endblock %}
 
 {% block content %}
-  <div class="container">
-    <aside class="sidebar">
-      <div class="profile-section">
-        <div class="profile-icon"></div>
-        <div>ねこ</div>
-      </div>
-      <ul class="sidebar-menu">
-        <li>
-          <a href="#" class="mypage_top">マイページTOP</a>
-        </li>
-        <li>
-          <div>アカウント情報</div>
-          <ul class="sidebar-submenu">
-            <li><a href="#">プロフィール</a></li>
-          </ul>
-        </li>
-        <li>
-          <div>振込</div>
-          <ul class="sidebar-submenu">
-            <li><a href="#">銀行登録</a></li>
-            <li><a href="#">銀行申請</a></li>
-          </ul>
-        </li>
-        <li>
-          <div>履歴管理</div>
-          <ul class="sidebar-submenu">
-            <li><a href="#">閲覧履歴</a></li>
-            <li><a href="#">レンタル履歴</a></li>
-            <li><a href="#">購入履歴</a></li>
-          </ul>
-        </li>
-        <li>
-          <div>設定</div>
-          <ul class="sidebar-submenu">
-            <li><a href="#">通知</a></li>
-            <li><a href="#">個人情報設定</a></li>
-            <li><a href="#">自動ログイン</a></li>
-            <li><a href="#">ブロック一覧</a></li>
-          </ul>
-        </li>
-        <li class="active-category"> <div>規約・ポリシー</div>
-          <ul class="sidebar-submenu">
-            <li class="active"><a href="#rules">利用規約</a></li> 
-            <li><a href="#policy">プライバシーポリシー</a></li>
-          </ul>
-        </li>
-        <li>
-          <div>ヘルプ</div>
-          <ul class="sidebar-submenu">
-            <li><a href="#">問い合わせ</a></li>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">ヘルプセンター</a></li>
-          </ul>
-        </li>
-        <li>
-          <div>アカウント管理</div>
-          <ul class="sidebar-submenu">
-            <li><a href="#">ログアウト</a></li>
-            <li><a href="#">アカウント削除</a></li>
-          </ul>
-        </li>
-      </ul>
-    </aside>
-
-    <main class="main-content">
-      <h1>規約・ポリシー</h1>
-
-      <div class="section" id="rules">
-        <h2>利用規約</h2>
-        
-        
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="section" id="policy">
-        <h2>プライバシーポリシー</h2>
-
-
-      </div>
-    </main>
-  </div>
+  <main>
+    <h1>プライバシーポリシー</h1>
+    <p>{{result.content_detail}}</p>
+  </main>
 {% endblock %}

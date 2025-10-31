@@ -76,6 +76,8 @@ CREATE TABLE `m_category` (
   PRIMARY KEY (`id`)
 );
 
+
+
 -- 商品テーブル ------------------------------------
 CREATE TABLE `m_product` (
   `id` INT AUTO_INCREMENT NOT NULL,
@@ -84,6 +86,7 @@ CREATE TABLE `m_product` (
   `rentalPrice` INT NULL,
   `size` VARCHAR(255) NOT NULL,
   `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','ピンク','レッド','オレンジ')  NULL,
+  `for` ENUM('レディース','ユニセックス') NOT NULL,
   `upload` DATE NOT NULL,
   `showing` ENUM('公開','非公開','非表示') NOT NULL,
   `draft` boolean NOT NULL,
@@ -263,8 +266,6 @@ CREATE TABLE `m_admin_contents` (
   
   PRIMARY KEY (`id`)
 );
-
-
 
 -- トップステーブル --------------------------------
 CREATE TABLE `m_topsSize` (
@@ -1155,5 +1156,3 @@ ORDER BY
 
 
   
-message.txt
-34 KB

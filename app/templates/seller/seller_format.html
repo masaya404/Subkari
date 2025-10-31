@@ -8,7 +8,7 @@
         <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
             <h1 class="text-3xl font-bold mb-8 text-center">出品する</h1>
 
-            <form id="sellerForm" method="POST" action="{{url_for('seller.format_submit')}}" class="space-y-6" enctype="multipart/form-data">
+          <!--  <form id="sellerForm" method="POST" class="space-y-6" enctype="multipart/form-data">-->
                 <!-- 商品画像 -->
                 <div class="border-2 border-dashed border-gray-300 rounded-lg text-center overflow-hidden">
 
@@ -40,7 +40,7 @@
                         商品名 <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="productName" placeholder="商品名を入力" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" 
-                    value="{{ form_data.get('productName', '') }}" id="name">
+                    value="" id="name">
                     <span class="text-red-500 text-sm hidden" id="productNameError">商品名は必須です</span>
                 </div>
 
@@ -49,14 +49,12 @@
                     <div class="flex flex-col gap-4">
                         <label class="flex items-start">
                             <span class="mr-2">レンタル可能</span>
-                            <input type="checkbox" name="rental" value="true" class="rentalCheckbox cursor-pointer" id="rental"
-                            {% if form_data.get('rental') %}checked{% endif %}>        
+                            <input type="checkbox" name="rental" value="true" class="rentalCheckbox cursor-pointer" id="rental">        
                         </label>
 
                         <label class="flex items-start">
                             <span class="mr-2">購入可能</span>
-                            <input type="checkbox" name="purchase" value="true" class="purchaseCheckbox cursor-pointer" id="purchase"
-                            {% if form_data.get('purchase') %}checked{% endif %}>                           
+                            <input type="checkbox" name="purchase" value="true" class="purchaseCheckbox cursor-pointer" id="purchase">                           
                         </label>
                     </div>
 
@@ -86,9 +84,23 @@
                     <label class="block text-sm font-semibold mb-2">
                         系統カラー <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="color" placeholder="白い系統"
-                    value="{{ form_data.get('color', '') }}" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" id="">
-                    <span class="text-red-500 text-sm hidden" id="colorError">系統カラーは必須です</span>
+                <!--    <input type="text" name="color" placeholder="白い系統"
+                    value="" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" id="">
+                    <span class="text-red-500 text-sm hidden" id="colorError">系統カラーは必須です</span>-->
+                    <select name="color" id="color" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
+                        <option value="ブラック" selected>ブラック</option>
+                        <option value="ホワイト">ホワイト</option>
+                        <option value="イエロー">イエロー</option>
+                        <option value="グレー">グレー</option>
+                        <option value="ブラウン">ブラウン</option>
+                        <option value="グリーン">グリーン</option>
+                        <option value="ブルー">ブルー</option>
+                        <option value="パープル">パープル</option>
+                        <option value="ピンク">ピンク</option>
+                        <option value="レッド">レッド</option>
+                        <option value="オレンジ">オレンジ</option>
+                    </select>
+                    <span class="text-red-500 text-sm hidden" id="brandError">ブランドを選択してください</span>
                 </div>
 
                 <!-- カテゴリー1（必須） -->
@@ -96,40 +108,57 @@
                     <label class="block text-sm font-semibold mb-2">
                         カテゴリー <span class="text-red-500">*</span>
                     </label>
-                    <select name="category" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                    <select name="category1" id="category1" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
                         <option value="">選択してください</option>
-                        <option value="tops" {% if form_data.get('category') == 'tops' %}selected{% endif %}>Tops</option>
-                        <option value="bottoms" {% if form_data.get('category') == 'bottoms' %}selected{% endif %}>Bottoms</option>
-                        <option value="accessories" {% if form_data.get('category') == 'accessories' %}selected{% endif %}>Accessories</option>
+                        <option value="ユニセックス">ユニセックス</option>
+                        <option value="レディース">Bottoms</option>
                     </select>
-                    <span class="text-red-500 text-sm hidden" id="categoryError">カテゴリーを選択してください</span>
+                    <span class="text-red-500 text-sm hidden" id="category1Error">カテゴリーを選択してください</span>
+                </div>
+                 <!-- カテゴリー2（必須） -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        カテゴリー <span class="text-red-500">*</span>
+                    </label>
+                    <select name="category2" id="category2" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
+                        <option value="">選択してください</option>
+                        <option value="トップス">トップス</option>
+                        <option value="ボトムス">ボトムス</option>
+                        <option value="コーデ">コーデ</option>
+                        <option value="アクセサリー">アクセサリー</option>
+                    </select>
+                    <span class="text-red-500 text-sm hidden" id="category2Error">カテゴリーを選択してください</span>
                 </div>
 
-                <!-- カテゴリー2（必須） -->
+                <!-- ブランド（必須） -->
                 <div>
                     <label class="block text-sm font-semibold mb-2">
                         ブランド <span class="text-red-500">*</span>
                     </label>
-                    <select name="brand" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                    <select name="brand" id="brand" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
                         <option value="">選択してください</option>
-                        <option value="KINGLYMASK" {% if form_data.get('brand') == 'KINGLYMASK' %}selected{% endif %}>KINGLYMASK</option>
-                        <option value="LIZ LIZA" {% if form_data.get('brand') == 'LIZ LIZA' %}selected{% endif %}>LIZ LIZA</option>
+                        <option value="TRAVAS TOKYO">TRAVAS TOKYO</option>
+                        <option value="REFLEM">REFLEM</option>
+                        <option value="CIVARIZE">CIVARIZE</option>
+                        <option value="ililil">ililil</option>
+                        <option value="Valerie">Valerie</option>
+                        <option value="THICC PSYNYXX">THICC PSYNYXX</option>
+                        <option value="KINGLYMASK">KINGLYMASK</option>
+                        <option value="Amlige">Amlige</option>
+                        <option value="Meltier">Meltier</option>
+                        <option value="OY">OY</option>
+                        <option value="LIZ LISA">LIZ LISA</option>
+                        <option value="Ank Rouge">Ank Rouge</option>
+                        <option value="other">other</option>
                     </select>
                     <span class="text-red-500 text-sm hidden" id="brandError">ブランドを選択してください</span>
-                </div>
-
-                <!-- アイテム説明 -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2">アイテム説明</label>
-                    <textarea name="itemDescription" rows="4" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
-                        {{ form_data.get('itemDescription', '') }}</textarea>
                 </div>
 
                 <!-- 商品概要説明 -->
                 <div>
                     <label class="block text-sm font-semibold mb-2">商品概要説明</label>
-                    <textarea name="productDescription" rows="4" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
-                        {{ form_data.get('productDescription', '') }}
+                    <textarea name="productDescription" id="explanation" rows="4" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
+            
                     </textarea>
                 </div>
 
@@ -140,19 +169,8 @@
                             サイズ <span class="text-red-500">*</span>
                         </label>
                         <!--  form 　-->
-                        <form method="POST" action="{{ url_for('seller.seller_size') }}">
-                            <input type="hidden" name="productName" value="{{ form_data.get('productName', '') }}">
-                            <input type="hidden" name="rental" value="{% if form_data.get('rental') %}on{% endif %}">
-                            <input type="hidden" name="purchase" value="{% if form_data.get('purchase') %}on{% endif %}">
-                            <input type="hidden" name="smoking" value="{{ form_data.get('smoking', 'no') }}">
-                            <input type="hidden" name="color" value="{{ form_data.get('color', '') }}">
-                            <input type="hidden" name="category" value="{{ form_data.get('category', '') }}">
-                            <input type="hidden" name="brand" value="{{ form_data.get('brand', '') }}">
-                            <input type="hidden" name="itemDescription" value="{{ form_data.get('itemDescription', '') }}">
-                            <input type="hidden" name="productDescription" value="{{ form_data.get('productDescription', '') }}">
-                            <input type="hidden" name="returnLocation" value="{{ form_data.get('returnLocation', '') }}">
-                            
-                            <button type="submit" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500 cursor-pointer">
+                        <form method="GET" action="{{ url_for('seller.seller_size') }}">
+                            <button type="submit" onclick="saveToSessionStorage()" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500 cursor-pointer">
                                 <span class="text-sm text-gray-600 mt-1 block" id="sizeDisplay">
                                     {% if session.get('shoulderWidth') %}選択済み{% else %}未選択{% endif %}
                                 </span>
@@ -166,18 +184,7 @@
                             洗濯表示 <span class="text-red-500">*</span>
                         </label>
                         <!--  form 　-->
-                        <form method="POST" action="{{ url_for('seller.seller_clean') }}">
-                            <input type="hidden" name="productName" value="{{ form_data.get('productName', '') }}">
-                            <input type="hidden" name="rental" value="{% if form_data.get('rental') %}on{% endif %}">
-                            <input type="hidden" name="purchase" value="{% if form_data.get('purchase') %}on{% endif %}">
-                            <input type="hidden" name="smoking" value="{{ form_data.get('smoking', 'no') }}">
-                            <input type="hidden" name="color" value="{{ form_data.get('color', '') }}">
-                            <input type="hidden" name="category" value="{{ form_data.get('category', '') }}">
-                            <input type="hidden" name="brand" value="{{ form_data.get('brand', '') }}">
-                            <input type="hidden" name="itemDescription" value="{{ form_data.get('itemDescription', '') }}">
-                            <input type="hidden" name="productDescription" value="{{ form_data.get('productDescription', '') }}">
-                            <input type="hidden" name="returnLocation" value="{{ form_data.get('returnLocation', '') }}">
-                            
+                        <form method="GET" action="{{ url_for('seller.seller_clean') }}">
                             <button type="submit" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500 cursor-pointer">
                                 <span class="text-sm text-gray-600 mt-1 block" id="washingDisplay">
                                     {% if session.get('clean_selected') %}選択済み{% else %}未選択{% endif %}
@@ -227,7 +234,7 @@
                     <label class="block text-sm font-semibold mb-2">
                         返却場所 <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="returnLocation" placeholder="返却場所を入力" value="{{ form_data.get('returnLocation', '') }}" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500" required>
+                    <input type="text" name="returnLocation" placeholder="返却場所を入力" value="" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
                     <span class="text-red-500 text-sm hidden" id="returnLocationError">返却場所は必須です</span>
                 </div>
 
@@ -240,8 +247,12 @@
                     <button type="button" onclick="saveDraft('{{url_for('seller.seller_draft')}}')" class="flex-1 bg-white text-gray-800 font-bold py-3 rounded border border-[#9a9a9a] hover:bg-gray-700 hover:text-white transition cursor-pointer">
                         下書き保存
                     </button>
+                    <button type="button"  onclick="saveToSessionStorage()" class="flex-1 bg-white text-gray-800 font-bold py-3 rounded border border-[#9a9a9a] hover:bg-gray-700 hover:text-white transition cursor-pointer">
+                        save
+                    </button>
+                   
                 </div>
-            </form>
+        <!--    </form>-->
         </div>
     </div>
 
