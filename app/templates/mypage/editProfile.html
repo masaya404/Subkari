@@ -12,7 +12,7 @@
         <div class="profile-header">
             <img src="{{url_for('static' , filename='image_path')}}" alt="プロフィール画像" class="profile-image">
             <div class="profile-info">
-                <h1 class="profile-name">{{username}}</h1>
+                <h1 class="profile-name">{{user_info.username}}</h1>
                 
                 <div class="profile-rating">
                     <span class="stars">
@@ -67,7 +67,7 @@
         <div class="products-grid">
             {% for name in productName %}
             <div class="product-card">
-                <img src="{{productImg[loop.index0]['img']}}" alt="スカート" class="product-image">
+                <img src="{{productImg[loop.index0]['img']}}" alt="{{name.name}}の画像" class="product-image">
                 <div class="product-name">{{name.name}}</div>
             </div>
             {% endfor %}

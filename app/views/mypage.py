@@ -113,14 +113,11 @@ def get_product_info(id):
     #各商品1枚目の画像を取得 
     sql="SELECT  i.* FROM m_productImg i INNER JOIN (SELECT  product_id,MIN(id) AS first_image_id FROM m_productImg GROUP BY product_id) AS first_img ON i.id = first_img.first_image_id INNER JOIN m_product p ON p.id = i.product_id WHERE p.account_id = %s"
     cur.execute(sql,(id,))
-
+    img=cur.fetchall()
     cur.close()
     con.close()
-    img_id=cur.fetchall()
-    
-    #パスを取得
-    # sql=
-    # return name,img
+
+    return name,img
 
 
 #mypageこういう名前のモジュール
@@ -175,7 +172,6 @@ def editProfile():
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
     #商品情報を取得
     productName,productImg=get_product_info(user_id)
-    print(productName)
 
     return render_template("mypage/editProfile.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
 
