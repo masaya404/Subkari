@@ -63,15 +63,16 @@
         </div>
 
         <!-- 商品グリッド -->
-
-        <div class="products-grid">
-            {% for name in productName %}
-            <div class="product-card">
-                <img src="{{productImg[loop.index0]['img']}}" alt="{{name.name}}の画像" class="product-image">
-                <div class="product-name">{{name.name}}</div>
+        <form action="" method="post"> <!--商品詳細へ遷移-->
+            <div class="products-grid">
+                {% for name in productName %}
+                <div class="product-card">
+                    <button><img src="{{productImg[loop.index0]['img']}}" alt="{{name.name}}の画像" class="product-image"></button>
+                    <div class="product-name">{{name.name}}</div>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
+        </form>
 
         <!-- もっと見るボタン -->
         <div class="load-more">

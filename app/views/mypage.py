@@ -220,14 +220,10 @@ def edit():
     #ユーザー情報を取得
     user_info=get_user_info(user_id)
 
-    
-    # image_path = result["identifyImg"] if result else None
-    # smoker = result["smoking"] if result and "smoking" in result else 0
-
     return render_template("mypage/edit.html", user_info=user_info)
     
 
-#---------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 
 
 #bankRegistration　振込口座登録ページ表示--------------------------------------------------------------
@@ -297,15 +293,6 @@ def bankComplete():
     cur.close()
     return render_template("mypage/bankComplete.html")
 #----------------------------------------------------------------------------------------------------
-# @mypage_bp.route("mypage/transferApplication")
-# def transferApplication():
-#     session["editmode"]=False
-#     sql = "SELECT * FROM content_detail WHERE id = 2"
-#     con=connect_db()
-#     cur=con.cursor(dictionary=True)
-
-#     return render_template("mypage/bankComplete.html")
-        
 
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
