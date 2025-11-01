@@ -36,15 +36,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //コンタンツswitch toggle
- function switchTab(tabIndex) {
+//  function switchTab(tabIndex) {
+//     const tabs = document.querySelectorAll('.tab');
+//     const contents = document.querySelectorAll('.tab-content');
+    
+//     tabs.forEach((tab, index) => {
+//         tab.classList.toggle('active', index === tabIndex);
+//     });
+    
+//     contents.forEach((content, index) => {
+//         content.classList.toggle('active', index === tabIndex);
+//     });
+// }
+
+function switchTab(tabIndex) {
     const tabs = document.querySelectorAll('.tab');
     const contents = document.querySelectorAll('.tab-content');
+    const activeTabInput = document.getElementById('active_tab');
     
     tabs.forEach((tab, index) => {
         tab.classList.toggle('active', index === tabIndex);
     });
-    
     contents.forEach((content, index) => {
         content.classList.toggle('active', index === tabIndex);
     });
+    
+    // 根據 tabIndex 設定目前 active tab 名稱
+    activeTabInput.value = (tabIndex === 0) ? 'tops' : 'bottoms';
 }

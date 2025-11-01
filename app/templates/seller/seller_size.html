@@ -9,15 +9,6 @@
         <h1 class="text-center text-3xl font-bold mb-8 text-gray-800">サイズ</h1>
 
         <!-- sizeの参考画像-->
-    <!--<div class="bg-white rounded-lg border-2 border-gray-300 p-8 mb-8">
-            <img src="{{url_for("static",filename='img/size_cloth.svg')}}" alt="sizeガイド" class="w-full h-auto">
-        </div>
-        <div class="bg-white rounded-lg border-2 border-gray-300 p-8 mb-8">
-            <img src="{{url_for("static",filename='img/size_bottom1.png')}}" alt="sizeガイド" class="w-full h-auto">
-        </div>
-        <div class="bg-white rounded-lg border-2 border-gray-300 p-8 mb-8">
-            <img src="{{url_for("static",filename='img/size_bottom2.png')}}" alt="sizeガイド" class="w-full h-auto">
-        </div>-->
         <div class="bg-white rounded-lg border-2 border-gray-300 p-8 mb-8">
                 <div class="relative w-full">
                     <!-- Carousel Container -->
@@ -73,6 +64,7 @@
 
         <form action="{{url_for("seller.seller_size_success")}}" method="POST">
             <!-- Input Section -->
+           
             <div class="grid grid-cols-2 gap-8">
                 <!-- Left Column - Input Form -->
                 <div class="bg-white rounded-lg border-2 border-gray-300 p-8">
@@ -82,7 +74,7 @@
                     <div class="space-y-6">
                         <!-- Tops Section -->
                         <div>
-
+                             <input type="hidden" name="active_tab" id="active_tab" value="tops">
                              <div class="flex gap-0 mb-6">
                                 <button type="button" class="bg-gray-500 text-white px-6 py-3 rounded-t-lg font-medium hover:bg-gray-600 transition tab active cursor-pointer" onclick="switchTab(0)" >
                                     トップス
@@ -243,6 +235,8 @@
                     <textarea 
                         name="notes"
                         class="w-full h-64 p-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500 resize-none text-sm"
+                        placeholder="衣類のタグに表示されているサイズと注意事項を入力してください。" 
+                        required
                     >{{ selected.get('notes','') }}</textarea>
                 </div>
             </div>
