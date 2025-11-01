@@ -2,6 +2,7 @@
 .mypage_main {
     max-width: 1280px;
     padding-top:50px;
+    padding-bottom: 200px;
     /* margin-top: 20px; */
     margin-bottom: 50px;
     margin-left: auto;
@@ -11,14 +12,13 @@
     gap: 40px;
     align-items: start;
     overflow: hidden; /* 全体でのスクロールを防止 */
-    height: calc(100vh - 80px); 
-}
+    min-height: calc(100vh - 80px); /* ← 固定heightをmin-heightに変更！ */}
 
 .mypage_main > section:not(.nav) {
     display: none;
-    overflow-y: auto;             /* ← コンテンツエリアも独立してスクロール可能に */
-    height: 100%;                 /* ← グリッド内で全高 */
-    padding-right: 16px;          /* ← スクロールバーが被らないように */
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    padding-right: 16px;
     box-sizing: border-box;
 }
 .mypage_main > section.active {
@@ -26,16 +26,6 @@
 }
 
 
-
-/* --- レイアウト基本 --- */
-
-/* main {
-    max-width: 1200px;
-    margin: 40px auto;
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 40px;
-} */
 h2{
     font-size: 24px;
     font-weight: 500;
@@ -46,14 +36,12 @@ h2{
 /* --- --------サイドナビ ----------------------- */
 .nav {
     position: sticky;
-    top: 80px; /* ← ヘッダーの高さに合わせる（なければ 0 に） */
+    top: 80px;
     align-self: start;
     height: calc(100vh - 80px);
     border-right: #727171 2px solid;
     overflow-y: auto;
     scrollbar-width: thin;
-    
-    
 }
 .nav-section { 
     list-style: none; 
@@ -272,6 +260,21 @@ h2{
 
 
 
+
+
+/* いいね一覧 */
+#likes{
+    margin: 20px 20px;
+    div{
+        h2{
+            margin: 0 0;
+            margin-bottom: 28px;
+        }
+        div{
+
+        }
+    }
+}
 
 @media (max-width: 768px) {
     .main-container {

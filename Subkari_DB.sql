@@ -82,7 +82,7 @@ CREATE TABLE `m_product` (
   `purchasePrice` INT NULL,
   `rentalPrice` INT NULL,
   `size` VARCHAR(255) NOT NULL,
-  `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','ピンク','レッド','オレンジ')  NULL,
+  `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','シルバー','ピンク','レッド','オレンジ')  NULL,
   `for` ENUM('ユニセックス','レディース') NOT NULL,
   `upload` DATE NOT NULL,
   `showing` ENUM('公開','非公開','非表示') NOT NULL,
@@ -291,7 +291,7 @@ CREATE TABLE `t_transaction` (
   `product_id` INT NOT NULL,
   `customer_id` INT NOT NULL,
   `seller_id` INT NOT NULL,
-  `status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','発送待ち','取引完了') NOT NULL,
+  `status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','取引完了') NOT NULL,
   `situation` ENUM('購入','レンタル') NOT NULL,
   `paymentMethod` ENUM('クレジットカード','PayPay','コンビニ払い') NOT NULL,
   `date` timestamp default current_timestamp ,
@@ -471,7 +471,6 @@ CREATE TABLE `t_clean` (
 );
 
 
-
 -- お問い合わせテーブル ------------------------------------------
 CREATE TABLE `t_inquiry` (
   `id` INT AUTO_INCREMENT NOT NULL,
@@ -510,7 +509,7 @@ CREATE TABLE `t_time` (
   `message_id` INT NULL,
   `inquiry_id` INT NULL,
   `transaction_id` INT NULL,
-  `transaction_status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','発送待ち','取引完了') NULL,
+  `transaction_status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','取引完了') NULL,
   `evaluation_id` INT NULL,
   `product_change` ENUM('料金変更','取引状態遷移','コメント') NULL,
 
@@ -1048,5 +1047,4 @@ GROUP BY
   month
 ORDER BY
   month;
-
 
