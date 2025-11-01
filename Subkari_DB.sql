@@ -14,8 +14,7 @@ use db_subkari
 -- アカウントテーブル ------------------------------
 CREATE TABLE `m_account` (
   `id` INT AUTO_INCREMENT NOT NULL,
-  `username` VARCHAR(100) NOT NULL,
-  `fullName` VARCHAR(100) NOT NULL,
+  `username` VARCHAR(12) NOT NULL,
   `birthday` DATE NOT NULL,
   `tel` VARCHAR(20) NOT NULL,
   `mail` VARCHAR(255) NOT NULL,
@@ -35,6 +34,12 @@ CREATE TABLE `m_account` (
   `mailFollowAnnounce` boolean,
   `mailSystemAnnounce` boolean,
   `autoLogin` boolean,
+  `last_name` VARCHAR(50) NOT NULL,
+  `first_name` VARCHAR(50) NOT NULL,
+  `last_name_kana` VARCHAR(50) NOT NULL,
+  `first_name_kana` VARCHAR(50) NOT NULL,
+
+
   
   PRIMARY KEY (`id`)
 );
@@ -43,11 +48,120 @@ CREATE TABLE `m_account` (
 CREATE TABLE `m_address` (
   `id` INT AUTO_INCREMENT NOT NULL,
   `account_id` INT NOT NULL,
-  `zip` CHAR(8) NOT NULL,
-  `pref` VARCHAR (255) NOT NULL,
-  `address1` VARCHAR(255) NOT NULL,
-  `address2` VARCHAR(255) NOT NULL,
-  `address3` VARCHAR(255) NOT NULL,
+  `zip` CHAR(7) NOT NULL,
+  `pref` VARCHAR (10) NOT NULL,
+  `address1` VARCHAR(20) NOT NULL,
+  `address2` VARCHAR(20) NOT NULL,
+  `address3` VARCHAR(40) NULL,
+  
+  PRIMARY KEY (`id`,`account_id`),
+  FOREIGN KEY (`account_id`)
+    REFERENCES `m_account`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- ブランドテーブル -------------------------------------
+CREATE TABLE `m_brand` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  
+  PRIMARY KEY (`id`)
+);
+
+-- カテゴリテーブル -------------------------------------
+CREATE TABLE `m_category` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+
+  PRIMARY KEY (`id`)
+);
+
+
+
+-- 商品テーブル ------------------------------------
+CREATE TABLE `m_product` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `purchasePrice` INT NULL,
+  `rentalPrice` INT NULL,
+  `size` VARCHAR(255) NOT NULL,
+  `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','ピンク','レッド','オレンジ')  NULL,
+  `for` ENUM('レディース','ユニセックス') NOT NULL,
+  `upload` DATE NOT NULL,
+  `showing` ENUM('公開','非公開','非表示') NOT NULL,
+  `draft` boolean NOT NULL,
+  `updateDate` DATETIME NOT NULL,
+  `purchaseFlg` boolean NOT NULL,
+  `rentalFlg` boolean NOT NULL,
+  `explanation` TEXT NULL,
+  `account_id` INT NOT NULL,
+  `brand_id` INT NOT NULL,
+  `category_id` INT NOT NULL,
+  `cleanNotes` TEXT ,
+  `smokingFlg` boolean NOT NULL,
+
+  PRIMARY KEY (`id`),
+-- アカウントテーブルのテストデータ
+
+INSERT INTO `m_account` (
+  `username`, `birthday`, `tel`, `mail`, `smoker`, `introduction`, `money`,
+  `status`, `password`, `identifyImg`,
+  `apiFavoriteAnnounce`, `apiFollowAnnounce`, `apiSystemAnnounce`,
+
+-- データベース作成
+create database db_subkari
+default character set utf8;
+
+use db_subkari
+
+-- アラートとタイムテーブルがまだ
+-- アラートはenum内が空
+
+
+
+-- テーブル作成 
+-- アカウントテーブル ------------------------------
+CREATE TABLE `m_account` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `username` VARCHAR(12) NOT NULL,
+  `birthday` DATE NOT NULL,
+  `tel` VARCHAR(20) NOT NULL,
+  `mail` VARCHAR(255) NOT NULL,
+  `smoker` boolean NOT NULL,
+  `introduction` TEXT  ,
+  `money` INT,
+  `created_at` timestamp default current_timestamp,
+  `updateDate` timestamp default current_timestamp on update current_timestamp,
+  `status` ENUM('未確認','本人確認済み','凍結','削除','強制削除') NOT NULL,
+  `updaterId` INT,
+  `password` VARCHAR(255) NOT NULL,
+  `identifyImg` varchar(255) NOT NULL,
+  `apiFavoriteAnnounce` boolean,
+  `apiFollowAnnounce` boolean,
+  `apiSystemAnnounce` boolean,
+  `mailFavoriteAnnounce` boolean,
+  `mailFollowAnnounce` boolean,
+  `mailSystemAnnounce` boolean,
+  `autoLogin` boolean,
+  `last_name` VARCHAR(50) NOT NULL,
+  `first_name` VARCHAR(50) NOT NULL,
+  `last_name_kana` VARCHAR(50) NOT NULL,
+  `first_name_kana` VARCHAR(50) NOT NULL,
+
+
+  
+  PRIMARY KEY (`id`)
+);
+
+-- 住所テーブル -----------------------------------
+CREATE TABLE `m_address` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `account_id` INT NOT NULL,
+  `zip` CHAR(7) NOT NULL,
+  `pref` VARCHAR (10) NOT NULL,
+  `address1` VARCHAR(20) NOT NULL,
+  `address2` VARCHAR(20) NOT NULL,
+  `address3` VARCHAR(40) NULL,
   
   PRIMARY KEY (`id`,`account_id`),
   FOREIGN KEY (`account_id`)
@@ -74,11 +188,11 @@ CREATE TABLE `m_category` (
 -- 商品テーブル ------------------------------------
 CREATE TABLE `m_product` (
   `id` INT AUTO_INCREMENT NOT NULL,
-  `img` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `purchasePrice` INT NULL,
   `rentalPrice` INT NULL,
   `size` VARCHAR(255) NOT NULL,
+  `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','ピンク','レッド','オレンジ')  NULL,
   `upload` DATE NOT NULL,
   `showing` ENUM('公開','非公開','非表示') NOT NULL,
   `draft` boolean NOT NULL,
@@ -101,6 +215,18 @@ CREATE TABLE `m_product` (
     ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (`account_id`)
     REFERENCES `m_account`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+--商品写真テーブル ------------------------------------
+CREATE TABLE `m_productImg` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `product_id` INT NOT NULL,
+  `img` VARCHAR(255) NOT NULL,
+  
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`product_id`)
+    REFERENCES `m_product`(`id`)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -242,7 +368,7 @@ CREATE TABLE `t_transfer` (
   `account_id` INT NOT NULL,
   `bankName` VARCHAR(100) NOT NULL,
   `accountType` VARCHAR(20) NOT NULL,
-  `branchName` VARCHAR(10) NOT NULL,
+  `branchCode` CHAR(3) NOT NULL,
   `accountNumber` VARCHAR(20) NOT NULL,
   `accountHolder` VARCHAR(20) NOT NULL,
   
@@ -455,7 +581,7 @@ CREATE TABLE `t_clean` (
 
 -- お問い合わせテーブル ------------------------------------------
 CREATE TABLE `t_inquiry` (
-  `id` INT NOT NULL,
+  `id` INT AUTO_INCREMENT NOT NULL,
   `sender_id` INT NOT NULL,
   `content` TEXT NOT NULL,
   `timeSent` timestamp default current_timestamp ,
@@ -1032,3 +1158,5 @@ ORDER BY
 
 
   
+message.txt
+34 KB

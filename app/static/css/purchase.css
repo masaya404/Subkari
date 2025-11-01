@@ -1,28 +1,4 @@
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f5f5;
-    color: #333;
-}
-
-header {
-    background: #000;
-    color: #fff;
-    padding: 20px 40px;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: 300;
-    letter-spacing: 3px;
-    font-style: italic;
-}
 
 .container {
     max-width: 1000px;
@@ -859,7 +835,7 @@ footer {
     color: #999;
 }
 
-        * {
+        /* * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -882,7 +858,7 @@ footer {
             font-weight: 300;
             letter-spacing: 3px;
             font-style: italic;
-        }
+        } */
 
         .container {
             max-width: 1000px;

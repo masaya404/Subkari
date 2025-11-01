@@ -1,64 +1,32 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>振込金額</title>
-    <link rel="stylesheet" href="../../static/css/transferAmount.css">
+{% extends "base.html" %}
+{% block title %}振込金額{% endblock %}
+{% block content %}
+<!-- <link rel="stylesheet" href="../../../app/static/css/transaction_detail.css">  -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/transferAmount.css') }}">
+<main>
+    <h1>振込金額</h1>
 
-</head>
-<body>
-    
-    <header>
-        <div class="logo">SUBKARI</div>
-    </header>
-
-    <main>
-        <h1>振込金額</h1>
-
-        <form id="transferForm">
-            <!-- Amount Input -->
-            <div class="form-group">
-                <p for="amount">金額</p>
-                <input 
-                    type="number" 
-                    id="amount" 
-                    name="amount" 
-                    class="form-input" 
-                    min="0"
-                    max="1000000"
-                >
-                <p class="form-note">※一度に振り込める限度額は1,000,000円まで</p>
-                <p class="error-message" id="errorMessage"></p>
-            </div>
-
-            <!-- Information Box -->
-            <div class="info-box">
-                <p>※振込手数料は200円です。金融機関・申請金額に関わらず、都度発生いたします。</p>
-                <p>※お持ちの残高（売上金含む）の金額が振込手数料以下の場合、振込申請をすることはできません。</p>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="submit-button">確定する</button>
-        </form>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-links">
-            <a href="#">初めての方へ</a>
-            <a href="#">サイトマップ</a>
-            <a href="#">FAQ</a>
-            <a href="#">お問い合わせ</a>
-            <a href="#">利用規約</a>
-            <a href="#">プライバシーポリシー</a>
-            <a href="#">特定商取引法に基づく表記</a>
-            <a href="#">古物営業法に基づく表示</a>
+    <form id="transferForm" action="{{url_for('mypage.transferAmount')}}" method="post">
+        <!-- Amount Input -->
+        <div class="form-group">
+            <p for="amount">金額</p>
+            <input type="number" id="amount" name="amount" class="form-input" min="0" max="1000000">
+            <p class="form-note">※一度に振り込める限度額は1,000,000円まで</p>
+            <p class="error-message" id="errorMessage"></p>
         </div>
-        <p class="copyright">© 2025 HAL OSAKA IA・IH Team 5</p>
-    </footer>
-    <script src="../../static/js/transferAmount.js"></script>
 
+        <!-- Information Box -->
+        <div class="info-box">
+            <p>金融機関・申請金額に関わらず、都度発生いたします。</p>
+            <p>※お持ちの残高（売上金含む）の金額が振込手数料以下の場合、振込申請をすることはできません。</p>
+        </div>
+        <button type="submit" class="submit-button">確定する</button>
+    </form>
+</main>
+<!-- Footer -->
+<script>
+    const mypageUrl = "{{ url_for('mypage.mypage') }}"; // ← Flaskルート名に合わせて
+</script>
+<script src="../../static/js/transferAmount.js"></script>
 
-</body>
-</html>
+{% endblock %}

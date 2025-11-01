@@ -116,6 +116,9 @@ h1 {
     cursor: pointer;
     font-size: 0.9rem;
     white-space: nowrap;
+    /* display: none; */
+}
+.none{
     display: none;
 }
 

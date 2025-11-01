@@ -42,7 +42,7 @@ function validateAccountNumber() {
     // 数字のみ許可
     input.value = input.value.replace(/[^0-9]/g, '');
     
-    if (input.value === '' || input.value.length !== 7) {
+    if (input.value === '' || input.value.length !== 11) {
         input.classList.add('error');
         error.classList.add('show');
         return false;
@@ -87,17 +87,17 @@ function validateAccountNameMei() {
 
 // フォーム送信
 function handleSubmit(event) {
-    event.preventDefault();
+    // event.preventDefault();
     
-    const isBankValid = validateBank();
-    const isBranchCodeValid = validateBranchCode();
-    const isAccountNumberValid = validateAccountNumber();
-    const isAccountNameSeiValid = validateAccountNameSei();
-    const isAccountNameMeiValid = validateAccountNameMei();
+    // const isBankValid = validateBank();
+    // const isBranchCodeValid = validateBranchCode();
+    // const isAccountNumberValid = validateAccountNumber();
+    // const isAccountNameSeiValid = validateAccountNameSei();
+    // const isAccountNameMeiValid = validateAccountNameMei();
     
-    if (isBankValid && isBranchCodeValid && isAccountNumberValid && 
-        isAccountNameSeiValid && isAccountNameMeiValid) {
-        alert('口座を登録しました');
-        // ここで実際の登録処理を行う
-    }
+    // if (isBankValid && isBranchCodeValid && isAccountNumberValid && 
+    //     isAccountNameSeiValid && isAccountNameMeiValid) {
+    //     alert('口座を登録しました');
+    //     // ここで実際の登録処理を行う
+    // }
 }

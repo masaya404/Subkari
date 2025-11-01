@@ -15,7 +15,7 @@ def create_app():
 
     # --- Blueprintの登録 ---
     # viewsパッケージからproductsとauthのBlueprintをインポート
-    from .views import top,login,products,seller,dashboard,mypage
+    from .views import top,login,products,seller,dashboard,mypage,deal
     
     app.register_blueprint(top.top_bp)
     app.register_blueprint(login.login_bp)
@@ -23,4 +23,15 @@ def create_app():
     app.register_blueprint(seller.seller_bp)
     app.register_blueprint(dashboard.dashboard_bp)
     app.register_blueprint(mypage.mypage_bp)
+    app.register_blueprint(deal.deal_bp)
+  
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('error.html'), 404
+
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template('error.html'), 500
+    
     return app
