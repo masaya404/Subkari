@@ -125,8 +125,9 @@ def seller_size():
     else:
         user_id = session.get('user_id')
         
+    active_tab = session.get('active_tab', 'tops')      
     selected = session.get('size_selected', {})           
-    return render_template('seller/seller_size.html', user_id = user_id,selected=selected)
+    return render_template('seller/seller_size.html', user_id = user_id,selected=selected,active_tab=active_tab)
 
 #size選択を記録----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/size/success',methods=['POST'])
@@ -137,12 +138,26 @@ def seller_size_success():
     else:
         user_id = session.get('user_id')
     
+    #今のtab確認
+    active_tab = request.form.get('active_tab', 'tops')
+    session['active_tab'] = active_tab
     
-    size_field = ['shoulderWidth', 'bodyWidth', 'sleeveLength', 'bodyLength','notes']
- 
+    size_field = ['shoulderWidth', 'bodyWidth', 'sleeveLength', 'bodyLength','notes','hip','totalLength','rise','inseam','waist','thighWidth','hemWidth','skirtLength']
+    tops_fields = ['shoulderWidth', 'bodyWidth', 'sleeveLength', 'bodyLength', 'notes']
+    bottoms_fields = ['hip', 'totalLength', 'rise', 'inseam', 'waist', 'thighWidth', 'hemWidth', 'skirtLength', 'notes']
+    
     size_data = {s: request.form.get(s, '') for s in size_field}
-    session['size_selected'] = size_data 
+    
+    if active_tab == 'tops':
+        filtered_data = {k: v for k, v in size_data.items() if k in tops_fields}
+    else:
+        filtered_data = {k: v for k, v in size_data.items() if k in bottoms_fields}
+        
+    session['size_selected'] = filtered_data
  
+    print(f" Active tab: {active_tab}")
+    print(f" Saved data: {filtered_data}")
+    
     return redirect(url_for('seller.seller_format'))
     
 #サイズ記録----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -207,14 +222,14 @@ def save_product():
                 purchaseFlg, 
                 rentalFlg, 
                 explanation, 
-               
+                account_id,
                 brand_id, 
                 category_id, 
                 cleanNotes, 
                 smokingFlg, 
                 returnAddress
             ) VALUES (
-                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s
             )
         """
         
@@ -235,9 +250,10 @@ def save_product():
             current_datetime,
             1 if data.get('purchase') else 0,
             1 if data.get('rental') else 0,
-            data.get('explanation') if data.get('explanation') else None,      
+            data.get('explanation') if data.get('explanation') else None,
+            session.get('user_id'),      
             int(data.get('brand')) if data.get('brand') else None,
-            int(data.get('category1')) if data.get('category1') else None, 
+            int(data.get('category2')) if data.get('category2') else None, 
             data.get('cleanNotes'),  # 注意事項
             1 if data.get('smoking') else 0,
             data.get('returnLocation') if data.get('returnLocation') else None

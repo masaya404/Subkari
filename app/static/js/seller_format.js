@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
 
-
 // 価格トグル
 const rentalCheckbox = document.querySelector('.rentalCheckbox');
 const purchaseCheckbox = document.querySelector('.purchaseCheckbox');
@@ -122,8 +121,6 @@ function displayFirstImage(image) {
         }
     }
 }
-
-loadUploadedImages();
 
 //sessionに記録の関数//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function saveToSessionStorage(){
@@ -278,10 +275,9 @@ function goToClean(sizeUrl){
 // フォーム検証
 function validateForm() {
     let isValid = true;
-    const form = document.getElementById('sellerForm');
 
     // 商品名
-    const productName = form.querySelector('[name="productName"]').value.trim();
+    const productName = document.getElementById('name').value.trim();
     if (!productName) {
         document.getElementById('productNameError').classList.remove('hidden');
         isValid = false;
@@ -290,8 +286,8 @@ function validateForm() {
     }
 
     // レンタル・購入
-    const rental = form.querySelector('[name="rental"]').checked;
-    const purchase = form.querySelector('[name="purchase"]').checked;
+    const rental = document.getElementById('rental').checked;
+    const purchase = document.getElementById('purchase').checked;
     if (!rental && !purchase) {
         document.getElementById('rentalPurchaseError').classList.remove('hidden');
         isValid = false;
@@ -300,7 +296,7 @@ function validateForm() {
     }
 
     // 系統カラー
-    const color = form.querySelector('[name="color"]').value.trim();
+    const color = document.getElementById('color').value.trim();
     if (!color) {
         document.getElementById('colorError').classList.remove('hidden');
         isValid = false;
@@ -309,8 +305,8 @@ function validateForm() {
     }
 
     // カテゴリー1
-    const category1 = form.querySelector('[name="category1"]').value;
-    if (!category) {
+    const category1 =document.getElementById('category1').value;
+    if (!category1) {
         document.getElementById('category1Error').classList.remove('hidden');
         isValid = false;
     } else {
@@ -318,14 +314,21 @@ function validateForm() {
     }
 
     // カテゴリー2
-    const brand = form.querySelector('[name="brand"]').value;
+    const category2 = document.getElementById('category2').value;
+    if (!category2) {
+        document.getElementById('category2Error').classList.remove('hidden');
+        isValid = false;
+    } else {
+        document.getElementById('category2Error').classList.add('hidden');
+    }
+     // brand
+    const brand = document.getElementById('brand').value;
     if (!brand) {
         document.getElementById('brandError').classList.remove('hidden');
         isValid = false;
     } else {
         document.getElementById('brandError').classList.add('hidden');
     }
-
     // サイズ
     const sizeDisplay = document.getElementById('sizeDisplay').innerText.trim();
     if (sizeDisplay === '未選択') {
@@ -345,7 +348,7 @@ function validateForm() {
     }
 
     // 返却場所
-    const returnLocation = form.querySelector('[name="returnLocation"]').value.trim();
+    const returnLocation = document.getElementById('returnLocation').value.trim();
     if (!returnLocation) {
         document.getElementById('returnLocationError').classList.remove('hidden');
         isValid = false;
@@ -431,7 +434,7 @@ function submitForm() {
         returnLocation: sessionStorage.getItem("returnLocation"),
     };
 
-    fetch('/format/save-product', {
+    fetch('/seller/format/save-product', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -443,7 +446,7 @@ function submitForm() {
         if (data.success) {
             console.log('Success:', data);
             alert('登録成功ID: ' + data.product_id);
-            // 成功後可以清除 sessionStorage
+            // 成功後sessionStorage清除 
             // sessionStorage.clear();
         } else {
             alert('失敗: ' + data.message);
