@@ -500,8 +500,8 @@ def todo():
 
 
 #privacy_policy プライバシーポリシー表示---------------------------------------------------------------
-@mypage_bp.route("/privacy_policy")
-def privacy_policy():
+@mypage_bp.route("/privacyPolicy")
+def privacyPolicy():
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))
@@ -517,7 +517,7 @@ def privacy_policy():
     con.close()
     
 
-    return render_template("mypage/privacy_policy.html" ,  user_id=user_id , result=result)
+    return render_template("mypage/privacyPolicy.html" ,  user_id=user_id , result=result)
 #--------------------------------------------------------------------------------------------------------------------
 
 #terms 利用規約表示  ----------------------------------------------------------------------------------------
