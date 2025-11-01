@@ -376,7 +376,15 @@ def transferAmount():
     return render_template("mypage/transferAmount.html")
 
 
+#出品・購入・レンタル---------------------------------------------------------------------------------------------------
+@mypage_bp.route("/mypage/buySellRent")
+def buySellRent():
+    return render_template("mypage/buySellRent.html")
+
+
 #---------------------------------------------------------------------------------------------------
+
+
 
 
 
