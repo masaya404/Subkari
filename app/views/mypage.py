@@ -173,7 +173,7 @@ def editProfile():
     #商品情報を取得
     productName,productImg=get_product_info(user_id)
 
-    return render_template("mypage/editProfile.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
+    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])
@@ -201,7 +201,7 @@ def updateProfile():
     user_info=get_user_info(id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(id)
     productName,productImg=get_product_info(id)
-    return render_template("mypage/editProfile.html",smoker=user_info['smoker'],username=user_info['username'],introduction=user_info['introduction'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg)
+    return render_template("mypage/editProfile.html",user_info=user_info,evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg)
 
     
 
@@ -220,14 +220,10 @@ def edit():
     #ユーザー情報を取得
     user_info=get_user_info(user_id)
 
-    
-    # image_path = result["identifyImg"] if result else None
-    # smoker = result["smoking"] if result and "smoking" in result else 0
-
-    return render_template("mypage/edit.html", username=user_info['username'],  smoker=user_info['smoker'],introduction=user_info['introduction'])
+    return render_template("mypage/edit.html", user_info=user_info)
     
 
-#---------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 
 
 #bankRegistration　振込口座登録ページ表示--------------------------------------------------------------
@@ -297,15 +293,6 @@ def bankComplete():
     cur.close()
     return render_template("mypage/bankComplete.html")
 #----------------------------------------------------------------------------------------------------
-# @mypage_bp.route("mypage/transferApplication")
-# def transferApplication():
-#     session["editmode"]=False
-#     sql = "SELECT * FROM content_detail WHERE id = 2"
-#     con=connect_db()
-#     cur=con.cursor(dictionary=True)
-
-#     return render_template("mypage/bankComplete.html")
-        
 
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
@@ -511,7 +498,8 @@ def todo():
     return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
 
-#privacy_policy プライバシーポリシー---------------------------------------------------------------
+
+#privacy_policy プライバシーポリシー表示---------------------------------------------------------------
 @mypage_bp.route("/privacy_policy")
 def privacy_policy():
     if 'user_id' not in session:
@@ -532,6 +520,26 @@ def privacy_policy():
     return render_template("mypage/privacy_policy.html" ,  user_id=user_id , result=result)
 #--------------------------------------------------------------------------------------------------------------------
 
+#terms 利用規約表示  ----------------------------------------------------------------------------------------
+@mypage_bp.route("/terms")
+def terms():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select content_detail from m_admin_contents  where id=1"
+    cur.execute(sql)
+    result=cur.fetchone()
+    cur.close()
+    con.close()
+    
+
+    return render_template("mypage/terms.html" ,  user_id=user_id , result=result)
+#--------------------------------------------------------------------------------------------------------------------
 
     
     

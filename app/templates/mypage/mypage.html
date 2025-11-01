@@ -44,7 +44,7 @@
 
             <ul class="nav-section">
                 <li class="nav-section-title">規約・ポリシー</li>
-                <li class="nav-item">利用規約</li>
+                <li class="nav-item"><a href="{{url_for('mypage.terms')}}">利用規約</a></li>
                 <li class="nav-item"><a href="{{url_for('mypage.privacy_policy')}}">プライバシーポリシー</a></li>
             </ul>
 
@@ -58,15 +58,7 @@
 
         <section id="profile" class="active" class="sec"> 
             <div class="img-name">
-                <img 
-                    src="{% if image_path %}
-                            {{ url_for('static', filename=image_path) }}
-                        {% else %}
-                            {{ url_for('static', filename='imag/default_profile.jng') }}
-                        {% endif %}" 
-                    alt="プロフィール画像" 
-                    class="profile-image" 
-                >
+                <img src="{{url_for('static' , filename='img/'+user_info.identifyImg)}}" alt="プロフィール画像" class="profile-image">
                 <div class="profile-name">
                     <p>{{user_info.username}}</p>
                     <a href="{{ url_for('mypage.editProfile') }}">

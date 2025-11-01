@@ -10,7 +10,7 @@
     <main class="editProfile_main">
         <h1></h1>
         <div class="profile-header">
-            <img src="{{url_for('static' , filename='image_path')}}" alt="プロフィール画像" class="profile-image">
+            <img src="{{url_for('static' , filename='img/'+user_info.identifyImg)}}" alt="プロフィール画像" class="profile-image">
             <div class="profile-info">
                 <h1 class="profile-name">{{user_info.username}}</h1>
                 
@@ -42,7 +42,7 @@
                 </div>
                 
                 <div class="profile-description" id="profileDescription">
-                    {{introduction}}
+                    {{user_info.introduction}}
                     <!-- 何文字以上でを作る -->
                     <span id="moreText" style="display: none;">
                         <br><br>
@@ -63,15 +63,17 @@
         </div>
 
         <!-- 商品グリッド -->
-
-        <div class="products-grid">
-            {% for name in productName %}
-            <div class="product-card">
-                <img src="{{productImg[loop.index0]['img']}}" alt="{{name.name}}の画像" class="product-image">
-                <div class="product-name">{{name.name}}</div>
+        <form action="" method="post"> <!--商品詳細へ遷移-->
+            <div class="products-grid">
+                {% for name in productName %}
+                <div class="product-card">
+                    <button><img src="{{productImg[loop.index0]['img']}}" alt="{{name.name}}の画像" class="product-image"></button>
+                    <div class="product-name" name="product_name">{{name.name}}</div>
+                    
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
+        </form>
 
         <!-- もっと見るボタン -->
         <div class="load-more">
