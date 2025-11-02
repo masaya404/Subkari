@@ -190,3 +190,13 @@ body.registerForm-page {
 .rfo-btn:hover {
     background-color: #555;
 }
+
+
+/* エラーメッセージのスタイル */
+.rfo-error {
+  color: #c00000; /* 赤色 */
+  font-size: 0.9em;
+  margin-top: 5px;
+  padding-left: 5px;
+  font-weight: bold;
+}

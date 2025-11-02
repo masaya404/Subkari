@@ -62,17 +62,7 @@ def logout():
 @login_bp.route("/register_user", methods=["GET"])
 def show_register_user():
     account = {}
-    return render_template("login/new_account.html", account=account)
-
-
-##りんた、これいらないよね⇂
-# @login_bp.route('login/register_user',methods=['GET'])
-# def register_user():
-#     account = {}
-   
-#     return render_template('login/new_account.html',account=account)
-
-
+    return render_template("login/new_account.html", account=account )
 
 
 
@@ -141,7 +131,8 @@ def register_user_complete():
     # ◆ 処理が正常終了した場合もDB接続をクローズします
     cur.close()
     con.close()
-    return render_template('login/register_form.html', error=error, error_same=error_same)
+    
+    return redirect(url_for('login.show_register_form'))
 
 
 
@@ -176,6 +167,27 @@ def register_user_complete():
     # return redirect(url_for('top.new_account',account_id = account["mail"]))
 
 
+#登録フォーム表示
+@login_bp.route("/register_user/form", methods=["GET"])
+def show_register_form():
+    """
+    住所・電話番号フォーム（register_form.html）を表示する
+    前のステップ（メール・パスワード登録）が完了しているかセッションをチェックする
+    """
+    # セッションに 'registration_data' がなければ、無効なアクセスとみなし最初のフォームへリダイレクト
+    if 'registration_data' not in session:
+        # show_register_user は最初のフォーム（new_account.html）を表示するルート名
+        return redirect(url_for('login.show_register_user')) 
+        
+    # セッションデータがあれば、フォームを表示する
+    # 初回表示のため、エラーとフォームデータは空で渡す
+    return render_template(
+        'login/register_form.html', 
+        errors={}, 
+        form_data={}
+    )
+
+
 
 # DBスキーマに対応するバリデーションルール
 # m_address テーブルの定義に基づき設定
@@ -192,7 +204,7 @@ def register_user_complete():
 ACCOUNT_SCHEMA = {
     # --- m_account ---------------------------------------------
     # 1. アカウント名
-    'account':          (12, True),   # m_account.username VARCHAR(12) NOT NULL
+    'username':          (12, True),   # m_account.username VARCHAR(12) NOT NULL
     
     # 2. 姓 (全角)
     'last_name':        (50, True),   # m_account.last_name VARCHAR(50) NOT NULL
@@ -236,6 +248,9 @@ ACCOUNT_SCHEMA = {
 #入力フォーム確認-電話番号や住所
 @login_bp.route("register_user/form_complete", methods=["POST"])
 def registration_form_complete():
+
+    # session['registration_data'] = None
+
 
     # セッションにデータがなければ、フォームに戻す
     if 'registration_data' not in session:
@@ -296,7 +311,21 @@ def registration_form_complete():
     else:
         # セッションにデータを保存する
         # (dict()で、不変なMultiDictから変更可能な通常の辞書に変換)
+
+        #既存のセッションデータを取得する(mail.passwordなど)
+        existing_data = session.get('registration_data', {})
+
+        #現在のフォームデータ (住所など) を取得
+        new_form_data = dict(form_data)
+
         session['registration_data'] = dict(form_data)
+
+        #二つの辞書を結合し、新しいデータで古いデータを更新/追加する
+        existing_data.update(new_form_data)
+
+        #結合したデータをセッションに再格納
+        session['registration_data'] = existing_data
+
         
         # PRGパターン: 次のページ（電話番号認証）にリダイレクトする
         return redirect(url_for('login.show_phone_verification'))
@@ -308,7 +337,7 @@ def registration_form_complete():
 def show_phone_verification():
     if 'registration_data' not in session:
         # flash("セッションが切れました。もう一度入力してください。")
-        return redirect(url_for('login.show_register_form')) # ★登録フォームのGETルート
+        return redirect(url_for('login.show_register_user')) # ★登録フォームのGETルート
         
     return render_template('login/Phone_verification.html')
 
@@ -317,6 +346,10 @@ def show_phone_verification():
 @login_bp.route("register_user/phone_auth", methods=["POST"])
 def phone_auth():
 
+    # セッション確認
+    if 'registration_data' not in session:
+        return redirect(url_for('login.show_register_user')) # ★登録フォームのGETルート
+
     return render_template('login/identity_verification.html')
 
 
@@ -324,11 +357,124 @@ def phone_auth():
 @login_bp.route("register_user/phone_auth_resend", methods=["POST"])
 def phone_auth_resend():
 
+    # セッション確認
+    if 'registration_data' not in session:
+        return redirect(url_for('login.show_register_user')) # ★登録フォームのGETルート
+
     return render_template('login/Phone_verification.html')
 
 #本人確認-登録完了
 @login_bp.route("register_user/verification", methods=["POST"])
 def verification():
+    # セッション確認
+    if 'registration_data' not in session:
+        return redirect(url_for('login.show_register_user')) # ★登録フォームのGETルート
+        
+    #セッションに入っているデータをdbに登録する。
+
+    # セッションから全登録データを取得
+    all_data = session['registration_data']
+
+
+    # m_account 用のデータ
+    account_data = (
+        all_data.get('mail'),
+        all_data.get('password'), 
+        all_data.get('username'),
+        all_data.get('last_name'),
+        all_data.get('first_name'),
+        all_data.get('last_name_kana'),
+        all_data.get('first_name_kana'),
+        all_data.get('birthday'),
+        all_data.get('tel'),
+        all_data.get('smoker') == 'yes', # 'yes'/'no' を True/False に変換
+    )
+
+    # m_address 用のデータ (m_account_idは後で取得)
+    address_data = (
+        # account_id を格納するプレースホルダ
+        all_data.get('zip'),
+        all_data.get('pref'),
+        all_data.get('address1'),
+        all_data.get('address2'),
+        all_data.get('address3'),
+        # ... 他のm_addressの項目
+    )
+
+    
+
+    #--最終メールアドレスチェック--
+
+     #同一user確認    
+    con = None  # データベース接続オブジェクトを初期化
+    cur = None  # カーソルオブジェクトを初期化
+    
+    # 参考コードをここに応用します
+    sql = "SELECT * FROM m_account WHERE mail = %s;"
+    
+    # connect_db() はご自身の環境で定義されているDB接続関数と想定しています
+    con = connect_db() 
+    cur = con.cursor(dictionary=True)
+    
+    # フォームから受け取ったメールアドレスをプレースホルダ(%s)に渡します
+    # (account['mail'],) のようにカンマを付けてタプルにすることが重要です
+    cur.execute(sql, (all_data['mail'],)) 
+    
+    # fetchone() で結果を1件取得します
+    userExist = cur.fetchone()
+    
+    # existing_user が None でない場合 ＝ データが取得できた ＝ 既に使用されている
+    if userExist:
+        #all_data['mail'] "このセッションのメールアドレスは既に使用されている。"
+        # エラーなので、テンプレートをレンダリングして処理を終了します
+
+        cur.close()
+        con.close()
+        error = {}
+        error_same = {}
+
+        return render_template('login/new_account.html', error=error, error_same=error_same)
+
+
+
+    #--db登録--
+
+
+    con = None  # データベース接続オブジェクトを初期化
+    cur = None  # カーソルオブジェクトを初期化
+
+    con = connect_db()
+    cur = con.cursor()
+    # 3. m_account への登録 (まず親テーブルから)
+    sql_account = """
+        INSERT INTO m_account 
+        (mail, password, username, last_name, first_name, last_name_kana, first_name_kana, birthday, tel, smoker)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+    """
+    cur.execute(sql_account, account_data)
+
+    # 4. 登録されたアカウントのIDを取得 (m_addressで必要)
+    new_account_id = cur.lastrowid
+
+    # 5. m_address への登録 (子テーブル)
+    sql_address = """
+        INSERT INTO m_address 
+        (account_id, zip, pref, address1, address2, address3)
+        VALUES (%s, %s, %s, %s, %s, %s);
+    """
+    # account_id を address_data の先頭に追加して実行
+    full_address_data = (new_account_id,) + address_data
+    cur.execute(sql_address, full_address_data)
+
+    # 6. コミットとセッションのクリア
+    con.commit()
+    
+    # 登録完了したのでセッションデータを削除
+    session.pop('registration_data', None)
+
+    cur.close()
+    con.close()
+
 
     return render_template('login/registration_complete.html')
 
