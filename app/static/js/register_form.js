@@ -27,43 +27,43 @@
     // }
 
 
-    // ------------------------------------
-    // カスタムセレクトボックス (都道府県) 動作
-    // ------------------------------------
-    document.addEventListener('DOMContentLoaded', function() {
-        const prefectureFrame = document.getElementById('prefectureFrame');
-        if (!prefectureFrame) return;
+    // // ------------------------------------
+    // // カスタムセレクトボックス (都道府県) 動作
+    // // ------------------------------------
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     const prefectureFrame = document.getElementById('prefectureFrame');
+    //     if (!prefectureFrame) return;
 
-        const selectedDiv = prefectureFrame.querySelector('.rfo-prefecture-selected');
-        const optionsList = prefectureFrame.querySelector('.rfo-prefecture-options');
-        const options = optionsList.querySelectorAll('li');
+    //     const selectedDiv = prefectureFrame.querySelector('.rfo-prefecture-selected');
+    //     const optionsList = prefectureFrame.querySelector('.rfo-prefecture-options');
+    //     const options = optionsList.querySelectorAll('li');
 
-        // 1. フレームをクリックしたらリストの表示/非表示を切り替える
-        prefectureFrame.addEventListener('click', function(e) {
-            // クリックがリスト内の要素でない場合、リストの表示を切り替える
-            if (e.target.closest('.rfo-prefecture-options') === null) {
-                optionsList.style.display = optionsList.style.display === 'block' ? 'none' : 'block';
-            }
-        });
+    //     // 1. フレームをクリックしたらリストの表示/非表示を切り替える
+    //     prefectureFrame.addEventListener('click', function(e) {
+    //         // クリックがリスト内の要素でない場合、リストの表示を切り替える
+    //         if (e.target.closest('.rfo-prefecture-options') === null) {
+    //             optionsList.style.display = optionsList.style.display === 'block' ? 'none' : 'block';
+    //         }
+    //     });
 
-        // 2. リストの項目をクリックしたときの処理
-        options.forEach(option => {
-            option.addEventListener('click', function() {
-                // 選択された値を表示部に反映させる
-                selectedDiv.textContent = this.textContent;
+    //     // 2. リストの項目をクリックしたときの処理
+    //     options.forEach(option => {
+    //         option.addEventListener('click', function() {
+    //             // 選択された値を表示部に反映させる
+    //             selectedDiv.textContent = this.textContent;
                 
-                // リストを非表示にする
-                optionsList.style.display = 'none';
-            });
-        });
+    //             // リストを非表示にする
+    //             optionsList.style.display = 'none';
+    //         });
+    //     });
 
-        // 3. 画面のどこかをクリックしたらリストを閉じる（UX向上）
-        document.addEventListener('click', function(e) {
-            if (!prefectureFrame.contains(e.target)) {
-                optionsList.style.display = 'none';
-            }
-        });
-    });
+    //     // 3. 画面のどこかをクリックしたらリストを閉じる（UX向上）
+    //     document.addEventListener('click', function(e) {
+    //         if (!prefectureFrame.contains(e.target)) {
+    //             optionsList.style.display = 'none';
+    //         }
+    //     });
+    // });
 
     // ------------------------------------
     // 郵便番号から住所を自動入力するダミー機能
@@ -73,10 +73,26 @@ document.getElementById('postal').addEventListener('blur', function() {
     if (postal.length === 7) {
         fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postal}`)
         .then(res => res.json())
-        .then(data => {
+        // .then(data => {
+        //     if (data.status === 200 && data.results) {
+        //         const result = data.results[0];
+        //         document.querySelector('.rfo-prefecture-selected').textContent = result.address1; // 都道府県
+        //         document.getElementById('city').value = result.address2; // 市区町村
+        //         document.getElementById('address').value = result.address3; // 番地
+        //         document.getElementById('building').focus(); // 次の入力欄にフォーカス
+        //     } else {
+        //         console.log('住所が見つかりません');
+        //     }
+            .then(data => {
             if (data.status === 200 && data.results) {
                 const result = data.results[0];
-                document.querySelector('.rfo-prefecture-selected').textContent = result.address1; // 都道府県
+                
+                const prefectureInput = document.getElementById('prefecture'); // hidden input
+                const prefectureDisplay = document.querySelector('.rfo-prefecture-selected'); // 表示部分
+
+                prefectureDisplay.textContent = result.address1; // 表示部分の更新
+                prefectureInput.value = result.address1; // ★隠しフィールドにも値を設定★
+                
                 document.getElementById('city').value = result.address2; // 市区町村
                 document.getElementById('address').value = result.address3; // 番地
                 document.getElementById('building').focus(); // 次の入力欄にフォーカス
@@ -112,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
         li.addEventListener('click', function() {
             
             // クリックされた li から値（都道府県名）を取得
-            const selectedValue = li.getAttribute('data-value'); // "東京都" など
+            const selectedValue = li.textContent; // "東京都" など
             
             // (A) 「選択してください」の表示テキストを更新
             selectedDisplay.textContent = selectedValue || '選択してください';
