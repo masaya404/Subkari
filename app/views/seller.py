@@ -199,8 +199,23 @@ def get_clean_selected():
 #セラーフォマットの内容をDB登録----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/format/save-product', methods=['POST'])
 def save_product():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+        
     try:
-        data = request.get_json()
+        product_data_str = request.form.get('productData')
+        if not product_data_str:
+            return jsonify({
+                'success': False,
+                'message': '商品情報がありません'
+            }), 400
+
+        # 解析JSON
+        data = json.loads(product_data_str)
+        # data = request.get_json()
         
         # DB接続
         con = connect_db()
@@ -212,7 +227,7 @@ def save_product():
                 name, 
                 purchasePrice, 
                 rentalPrice, 
-              
+                size,
                 color, 
                 `for`, 
                 upload, 
@@ -229,7 +244,7 @@ def save_product():
                 smokingFlg, 
                 returnAddress
             ) VALUES (
-                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s
             )
         """
         
@@ -239,9 +254,10 @@ def save_product():
         
         #実際の資料
         values = (
-            data.get('name'),
-            int(data.get('rentalPrice')) if data.get('rentalPrice') else None,
+            data.get('name'),          
             int(data.get('purchasePrice')) if data.get('purchasePrice') else None,
+            int(data.get('rentalPrice')) if data.get('rentalPrice') else None,
+            session.get('size_selected', {}).get('notes'),
             data.get('color'),
             data.get('category1', 'ユニセックス'), 
             current_date,
@@ -254,7 +270,7 @@ def save_product():
             session.get('user_id'),      
             int(data.get('brand')) if data.get('brand') else None,
             int(data.get('category2')) if data.get('category2') else None, 
-            data.get('cleanNotes'),  # 注意事項
+            session.get('clean_selected', {}).get('notes'),  # 注意事項
             1 if data.get('smoking') else 0,
             data.get('returnLocation') if data.get('returnLocation') else None
         )
@@ -266,11 +282,134 @@ def save_product():
         # AUTO INCREMENTの値を取得
         product_id = cursor.lastrowid
         
-        #sizeの登録
-        session['size_selected']
+        #====== size登録の処理 ==============================================================================================================
+        #今のtab確認
+        active_tab = session.get('active_tab')
+        size_selected = session.get('size_selected', {})
+        
+        # tops bottomsの判断######################################################
+        if active_tab == 'tops':
+            sql = """
+                INSERT INTO m_topssize (
+                    product_id, shoulderWidth, bodyWidth, sleeveLength, bodyLength, notes
+                ) VALUES (
+                    %s, %s, %s, %s, %s, %s
+                )
+            """
+            values = (
+                product_id,
+                size_selected.get('shoulderWidth'),
+                size_selected.get('bodyWidth'),
+                size_selected.get('sleeveLength'),
+                size_selected.get('bodyLength'),
+                size_selected.get('notes'),
+            )
+            
+        else:
+            sql = """
+                INSERT INTO m_bottomssize (
+                    product_id, hip, totalLength, rise, inseam, waist, thighWidth, hemWidth, skirtLength, notes
+                ) VALUES (
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                )
+            """
+            values = (
+                product_id,
+                size_selected.get('hip'),
+                size_selected.get('totalLength'),
+                size_selected.get('rise'),
+                size_selected.get('inseam'),
+                size_selected.get('waist'),
+                size_selected.get('thighWidth'),
+                size_selected.get('hemWidth'),
+                size_selected.get('skirtLength'),
+                size_selected.get('notes'),
+            )
+            
+        cursor.execute(sql, values)
+        con.commit()
+        #====== clean登録の処理 ============================================================================================================== 
+        clean_selected = session.get('clean_selected', {})
+        
+        # clean フィールド名を定義
+        clean_fields = ['wash', 'bleach', 'tumble', 'dry', 'iron', 'dryclean', 'wet']
+        
+        inserted_count = 0
+        try:
+            # すべての項目確認
+            for field_name in clean_fields:
+                val = clean_selected.get(field_name)  # フィールド値を取得
+                
+                # "None"、''の場合は処理しない
+                if val in [None, '', 'None']:
+                    continue
+                
+                # SQL用意
+                sql = """
+                    INSERT INTO t_clean (product_id, cleanSign_id)
+                    VALUES (%s, %s)
+                """
+                values = (product_id, val)
+        
+                cursor.execute(sql, values)
+                inserted_count += 1
+
+            con.commit()
+
+        except Exception as e:
+            # エラーが発生するとき、前の処理なかったことにする
+            print(f' t_clean 登録エラー: {str(e)}')  #  デバッグ用
+            con.rollback()
+            
+            
+        # ===== 画像アップロードの処理 =====
+        uploaded_image_count = 0
+        
+        if 'images' in request.files:
+            files = request.files.getlist('images')
+            print(f'画像の数: {len(files)}')
+
+            # uploadsフォルダー指定、なければつくる
+            upload_folder = 'app/static/img/productImg'
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)
+
+            for index, file in enumerate(files):
+                try:
+                    if file and file.filename:
+                        # ===== 唯一の画像名を生成 =====
+                        timestamp = int(datetime.now().timestamp() * 1000)
+                        filename = f"product_{product_id}_{index}_{timestamp}.png"
+                        filepath = os.path.join(upload_folder, filename)
+
+                        # ===== ファイル保存 =====
+                        file.save(filepath)
+                        print(f'画像{index}保存済み: {filename}')
+
+                        # ===== m_productimg =====
+                        # user_id, product_id, imgカラムと合わせる
+                        cursor.execute(
+                            "INSERT INTO m_productimg (id, product_id, img) VALUES (%s, %s, %s)",
+                            (int(user_id), int(product_id), filename)
+                        )
+                        con.commit()
+                        uploaded_image_count += 1
+                        print(f'画像DB登録完了: user_id={user_id}, product_id={product_id}, img={filename}')
+
+                except Exception as img_error:
+                    print(f'画像{index}アップロード失敗: {str(img_error)}')
+                    con.rollback()
+                    continue
+
+        else:
+            print('画像がない')
         
         cursor.close()
         con.close()
+        
+        #session削除
+        session.pop('size_selected', None)
+        session.pop('clean_selected', None)
         
         return jsonify({
             'success': True,

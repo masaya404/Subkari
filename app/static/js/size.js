@@ -61,6 +61,6 @@ function switchTab(tabIndex) {
         content.classList.toggle('active', index === tabIndex);
     });
     
-    // 根據 tabIndex 設定目前 active tab 名稱
+    //  tabIndex による active tab の名稱判断　True tops False bottoms
     activeTabInput.value = (tabIndex === 0) ? 'tops' : 'bottoms';
 }
