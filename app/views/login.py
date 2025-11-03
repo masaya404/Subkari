@@ -543,6 +543,46 @@ def forgot_email():
     return render_template('login/forgot_email.html')
 
 
+#本来ならここで入力された電話番号にSMSをおくる処理
+@login_bp.route('/email_sent/success', methods=['POST'])
+def email_sent_success():
+
+    #セッションに電話番号を登録する
+
+
+
+    #dbに登録されている電話番号があるか確かめる
+
+    #登録されていなかったら、エラーメッセージを渡す
+
+
+    #SMSにメールアドレスを送信する
+
+
+
+    return redirect(url_for('login.email_sent'))
+
+
+
+#メールアドレス送信完了表示処理
+@login_bp.route('/email_sent', methods=['GET'])
+def email_sent():
+
+
+    return render_template('login/email_sent.html')
+
+
+#メール再送処理
+@login_bp.route('/email_resend', methods=['GET'])
+def email_resend():
+
+    #セッション使う
+
+
+    #再送したメッセージをわたす。
+
+    return render_template('login/email_sent.html')
+
 
 
 
