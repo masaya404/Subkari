@@ -20,16 +20,16 @@
             </div>
         </div>
         <div class="product-info">
-            <h1 class="product-title">{{ result.name }}</h1>
+            <h1 class="product-title">{{ product.name }}</h1>
             <div class="price-section">
                 <div class="price-row">
                     <span>レンタル価格</span>
-                    <span class="price">{{ result.rentalPrice }}<span style="font-size:14px; font-weight:normal;">
+                    <span class="price">{{ product.rentalPrice }}<span style="font-size:14px; font-weight:normal;">
                             送料込み</span></span>
                 </div>
                 <div class="price-row">
                     <span>購入価格</span>
-                    <span class="price">{{ result.purchasePrice }}<span style="font-size:14px; font-weight:normal;">
+                    <span class="price">{{ product.purchasePrice }}<span style="font-size:14px; font-weight:normal;">
                             送料込み</span></span>
                 </div>
             </div>
@@ -49,7 +49,7 @@
         <button class="tab" onclick="switchTab(2)">コメント</button>
     </div>
     <div class="tab-content active" id="tab0">
-        <p>{{ result.explanation }}</p>
+        <p>{{ product.explanation }}</p>
     </div>
     <div class="tab-content" id="tab1">
         <p><strong>サイズ:</strong> フリーサイズ<br>
@@ -58,28 +58,25 @@
             <strong>状態:</strong> 目立った傷や汚れなし
         </p>
     </div>
+
+
     <div class="tab-content" id="tab2">
+        {% for comment in comments %}
         <div class="comment-item">
             <div class="comment-avatar"></div>
             <div class="comment-content">
                 <div class="comment-header">
-                    <span class="comment-name">中村 輝</span>
-                </div>
-                <div class="comment-text">購入を検討しているのですが、こちらの商品の使用期間はどれくらいでしょうか？</div>
-            </div>
-        </div>
-        <div class="comment-item">
-            <div class="comment-avatar"></div>
-            <div class="comment-content">
-                <div class="comment-header">
-                    <a href="{{url_for('userprf.userprf')}}" class="comment-link">
-                    <span class="comment-name">谷口 昌哉</span>
+                    <a href="{{url_for('userprf.userprf')}}" class="comment-link"></a>
+                    <span class="comment-name">{{ comment.user_name }}</span>
+                    {% if comment.is_seller %}
                     <span class="seller-badge">出品者</span>
+                    {% endif %}
                     </a>
                 </div>
-                <div class="comment-text">商品の使用期間ですね。約○年間（または○か月間）使用しました。</div>
+                <div class="comment-text">{{ comment.text }}</div>
             </div>
         </div>
+        {% endfor %}
         <div class="comment-form">
             <input type="text" class="comment-input" placeholder="商品について質問や気になることがコメントしてください。">
             <button class="submit-btn">投稿</button>
