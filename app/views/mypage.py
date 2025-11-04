@@ -418,7 +418,7 @@ def salesHistory():
     
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    sql="select * from t_transaction t inner join m_product p on t.product_id=p.id where"
+    sql="select * from t_transaction t inner join m_product p on t.product_id=p.id where t.seller_id=%s and t.status='取引完了'" 
     #売上履歴を取得
     #売上履歴は取引テーブルでステータスが取引完了のものを取得
     
