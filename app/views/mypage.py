@@ -143,7 +143,9 @@ def mypage():
     user_info=get_user_info(user_id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
 
-    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id)
+    evaluation_int = int(evaluation) if evaluation is not None else 0
+
+    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id , evaluation_int=evaluation_int)
     
 #------------------------------------------------------------------------------------------------
 
@@ -541,8 +543,18 @@ def terms():
     return render_template("mypage/terms.html" ,  user_id=user_id , result=result)
 #--------------------------------------------------------------------------------------------------------------------
 
+#お問い合わせ---------------------------------------------------------------------------------------------------------
+@mypage_bp.route("/inquiry")
+def inquiry():
     
-    
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    return render_template("mypage/inquiry.html" , user_id=user_id)
+#--------------------------------------------------------------------------------------------------------------------
 
 
 # htmlの画面遷移url_for
