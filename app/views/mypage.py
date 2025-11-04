@@ -503,7 +503,7 @@ def terms():
     return render_template("mypage/terms.html" ,  user_id=user_id , result=result)
 #--------------------------------------------------------------------------------------------------------------------
 
-    
+
     
 
 
