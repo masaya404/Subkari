@@ -43,35 +43,35 @@
 }
 
 /* 全体で横スクロールを防止 */
-html,
+/* html,
 body {
     overflow-x: hidden;
     width: 100%;
     margin: 0;
     padding: 0;
-}
+} */
 
 /* Flexboxの不具合防止 */
-.header,
+/* .header,
 .footer-top,
 .footer-bottom {
     flex-wrap: wrap;
-}
+} */
 
 /* 固定幅をレスポンシブに調整 */
-.header-left,
+/* .header-left,
 .nav-container,
 .search-container input[type="search"],
 .search-container input[type="text"],
 .search-box input {
     max-width: 100%;
     box-sizing: border-box;
-}
+} */
 
 /* 不要な余白防止 */
-.header-left {
+/* .header-left {
     margin: 0 auto;
-}
+} */
 
 
 /********************************************* header **********************************************************/
@@ -89,7 +89,7 @@ header {
 
 .header {
     display: flex;
-    flex-direction: row wrap;
+    flex-direction: row nowrap;
     width: 100%;
     box-sizing: border-box;
 }
