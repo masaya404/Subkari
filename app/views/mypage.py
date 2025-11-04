@@ -17,10 +17,6 @@ def connect_db():
     return con
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
 #アカウントの口座情報を取得する ------------------------------------------------------------------------------
 def getAccountInfo():
     accountNumbers=[]                 #口座番号下位三桁を格納
@@ -75,7 +71,7 @@ def get_transaction_info(id):
     con = connect_db()
     cur = con.cursor(dictionary=True)
       
-    #フォロワー数、フォロー数、評価、総評価件数、出品数を取得
+    #フォロワー数、フォロー数、評価、出品数を取得
     #フォロー数
     sql="select count(*) as フォロー数 from t_connection where execution_id=%s and type='フォロー' group by execution_id"
     cur.execute(sql, (id,))
@@ -85,21 +81,22 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     followers=cur.fetchone()
     #評価
-    sql="select avg(score) as 評価 from t_evaluation where recipient_id=%s group by recipient_id"
+    sql="select round(avg(score),1) as 評価 from t_evaluation where recipient_id=%s group by recipient_id"
     cur.execute(sql, (id,))
     evaluation=cur.fetchone()
-    #総評価件数
-    sql="select count(*) as 評価件数 from t_evaluation where recipient_id=%s group by recipient_id"
-    cur.execute(sql, (id,))
-    evaluationCount=cur.fetchone()
+    
     #出品数
     sql="select count(*) as 出品数 from m_product where account_id=%s"
     cur.execute(sql, (id,))
     products=cur.fetchone()
-    #評価を変形
-    evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
+
+    #評価は小数1桁まで表示
+    evaluation=float(evaluation['評価'])
+
+    #★の表示数を制御
+    evaulation_int=int(evaluation)    
    
-    return evaluation,evaluationCount,follows,followers,products
+    return evaluation,evaulation_int,follows,followers,products
 #商品データを取得 --------------------------------------------------
 def get_product_info(id):
 
@@ -141,21 +138,12 @@ def mypage():
     
     #アカウントテーブルからユーザー情報を取得
     user_info=get_user_info(user_id)
-    evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
+    evaluation,evaluation_int,follows,followers,products=get_transaction_info(user_id)
 
-    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id)
+    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluation_int=evaluation_int,follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id)
     
 #------------------------------------------------------------------------------------------------
 
-#userprf表示--------------------------------------------------------------------------------------
-@mypage_bp.route("mypage/userprf")
-def userprf():
-    if 'user_id' not in session:
-        user_id = None
-        return redirect(url_for('login.login'))
-    else:
-        user_id = session.get('user_id')
-    return render_template("mypage/mypage.html" , user_id=user_id)
 #-------------------------------------------------------------------------------------------------
 
 #editProfile プロフィール編集ページ表示--------------------------------------------------------------
@@ -169,11 +157,11 @@ def editProfile():
     
     #user情報を取得
     user_info=get_user_info(user_id)
-    evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
+    evaluation,evaluation_int,follows,followers,products=get_transaction_info(user_id)
     #商品情報を取得
     productName,productImg=get_product_info(user_id)
 
-    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
+    return render_template("mypage/editProfile.html",user_id=user_id,evaluation=evaluation,evaluation_int=evaluation_int,follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])
@@ -199,11 +187,9 @@ def updateProfile():
 
     #更新後のユーザー情報を取得 
     user_info=get_user_info(id)
-    evaluation,evaluationCount,follows,followers,products=get_transaction_info(id)
+    evaluation,evaluation_int,follows,followers,products=get_transaction_info(id)
     productName,productImg=get_product_info(id)
-    return render_template("mypage/editProfile.html",user_info=user_info,evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg)
-
-    
+    return render_template("mypage/editProfile.html",user_id=user_id,user_info=user_info,evaluation=evaluation,evaluation_int=evaluation_int,follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg)
 
 
 #--------------------------------------------------------------------------------------------------
@@ -220,16 +206,22 @@ def edit():
     #ユーザー情報を取得
     user_info=get_user_info(user_id)
 
-    return render_template("mypage/edit.html", user_info=user_info)
+    return render_template("mypage/edit.html", user_id=user_id,user_info=user_info)
     
 
 #--------------------------------------------------------------------------------------------------
+
+#privacy_info 個人情報ページ表示　 -----------------------------------------------------------------
 
 
 #bankRegistration　振込口座登録ページ表示--------------------------------------------------------------
 @mypage_bp.route("/bankRegistration")
 def bankRegistration():
-
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     #登録されている口座数を取得
     bank_count=0
     id=session["user_id"]
@@ -258,6 +250,11 @@ def bankRegistration():
 #bankComplete' 振込口座登録完了ページ------------------------------------------------------------------
 @mypage_bp.route("/bankComplete",methods=['POST'])
 def bankComplete():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     #エラーチェック
     #error回数とメッセージ
     ecnt = 0
@@ -297,6 +294,11 @@ def bankComplete():
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
 def transferApplication():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     session["editmode"]=False
     bank_info,accountNumbers,count=getAccountInfo()
     editmode=session["editmode"]
@@ -395,7 +397,7 @@ def amountComp():
 #---------------------------------------------------------------------------------------------------
 
 
-#salesHistory 売上履歴------------------------------------------------------------------------------
+#salesHistory 売上履歴表示 -------------------------------------------------------------------------------
 @mypage_bp.route("/salesHistory")
 def salesHistory():
     if 'user_id' not in session:
@@ -403,6 +405,7 @@ def salesHistory():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+    
     
 
     
@@ -505,6 +508,21 @@ def todo():
 
     return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------------------------
+#inquiry お問い合わせページ表示----------------------------------------------------------------------
+@mypage_bp.route("/inquiry")
+def inquiry():
+    if 'user_id' not in session:
+        user_id = None  
+        return redirect(url_for('login.inquiry'))
+    else:
+        user_id = session.get('user_id')    
+    return render_template("mypage/inquiry.html" ,  user_id=user_id)
+#------------------------------------------------------------------------------------------------
+
+
+
 
 
 #privacy_policy プライバシーポリシー表示---------------------------------------------------------------
