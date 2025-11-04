@@ -378,6 +378,16 @@ function validateForm() {
 //         isValid = false;
 //     }
 // }
+///////////////////////////////////////////////////////画像の形式変換の関数///////////////////////////////////////////////////////////////////////////
+function base64ToFile(base64Data, filename) {
+  const arr = base64Data.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) u8arr[n] = bstr.charCodeAt(n);
+  return new File([u8arr], filename, { type: mime });
+}
 
 /**
  * フォーム送信
@@ -414,9 +424,26 @@ function submitForm() {
         alert('最低1つの画像をアップロードしてください');
         return;
     }
+    console.log('=== 画像の格式確認 ===');
+    console.log('uploadedImages:', uploadedImages);
+    console.log('最初の画像:', uploadedImages[0]);
 
-    // hidden input に JSON を設定
-    // document.getElementById('imagesData').value = JSON.stringify(uploadedImages);
+    // 全部のデータ変数
+    const formData = new FormData();
+
+     // ===== 画像 →　formData =====
+        uploadedImages.forEach((imageData, index) => {
+            try {
+                const base64String = imageData.src;
+
+                // Base64　転換　→　File
+                const file = base64ToFile(base64String, `product_image_${index}.png`);
+                formData.append('images', file);  // keyは'images'，複数あり
+                console.log(`画像${index}FormDataに追加`);
+            } catch (error) {
+                console.error(`画像${index}形式変換失敗:`, error);
+            }
+        });
 
     //  sessionStorage 取得
     const productData = {
@@ -434,20 +461,29 @@ function submitForm() {
         returnLocation: sessionStorage.getItem("returnLocation"),
     };
 
+    //すべてのデータ　→　formData
+    formData.append('productData', JSON.stringify(productData));
+
+    console.log('=== 準備完了 ===');
+    console.log('画像の枚数:', uploadedImages.length);
+    console.log('商品名:', productData.name);
+    console.log('バックエンドに送る');
+
     fetch('/seller/format/save-product', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData)
+        body:formData
+        // headers: {
+        //     'Content-Type': 'application/json',
+        // },
+        // body: JSON.stringify(productData)
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             console.log('Success:', data);
             alert('登録成功ID: ' + data.product_id);
-            // 成功後sessionStorage清除 
-            // sessionStorage.clear();
+            // 成功後　sessionStorageのデータすべて消す
+            sessionStorage.clear();
         } else {
             alert('失敗: ' + data.message);
         }

@@ -1,13 +1,68 @@
-{% extends "base.html" %}
+<!-- {% extends "base.html" %}
 {% block title %}
-    FAQ
+    マイページ
 {% endblock %}
 
-{% block content %}
-<main>
-    <h1>ヘルプセンター</h1>
-    
+{% block content %} -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bankRegistration.css') }}">
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../../app/static/css/helpCenter.css">
+</head>
+<main class="mypage_main">
+    <section class="nav">
+        <ul class="nav-section">
+            <li class="nav-section-title">初めての方へ</li>
+            <li class="nav-item">サブカり初心者ガイド</li><br>
+            <li class="nav-section-title">カテゴリから探す</li>
+            <li class="nav-item">出品、購入、レンタル</li>
+            <li class="nav-item">配送方法</li>
+            <li class="nav-item">取引後のFAQ</li>
+            <li class="nav-item">アカウント</li>
+            <li class="nav-item">ルールとマナー</li>
+            <li class="nav-item">よくある質問</li>
+            <li class="nav-item">ログインができない</li>
+        </ul>
+
+        <ul class="nav-section">
+            <li class="nav-section-title">利用規約など</li>
+            <li class="nav-item">プライバシーポリシー</li>
+            <li class="nav-item">特定商取引法に基づく表記</li>
+            <li class="nav-item">古物営業法に基づく表示</li>
+        </ul>
+
+    </section>
+    <section id="guide" class="sec">
+        <h2>サブカり初心者ガイド</h2>
+    </section>
+
+    <section id="selling" class="sec">
+                        <li class="nav-item" ><a href="{{url_for('mypage.todo')}}">やることリスト</a></li>
+
+        <h2>出品、購入、レンタル</h2>
+    </section>
+
+    <section id="delivery" class="sec">
+        <h2>配送方法</h2>
+        <ul class="menu-list">
+            <li class="menu-item"><a href="#" class="menu-link">商品別おすすめ配送方法</a></li>
+            <li class="menu-item"><a href="#" class="menu-link">配送方法一覧</a></li>
+        </ul>
+    </section>
+
+
+
+
 </main>
+<script src="../../static/js/mypage.js"></script>
+<!-- {% endblock %}  -->
+</body>
 
+</html>
 
-{% endblock %} 

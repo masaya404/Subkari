@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/bankRegistration.css') }}">
 
-
     <main class="mypage_main">
         <section class="nav">
             <ul class="nav-section">
@@ -37,9 +36,9 @@
 
             <ul class="nav-section">
                 <li class="nav-section-title">ヘルプ</li>
-                <li class="nav-item">問い合わせ</li>
-                <li class="nav-item">FAQ</li>
-                <li class="nav-item">ヘルプセンター</li>
+                <li class="nav-item"><a href="{{ url_for('mypage.inquiry') }}">問い合わせ</li>
+                <li class="nav-item"><a href="{{ url_for('mypage.editProfile') }}">FAQ</li>
+                <li class="nav-item"><a href="{{ url_for('mypage.editProfile') }}">ヘルプセンター</li>
             </ul>
 
             <ul class="nav-section">
@@ -72,9 +71,9 @@
                 
             <div class="profile-rating">
                 <span class="stars">
-                    {% for i in range(evaluation)%}★{% endfor %}
-                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
-                <span class="rating-count">{{evaluationCount}}</span>
+                    {% for i in range(evaluation_int)%}★{% endfor %}
+                    {% for i in range(5-evaluation_int)%}☆{% endfor %}</span>
+                <span class="rating-count">{{evaluation}}</span>
             </div>
             
             <div class="badge-group">
@@ -133,8 +132,8 @@
                 
             <div class="profile-rating">
                 <span class="stars">
-                    {% for i in range(evaluation)%}★{% endfor %}
-                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                    {% for i in range(evaluation_int)%}★{% endfor %}
+                    {% for i in range(5-evaluation_int)%}☆{% endfor %}</span>
                 <span class="rating-count">{{evaluationCount}}</span>
             </div>
             
@@ -267,8 +266,8 @@
                 
             <div class="profile-rating">
                 <span class="stars">
-                    {% for i in range(evaluation)%}★{% endfor %}
-                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                    {% for i in range(evaluation_int)%}★{% endfor %}
+                    {% for i in range(5-evaluation_int)%}☆{% endfor %}</span>
                 <span class="rating-count">{{evaluationCount}}</span>
             </div>
             
@@ -328,8 +327,8 @@
                 
             <div class="profile-rating">
                 <span class="stars">
-                    {% for i in range(evaluation)%}★{% endfor %}
-                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                    {% for i in range(evaluation_int)%}★{% endfor %}
+                    {% for i in range(5-evaluation_int)%}☆{% endfor %}</span>
                 <span class="rating-count">{{evaluationCount}}</span>
             </div>
             
@@ -379,8 +378,6 @@
         <section id="logout" class="sec">
 
         </section>
-
-    
     </main>
     <script src="../../static/js/mypage.js"></script>
 {% endblock %} 
