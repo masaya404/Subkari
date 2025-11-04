@@ -516,6 +516,17 @@ def inquiry():
     return render_template("mypage/inquiry.html" , user_id=user_id  )
 #-------------------------------------------------------------------------------------------------------------------
     
+#ヘルプセンター-------------------------------------------------------------------------------------------------------------------
+@mypage_bp.route("/helpCenter")
+def helpCenter():
+
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    return render_template("mypage/helpCenter.html" , user_id=user_id  )
 
 
 # htmlの画面遷移url_for
