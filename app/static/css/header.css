@@ -42,37 +42,6 @@
     -webkit-text-fill-color: #fff !important;
 }
 
-/* 全体で横スクロールを防止 */
-html,
-body {
-    overflow-x: hidden;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-/* Flexboxの不具合防止 */
-.header,
-.footer-top,
-.footer-bottom {
-    flex-wrap: wrap;
-}
-
-/* 固定幅をレスポンシブに調整 */
-.header-left,
-.nav-container,
-.search-container input[type="search"],
-.search-container input[type="text"],
-.search-box input {
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-/* 不要な余白防止 */
-.header-left {
-    margin: 0 auto;
-}
-
 
 /********************************************* header **********************************************************/
 .header-logo {
