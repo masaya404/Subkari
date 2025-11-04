@@ -29,7 +29,8 @@ def deal():
             SELECT 
                 p.*, 
                 m.img,
-                t.status
+                t.status,
+                t.situation
             FROM 
                 m_product AS p
             LEFT JOIN 
@@ -37,11 +38,11 @@ def deal():
             ON 
                 p.id = m.product_id
             LEFT JOIN 
-                t_transation AS t 
+                t_transaction AS t 
             ON 
                 p.id = t.product_id
             WHERE 
-                p.account_id = %s
+                t.customer_id = %s
             ORDER BY p.id ASC
             ;
             """   
@@ -61,13 +62,14 @@ def deal():
             ON 
                 p.id = m.product_id
             LEFT JOIN 
-                t_transation AS t 
+                t_transaction AS t 
             ON 
                 p.id = t.product_id
             WHERE 
                 p.account_id = %s
             AND
                 p.draft = 0
+            GROUP BY p.id
             ;
             """   
         cur.execute(sql, (user_id,))

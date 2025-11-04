@@ -25,12 +25,12 @@
                     <!-- Item Card 1 -->
                     <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
                         <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
-                            <img src="{{url_for('static',filename='img/productImg' + bought_product.img)}}" />
+                            <img src="{{url_for('static',filename='img/productImg' + (bought_product.img if bought_product.img else 'default.png'))}}" />
                         </div>
                         <div class="flex-1">
                             <h3 class="font-semibold text-gray-800 text-sm">{{bought_product.name}}</h3>
                             <div class="flex items-center gap-3 mt-2">
-                                <span class="text-lg font-bold text-gray-900">{{bought_product.price}}</span>
+                                <span class="text-lg font-bold text-gray-900">￥{%if bought_product.purchaseFlg%}{{bought_product.purchasePrice}}{%else%}{{bought_product.rentalPrice}}{%endif%}</span>
                                 <span class="text-red-500 text-xs font-medium">{{bought_product.situation}}</span>
                             </div>
                             <p class="text-gray-500 text-xs mt-2">{{bought_product.status}}</p>
@@ -44,43 +44,15 @@
                     <!-- Item Card 1 -->
                     <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
                         <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
-                            <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
+                            <img src="{{url_for('static',filename='img/productImg' + (product.img if product.img else 'default.png'))}}" />
                         </div>
                         <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800 text-sm">ファーバーカー</h3>
+                            <h3 class="font-semibold text-gray-800 text-sm">{{product.name}}</h3>
                             <div class="flex items-center gap-3 mt-2">
-                                <span class="text-lg font-bold text-gray-900">¥9,900</span>
-                                <span class="text-red-500 text-xs font-medium">購入</span>
+                                <span class="text-lg font-bold text-gray-900">￥{%if product.purchaseFlg%}{{product.purchasePrice}}{%else%}{{product.rentalPrice}}{%endif%}</span>
+                                <span class="text-red-500 text-xs font-medium">{{product.situation}}</span>
                             </div>
-                            <p class="text-gray-500 text-xs mt-2">支払い待ち</p>
-                        </div>
-                    </div>
-
-                    <!-- Item Card 2 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
-                        <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
-                            <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800 text-sm">ファーバーカー</h3>
-                            <div class="flex items-center gap-3 mt-2">
-                                <span class="text-lg font-bold text-gray-900">¥10,900</span>
-                                <span class="text-red-500 text-xs font-medium">配送中</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item Card 3 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
-                        <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
-                            <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800 text-sm">スーパーファー...クリーニング期間</h3>
-                            <div class="flex items-center gap-3 mt-2">
-                                <span class="text-lg font-bold text-gray-900">¥8,900</span>
-                                <span class="text-red-500 text-xs font-medium">レンタル</span>
-                            </div>
+                            <p class="text-gray-500 text-xs mt-2">{{product.status}}</p>
                         </div>
                     </div>
                     {% endfor %}
