@@ -27,6 +27,7 @@
 
     <!-- Bank List -->
     <div class="bank-list" id="bankList">
+        {% if count %}
         {% for i in range(count) %}
         <div class="bank-item" data-id=1>
             <input type="radio" name="bank" value="1">

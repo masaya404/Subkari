@@ -17,10 +17,6 @@ def connect_db():
     return con
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
 #アカウントの口座情報を取得する ------------------------------------------------------------------------------
 def getAccountInfo():
     accountNumbers=[]                 #口座番号下位三桁を格納
@@ -85,7 +81,7 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     followers=cur.fetchone()
     #評価
-    sql="select avg(score) as 評価 from t_evaluation where recipient_id=%s group by recipient_id"
+    sql="select round(avg(score),1) as 評価 from t_evaluation where recipient_id=%s group by recipient_id"
     cur.execute(sql, (id,))
     evaluation=cur.fetchone()
     #総評価件数
@@ -96,8 +92,9 @@ def get_transaction_info(id):
     sql="select count(*) as 出品数 from m_product where account_id=%s"
     cur.execute(sql, (id,))
     products=cur.fetchone()
-    #評価を変形
-    evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
+
+    #評価は小数1桁まで表示
+    evaluation=float(evaluation['評価'])    
    
     return evaluation,evaluationCount,follows,followers,products
 #商品データを取得 --------------------------------------------------
@@ -147,15 +144,6 @@ def mypage():
     
 #------------------------------------------------------------------------------------------------
 
-#userprf表示--------------------------------------------------------------------------------------
-@mypage_bp.route("mypage/userprf")
-def userprf():
-    if 'user_id' not in session:
-        user_id = None
-        return redirect(url_for('login.login'))
-    else:
-        user_id = session.get('user_id')
-    return render_template("mypage/mypage.html" , user_id=user_id)
 #-------------------------------------------------------------------------------------------------
 
 #editProfile プロフィール編集ページ表示--------------------------------------------------------------
@@ -203,8 +191,6 @@ def updateProfile():
     productName,productImg=get_product_info(id)
     return render_template("mypage/editProfile.html",user_info=user_info,evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg)
 
-    
-
 
 #--------------------------------------------------------------------------------------------------
 
@@ -225,11 +211,17 @@ def edit():
 
 #--------------------------------------------------------------------------------------------------
 
+#privacy_info 個人情報ページ表示　 -----------------------------------------------------------------
+
 
 #bankRegistration　振込口座登録ページ表示--------------------------------------------------------------
 @mypage_bp.route("/bankRegistration")
 def bankRegistration():
-
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     #登録されている口座数を取得
     bank_count=0
     id=session["user_id"]
@@ -258,6 +250,11 @@ def bankRegistration():
 #bankComplete' 振込口座登録完了ページ------------------------------------------------------------------
 @mypage_bp.route("/bankComplete",methods=['POST'])
 def bankComplete():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     #エラーチェック
     #error回数とメッセージ
     ecnt = 0
@@ -297,6 +294,11 @@ def bankComplete():
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
 def transferApplication():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     session["editmode"]=False
     bank_info,accountNumbers,count=getAccountInfo()
     editmode=session["editmode"]
@@ -387,7 +389,7 @@ def amountComp():
 #---------------------------------------------------------------------------------------------------
 
 
-#salesHistory 売上履歴------------------------------------------------------------------------------
+#salesHistory 売上履歴表示 -------------------------------------------------------------------------------
 @mypage_bp.route("/salesHistory")
 def salesHistory():
     if 'user_id' not in session:
@@ -395,6 +397,7 @@ def salesHistory():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+    
     
 
     
@@ -517,7 +520,7 @@ def privacy_policy():
     con.close()
     
 
-    return render_template("mypage/privacy_policy.html" ,  user_id=user_id , result=result)
+    return render_template("mypage/privacyPolicy.html" ,  user_id=user_id , result=result)
 #--------------------------------------------------------------------------------------------------------------------
 
 #terms 利用規約表示  ----------------------------------------------------------------------------------------
