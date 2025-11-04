@@ -34,10 +34,10 @@
                 </div>
             </div>
             <div class="action-buttons cursor-pointer">
-                <a href="{{url_for("products.purchase")}}">
+                <a href="{{url_for('products.purchase')}}">
                 <button class="btn">購入する</button>
                 </a>
-                <a href="{{url_for("products.purchase")}}">
+                <a href="{{url_for('products.purchase')}}">
                 <button class="btn">レンタル</button>
                 </a>
             </div>
@@ -65,15 +65,17 @@
                 <div class="comment-header">
                     <span class="comment-name">中村 輝</span>
                 </div>
-                <div class="comment-text">コメント失礼します。購入を検討しているのですが、こちらの商品の使用期間はどれくらいでしょうか？</div>
+                <div class="comment-text">購入を検討しているのですが、こちらの商品の使用期間はどれくらいでしょうか？</div>
             </div>
         </div>
         <div class="comment-item">
             <div class="comment-avatar"></div>
             <div class="comment-content">
                 <div class="comment-header">
+                    <a href="{{url_for('userprf.userprf')}}" class="comment-link">
                     <span class="comment-name">谷口 昌哉</span>
                     <span class="seller-badge">出品者</span>
+                    </a>
                 </div>
                 <div class="comment-text">商品の使用期間ですね。約○年間（または○か月間）使用しました。</div>
             </div>

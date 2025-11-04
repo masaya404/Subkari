@@ -183,16 +183,26 @@
     border-radius: 50%;
     background: #ddd;
 }
+.comment-header * {
+  pointer-events: none; /* 子要素でクリックを阻害しない */
+}
+.comment-header::before {
+  content: "";
+  position: absolute;
+  inset: 0; /* 全体クリック可能 */
+}
 
 .comment-content {
     flex: 1;
 }
 
 .comment-header {
-    display: flex;
+    display: inline-flex; /* 全体クリックOK */
     align-items: center;
     gap: 10px;
     margin-bottom: 8px;
+    position: relative;
+    z-index: 1000; /* 前面に出す */
 }
 
 .comment-name {
