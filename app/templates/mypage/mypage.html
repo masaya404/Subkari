@@ -72,9 +72,9 @@
                 
             <div class="profile-rating">
                 <span class="stars">
-                    {% for i in range(evaluation)%}★{% endfor %}
-                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
-                <span class="rating-count">{{evaluationCount}}</span>
+                    {% for i in range(evaluation_int)%}★{% endfor %}
+                    {% for i in range(5-evaluation_int)%}☆{% endfor %}</span>
+                <span class="rating-count">{{evaluation}}</span>
             </div>
             
             <div class="badge-group">
@@ -133,8 +133,8 @@
                 
             <div class="profile-rating">
                 <span class="stars">
-                    {% for i in range(evaluation)%}★{% endfor %}
-                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                    {% for i in range(evaluation_int)%}★{% endfor %}
+                    {% for i in range(5-evaluation_int)%}☆{% endfor %}</span>
                 <span class="rating-count">{{evaluationCount}}</span>
             </div>
             
@@ -267,8 +267,8 @@
                 
             <div class="profile-rating">
                 <span class="stars">
-                    {% for i in range(evaluation)%}★{% endfor %}
-                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                    {% for i in range(evaluation_int)%}★{% endfor %}
+                    {% for i in range(5-evaluation_int)%}☆{% endfor %}</span>
                 <span class="rating-count">{{evaluationCount}}</span>
             </div>
             
@@ -328,8 +328,8 @@
                 
             <div class="profile-rating">
                 <span class="stars">
-                    {% for i in range(evaluation)%}★{% endfor %}
-                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                    {% for i in range(evaluation_int)%}★{% endfor %}
+                    {% for i in range(5-evaluation_int)%}☆{% endfor %}</span>
                 <span class="rating-count">{{evaluationCount}}</span>
             </div>
             
@@ -379,8 +379,6 @@
         <section id="logout" class="sec">
 
         </section>
-
-    
     </main>
     <script src="../../static/js/mypage.js"></script>
 {% endblock %} 
