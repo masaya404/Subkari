@@ -13,7 +13,7 @@
                 <li class="nav-section-title">アカウント情報</li>
                 <li class="nav-item">プロフィール</li>
                 <li class="nav-item" ><a href="{{url_for('mypage.todo')}}">やることリスト</a></li>
-                <li class="nav-item">いいね一覧</li>
+                <li class="nav-item"><a href="{{url_for('mypage.likes')}}">いいね一覧</a></li>
                 <li class="nav-item">フォローリスト</li>
                 <li class="nav-item">出品した商品</li>
                 <li class="nav-item">レンタル・購入した商品</li>
@@ -176,28 +176,6 @@
             </div>
         </section>
 
-        <section id="likes" class="sec">
-            <div>
-                <h2>いいね一覧</h2>
-                <div class="sales-list">
-                    {% if sales_list %}
-                        {% for item in sales_list %}
-                            <form action="{{url_for('mypage.transaction_detail')}}">
-                                <div class="sales-item" >
-                                    <div class="sales-info">
-                                        <div class="sales-type">{{ item.type }}</div>
-                                        <div class="sales-date">{{ item.date }}</div>
-                                    </div>
-                                    <div class="sales-amount">¥{{ "{:,}".format(item.amount) }}</div>
-                                </div>
-                            </form>
-                        {% endfor %}
-                    {% else %}
-                        <p>振込履歴はまだありません。</p>
-                    {% endif %}
-                </div>
-            </div>
-        </section>
 
         <section id="follow-list" class="sec">
             <p>フォローリストを表示</p>
