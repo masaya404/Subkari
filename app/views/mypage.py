@@ -242,9 +242,9 @@ def bankRegistration():
     con.close()
     #3件すでに登録済みなら拒否する
     if bank_count>=3:
-        return render_template("mypage/mypage.html")
+        return render_template("mypage/mypage.html",user_id=user_id)
     
-    return render_template("mypage/bankRegistration.html")
+    return render_template("mypage/bankRegistration.html",user_id=user_id)
 #----------------------------------------------------------------------------------------------------
 
 #bankComplete' 振込口座登録完了ページ------------------------------------------------------------------
@@ -266,7 +266,7 @@ def bankComplete():
             ecnt+=1
     #空欄あり、登録できない      
     if ecnt !=0:
-        return render_template('mypage/bankRegistration.html')
+        return render_template('mypage/bankRegistration.html',user_id=user_id)
     
     #既に登録されていないか調べる 
     id=session["user_id"]
@@ -278,7 +278,7 @@ def bankComplete():
 
     #登録されているのでエラー
     if bankSame is not None:
-        return render_template('mypage/bankRegistration.html')
+        return render_template('mypage/bankRegistration.html',user_id=user_id)
     
     accountHolder=bank_info['famillyName']+bank_info['firstName']
     #登録処理
@@ -288,7 +288,7 @@ def bankComplete():
     cur.execute(sql, (id,bank_info['name'],bank_info['accountType'],bank_info['branchCode'],bank_info['accountNumber'],accountHolder))          #アカウントidがわからない
     con.commit()
     cur.close()
-    return render_template("mypage/bankComplete.html")
+    return render_template("mypage/bankComplete.html",user_id=user_id)
 #----------------------------------------------------------------------------------------------------
 
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
@@ -302,11 +302,16 @@ def transferApplication():
     session["editmode"]=False
     bank_info,accountNumbers,count=getAccountInfo()
     editmode=session["editmode"]
-    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+    return render_template("mypage/transferApplication.html",user_id=user_id,bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 #---------------------------------------------------------------------------------------------------
 #transferApplication 削除ボタン表示 -----------------------------------------------------------------
 @mypage_bp.route("/transferApplication")
 def editActivate():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     editmode=session["editmode"]
     if not editmode:
         session["editmode"]=True
@@ -316,11 +321,16 @@ def editActivate():
     bank_info,accountNumbers,count=getAccountInfo()
    
     
-    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+    return render_template("mypage/transferApplication.html",user_id=user_id,bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 
 #transferApplication 登録口座削除 -------------------------------------------------------------------
 @mypage_bp.route("/transferApplication/removeBank",methods=['POST'])
 def removeBank():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     #何番目が選択されたかを取得
     bank_id = request.form.get("bank_id") 
 
@@ -342,7 +352,7 @@ def removeBank():
     bank_info,accountNumbers,count=getAccountInfo()
     editmode=session["editmode"]
     
-    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+    return render_template("mypage/transferApplication.html",user_id=user_id,bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 
 
 #transferAmount 金額選択ページ表示--------------------------------------------------------------------
@@ -406,41 +416,15 @@ def salesHistory():
     else:
         user_id = session.get('user_id')
     
-    
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select * from t_transaction t inner join m_product p on t.product_id=p.id where"
+    #売上履歴を取得
+    #売上履歴は取引テーブルでステータスが取引完了のものを取得
+
 
     
-    # try:
-    #     conn = mysql.connector.connect(
-    #         host="localhost",
-    #         user="root",
-    #         password="あなたのパスワード",
-    #         database="db_subkari",   # ←実際のDB名に変更
-    #         charset="utf8mb4"
-    #     )
-    #     cursor = conn.cursor(dictionary=True)
 
-    #     # ログイン中のユーザーIDを使用する場合（例）
-    #     user_id = session.get("user_id", 1)  # 仮で1番ユーザー
-
-    #     # 売上履歴を取得（新しい順）
-    #     sql = """
-    #         SELECT id, type, DATE_FORMAT(date, '%%Y/%%m/%%d %%H:%%i') AS date, amount
-    #         FROM sales_history
-    #         WHERE user_id = %s
-    #         ORDER BY date DESC
-    #     """
-    #     cursor.execute(sql, (user_id,))
-    #     sales_list = cursor.fetchall()
-
-    # except mysql.connector.Error as err:
-    #     print("DBエラー:", err)
-    #     sales_list = []
-    # finally:
-    #     cursor.close()
-    #     conn.close()
-
-    # HTMLへ渡す
-    # return render_template("mypage/salesHistory.html", sales_list=sales_list)
     return render_template("mypage/salesHistory.html" ,  user_id=user_id)
 #-------------------------------------------------------------------------------------------------
 
@@ -452,38 +436,7 @@ def transferHistory():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    # try:
-    #     conn = mysql.connector.connect(
-    #         host="localhost",
-    #         user="root",
-    #         password="あなたのパスワード",
-    #         database="db_subkari",   # ←実際のDB名に変更
-    #         charset="utf8mb4"
-    #     )
-    #     cursor = conn.cursor(dictionary=True)
-
-    #     # ログイン中のユーザーIDを使用する場合（例）
-    #     user_id = session.get("user_id", 1)  # 仮で1番ユーザー
-
-    #     # 売上履歴を取得（新しい順）
-    #     sql = """
-    #         SELECT id, type, DATE_FORMAT(date, '%%Y/%%m/%%d %%H:%%i') AS date, amount
-    #         FROM sales_history
-    #         WHERE user_id = %s
-    #         ORDER BY date DESC
-    #     """
-    #     cursor.execute(sql, (user_id,))
-    #     sales_list = cursor.fetchall()
-
-    # except mysql.connector.Error as err:
-    #     print("DBエラー:", err)
-    #     sales_list = []
-    # finally:
-    #     cursor.close()
-    #     conn.close()
-
-    # HTMLへ渡す
-    # return render_template("mypage/salesHistory.html", sales_list=sales_list)
+    
     return render_template("mypage/transferHistory.html" ,  user_id=user_id)
 #------------------------------------------------------------------------------------------------
 
