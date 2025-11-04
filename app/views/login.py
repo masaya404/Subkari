@@ -500,12 +500,59 @@ def password_reset():
     # 初期表示用に空の辞書を渡す
     error = None
     success = None
-    return render_template('login/forgot_password.html', error=error, success=success)
+    message = None
+    return render_template('login/forgot_password.html', error=error, success=success,message = message)
+
+
+
+# パスワード再設定画面の遷移
+@login_bp.route('/forgot_password', methods=['POST'])
+def forgot_password():
+    email_address = request.form.get('email')
+
+    #メールアドレスが登録されているものか確かめる
+     #同一user確認    
+    con = None  # データベース接続オブジェクトを初期化
+    cur = None  # カーソルオブジェクトを初期化
+    
+    # 参考コードをここに応用します
+    sql = "SELECT * FROM m_account WHERE mail = %s;"
+    
+    # connect_db() はご自身の環境で定義されているDB接続関数と想定しています
+    con = connect_db() 
+    cur = con.cursor(dictionary=True)
+    
+    # フォームから受け取ったメールアドレスをプレースホルダ(%s)に渡します
+    cur.execute(sql, (email_address,)) 
+    
+    # fetchone() で結果を1件取得します
+    userExist = cur.fetchone()
+    
+    # existing_user が None の場合 ＝ データ取得できない ＝ 登録されていない
+    if   userExist == None:
+        
+        # エラーなので、テンプレートをレンダリングして処理を終了します
+
+        cur.close()
+        con.close()
+        message = "このメールアドレスは登録されていません"
+
+        return render_template('login/forgot_password.html', message = message)
+    
+
+
+    #登録されていたら、セッションにメールアドレスを保存
+    session['reset_email'] = email_address
+
+    cur.close()
+    con.close()
+
+    return render_template('login/password_reset.html')
 
 
 
 
-@login_bp.route('/password-reset', methods=['POST'])
+@login_bp.route('/password-reset/complete', methods=['POST'])
 def reset_password():
     password = request.form.get('password')
     password_confirm = request.form.get('password_confirm')
@@ -519,20 +566,47 @@ def reset_password():
         error = "パスワードが一致しません。"
     elif len(password) < 8:
         error = "パスワードは8文字以上で入力してください。"
+
+
+    if error:
+        #エラーがある場合フォームテンプレートに戻す
         return render_template('login/password_reset.html', error=error, success=success)
 
     else:
-        # 実際にはここでDBにパスワードを更新
+        email_address =  session['reset_email']
+
         success = "パスワードを更新しました。"
+        # 実際にはここでDBにパスワードを更新
+        con = None  # データベース接続オブジェクトを初期化
+        cur = None  # カーソルオブジェクトを初期化
 
-    return render_template('login/password_update.html', error=error, success=success)
+        try:
+            con = connect_db() 
+            cur = con.cursor()
+            
+            # パスワードを更新するSQL
+            sql = "UPDATE m_account SET password = %s WHERE mail = %s;"
+            
+            # DBにハッシュ化されたパスワードとメールアドレスを渡す
+            cur.execute(sql, (password, email_address)) 
+            con.commit()
+            
+            # 4. 成功処理: セッションをクリア
+            session.pop('reset_email', None)
+
+            return render_template('login/password_update.html')
+
+        except mysql.connector.Error as err:
+            print(f"データベースエラー: {err}")
+
+        finally:
+            if con and con.is_connected():
+                cur.close()
+                con.close()
 
 
-# パスワード再設定画面の遷移
-@login_bp.route('/forgot_password', methods=['POST'])
-def forgot_password():
 
-    return render_template('login/password_reset.html')
+
 
 
 #メールアドレス忘れ画面の遷移
@@ -542,6 +616,46 @@ def forgot_email():
 
     return render_template('login/forgot_email.html')
 
+
+#本来ならここで入力された電話番号にSMSをおくる処理
+@login_bp.route('/email_sent/success', methods=['POST'])
+def email_sent_success():
+
+    #セッションに電話番号を登録する
+
+
+
+    #dbに登録されている電話番号があるか確かめる
+
+    #登録されていなかったら、エラーメッセージを渡す
+
+
+    #SMSにメールアドレスを送信する
+
+
+
+    return redirect(url_for('login.email_sent'))
+
+
+
+#メールアドレス送信完了表示処理
+@login_bp.route('/email_sent', methods=['GET'])
+def email_sent():
+
+
+    return render_template('login/email_sent.html')
+
+
+#メール再送処理
+@login_bp.route('/email_resend', methods=['GET'])
+def email_resend():
+
+    #セッション使う
+
+
+    #再送したメッセージをわたす。
+
+    return render_template('login/email_sent.html')
 
 
 
