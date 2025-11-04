@@ -6,7 +6,6 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/bankRegistration.css') }}">
-
     <main class="mypage_main">
         <section class="nav">
             <ul class="nav-section">
@@ -38,7 +37,7 @@
                 <li class="nav-section-title">ヘルプ</li>
                 <li class="nav-item"><a href="{{ url_for('mypage.inquiry') }}">問い合わせ</li>
                 <li class="nav-item"><a href="{{ url_for('mypage.editProfile') }}">FAQ</li>
-                <li class="nav-item"><a href="{{ url_for('mypage.editProfile') }}">ヘルプセンター</li>
+                <li class="nav-item"><a href="{{ url_for('mypage.helpCenter') }}">ヘルプセンター</li>
             </ul>
 
             <ul class="nav-section">

@@ -3,6 +3,8 @@
 {% block title %}電話番号認証{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename ='css/phone_vertification.css') }}">
+
 <main class="main-content">
     <div class="auth-container">
         <h2 class="title">電話番号認証</h2>
@@ -37,5 +39,100 @@
         </form>
     </div>
 </main>
+<script>document.addEventListener('DOMContentLoaded', () => {
+    const codeInputs = document.querySelectorAll('.code-input');
+    const authForm = document.querySelector('form[action*="phone_auth"]');
+    const authButton = authForm.querySelector('.btn-primary');
+
+    // --- 1. 自動フォーカス移動と入力制御 ---
+    codeInputs.forEach((input, index) => {
+        // キーダウンイベントで数値以外の入力をブロック
+        input.addEventListener('keydown', (e) => {
+            // '0'から'9'の数字キー、Backspace, Delete, Tab, Arrowキーは許可
+            if (!((e.key >= '0' && e.key <= '9') || 
+                  e.key === 'Backspace' || e.key === 'Delete' || 
+                  e.key === 'Tab' || e.key.includes('Arrow'))) {
+                e.preventDefault();
+            }
+        });
+
+        // インプットイベントで次のフィールドに移動
+        input.addEventListener('input', () => {
+            // 現在のフィールドに1文字入力された場合
+            if (input.value.length === 1) {
+                if (index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+            }
+            
+            // 入力状態に応じてボタンの有効・無効を切り替え
+            checkInputCompletion();
+        });
+
+        // Backspaceキーで前のフィールドに移動
+        input.addEventListener('keyup', (e) => {
+            if (e.key === 'Backspace' && input.value.length === 0) {
+                if (index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+            }
+        });
+    });
+
+    // --- 2. 入力完了チェックとボタン有効化/無効化 ---
+    function checkInputCompletion() {
+        let isCompleted = true;
+        codeInputs.forEach(input => {
+            if (input.value.length === 0) {
+                isCompleted = false;
+            }
+        });
+
+        if (isCompleted) {
+            authButton.disabled = false;
+            // スタイルはCSSがないため簡易的に
+            authButton.style.opacity = '1.0'; 
+        } else {
+            authButton.disabled = true;
+            authButton.style.opacity = '0.6';
+        }
+    }
+
+    // --- 3. フォーム送信時の最終バリデーション (alertで「未入力項目があります」を表示) ---
+    authForm.addEventListener('submit', (e) => {
+        let allFilled = true;
+        let completeCode = '';
+        let firstEmptyInput = null;
+
+        // 全てのフィールドをチェック
+        codeInputs.forEach(input => {
+            completeCode += input.value;
+            if (input.value.length === 0) {
+                allFilled = false;
+                if (!firstEmptyInput) {
+                    firstEmptyInput = input; // 最初の未入力フィールドを特定
+                }
+            }
+            // CSSを伴わないため、ここではclassList.add('error')の処理は除外
+        });
+
+        // 6桁未満の場合は送信をブロックし、アラートメッセージを表示
+        if (!allFilled || completeCode.length !== 6) {
+            e.preventDefault();
+            
+            // 【変更点】alert()で「未入力項目があります」というメッセージを表示
+            alert('未入力項目があります。6桁すべての認証コードを入力してください。');
+
+            // 最初の未入力フィールドにフォーカスを戻す
+            if (firstEmptyInput) {
+                firstEmptyInput.focus();
+            }
+        }
+        // エラーがなければフォームが通常通り送信されます
+    });
+    
+    // 初期ロード時に入力完了チェックを実行し、ボタンを無効化
+    checkInputCompletion();
+});</script>
 {% endblock %}
 
