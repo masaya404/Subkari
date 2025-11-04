@@ -143,9 +143,14 @@ def mypage():
     user_info=get_user_info(user_id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
 
+<<<<<<< HEAD
     return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],
     evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],
     followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id)
+=======
+
+    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id )
+>>>>>>> 27960dfea4d5776f4507879fd574a856b527f7ef
     
 #------------------------------------------------------------------------------------------------
 
