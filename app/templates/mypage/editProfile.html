@@ -63,7 +63,7 @@
         </div>
 
         <!-- 商品グリッド -->
-        <form action="" method="post"> <!--商品詳細へ遷移-->
+        <form action="{{url_for('products/product_details')}}" method="post"> <!--商品詳細へ遷移-->
             <div class="products-grid">
                 {% for name in productName %}
                 <div class="product-card">

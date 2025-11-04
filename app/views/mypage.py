@@ -147,16 +147,16 @@ def mypage():
     
 #------------------------------------------------------------------------------------------------
 
-#userprf表示--------------------------------------------------------------------------------------
-@mypage_bp.route("mypage/userprf")
-def userprf():
-    if 'user_id' not in session:
-        user_id = None
-        return redirect(url_for('login.login'))
-    else:
-        user_id = session.get('user_id')
-    return render_template("mypage/mypage.html" , user_id=user_id)
-#-------------------------------------------------------------------------------------------------
+# #userprf表示--------------------------------------------------------------------------------------
+# @mypage_bp.route("mypage/userprf")
+# def userprf():
+#     if 'user_id' not in session:
+#         user_id = None
+#         return redirect(url_for('login.login'))
+#     else:
+#         user_id = session.get('user_id')
+#     return render_template("mypage/mypage.html" , user_id=user_id)
+# #-------------------------------------------------------------------------------------------------
 
 #editProfile プロフィール編集ページ表示--------------------------------------------------------------
 @mypage_bp.route("/editProfile")

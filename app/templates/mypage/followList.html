@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}
+    プロフィール編集
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="../../static/css/followList.css">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/followList.css') }}"> -->
+
+<main>
+    <h1>フォロー一覧</h1>
+    <div class="sales-list">
+        {% if sales_list %}
+            {% for item in sales_list %}
+                <form action="{{url_for('mypage.transaction_detail')}}">
+                    <div class="sales-item" >
+                        <div class="sales-info">
+                            <div class="sales-type">{{ item.type }}</div>
+                            <div class="sales-date">{{ item.date }}</div>
+                        </div>
+                        <div class="sales-amount">¥{{ "{:,}".format(item.amount) }}</div>
+                    </div>
+                </form>
+            {% endfor %}
+        {% else %}
+            <p>フォロー一覧まだありません。</p>
+        {% endif %}
+    </div>
+</main>
