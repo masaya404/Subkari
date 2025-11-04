@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="header-right-guest">
+        <div class="header-right">
             {% if not user_id %}
             <div class="header-login">
                 <a href="{{ url_for('login.show_register_user') }}" class="">
@@ -49,7 +49,7 @@
                     <img src="{{ url_for('static', filename='img/camera.png') }}" class="icon"></img>
                     <span>出品</span>
                 </a>
-                <a href="#" class="icon-item">
+                <a href="{{url_for('deal.deal')}}" class="icon-item">
                     <img src="{{ url_for('static', filename='img/deal.png') }}" class="icon"></img>
                     <span>取引</span>
                 </a>
@@ -67,10 +67,8 @@
                     <a href="{{ url_for('top.coordinate') }}" class="header_list">Coordinate</a>
                     <a href="{{ url_for('top.tops') }}" class="header_list">Tops</a>
                     <a href="{{ url_for('top.bottoms') }}" class="header_list">Bottoms</a>
-                    <a href="{{ url_for('top.accessories') }}" class="header_list">Accessories</a> <!-- <a href="#">Coordinate</a>
-                        <a href="#">Tops</a>
-                        <a href="#">Bottoms</a>
-                        <a href="#">Accessories</a> -->
+                    <a href="{{ url_for('top.accessories') }}" class="header_list">Accessories</a> 
+
                 </nav>
             </div>
         </div>

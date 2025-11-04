@@ -484,6 +484,7 @@ function submitForm() {
             alert('登録成功ID: ' + data.product_id);
             // 成功後　sessionStorageのデータすべて消す
             sessionStorage.clear();
+            window.location.href=url
         } else {
             alert('失敗: ' + data.message);
         }
