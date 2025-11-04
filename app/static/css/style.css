@@ -7,3 +7,19 @@ body{
     -webkit-text-stroke: 0.5px #7A7A7A;
    
 }
+.carousel-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    display: none;
+}
+
+.carousel-item.active {
+    display: block;
+}
+
+.dot.active {
+    @apply bg-gray-600 border-gray-600;
+}

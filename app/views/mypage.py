@@ -378,7 +378,15 @@ def transferAmount():
     return render_template("mypage/transferAmount.html")
 
 
+#出品・購入・レンタル---------------------------------------------------------------------------------------------------
+@mypage_bp.route("/mypage/buySellRent")
+def buySellRent():
+    return render_template("mypage/buySellRent.html")
+
+
 #---------------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -503,8 +511,8 @@ def todo():
 
 
 #privacy_policy プライバシーポリシー表示---------------------------------------------------------------
-@mypage_bp.route("/privacy_policy")
-def privacy_policy():
+@mypage_bp.route("/privacyPolicy")
+def privacyPolicy():
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))

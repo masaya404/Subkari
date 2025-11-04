@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
 
-
 // 価格トグル
 const rentalCheckbox = document.querySelector('.rentalCheckbox');
 const purchaseCheckbox = document.querySelector('.purchaseCheckbox');
@@ -122,8 +121,6 @@ function displayFirstImage(image) {
         }
     }
 }
-
-loadUploadedImages();
 
 //sessionに記録の関数//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function saveToSessionStorage(){
@@ -252,31 +249,35 @@ function goToSize(sizeUrl){
     saveToSessionStorage();
     window.location.href = sizeUrl;
 }
+//他の資料をsessionStorage裡面保存 その後clean画面遷移/////////////////////////////////////////////////////////////////////////////////////////
+function goToClean(sizeUrl){
+    saveToSessionStorage();
+    window.location.href = sizeUrl;
+}
 
-document.getElementById("saveBtn").addEventListener("click", function() {
-  // 各 input 欄位的值を取得
+// document.getElementById("saveBtn").addEventListener("click", function() {
+//   // 各 input 欄位的值を取得
 
 
-  // formDateで囲む
-  const formData = {
-    name: name,
-    email: email,
-    comment: comment
-  };
+//   // formDateで囲む
+//   const formData = {
+//     name: name,
+//     email: email,
+//     comment: comment
+//   };
 
-  // JSONに変換して保存
-  sessionStorage.setItem("formData", JSON.stringify(formData));
+//   // JSONに変換して保存
+//   sessionStorage.setItem("formData", JSON.stringify(formData));
 
-  alert("入力データを sessionStorage に保存しました！");
-});
+//   alert("入力データを sessionStorage に保存しました！");
+// });
 
 // フォーム検証
 function validateForm() {
     let isValid = true;
-    const form = document.getElementById('sellerForm');
 
     // 商品名
-    const productName = form.querySelector('[name="productName"]').value.trim();
+    const productName = document.getElementById('name').value.trim();
     if (!productName) {
         document.getElementById('productNameError').classList.remove('hidden');
         isValid = false;
@@ -285,8 +286,8 @@ function validateForm() {
     }
 
     // レンタル・購入
-    const rental = form.querySelector('[name="rental"]').checked;
-    const purchase = form.querySelector('[name="purchase"]').checked;
+    const rental = document.getElementById('rental').checked;
+    const purchase = document.getElementById('purchase').checked;
     if (!rental && !purchase) {
         document.getElementById('rentalPurchaseError').classList.remove('hidden');
         isValid = false;
@@ -295,7 +296,7 @@ function validateForm() {
     }
 
     // 系統カラー
-    const color = form.querySelector('[name="color"]').value.trim();
+    const color = document.getElementById('color').value.trim();
     if (!color) {
         document.getElementById('colorError').classList.remove('hidden');
         isValid = false;
@@ -304,8 +305,8 @@ function validateForm() {
     }
 
     // カテゴリー1
-    const category1 = form.querySelector('[name="category1"]').value;
-    if (!category) {
+    const category1 =document.getElementById('category1').value;
+    if (!category1) {
         document.getElementById('category1Error').classList.remove('hidden');
         isValid = false;
     } else {
@@ -313,14 +314,21 @@ function validateForm() {
     }
 
     // カテゴリー2
-    const brand = form.querySelector('[name="brand"]').value;
+    const category2 = document.getElementById('category2').value;
+    if (!category2) {
+        document.getElementById('category2Error').classList.remove('hidden');
+        isValid = false;
+    } else {
+        document.getElementById('category2Error').classList.add('hidden');
+    }
+     // brand
+    const brand = document.getElementById('brand').value;
     if (!brand) {
         document.getElementById('brandError').classList.remove('hidden');
         isValid = false;
     } else {
         document.getElementById('brandError').classList.add('hidden');
     }
-
     // サイズ
     const sizeDisplay = document.getElementById('sizeDisplay').innerText.trim();
     if (sizeDisplay === '未選択') {
@@ -340,7 +348,7 @@ function validateForm() {
     }
 
     // 返却場所
-    const returnLocation = form.querySelector('[name="returnLocation"]').value.trim();
+    const returnLocation = document.getElementById('returnLocation').value.trim();
     if (!returnLocation) {
         document.getElementById('returnLocationError').classList.remove('hidden');
         isValid = false;
@@ -370,6 +378,16 @@ function validateForm() {
 //         isValid = false;
 //     }
 // }
+///////////////////////////////////////////////////////画像の形式変換の関数///////////////////////////////////////////////////////////////////////////
+function base64ToFile(base64Data, filename) {
+  const arr = base64Data.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) u8arr[n] = bstr.charCodeAt(n);
+  return new File([u8arr], filename, { type: mime });
+}
 
 /**
  * フォーム送信
@@ -395,6 +413,7 @@ function validateForm() {
 function submitForm() {
     // バリデーション
     if (!validateForm()) {
+        console.log("未入力項目存在.")
         return;
     }
 
@@ -405,12 +424,76 @@ function submitForm() {
         alert('最低1つの画像をアップロードしてください');
         return;
     }
+    console.log('=== 画像の格式確認 ===');
+    console.log('uploadedImages:', uploadedImages);
+    console.log('最初の画像:', uploadedImages[0]);
 
-    // hidden input に JSON を設定
-    document.getElementById('imagesData').value = JSON.stringify(uploadedImages);
-    
-    // フォーム送信
-    document.getElementById('sellerForm').submit();
+    // 全部のデータ変数
+    const formData = new FormData();
+
+     // ===== 画像 →　formData =====
+        uploadedImages.forEach((imageData, index) => {
+            try {
+                const base64String = imageData.src;
+
+                // Base64　転換　→　File
+                const file = base64ToFile(base64String, `product_image_${index}.png`);
+                formData.append('images', file);  // keyは'images'，複数あり
+                console.log(`画像${index}FormDataに追加`);
+            } catch (error) {
+                console.error(`画像${index}形式変換失敗:`, error);
+            }
+        });
+
+    //  sessionStorage 取得
+    const productData = {
+        name: sessionStorage.getItem("name"),
+        rental: sessionStorage.getItem("rental") === "true",
+        purchase: sessionStorage.getItem("purchase") === "true",
+        rentalPrice: sessionStorage.getItem("rentalPrice") || null,
+        purchasePrice: sessionStorage.getItem("purchasePrice") || null,
+        smoking: sessionStorage.getItem("smoking") === "yes", // "yes" OR "no"
+        color: sessionStorage.getItem("color"),
+        category1: sessionStorage.getItem("category1"),
+        category2: sessionStorage.getItem("category2"),
+        brand: sessionStorage.getItem("brand"),
+        explanation: sessionStorage.getItem("explanation"),
+        returnLocation: sessionStorage.getItem("returnLocation"),
+    };
+
+    //すべてのデータ　→　formData
+    formData.append('productData', JSON.stringify(productData));
+
+    console.log('=== 準備完了 ===');
+    console.log('画像の枚数:', uploadedImages.length);
+    console.log('商品名:', productData.name);
+    console.log('バックエンドに送る');
+
+    fetch('/seller/format/save-product', {
+        method: 'POST',
+        body:formData
+        // headers: {
+        //     'Content-Type': 'application/json',
+        // },
+        // body: JSON.stringify(productData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Success:', data);
+            alert('登録成功ID: ' + data.product_id);
+            // 成功後　sessionStorageのデータすべて消す
+            sessionStorage.clear();
+        } else {
+            alert('失敗: ' + data.message);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert('catch失敗');
+    });
+
+
 }
 // 下書き保存
 function saveDraft(url) {
@@ -420,3 +503,5 @@ function saveDraft(url) {
     // alert('下書きが保存されました');
     window.location.href = url;
 }
+
+

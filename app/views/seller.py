@@ -23,7 +23,7 @@ def seller():
     return resp
 
 #seller フォーマット----------------------------------------------------------------------------------------------------------------------------------------------------------
-@seller_bp.route('/seller/format',methods=['GET','POST'])
+@seller_bp.route('/seller/format',methods=['GET'])
 def seller_format():
     if 'user_id' not in session:
         user_id = None
@@ -31,16 +31,11 @@ def seller_format():
     else:
         user_id = session.get('user_id')
         
-    # POST ：保存
-    if request.method == 'POST':
-        save_form_data_to_session(request.form)
-    
-    # 取得
-    form_data = get_form_data_from_session()
+  
     
     return render_template('seller/seller_format.html', 
                          user_id=user_id, 
-                         form_data=form_data)    
+                         )    
     # return render_template('seller/seller_format.html', user_id = user_id)
 
 #画像アップロード画面----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -121,7 +116,7 @@ def seller_save_images():
     
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
-#size選択----------------------------------------------------------------------------------------------------------------------------------------------------------
+#size選択表示----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/size',methods=['GET'])
 def seller_size():
     if 'user_id' not in session:
@@ -129,8 +124,10 @@ def seller_size():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-               
-    return render_template('seller/seller_size.html', user_id = user_id)
+        
+    active_tab = session.get('active_tab', 'tops')      
+    selected = session.get('size_selected', {})           
+    return render_template('seller/seller_size.html', user_id = user_id,selected=selected,active_tab=active_tab)
 
 #size選択を記録----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/size/success',methods=['POST'])
@@ -141,29 +138,27 @@ def seller_size_success():
     else:
         user_id = session.get('user_id')
     
+    #今のtab確認
+    active_tab = request.form.get('active_tab', 'tops')
+    session['active_tab'] = active_tab
     
-    size_field = ['shoulderWidth', 'bodyWidth', 'sleeveLength', 'bodyLength','notes']
-    # size_list = [request.form.get(s, '') for s in size_field]
+    size_field = ['shoulderWidth', 'bodyWidth', 'sleeveLength', 'bodyLength','notes','hip','totalLength','rise','inseam','waist','thighWidth','hemWidth','skirtLength']
+    tops_fields = ['shoulderWidth', 'bodyWidth', 'sleeveLength', 'bodyLength', 'notes']
+    bottoms_fields = ['hip', 'totalLength', 'rise', 'inseam', 'waist', 'thighWidth', 'hemWidth', 'skirtLength', 'notes']
     
-    # size_list.append(request.form.get('shoulderWidth'))
-    # size_list.append(request.form.get('bodyWidth'))
-    # size_list.append(request.form.get('sleeveLength'))
-    # size_list.append(request.form.get('bodyLength'))
     size_data = {s: request.form.get(s, '') for s in size_field}
-    session['size_selected'] = size_data 
-    # session['shoulderWidth'] = request.form.get('shoulderWidth')
-    # session['bodyWidth'] = request.form.get('bodyWidth')
-    # session['sleeveLength'] = request.form.get('sleeveLength')
-    # session['bodyLength'] = request.form.get('bodyLength')
     
-    # #flashはerror message , 自動的にsessionに保存され、get_flashed_messages()で内容を取得できる
-    # if not size:
-    #     flash("sizeの選択が必要です。")
-    #     return redirect(url_for('seller.seller_size'))
-    #  format 画面遷移
+    if active_tab == 'tops':
+        filtered_data = {k: v for k, v in size_data.items() if k in tops_fields}
+    else:
+        filtered_data = {k: v for k, v in size_data.items() if k in bottoms_fields}
+        
+    session['size_selected'] = filtered_data
+ 
+    print(f" Active tab: {active_tab}")
+    print(f" Saved data: {filtered_data}")
+    
     return redirect(url_for('seller.seller_format'))
-               
-    # return render_template('seller/seller_format.html', user_id = user_id )
     
 #サイズ記録----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/get_size_selected')
@@ -177,12 +172,10 @@ def seller_clean():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    
-    #cleanの辞書型データを確認し、なければ{}
+      
     selected = session.get('clean_selected', {})
     
     return render_template('seller/seller_clean.html', selected=selected, user_id=user_id)           
-    # return render_template('seller/seller_clean.html', user_id = user_id)
 
 #洗濯表示記録----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/clean/success',methods=['POST'])
@@ -192,13 +185,9 @@ def seller_clean_success():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-     
-    #  保存セッション
-    save_form_data_to_session(request.form)
     
     #取ってきたデータを辞書型で保存
     session['clean_selected'] = request.form.to_dict()
-    session.modified = True
     return redirect(url_for('seller.seller_format'))          
     # return render_template('seller/seller_format.html', user_id = user_id)
 
@@ -208,175 +197,409 @@ def get_clean_selected():
     return jsonify(session.get('clean_selected', {}))
 
 #セラーフォマットの内容をDB登録----------------------------------------------------------------------------------------------------------------------------------------------------------
-@seller_bp.route('/format/submit',methods=['POST'])
-def format_submit():
+@seller_bp.route('/format/save-product', methods=['POST'])
+def save_product():
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    
-    #メイｎ処理
-    # return render_template('seller/seller_products.html', user_id=user_id)
-    try:
-            # フォームデータ取得
-            product_name = request.form.get('productName', '').strip()
-            rental = request.form.get('rental') == 'true'
-            purchase = request.form.get('purchase') == 'true'
-            rentalPrice = request.form.get('rentalPrice', 0) if rental else 0
-            purchasePrice = request.form.get('purchasePrice', 0) if purchase else 0
-            smoking = request.form.get('smoking', 'no')
-            color = request.form.get('color', '').strip()
-            category = request.form.get('category', '').strip()
-            brand = request.form.get('brand', '').strip()
-            item_description = request.form.get('itemDescription', '').strip()
-            product_description = request.form.get('productDescription', '').strip()
-            return_location = request.form.get('returnLocation', '').strip()
-            
-            # sessionのサイズ取得
-            shoulder_width = session.get('shoulderWidth', '')
-            body_width = session.get('bodyWidth', '')
-            sleeve_length = session.get('sleeveLength', '')
-            body_length = session.get('bodyLength', '')
-            size_notes = session.get('notes', '')
-            
-           # サイズをDBに保存
-            sql = """
-            INSERT INTO sizes (shoulderWidth, bodyWidth, sleeveLength, bodyLength, notes)
-            VALUES (%s, %s, %s, %s, %s)
-            """
-            cursor.execute(sql, (shoulder_width, body_width, sleeve_length, body_length, size_notes))
-            db.commit()
         
-            #sessionの洗濯表示取得
-            clean_selected = session.get('clean_selected', {})
-            #column名
-            columns = ['wash','bleach','tumble','dry','iron','dryclean','wet']
-            #value名
-            values = [clean_selected.get(col) for col in columns]
+    try:
+        product_data_str = request.form.get('productData')
+        if not product_data_str:
+            return jsonify({
+                'success': False,
+                'message': '商品情報がありません'
+            }), 400
 
-            # 洗濯表示のSQL
-            sql_clean = f"""
-            INSERT INTO cleaning (user_id, {', '.join(columns)})
-            VALUES (%s, {', '.join(['%s']*len(columns))})
+        # 解析JSON
+        data = json.loads(product_data_str)
+        # data = request.get_json()
+        
+        # DB接続
+        con = connect_db()
+        cursor = con.cursor()
+        
+        #  SQL 文章用意
+        sql = """
+            INSERT INTO m_product (
+                name, 
+                purchasePrice, 
+                rentalPrice, 
+                size,
+                color, 
+                `for`, 
+                upload, 
+                showing, 
+                draft, 
+                updateDate, 
+                purchaseFlg, 
+                rentalFlg, 
+                explanation, 
+                account_id,
+                brand_id, 
+                category_id, 
+                cleanNotes, 
+                smokingFlg, 
+                returnAddress
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s
+            )
+        """
+        
+        # 時間
+        current_date = datetime.now().date()
+        current_datetime = datetime.now()
+        
+        #実際の資料
+        values = (
+            data.get('name'),          
+            int(data.get('purchasePrice')) if data.get('purchasePrice') else None,
+            int(data.get('rentalPrice')) if data.get('rentalPrice') else None,
+            session.get('size_selected', {}).get('notes'),
+            data.get('color'),
+            data.get('category1', 'ユニセックス'), 
+            current_date,
+            '公開', 
+            0,
+            current_datetime,
+            1 if data.get('purchase') else 0,
+            1 if data.get('rental') else 0,
+            data.get('explanation') if data.get('explanation') else None,
+            session.get('user_id'),      
+            int(data.get('brand')) if data.get('brand') else None,
+            int(data.get('category2')) if data.get('category2') else None, 
+            session.get('clean_selected', {}).get('notes'),  # 注意事項
+            1 if data.get('smoking') else 0,
+            data.get('returnLocation') if data.get('returnLocation') else None
+        )
+        
+        #  SQL 実行
+        cursor.execute(sql, values)
+        con.commit()
+        
+        # AUTO INCREMENTの値を取得
+        product_id = cursor.lastrowid
+        
+        #====== size登録の処理 ==============================================================================================================
+        #今のtab確認
+        active_tab = session.get('active_tab')
+        size_selected = session.get('size_selected', {})
+        
+        # tops bottomsの判断######################################################
+        if active_tab == 'tops':
+            sql = """
+                INSERT INTO m_topssize (
+                    product_id, shoulderWidth, bodyWidth, sleeveLength, bodyLength, notes
+                ) VALUES (
+                    %s, %s, %s, %s, %s, %s
+                )
             """
-            cursor.execute(sql_clean, [user_id] + values)
-            db.commit()
+            values = (
+                product_id,
+                size_selected.get('shoulderWidth'),
+                size_selected.get('bodyWidth'),
+                size_selected.get('sleeveLength'),
+                size_selected.get('bodyLength'),
+                size_selected.get('notes'),
+            )
             
-            # # session から取得
-            # size = session.get('size')
-            # washing = session.get('clean')
+        else:
+            sql = """
+                INSERT INTO m_bottomssize (
+                    product_id, hip, totalLength, rise, inseam, waist, thighWidth, hemWidth, skirtLength, notes
+                ) VALUES (
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                )
+            """
+            values = (
+                product_id,
+                size_selected.get('hip'),
+                size_selected.get('totalLength'),
+                size_selected.get('rise'),
+                size_selected.get('inseam'),
+                size_selected.get('waist'),
+                size_selected.get('thighWidth'),
+                size_selected.get('hemWidth'),
+                size_selected.get('skirtLength'),
+                size_selected.get('notes'),
+            )
             
-            # 画像データ取得
-            images_json = request.form.get('images_data', '[]')
-            images = json.loads(images_json)
-            
-            # バリデーション
-            if not all([product_name, color, category, brand, size, washing, return_location]):
-                flash('必須項目を入力してください', 'error')
-                return render_template('seller/seller_format.html', user_id=user_id)
-            
-            if not (rental or purchase):
-                flash('レンタル可能または購入可能を選択してください', 'error')
-                return render_template('seller/seller_format.html', user_id=user_id)
-            
-            if not images:
-                flash('最低1つの画像をアップロードしてください', 'error')
-                return render_template('seller/seller_format.html', user_id=user_id)
-            
-            # DB に登録
-            con = connect_db()
-            cursor = con.cursor()
-            
-            try:
-                # products テーブルに挿入
-                query = """
-                    INSERT INTO m_products 
-                    (account_id, name, rentalPrice, purchasePrice, smokingFlg, color, 
-                    category, brand, explanation , brand_id, 
-                    size, cleanNotes, return_location, created_at)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+        cursor.execute(sql, values)
+        con.commit()
+        #====== clean登録の処理 ============================================================================================================== 
+        clean_selected = session.get('clean_selected', {})
+        
+        # clean フィールド名を定義
+        clean_fields = ['wash', 'bleach', 'tumble', 'dry', 'iron', 'dryclean', 'wet']
+        
+        inserted_count = 0
+        try:
+            # すべての項目確認
+            for field_name in clean_fields:
+                val = clean_selected.get(field_name)  # フィールド値を取得
+                
+                # "None"、''の場合は処理しない
+                if val in [None, '', 'None']:
+                    continue
+                
+                # SQL用意
+                sql = """
+                    INSERT INTO t_clean (product_id, cleanSign_id)
+                    VALUES (%s, %s)
                 """
-                
-                cursor.execute(query, (
-                    user_id,
-                    product_name,
-                    rental,
-                    purchase,
-                    smoking,
-                    color,
-                    category,
-                    brand,
-                    item_description,
-                    product_description,
-                    size,
-                    washing,
-                    return_location
-                ))
-                
-                product_id = cursor.lastrowid
-                
-                # 画像を保存
-                for idx, img_data in enumerate(images):
-                    try:
-                        # Base64 データを画像ファイルに変換
-                        src = img_data.get('src', '')
-                        if ',' in src:
-                            base64_str = src.split(',')[1]
-                        else:
-                            base64_str = src
-                        
-                        image_bytes = base64.b64decode(base64_str)
-                        image = Image.open(io.BytesIO(image_bytes))
-                        
-                        # ファイル名: product_id.order (例: 1.1, 1.2, 1.3)
-                        filename = f"{product_id}.{idx + 1}.jpg"
-                        
-                        # パス生成と保存
-                        current_filepath = os.path.abspath(__file__)
-                        current_directory = os.path.dirname(current_filepath)
-                        save_dir = os.path.join(current_directory, "static", "img")
-                        os.makedirs(save_dir, exist_ok=True)
-                        
-                        save_path = os.path.join(save_dir, filename)
-                        image.save(save_path, quality=90)
-                        
-                        image_url = f"/static/img/{filename}"
-                        
-                        # product_images テーブルに挿入
-                        query_img = """
-                            INSERT INTO product_images (product_id, image_url, order_index)
-                            VALUES (%s, %s, %s)
-                        """
-                        cursor.execute(query_img, (product_id, image_url, idx + 1))
-                        
-                    except Exception as e:
-                        print(f"画像保存エラー: {e}")
-                        continue
-                
-                con.commit()
-                
-                # session をクリア
-                session.pop('uploadedImages', None)
-                session.pop('size', None)
-                session.pop('clean', None)
-                
-                return render_template('seller/seller_products.html', user_id=user_id)
-                
-            except Exception as e:
-                con.rollback()
-                print(f"DB エラー: {e}")
-                flash('データベースへの登録に失敗しました', 'error')
-                return render_template('seller/seller_format.html', user_id=user_id)
+                values = (product_id, val)
+        
+                cursor.execute(sql, values)
+                inserted_count += 1
+
+            con.commit()
+
+        except Exception as e:
+            # エラーが発生するとき、前の処理なかったことにする
+            print(f' t_clean 登録エラー: {str(e)}')  #  デバッグ用
+            con.rollback()
             
-            finally:
-                cursor.close()
-                con.close()
+            
+        # ===== 画像アップロードの処理 =====
+        uploaded_image_count = 0
+        
+        if 'images' in request.files:
+            files = request.files.getlist('images')
+            print(f'画像の数: {len(files)}')
+
+            # uploadsフォルダー指定、なければつくる
+            upload_folder = 'app/static/img/productImg'
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)
+
+            for index, file in enumerate(files):
+                try:
+                    if file and file.filename:
+                        # ===== 唯一の画像名を生成 =====
+                        timestamp = int(datetime.now().timestamp() * 1000)
+                        filename = f"product_{product_id}_{index}_{timestamp}.png"
+                        filepath = os.path.join(upload_folder, filename)
+
+                        # ===== ファイル保存 =====
+                        file.save(filepath)
+                        print(f'画像{index}保存済み: {filename}')
+
+                        # ===== m_productimg =====
+                        # user_id, product_id, imgカラムと合わせる
+                        cursor.execute(
+                            "INSERT INTO m_productimg (id, product_id, img) VALUES (%s, %s, %s)",
+                            (int(user_id), int(product_id), filename)
+                        )
+                        con.commit()
+                        uploaded_image_count += 1
+                        print(f'画像DB登録完了: user_id={user_id}, product_id={product_id}, img={filename}')
+
+                except Exception as img_error:
+                    print(f'画像{index}アップロード失敗: {str(img_error)}')
+                    con.rollback()
+                    continue
+
+        else:
+            print('画像がない')
+        
+        cursor.close()
+        con.close()
+        
+        #session削除
+        session.pop('size_selected', None)
+        session.pop('clean_selected', None)
+        
+        return jsonify({
+            'success': True,
+            'message': 'DBの登録成功',
+            'product_id': product_id
+        }), 200
+        
+    except mysql.connector.Error as err:
+        return jsonify({
+            'success': False,
+            'message': f'DBエラー: {str(err)}'
+        }), 500
         
     except Exception as e:
-        print(f"エラー: {e}")
-        flash('エラーが発生しました', 'error')
-        return render_template('seller/seller_format.html', user_id=user_id)
+        return jsonify({
+            'success': False,
+            'message': f'わからないエラー: {str(e)}'
+        }), 500
+
+
+#セラーフォマットの内容をDB登録----------------------------------------------------------------------------------------------------------------------------------------------------------
+# @seller_bp.route('/format/submit',methods=['POST'])
+# def format_submit():
+#     if 'user_id' not in session:
+#         user_id = None
+#         return redirect(url_for('login.login'))
+#     else:
+#         user_id = session.get('user_id')
+    
+#     #メイｎ処理
+#     # return render_template('seller/seller_products.html', user_id=user_id)
+#     try:
+#             # フォームデータ取得
+#             product_name = request.form.get('productName', '').strip()
+#             rental = request.form.get('rental') == 'true'
+#             purchase = request.form.get('purchase') == 'true'
+#             rentalPrice = request.form.get('rentalPrice', 0) if rental else 0
+#             purchasePrice = request.form.get('purchasePrice', 0) if purchase else 0
+#             smoking = request.form.get('smoking', 'no')
+#             color = request.form.get('color', '').strip()
+#             category = request.form.get('category', '').strip()
+#             brand = request.form.get('brand', '').strip()
+#             item_description = request.form.get('itemDescription', '').strip()
+#             product_description = request.form.get('productDescription', '').strip()
+#             return_location = request.form.get('returnLocation', '').strip()
+            
+#             # sessionのサイズ取得
+#             shoulder_width = session.get('shoulderWidth', '')
+#             body_width = session.get('bodyWidth', '')
+#             sleeve_length = session.get('sleeveLength', '')
+#             body_length = session.get('bodyLength', '')
+#             size_notes = session.get('notes', '')
+            
+#            # サイズをDBに保存
+#             sql = """
+#             INSERT INTO sizes (shoulderWidth, bodyWidth, sleeveLength, bodyLength, notes)
+#             VALUES (%s, %s, %s, %s, %s)
+#             """
+#             cursor.execute(sql, (shoulder_width, body_width, sleeve_length, body_length, size_notes))
+#             db.commit()
+        
+#             #sessionの洗濯表示取得
+#             clean_selected = session.get('clean_selected', {})
+#             #column名
+#             columns = ['wash','bleach','tumble','dry','iron','dryclean','wet']
+#             #value名
+#             values = [clean_selected.get(col) for col in columns]
+
+#             # 洗濯表示のSQL
+#             sql_clean = f"""
+#             INSERT INTO cleaning (user_id, {', '.join(columns)})
+#             VALUES (%s, {', '.join(['%s']*len(columns))})
+#             """
+#             cursor.execute(sql_clean, [user_id] + values)
+#             db.commit()
+            
+#             # # session から取得
+#             # size = session.get('size')
+#             # washing = session.get('clean')
+            
+#             # 画像データ取得
+#             images_json = request.form.get('images_data', '[]')
+#             images = json.loads(images_json)
+            
+#             # バリデーション
+#             if not all([product_name, color, category, brand, size, washing, return_location]):
+#                 flash('必須項目を入力してください', 'error')
+#                 return render_template('seller/seller_format.html', user_id=user_id)
+            
+#             if not (rental or purchase):
+#                 flash('レンタル可能または購入可能を選択してください', 'error')
+#                 return render_template('seller/seller_format.html', user_id=user_id)
+            
+#             if not images:
+#                 flash('最低1つの画像をアップロードしてください', 'error')
+#                 return render_template('seller/seller_format.html', user_id=user_id)
+            
+#             # DB に登録
+#             con = connect_db()
+#             cursor = con.cursor()
+            
+#             try:
+#                 # products テーブルに挿入
+#                 query = """
+#                     INSERT INTO m_products 
+#                     (account_id, name, rentalPrice, purchasePrice, smokingFlg, color, 
+#                     category, brand, explanation , brand_id, 
+#                     size, cleanNotes, return_location, created_at)
+#                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+#                 """
+                
+#                 cursor.execute(query, (
+#                     user_id,
+#                     product_name,
+#                     rental,
+#                     purchase,
+#                     smoking,
+#                     color,
+#                     category,
+#                     brand,
+#                     item_description,
+#                     product_description,
+#                     size,
+#                     washing,
+#                     return_location
+#                 ))
+                
+#                 product_id = cursor.lastrowid
+                
+#                 # 画像を保存
+#                 for idx, img_data in enumerate(images):
+#                     try:
+#                         # Base64 データを画像ファイルに変換
+#                         src = img_data.get('src', '')
+#                         if ',' in src:
+#                             base64_str = src.split(',')[1]
+#                         else:
+#                             base64_str = src
+                        
+#                         image_bytes = base64.b64decode(base64_str)
+#                         image = Image.open(io.BytesIO(image_bytes))
+                        
+#                         # ファイル名: product_id.order (例: 1.1, 1.2, 1.3)
+#                         filename = f"{product_id}.{idx + 1}.jpg"
+                        
+#                         # パス生成と保存
+#                         current_filepath = os.path.abspath(__file__)
+#                         current_directory = os.path.dirname(current_filepath)
+#                         save_dir = os.path.join(current_directory, "static", "img")
+#                         os.makedirs(save_dir, exist_ok=True)
+                        
+#                         save_path = os.path.join(save_dir, filename)
+#                         image.save(save_path, quality=90)
+                        
+#                         image_url = f"/static/img/{filename}"
+                        
+#                         # product_images テーブルに挿入
+#                         query_img = """
+#                             INSERT INTO product_images (product_id, image_url, order_index)
+#                             VALUES (%s, %s, %s)
+#                         """
+#                         cursor.execute(query_img, (product_id, image_url, idx + 1))
+                        
+#                     except Exception as e:
+#                         print(f"画像保存エラー: {e}")
+#                         continue
+                
+#                 con.commit()
+                
+#                 # session をクリア
+#                 session.pop('uploadedImages', None)
+#                 session.pop('size', None)
+#                 session.pop('clean', None)
+                
+#                 return render_template('seller/seller_products.html', user_id=user_id)
+                
+#             except Exception as e:
+#                 con.rollback()
+#                 print(f"DB エラー: {e}")
+#                 flash('データベースへの登録に失敗しました', 'error')
+#                 return render_template('seller/seller_format.html', user_id=user_id)
+            
+#             finally:
+#                 cursor.close()
+#                 con.close()
+        
+#     except Exception as e:
+#         print(f"エラー: {e}")
+#         flash('エラーが発生しました', 'error')
+#         return render_template('seller/seller_format.html', user_id=user_id)
 
 #出品一覧画面----------------------------------------------------------------------------------------------------------------------------------------------------------
 @seller_bp.route('/seller/products',methods=['GET'])
@@ -417,38 +640,38 @@ def datacenter():
     return render_template('seller/seller_datacenter.html', user_id = user_id)
 
 #セッション記録----------------------------------------------------------------------------------------------------------------------------------------------------------
-def save_form_data_to_session(form_data):
-    """保存session"""
-    session['productName'] = form_data.get('productName', '')
-    session['rental'] = form_data.get('rental') == 'true'  # checkbox  'true'
-    session['purchase'] = form_data.get('purchase') == 'true'
-    session['rentalPrice'] = form_data.get('rentalPrice','')
-    session['purchasePrice'] = form_data.get('purchasePrice','')
-    session['smoking'] = form_data.get('smoking', 'no')
-    session['color'] = form_data.get('color', '')
-    session['category'] = form_data.get('category', '')
-    session['brand'] = form_data.get('brand', '')
-    session['itemDescription'] = form_data.get('itemDescription', '')
-    session['productDescription'] = form_data.get('productDescription', '')
-    session['returnLocation'] = form_data.get('returnLocation', '')
-    session.modified = True
+# def save_form_data_to_session(form_data):
+#     """保存session"""
+#     session['productName'] = form_data.get('productName', '')
+#     session['rental'] = form_data.get('rental') == 'true'  # checkbox  'true'
+#     session['purchase'] = form_data.get('purchase') == 'true'
+#     session['rentalPrice'] = form_data.get('rentalPrice','')
+#     session['purchasePrice'] = form_data.get('purchasePrice','')
+#     session['smoking'] = form_data.get('smoking', 'no')
+#     session['color'] = form_data.get('color', '')
+#     session['category'] = form_data.get('category', '')
+#     session['brand'] = form_data.get('brand', '')
+#     session['itemDescription'] = form_data.get('itemDescription', '')
+#     session['productDescription'] = form_data.get('productDescription', '')
+#     session['returnLocation'] = form_data.get('returnLocation', '')
+#     session.modified = True
 
-def get_form_data_from_session():
-    """ session 取得"""
-    return {
-        'productName': session.get('productName', ''),
-        'rental': session.get('rental', False),
-        'purchase': session.get('purchase', False),
-        'rentalPrice':session.get('rentalPrice',''),
-        'purchasePrice':session.get('purchasePrice',''),
-        'smoking': session.get('smoking', 'no'),
-        'color': session.get('color', ''),
-        'category': session.get('category', ''),
-        'brand': session.get('brand', ''),
-        'itemDescription': session.get('itemDescription', ''),
-        'productDescription': session.get('productDescription', ''),
-        'returnLocation': session.get('returnLocation', '')
-    }
+# def get_form_data_from_session():
+#     """ session 取得"""
+#     return {
+#         'productName': session.get('productName', ''),
+#         'rental': session.get('rental', False),
+#         'purchase': session.get('purchase', False),
+#         'rentalPrice':session.get('rentalPrice',''),
+#         'purchasePrice':session.get('purchasePrice',''),
+#         'smoking': session.get('smoking', 'no'),
+#         'color': session.get('color', ''),
+#         'category': session.get('category', ''),
+#         'brand': session.get('brand', ''),
+#         'itemDescription': session.get('itemDescription', ''),
+#         'productDescription': session.get('productDescription', ''),
+#         'returnLocation': session.get('returnLocation', '')
+#     }
    
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():

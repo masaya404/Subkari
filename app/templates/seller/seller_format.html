@@ -8,7 +8,7 @@
         <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
             <h1 class="text-3xl font-bold mb-8 text-center">出品する</h1>
 
-          <!--  <form id="sellerForm" method="POST" class="space-y-6" enctype="multipart/form-data">-->
+        <!--    <form id="sellerForm" class="space-y-6" enctype="multipart/form-data">-->
                 <!-- 商品画像 -->
                 <div class="border-2 border-dashed border-gray-300 rounded-lg text-center overflow-hidden">
 
@@ -35,7 +35,7 @@
                 </div>
 
                 <!-- 商品名（必須） -->
-                <div>
+                <div class="mb-3">
                     <label class="block text-sm font-semibold mb-2">
                         商品名 <span class="text-red-500">*</span>
                     </label>
@@ -100,7 +100,7 @@
                         <option value="レッド">レッド</option>
                         <option value="オレンジ">オレンジ</option>
                     </select>
-                    <span class="text-red-500 text-sm hidden" id="brandError">ブランドを選択してください</span>
+                    <span class="text-red-500 text-sm hidden" id="colorError">系統カラーを選択してください</span>
                 </div>
 
                 <!-- カテゴリー1（必須） -->
@@ -111,7 +111,7 @@
                     <select name="category1" id="category1" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
                         <option value="">選択してください</option>
                         <option value="ユニセックス">ユニセックス</option>
-                        <option value="レディース">Bottoms</option>
+                        <option value="レディース">レディース</option>
                     </select>
                     <span class="text-red-500 text-sm hidden" id="category1Error">カテゴリーを選択してください</span>
                 </div>
@@ -122,10 +122,10 @@
                     </label>
                     <select name="category2" id="category2" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
                         <option value="">選択してください</option>
-                        <option value="トップス">トップス</option>
-                        <option value="ボトムス">ボトムス</option>
-                        <option value="コーデ">コーデ</option>
-                        <option value="アクセサリー">アクセサリー</option>
+                        <option value="2">トップス</option>
+                        <option value="3">ボトムス</option>
+                        <option value="1">コーデ</option>
+                        <option value="4">アクセサリー</option>
                     </select>
                     <span class="text-red-500 text-sm hidden" id="category2Error">カテゴリーを選択してください</span>
                 </div>
@@ -137,19 +137,19 @@
                     </label>
                     <select name="brand" id="brand" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
                         <option value="">選択してください</option>
-                        <option value="TRAVAS TOKYO">TRAVAS TOKYO</option>
-                        <option value="REFLEM">REFLEM</option>
-                        <option value="CIVARIZE">CIVARIZE</option>
-                        <option value="ililil">ililil</option>
-                        <option value="Valerie">Valerie</option>
-                        <option value="THICC PSYNYXX">THICC PSYNYXX</option>
-                        <option value="KINGLYMASK">KINGLYMASK</option>
-                        <option value="Amlige">Amlige</option>
-                        <option value="Meltier">Meltier</option>
-                        <option value="OY">OY</option>
-                        <option value="LIZ LISA">LIZ LISA</option>
-                        <option value="Ank Rouge">Ank Rouge</option>
-                        <option value="other">other</option>
+                        <option value="1">TRAVAS TOKYO</option>
+                        <option value="2">REFLEM</option>
+                        <option value="3">CIVARIZE</option>
+                        <option value="4">ililil</option>
+                        <option value="5">Valerie</option>
+                        <option value="6">THICC PSYNYXX</option>
+                        <option value="7">KINGLYMASK</option>
+                        <option value="8">Amlige</option>
+                        <option value="9">Meltier</option>
+                        <option value="10">OY</option>
+                        <option value="11">LIZ LISA</option>
+                        <option value="12">Ank Rouge</option>
+                        <option value="13">other</option>
                     </select>
                     <span class="text-red-500 text-sm hidden" id="brandError">ブランドを選択してください</span>
                 </div>
@@ -172,7 +172,7 @@
                         <form method="GET" action="{{ url_for('seller.seller_size') }}">
                             <button type="submit" onclick="saveToSessionStorage()" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500 cursor-pointer">
                                 <span class="text-sm text-gray-600 mt-1 block" id="sizeDisplay">
-                                    {% if session.get('shoulderWidth') %}選択済み{% else %}未選択{% endif %}
+                                    {% if session.get('size_selected') %}選択済み{% else %}未選択{% endif %}
                                 </span>
                             </button>
                         </form>
@@ -185,7 +185,7 @@
                         </label>
                         <!--  form 　-->
                         <form method="GET" action="{{ url_for('seller.seller_clean') }}">
-                            <button type="submit" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500 cursor-pointer">
+                            <button type="submit" onclick="saveToSessionStorage()" class="w-full px-4 py-2 border-2 border-[#9a9a9a] rounded hover:border-blue-500 cursor-pointer">
                                 <span class="text-sm text-gray-600 mt-1 block" id="washingDisplay">
                                     {% if session.get('clean_selected') %}選択済み{% else %}未選択{% endif %}
                                 </span>
@@ -234,7 +234,7 @@
                     <label class="block text-sm font-semibold mb-2">
                         返却場所 <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="returnLocation" placeholder="返却場所を入力" value="" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
+                    <input type="text" id="returnLocation" name="returnLocation" placeholder="返却場所を入力" value="" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
                     <span class="text-red-500 text-sm hidden" id="returnLocationError">返却場所は必須です</span>
                 </div>
 

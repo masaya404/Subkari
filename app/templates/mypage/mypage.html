@@ -37,15 +37,15 @@
 
             <ul class="nav-section">
                 <li class="nav-section-title">ヘルプ</li>
-                <li class="nav-item">問い合わせ</li>
-                <li class="nav-item">FAQ</li>
-                <li class="nav-item">ヘルプセンター</li>
+                <li class="nav-item"><a href="{{ url_for('mypage.editProfile') }}">問い合わせ</li>
+                <li class="nav-item"><a href="{{ url_for('mypage.editProfile') }}">FAQ</li>
+                <li class="nav-item"><a href="{{ url_for('mypage.editProfile') }}">ヘルプセンター</li>
             </ul>
 
             <ul class="nav-section">
                 <li class="nav-section-title">規約・ポリシー</li>
                 <li class="nav-item"><a href="{{url_for('mypage.terms')}}">利用規約</a></li>
-                <li class="nav-item"><a href="{{url_for('mypage.privacy_policy')}}">プライバシーポリシー</a></li>
+                <li class="nav-item"><a href="{{url_for('mypage.privacyPolicy')}}">プライバシーポリシー</a></li>
             </ul>
 
             <ul class="nav-section">
@@ -116,14 +116,90 @@
             </div>
         </section>
 
-        </section>
-        <!-- <section id="todo" class="sec">
+        
+        <section id="todo" class="sec">
+            <div class="img-name">
+                <img src="{{url_for('static' , filename='img/'+user_info.identifyImg)}}" alt="プロフィール画像" class="profile-image">
+                <div class="profile-name">
+                    <p>{{user_info.username}}</p>
+                    <a href="{{ url_for('mypage.editProfile') }}">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" > 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+                    </a>
+            </div>
+                
+                
+            <div class="profile-rating">
+                <span class="stars">
+                    {% for i in range(evaluation)%}★{% endfor %}
+                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                <span class="rating-count">{{evaluationCount}}</span>
+            </div>
             
-        </section> -->
-        <section id="likes" class="sec">
-            <p>いいねを押した商品を表示</p>
-
+            <div class="badge-group">
+                <div class="badge">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    {% if user_info.status == "本人確認済み" %}
+                        <p>本人確認済</p>
+                    {% else %}
+                        <p>未承認</p>
+                    {% endif %}
+                </div>
+                {% if user_info.smoker == 0 %}
+                    <span class="badge">喫煙者</span>
+                {% else %}
+                    <span class="badge">非喫煙者</span>
+                {% endif %}
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-number">{{products}}</span>
+                    <span class="stat-label">出品数</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{follows}}</span>
+                    <span class="stat-label">フォロー</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{followers}}</span>
+                    <span class="stat-label">フォロワー</span>
+                </div>
+            </div>
+            
+            <div class="sold-info">
+                <div class="sold-label">売上金</div>
+                <div class="sold-amount">¥ 2</div>
+            </div>
         </section>
+
+        <section id="likes" class="sec">
+            <div>
+                <h2>いいね一覧</h2>
+                <div class="sales-list">
+                    {% if sales_list %}
+                        {% for item in sales_list %}
+                            <form action="{{url_for('mypage.transaction_detail')}}">
+                                <div class="sales-item" >
+                                    <div class="sales-info">
+                                        <div class="sales-type">{{ item.type }}</div>
+                                        <div class="sales-date">{{ item.date }}</div>
+                                    </div>
+                                    <div class="sales-amount">¥{{ "{:,}".format(item.amount) }}</div>
+                                </div>
+                            </form>
+                        {% endfor %}
+                    {% else %}
+                        <p>振込履歴はまだありません。</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
         <section id="follow-list" class="sec">
             <p>フォローリストを表示</p>
         </section>
@@ -176,10 +252,124 @@
         </section>
 
         <section id="help-center" class="sec">
+            <div class="img-name">
+                <img src="{{url_for('static' , filename='img/'+user_info.identifyImg)}}" alt="プロフィール画像" class="profile-image">
+                <div class="profile-name">
+                    <p>{{user_info.username}}</p>
+                    <a href="{{ url_for('mypage.editProfile') }}">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" > 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+                    </a>
+            </div>
+                
+                
+            <div class="profile-rating">
+                <span class="stars">
+                    {% for i in range(evaluation)%}★{% endfor %}
+                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                <span class="rating-count">{{evaluationCount}}</span>
+            </div>
+            
+            <div class="badge-group">
+                <div class="badge">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    {% if user_info.status == "本人確認済み" %}
+                        <p>本人確認済</p>
+                    {% else %}
+                        <p>未承認</p>
+                    {% endif %}
+                </div>
+                {% if user_info.smoker == 0 %}
+                    <span class="badge">喫煙者</span>
+                {% else %}
+                    <span class="badge">非喫煙者</span>
+                {% endif %}
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-number">{{products}}</span>
+                    <span class="stat-label">出品数</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{follows}}</span>
+                    <span class="stat-label">フォロー</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{followers}}</span>
+                    <span class="stat-label">フォロワー</span>
+                </div>
+            </div>
+            
+            <div class="sold-info">
+                <div class="sold-label">売上金</div>
+                <div class="sold-amount">¥ 2</div>
+            </div>
 
         </section>
 
         <section id="terms" class="sec">
+            <div class="img-name">
+                <img src="{{url_for('static' , filename='img/'+user_info.identifyImg)}}" alt="プロフィール画像" class="profile-image">
+                <div class="profile-name">
+                    <p>{{user_info.username}}</p>
+                    <a href="{{ url_for('mypage.editProfile') }}">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" > 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+                    </a>
+            </div>
+                
+                
+            <div class="profile-rating">
+                <span class="stars">
+                    {% for i in range(evaluation)%}★{% endfor %}
+                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                <span class="rating-count">{{evaluationCount}}</span>
+            </div>
+            
+            <div class="badge-group">
+                <div class="badge">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    {% if user_info.status == "本人確認済み" %}
+                        <p>本人確認済</p>
+                    {% else %}
+                        <p>未承認</p>
+                    {% endif %}
+                </div>
+                {% if user_info.smoker == 0 %}
+                    <span class="badge">喫煙者</span>
+                {% else %}
+                    <span class="badge">非喫煙者</span>
+                {% endif %}
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-number">{{products}}</span>
+                    <span class="stat-label">出品数</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{follows}}</span>
+                    <span class="stat-label">フォロー</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{followers}}</span>
+                    <span class="stat-label">フォロワー</span>
+                </div>
+            </div>
+            
+            <div class="sold-info">
+                <div class="sold-label">売上金</div>
+                <div class="sold-amount">¥ 2</div>
+            </div>
 
         </section>
         <section id="policy" class="sec">
