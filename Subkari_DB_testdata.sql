@@ -6,30 +6,29 @@ INSERT INTO `m_account` (
   `apiFavoriteAnnounce`, `apiFollowAnnounce`, `apiSystemAnnounce`,
   `mailFavoriteAnnounce`, `mailFollowAnnounce`, `mailSystemAnnounce`,
   `autoLogin`,
-  `last_name`, `first_name`, `last_name_kana`, `first_name_kana`
+  `lastName`, `firstName`, `lastNameKana`, `firstNameKana`,
+  `profileImage`
 ) VALUES
-('taniguchi', '1990-03-15', '090-1111-1111', 'test@gmail.com', 0, 'こんにちは。よろしくお願いします。', 12000, '本人確認済み', '12345678', 'img', 1, 1, 1, 1, 0, 1, 0, '中村', '太郎', 'ナカムラ', 'タロウ'),
-('hanako02', '1992-07-20', '090-2222-2222', 'hanako02@example.com', 0, '服が好きです。', 8000, '本人確認済み', 'hanako123', 'id02.jpg', 1, 0, 1, 1, 1, 1, 0, '佐藤', '花子', 'サトウ', 'ハナコ'),
-('jiro03', '1988-02-11', '080-3333-3333', 'jiro03@example.com', 1, '古着を出品しています。', 3000, '本人確認済み', 'jiro_pass', 'id03.jpg', 0, 1, 1, 0, 1, 0, 1, '田中', '次郎', 'タナカ', 'ジロウ'),
-('yuki04', '1995-12-01', '070-4444-4444', 'yuki04@example.com', 0, 'レンタル中心に使っています。', 5500, '未確認', 'yuki_pass', 'id04.jpg', 1, 1, 1, 0, 0, 1, 0, '鈴木', '悠希', 'スズキ', 'ユウキ'),
-('mika05', '1998-09-25', '090-5555-5555', 'mika05@example.com', 0, 'よろしくお願いします！', 1000, '本人確認済み', 'mika_pass', 'id05.jpg', 1, 1, 1, 1, 1, 1, 0, '高橋', '美香', 'タカハシ', 'ミカ'),
-('koji06', '1985-01-30', '080-6666-6666', 'koji06@example.com', 1, '喫煙者です。', 25000, '本人確認済み', 'koji_pass', 'id06.jpg', 0, 1, 0, 1, 0, 0, 1, '井上', '浩二', 'イノウエ', 'コウジ'),
-('ayaka07', '1993-11-05', '070-7777-7777', 'ayaka07@example.com', 0, 'フォロバします！', 7200, '本人確認済み', 'ayaka_pass', 'id07.jpg', 1, 1, 1, 1, 1, 0, 0, '松本', '彩香', 'マツモト', 'アヤカ'),
-('kenta08', '1991-06-10', '090-8888-8888', 'kenta08@example.com', 0, '出品中心で利用しています。', 4100, '未確認', 'kenta_pass', 'id08.jpg', 1, 0, 1, 1, 0, 1, 0, '山本', '健太', 'ヤマモト', 'ケンタ'),
-('saki09', '1999-10-02', '080-9999-9999', 'saki09@example.com', 0, '新品も扱ってます。', 9300, '本人確認済み', 'saki_pass', 'id09.jpg', 1, 1, 1, 1, 1, 1, 1, '加藤', '咲', 'カトウ', 'サキ'),
-('takumi10', '1987-08-08', '070-1010-1010', 'takumi10@example.com', 1, '古着コレクターです。', 12000, '本人確認済み', 'takumi_pass', 'id10.jpg', 0, 1, 1, 0, 0, 0, 1, '中島', '拓海', 'ナカジマ', 'タクミ'),
-('rina11', '1996-04-18', '090-1111-2222', 'rina11@example.com', 0, 'かわいい服を探してます！', 7000, '本人確認済み', 'rina_pass', 'id11.jpg', 1, 1, 1, 1, 1, 1, 1, '森', '里奈', 'モリ', 'リナ'),
-('kazu12', '1989-03-12', '080-2222-3333', 'kazu12@example.com', 0, '出品強化中！', 15500, '本人確認済み', 'kazu_pass', 'id12.jpg', 1, 0, 1, 1, 1, 1, 0, '藤田', '一', 'フジタ', 'カズ'),
-('emi13', '1997-05-09', '070-3333-4444', 'emi13@example.com', 0, '日々出品中。', 4200, '本人確認済み', 'emi_pass', 'id13.jpg', 1, 1, 0, 1, 1, 1, 0, '長谷川', '恵美', 'ハセガワ', 'エミ'),
-('ryota14', '1994-09-17', '090-4444-5555', 'ryota14@example.com', 1, 'よろしくお願いします。', 6000, '本人確認済み', 'ryota_pass', 'id14.jpg', 1, 1, 1, 1, 0, 0, 1, '小林', '亮太', 'コバヤシ', 'リョウタ'),
-('mai15', '1993-12-03', '080-5555-6666', 'mai15@example.com', 0, 'フォロワー募集中！', 8600, '本人確認済み', 'mai_pass', 'id15.jpg', 1, 1, 1, 1, 1, 1, 0, '吉田', '舞', 'ヨシダ', 'マイ'),
-('daisuke16', '1982-07-14', '070-6666-7777', 'daisuke16@example.com', 1, 'たまに出品してます。', 3000, '凍結', 'daisuke_pass', 'id16.jpg', 0, 0, 0, 1, 0, 0, 0, '佐々木', '大輔', 'ササキ', 'ダイスケ'),
-('kana17', '1998-11-25', '090-7777-8888', 'kana17@example.com', 0, '初心者です。', 1800, '本人確認済み', 'kana_pass', 'id17.jpg', 1, 1, 1, 1, 1, 1, 0, '山田', '佳奈', 'ヤマダ', 'カナ'),
-('yuto18', '1990-02-22', '080-8888-9999', 'yuto18@example.com', 1, '最近始めました。', 2000, '本人確認済み', 'yuto_pass', 'id18.jpg', 1, 0, 1, 1, 0, 1, 1, '岡田', '悠斗', 'オカダ', 'ユウト'),
-('nana19', '1999-06-06', '070-9999-0000', 'nana19@example.com', 0, '洋服好きです。', 9700, '本人確認済み', 'nana_pass', 'id19.jpg', 1, 1, 1, 1, 1, 1, 0, '井上', '奈々', 'イノウエ', 'ナナ'),
-('akira20', '1986-01-01', '090-0000-1111', 'akira20@example.com', 1, 'よろしく。', 500, '本人確認済み', 'akira_pass', 'id20.jpg', 0, 0, 1, 0, 0, 1, 1, '川口', '明', 'カワグチ', 'アキラ');
-
-
+('taniguchi', '1990-03-15', '090-1111-1111', 'test@gmail.com', 0, 'こんにちは。よろしくお願いします。', 12000, '本人確認済み', '12345678', 'default_profile.jpg', 1, 1, 1, 1, 0, 1, 0, '中村', '太郎', 'ナカムラ', 'タロウ', 'default_profile.jpg'),
+('hanako02', '1992-07-20', '090-2222-2222', 'hanako02@example.com', 0, '服が好きです。', 8000, '本人確認済み', 'hanako123', 'default_profile.jpg', 1, 0, 1, 1, 1, 1, 0, '佐藤', '花子', 'サトウ', 'ハナコ', 'default_profile.jpg'),
+('jiro03', '1988-02-11', '080-3333-3333', 'jiro03@example.com', 1, '古着を出品しています。', 3000, '本人確認済み', 'jiro_pass', 'default_profile.jpg', 0, 1, 1, 0, 1, 0, 1, '田中', '次郎', 'タナカ', 'ジロウ', 'default_profile.jpg'),
+('yuki04', '1995-12-01', '070-4444-4444', 'yuki04@example.com', 0, 'レンタル中心に使っています。', 5500, '未確認', 'yuki_pass', 'default_profile.jpg', 1, 1, 1, 0, 0, 1, 0, '鈴木', '悠希', 'スズキ', 'ユウキ', 'default_profile.jpg'),
+('mika05', '1998-09-25', '090-5555-5555', 'mika05@example.com', 0, 'よろしくお願いします！', 1000, '本人確認済み', 'mika_pass', 'default_profile.jpg', 1, 1, 1, 1, 1, 1, 0, '高橋', '美香', 'タカハシ', 'ミカ', 'default_profile.jpg'),
+('koji06', '1985-01-30', '080-6666-6666', 'koji06@example.com', 1, '喫煙者です。', 25000, '本人確認済み', 'koji_pass', 'default_profile.jpg', 0, 1, 0, 1, 0, 0, 1, '井上', '浩二', 'イノウエ', 'コウジ', 'default_profile.jpg'),
+('ayaka07', '1993-11-05', '070-7777-7777', 'ayaka07@example.com', 0, 'フォロバします！', 7200, '本人確認済み', 'ayaka_pass', 'default_profile.jpg', 1, 1, 1, 1, 1, 0, 0, '松本', '彩香', 'マツモト', 'アヤカ', 'default_profile.jpg'),
+('kenta08', '1991-06-10', '090-8888-8888', 'kenta08@example.com', 0, '出品中心で利用しています。', 4100, '未確認', 'kenta_pass', 'default_profile.jpg', 1, 0, 1, 1, 0, 1, 0, '山本', '健太', 'ヤマモト', 'ケンタ', 'default_profile.jpg'),
+('saki09', '1999-10-02', '080-9999-9999', 'saki09@example.com', 0, '新品も扱ってます。', 9300, '本人確認済み', 'saki_pass', 'default_profile.jpg', 1, 1, 1, 1, 1, 1, 1, '加藤', '咲', 'カトウ', 'サキ', 'default_profile.jpg'),
+('takumi10', '1987-08-08', '070-1010-1010', 'takumi10@example.com', 1, '古着コレクターです。', 12000, '本人確認済み', 'takumi_pass', 'default_profile.jpg', 0, 1, 1, 0, 0, 0, 1, '中島', '拓海', 'ナカジマ', 'タクミ', 'default_profile.jpg'),
+('rina11', '1996-04-18', '090-1111-2222', 'rina11@example.com', 0, 'かわいい服を探してます！', 7000, '本人確認済み', 'rina_pass', 'default_profile.jpg', 1, 1, 1, 1, 1, 1, 1, '森', '里奈', 'モリ', 'リナ', 'default_profile.jpg'),
+('kazu12', '1989-03-12', '080-2222-3333', 'kazu12@example.com', 0, '出品強化中！', 15500, '本人確認済み', 'kazu_pass', 'default_profile.jpg', 1, 0, 1, 1, 1, 1, 0, '藤田', '一', 'フジタ', 'カズ', 'default_profile.jpg'),
+('emi13', '1997-05-09', '070-3333-4444', 'emi13@example.com', 0, '日々出品中。', 4200, '本人確認済み', 'emi_pass', 'default_profile.jpg', 1, 1, 0, 1, 1, 1, 0, '長谷川', '恵美', 'ハセガワ', 'エミ', 'default_profile.jpg'),
+('ryota14', '1994-09-17', '090-4444-5555', 'ryota14@example.com', 1, 'よろしくお願いします。', 6000, '本人確認済み', 'ryota_pass', 'default_profile.jpg', 1, 1, 1, 1, 0, 0, 1, '小林', '亮太', 'コバヤシ', 'リョウタ', 'default_profile.jpg'),
+('mai15', '1993-12-03', '080-5555-6666', 'mai15@example.com', 0, 'フォロワー募集中！', 8600, '本人確認済み', 'mai_pass', 'default_profile.jpg', 1, 1, 1, 1, 1, 1, 0, '吉田', '舞', 'ヨシダ', 'マイ', 'default_profile.jpg'),
+('daisuke16', '1982-07-14', '070-6666-7777', 'daisuke16@example.com', 1, 'たまに出品してます。', 3000, '凍結', 'daisuke_pass', 'default_profile.jpg', 0, 0, 0, 1, 0, 0, 0, '佐々木', '大輔', 'ササキ', 'ダイスケ', 'default_profile.jpg'),
+('kana17', '1998-11-25', '090-7777-8888', 'kana17@example.com', 0, '初心者です。', 1800, '本人確認済み', 'kana_pass', 'default_profile.jpg', 1, 1, 1, 1, 1, 1, 0, '山田', '佳奈', 'ヤマダ', 'カナ', 'default_profile.jpg'),
+('yuto18', '1990-02-22', '080-8888-9999', 'yuto18@example.com', 1, '最近始めました。', 2000, '本人確認済み', 'yuto_pass', 'default_profile.jpg', 1, 0, 1, 1, 0, 1, 1, '岡田', '悠斗', 'オカダ', 'ユウト', 'default_profile.jpg'),
+('nana19', '1999-06-06', '070-9999-0000', 'nana19@example.com', 0, '洋服好きです。', 9700, '本人確認済み', 'nana_pass', 'default_profile.jpg', 1, 1, 1, 1, 1, 1, 0, '井上', '奈々', 'イノウエ', 'ナナ', 'default_profile.jpg'),
+('akira20', '1986-01-01', '090-0000-1111', 'akira20@example.com', 1, 'よろしく。', 500, '本人確認済み', 'akira_pass', 'default_profile.jpg', 0, 0, 1, 0, 0, 1, 1, '川口', '明', 'カワグチ', 'アキラ', 'default_profile.jpg');
 -- 住所テーブルのテストデータ
 INSERT INTO `m_address` 
   (`account_id`, `zip`, `pref`, `address1`, `address2`, `address3`) 
@@ -1020,5 +1019,3 @@ VALUES
   3, 'お問い合わせありがとうございます。具体的なご用件をお伺いできますでしょうか。 ※本件は一旦クローズいたします。', '2025-10-20 10:05:00', '対応済み'
 );
 
-message.txt
-50 KB
