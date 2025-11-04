@@ -33,10 +33,11 @@ CREATE TABLE `m_account` (
   `mailFollowAnnounce` boolean,
   `mailSystemAnnounce` boolean,
   `autoLogin` boolean,
-  `last_name` VARCHAR(50) NOT NULL,
-  `first_name` VARCHAR(50) NOT NULL,
-  `last_name_kana` VARCHAR(50) NOT NULL,
-  `first_name_kana` VARCHAR(50) NOT NULL,
+  `lastName` VARCHAR(50) NOT NULL,
+  `firstName` VARCHAR(50) NOT NULL,
+  `lastNameKana` VARCHAR(50) NOT NULL,
+  `firstNameKana` VARCHAR(50) NOT NULL,
+  `profileImage` VARCHAR(255) NOT NULL,
 
 
   
