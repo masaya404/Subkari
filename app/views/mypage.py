@@ -143,9 +143,8 @@ def mypage():
     user_info=get_user_info(user_id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
 
-    evaluation_int = int(evaluation) if evaluation is not None else 0
 
-    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id , evaluation_int=evaluation_int)
+    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id )
     
 #------------------------------------------------------------------------------------------------
 
