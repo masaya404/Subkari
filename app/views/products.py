@@ -44,24 +44,78 @@ def product_details_stub(product_id):
     # sessionからuser_idを取得
     user_id = session.get('user_id')
 
-    result = None
+    product = None
     comments = []  # コメントリストを初期化
     con = None
+    cur = None
 
     try:
         con = connect_db()
         cur = con.cursor(dictionary=True)
 
         # 商品情報を取得
-        sql = "SELECT name, rentalPrice, purchasePrice, explanation, image_path, thumbnail1, thumbnail2, thumbnail3 FROM m_product WHERE id = %s;"
-        cur.execute(sql, (product_id,))
-        result = cur.fetchone()
+        sql_product = "SELECT name,account_id, rentalPrice, purchasePrice, explanation, image_path, thumbnail1, thumbnail2, thumbnail3 FROM m_product WHERE id = %s;"
+        cur.execute(sql_product, (product_id,))
+        product = cur.fetchone()
 
-        # コメントのダミーデータ
-        comments = [
-            {'user_name': '中村 輝', 'text': 'コメント失礼します。購入を検討しているのですが、こちらの商品の使用期間はどれくらいでしょうか？', 'is_seller': False},
-            {'user_name': '谷口 昌哉', 'text': '商品の使用期間ですね。約○年間（または○か月間）使用しました。', 'is_seller': True},
-        ]
+        #商品が見つからない場合の処理
+        # 商品が見つからなかった場合のデフォルト処理
+        if not product:
+            product = {
+                'name': '商品が見つかりません',
+                'rentalPrice': '¥0',
+                'purchasePrice': '¥0',
+                'explanation': '該当する商品IDのデータは存在しませんでした。',
+                'image_path': 'default.jpg',  # 画像がない場合のデフォルト画像を設定
+                'thumbnail1': 'default_thumbnail1.jpg',
+                'thumbnail2': 'default_thumbnail2.jpg',
+                'thumbnail3': 'default_thumbnail3.jpg'
+            }
+
+
+        # コメント情報を取得
+        # 2. コメントデータと投稿者名を取得
+        # t_comments と m_account を結合し、投稿日時の降順で取得
+        sql_comments = """
+            SELECT 
+                t.content AS text, 
+                m.username AS user_name, 
+                t.account_id AS comment_acouunt_id,
+                t.createdDate
+
+            FROM 
+                t_comments t
+            JOIN 
+                m_account m ON t.account_id = m.id
+            WHERE 
+                t.product_id = %s
+            ORDER BY 
+                t.createdDate ASC;
+        """
+
+        cur.execute(sql_comments, (product_id,))
+        fetched_comments = cur.fetchall()
+
+        
+        # 3. HTMLテンプレートに渡す形式にデータを整形
+        # 商品の出品者IDと比較して、出品者かどうかを判定するフラグを追加
+        seller_id = product['account_id'] # m_productから取得した出品者のaccount_id
+        
+        for comment in fetched_comments:
+            is_seller = (comment['comment_acouunt_id'] == seller_id)
+            
+            # テンプレートに渡すコメントリストに追加
+            comments.append({
+                'user_name': comment['user_name'],
+                'text': comment['text'],
+                'is_seller': is_seller,
+                # 日付も表示したい場合はここで整形して渡すことも可能
+                'created_date': comment['createdDate'].strftime('%Y/%m/%d %H:%M') if comment['createdDate'] else ''
+            })
+        # comments = [
+        #     {'user_name': '中村 輝', 'text': 'コメント失礼します。購入を検討しているのですが、こちらの商品の使用期間はどれくらいでしょうか？', 'is_seller': False},
+        #     {'user_name': '谷口 昌哉', 'text': '商品の使用期間ですね。約○年間（または○か月間）使用しました。', 'is_seller': True},
+        # ]
 
     except mysql.connector.Error as err:
         print(f"データベースエラー: {err}")
@@ -71,24 +125,13 @@ def product_details_stub(product_id):
             cur.close()
             con.close()
 
-    # 商品が見つからなかった場合のデフォルト処理
-    if not result:
-        result = {
-            'name': '商品が見つかりません',
-            'rentalPrice': '¥0',
-            'purchasePrice': '¥0',
-            'explanation': '該当する商品IDのデータは存在しませんでした。',
-            'image_path': 'default.jpg',  # 画像がない場合のデフォルト画像を設定
-            'thumbnail1': 'default_thumbnail1.jpg',
-            'thumbnail2': 'default_thumbnail2.jpg',
-            'thumbnail3': 'default_thumbnail3.jpg'
-        }
+    
 
-    # 取得した商品情報 (result) とコメント (comments) をテンプレートに渡す
+    # 取得した商品情報 (product) とコメント (comments) をテンプレートに渡す
     resp = make_response(render_template(
         'products/product_details.html',
         user_id=user_id,
-        result=result,
+        product=product,
         comments=comments
     ))
     return resp
