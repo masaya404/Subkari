@@ -503,7 +503,18 @@ def terms():
     return render_template("mypage/terms.html" ,  user_id=user_id , result=result)
 #--------------------------------------------------------------------------------------------------------------------
 
-    
+#問い合わせ----------------------------------------------------------------------------------------------------------
+@mypage_bp.route("/inquiry")
+def inquiry():
+
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    return render_template("mypage/inquiry.html" , user_id=user_id  )
+#-------------------------------------------------------------------------------------------------------------------
     
 
 
