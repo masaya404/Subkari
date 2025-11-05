@@ -306,11 +306,15 @@ def bankComplete():
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
 def transferApplication():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     session["editmode"]=False
     bank_info,accountNumbers,count=getAccountInfo()
     editmode=session["editmode"]
-    return render_template("mypage/transferApplication.html")
-    # return render_template("mypage/transferApplication.html",user_id=user_id,bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+    return render_template("mypage/transferApplication.html",user_id=user_id,bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 #---------------------------------------------------------------------------------------------------
 #transferApplication 削除ボタン表示 -----------------------------------------------------------------
 @mypage_bp.route("/transferApplication")
@@ -406,7 +410,7 @@ def amountComp():
     return render_template("mypage/amountComp.html")
 #---------------------------------------------------------------------------------------------------
 
-
+#レンタルと購入で値段の区別がつかないため支払った額がわからない
 #salesHistory 売上履歴------------------------------------------------------------------------------
 @mypage_bp.route("/salesHistory")
 def salesHistory():
@@ -434,7 +438,12 @@ def transferHistory():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select  from t_transaction t inner join m_product p on t.product_id=p.id where t.seller_id=%s and t.status='取引完了'"
+
+    #売上履歴を取得
+    #売上履歴は取引テーブルでステータスが取引完了のものを取得
     return render_template("mypage/transferHistory.html" ,  user_id=user_id)
 #------------------------------------------------------------------------------------------------
 
