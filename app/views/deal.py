@@ -18,8 +18,68 @@ def deal():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+    
+     
+        # DB接続
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
         
-    return render_template('deal/deal_index.html', user_id = user_id)
+        #  SQL 文章用意bought
+        sql = """
+            SELECT 
+                p.*, 
+                m.img,
+                t.status,
+                t.situation
+            FROM 
+                m_product AS p
+            LEFT JOIN 
+                m_productimg AS m 
+            ON 
+                p.id = m.product_id
+            LEFT JOIN 
+                t_transaction AS t 
+            ON 
+                p.id = t.product_id
+            WHERE 
+                t.customer_id = %s
+            ORDER BY p.id ASC
+            ;
+            """   
+        cur.execute(sql, (user_id,))
+        bought_products = cur.fetchall()
+       
+        #  SQL 文章用意sell
+        sql = """
+            SELECT 
+                p.*, 
+                m.img,
+                t.status,t.situation
+            FROM 
+                m_product AS p
+            LEFT JOIN 
+                m_productimg AS m 
+            ON 
+                p.id = m.product_id
+            LEFT JOIN 
+                t_transaction AS t 
+            ON 
+                p.id = t.product_id
+            WHERE 
+                p.account_id = %s
+            AND
+                p.draft = 0
+            GROUP BY p.id
+            ;
+            """   
+        cur.execute(sql, (user_id,))
+        products = cur.fetchall()
+        cur.close()
+        con.close()
+        #出品商品の表示 products={product_id:2, customer_id:1, status:2, ...}
+        
+        
+    return render_template('deal/deal_index.html', bought_products = bought_products, products = products, user_id = user_id)
 # 取引一覧画面表示 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 @deal_bp.route('/deal/list', methods=['GET'])
 def deal_list():
@@ -99,4 +159,13 @@ def deal_list_imageUpload():
                              error=error, 
                              user_id=user_id)    
 
-
+   
+#DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
+def connect_db():
+    con=mysql.connector.connect(
+        host = 'localhost',
+        user = 'root',
+        passwd = '',
+        db ='db_subkari'
+    )
+    return con

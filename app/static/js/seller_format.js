@@ -481,9 +481,10 @@ function submitForm() {
     .then(data => {
         if (data.success) {
             console.log('Success:', data);
-            alert('登録成功ID: ' + data.product_id);
+            alert('出品成功しました。');
             // 成功後　sessionStorageのデータすべて消す
             sessionStorage.clear();
+            window.location.href="/seller/seller";
         } else {
             alert('失敗: ' + data.message);
         }

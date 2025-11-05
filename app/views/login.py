@@ -8,6 +8,13 @@ import os
 
 login_bp = Blueprint('login', __name__, url_prefix='/login')
 
+#登録完了画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
+# 登録完了画面表示
+@login_bp.route('/registration_complete', methods=['GET'])
+def registration_complete():
+    # 登録完了画面で表示するメッセージなどを渡す場合
+    message = "ユーザー登録が完了しました。"
+    return render_template('login/registration_complete.html', message=message)
 
 #Login画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/login',methods=['GET'])
@@ -207,16 +214,16 @@ ACCOUNT_SCHEMA = {
     'username':          (12, True),   # m_account.username VARCHAR(12) NOT NULL
     
     # 2. 姓 (全角)
-    'last_name':        (50, True),   # m_account.last_name VARCHAR(50) NOT NULL
+    'lastName':        (50, True),   # m_account.lastName VARCHAR(50) NOT NULL
     
     # 3. 名 (全角)
-    'first_name':       (50, True),   # m_account.first_name VARCHAR(50) NOT NULL
+    'firstName':       (50, True),   # m_account.firstName VARCHAR(50) NOT NULL
     
     # 4. セイ (全角)
-    'last_name_kana':   (50, True),   # m_account.last_name_kana VARCHAR(50) NOT NULL
+    'lastNameKana':   (50, True),   # m_account.lastNameKana VARCHAR(50) NOT NULL
     
     # 5. メイ (全角)
-    'first_name_kana':  (50, True),   # m_account.first_name_kana VARCHAR(50) NOT NULL
+    'firstNameKana':  (50, True),   # m_account.firstNameKana VARCHAR(50) NOT NULL
     
     # 6. 生年月日
     'birthday':         (None, True), # m_account.birthday DATE NOT NULL
@@ -381,10 +388,10 @@ def verification():
         all_data.get('mail'),
         all_data.get('password'), 
         all_data.get('username'),
-        all_data.get('last_name'),
-        all_data.get('first_name'),
-        all_data.get('last_name_kana'),
-        all_data.get('first_name_kana'),
+        all_data.get('lastName'),
+        all_data.get('firstName'),
+        all_data.get('lastNameKana'),
+        all_data.get('firstNameKana'),
         all_data.get('birthday'),
         all_data.get('tel'),
         all_data.get('smoker') == 'yes', # 'yes'/'no' を True/False に変換
@@ -437,6 +444,9 @@ def verification():
 
 
 
+    cur.close()
+    con.close()
+
     #--db登録--
 
 
@@ -447,9 +457,9 @@ def verification():
     cur = con.cursor()
     # 3. m_account への登録 (まず親テーブルから)
     sql_account = """
-        INSERT INTO m_account 
-        (mail, password, username, last_name, first_name, last_name_kana, first_name_kana, birthday, tel, smoker)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+    INSERT INTO m_account 
+    (mail, password, userName, lastName, firstName, lastNameKana, firstNameKana, birthday, tel, smoker, profileImage)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'default_profile.jpg');
     """
     cur.execute(sql_account, account_data)
 

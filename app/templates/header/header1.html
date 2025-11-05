@@ -41,7 +41,7 @@
                     <img src="{{ url_for('static', filename='img/heart.png') }}" class="icon"></img>
                     <span>いいね</span>
                 </a>
-                <a href="#" class="icon-item">
+                <a href="{{url_for('mypage.mypage')}}" class="icon-item">
                     <img src="{{ url_for('static', filename='img/inform.png') }}" class="icon"></img>
                     <span>通知</span>
                 </a>
@@ -49,7 +49,7 @@
                     <img src="{{ url_for('static', filename='img/camera.png') }}" class="icon"></img>
                     <span>出品</span>
                 </a>
-                <a href="#" class="icon-item">
+                <a href="{{url_for('deal.deal')}}" class="icon-item">
                     <img src="{{ url_for('static', filename='img/deal.png') }}" class="icon"></img>
                     <span>取引</span>
                 </a>
@@ -57,9 +57,7 @@
                     <img src="{{ url_for('static', filename='img/logout.png') }}" class="icon"></img>
                     <span>ログアウト</span>
                 </a>
-                <a href="#" class="icon-item">
-                    <img src="{{ url_for('static', filename='img/hamburger.png') }}" class="icon"></img>
-                </a>
+           
             </div>
             {% endif %}
             <div class="nav-container">

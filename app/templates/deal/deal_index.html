@@ -19,96 +19,46 @@
                         出品
                     </button>
                 </div>
-          
+
                 <div class="lg:col-span-2 space-y-4 tab-content active" id ="tab1">
+                    {% for bought_product in bought_products %}
                     <!-- Item Card 1 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
+                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4 product-item cursor-pointer hover:shadow-lg transition" data-product='{{ bought_product | tojson }}'>
                         <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
-                            <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
+                            <img src="{{url_for('static',filename='img/productImg' + (bought_product.img if bought_product.img else 'default.png'))}}" />
                         </div>
                         <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800 text-sm">ファーバーカー</h3>
+                            <h3 class="font-semibold text-gray-800 text-sm">{{bought_product.name}}</h3>
                             <div class="flex items-center gap-3 mt-2">
-                                <span class="text-lg font-bold text-gray-900">¥8,900</span>
-                                <span class="text-red-500 text-xs font-medium">レンタル</span>
+                                <span class="text-lg font-bold text-gray-900">￥{%if bought_product.purchaseFlg%}{{bought_product.purchasePrice}}{%else%}{{bought_product.rentalPrice}}{%endif%}</span>
+                                <span class="text-red-500 text-xs font-medium">{{bought_product.situation}}</span>
                             </div>
-                            <p class="text-gray-500 text-xs mt-2">支払い待ち</p>
+                            <p class="text-gray-500 text-xs mt-2">{{bought_product.status}}</p>
                         </div>
                     </div>
-
-                    <!-- Item Card 2 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
-                        <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
-                            <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800 text-sm">ファーバーカー</h3>
-                            <div class="flex items-center gap-3 mt-2">
-                                <span class="text-lg font-bold text-gray-900">¥8,900</span>
-                                <span class="text-red-500 text-xs font-medium">配送中</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item Card 3 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
-                        <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
-                            <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800 text-sm">スーパーファー...クリーニング期間</h3>
-                            <div class="flex items-center gap-3 mt-2">
-                                <span class="text-lg font-bold text-gray-900">¥8,900</span>
-                                <span class="text-red-500 text-xs font-medium">レンタル</span>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
+
                 <div class="lg:col-span-2 space-y-4 tab-content" id ="tab2">
+                    {% for product in products %}
                     <!-- Item Card 1 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
+                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4 product-item cursor-pointer hover:shadow-lg transition" data-product='{{ product | tojson }}'>
                         <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
-                            <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
+                            <img src="{{url_for('static',filename='img/productImg' + (product.img if product.img else 'default.png'))}}" />
                         </div>
                         <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800 text-sm">ファーバーカー</h3>
+                            <h3 class="font-semibold text-gray-800 text-sm">{{product.name}}</h3>
                             <div class="flex items-center gap-3 mt-2">
-                                <span class="text-lg font-bold text-gray-900">¥9,900</span>
-                                <span class="text-red-500 text-xs font-medium">購入</span>
+                                <span class="text-lg font-bold text-gray-900">￥{%if product.purchaseFlg%}{{product.purchasePrice}}{%else%}{{product.rentalPrice}}{%endif%}</span>
+                                <span class="text-red-500 text-xs font-medium">{{product.situation}}</span>
                             </div>
-                            <p class="text-gray-500 text-xs mt-2">支払い待ち</p>
+                            <p class="text-gray-500 text-xs mt-2">{{product.status}}</p>
                         </div>
                     </div>
-
-                    <!-- Item Card 2 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
-                        <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
-                            <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800 text-sm">ファーバーカー</h3>
-                            <div class="flex items-center gap-3 mt-2">
-                                <span class="text-lg font-bold text-gray-900">¥10,900</span>
-                                <span class="text-red-500 text-xs font-medium">配送中</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item Card 3 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
-                        <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
-                            <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800 text-sm">スーパーファー...クリーニング期間</h3>
-                            <div class="flex items-center gap-3 mt-2">
-                                <span class="text-lg font-bold text-gray-900">¥8,900</span>
-                                <span class="text-red-500 text-xs font-medium">レンタル</span>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
+
             <!-- Medium Column -->
             <div class="bg-white border border-gray-200 rounded-lg p-4">
                     <div class="space-y-4">
@@ -230,10 +180,10 @@
                 <div class="bg-white border border-gray-200 rounded-lg p-4">
                     <h1 class="text-xl mb-[32px]">取引情報</h1>
                     <div class="w-full h-60 bg-gray-300 rounded-lg mb-4 flex items-center justify-center text-6xl overflow-hidden">
-                        <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
+                        <img id="detailProductImg" src="{{url_for('static',filename='img/cloth.jpg')}}" />
                     </div>
-                    <p class="text-sm text-gray-700 leading-relaxed">
-                        冬に大活躍わわもこファーバーカーゆったりシルエットで体型カバー効果
+                    <p id="detailProductExplanation" class="text-sm text-gray-700 leading-relaxed">
+                        
                     </p>
                 </div>
                 
