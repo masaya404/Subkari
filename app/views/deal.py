@@ -114,9 +114,9 @@ def deal_list(transaction_id):
         LEFT JOIN 
             m_productimg AS m
         ON
-            p.id = m.product_id
+            t.product_id = m.product_id
         WHERE 
-            t.product_id = %s
+            t.id = %s
         LIMIT 1
         ;
         """
@@ -139,6 +139,7 @@ def deal_list(transaction_id):
         benefit = int(transaction['rentalPrice']) - charge
         transaction['charge'] = charge
         transaction['benefit'] = benefit
+        
     print(transaction)
     
     return render_template('deal/deal_detail.html', transaction = transaction, user_id = user_id)

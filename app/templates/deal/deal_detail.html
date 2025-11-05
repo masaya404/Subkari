@@ -11,7 +11,7 @@
         <!-- 商品情報セクション -->
         <div class="border-b border-gray-300 pb-8 mb-8">
             <div class="flex gap-6">
-                <img src="{{url_for('static',filename='img/cloth.jpg')}}" alt="商品画像" class="w-24 h-24 rounded object-cover flex-shrink-0">
+                <img src="{{url_for('static',filename='img/productImg/'+ (transaction.img if transaction.img else 'default.png'))}}" alt="商品画像" class="w-24 h-24 rounded object-cover flex-shrink-0">
                 <div class="flex-1">
                     <p class="text-gray-700 leading-relaxed">
                         {{transaction.explanation}}
