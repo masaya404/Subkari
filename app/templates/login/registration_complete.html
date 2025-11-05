@@ -1,23 +1,44 @@
 
 {% extends "base.html" %}
-    
 {% block title %}
-    登録完了
+登録完了 - SUBKARI
 {% endblock %}
-
 {% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename ='css/login.css') }}">
+<div class="bg-white min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- メインコンテンツ領域 -->
+    <main class="w-full max-w-lg mx-auto">
+        <!-- 完了メッセージコンテナ -->
+        <div class="completion-message text-center px-4">
+            <!-- タイトル: 登録が完了しました。 -->
+            <h1 class="text-xl font-bold mb-8 md:text-2xl">
+                登録が完了しました。
+            </h1>
+
+            <!-- 説明テキスト -->
+            <div class="text-sm space-y-2 mb-10 md:text-base md:mb-12">
+                <p>本人確認完了次第ご登録いただいたメール宛にお知らせします。</p>
+                <p>本人確認完了後取引可能になります。</p>
+            </div>
+        </div>
+
+        <!-- ボタンコンテナ -->
+        <!-- 画像を参考に、ボタンを縦に並べ、幅を制限 -->
+        <div class="button-container space-y-4 w-full px-4 sm:px-10">
+            <!-- ログイン画面へ戻るボタン (Primary) -->
+            <!-- リンク先はダミーです -->
+            <a href="#" class="btn primary-btn">
+                ログイン画面へ戻る
+            </a>
+            
+            <!-- トップページへボタン (Secondary) -->
+            <!-- リンク先はダミーです -->
+            <a href="#" class="btn secondary-btn">
+                トップページへ
+            </a>
+        </div>
+    </main>
     
-
-<div class="completion-message">
-    <h1>登録が完了しました。</h1>
-    <p class="info-text">本人確認完了次第ご登録いただいたメール宛にお知らせします。</p>
-    <p class="info-text">本人確認完了後取引可能になります〜</p>
-</div>
-
-<div class="button-container">
-    <a href="{{ url_for('login.login') }}" class="btn">ログイン画面へ戻る</a>
-    <!-- <a href="#" class="btn">トップページへ</a> -->
-</div>
-
-
 {% endblock %}
