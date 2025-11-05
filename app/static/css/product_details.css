@@ -330,3 +330,16 @@
     font-size: 16px;
     font-weight: bold;
 }
+
+/* 評価の星css */
+.stars {
+    color: #ffc107;
+    font-size: 18px;
+}
+
+/* 評価css */
+
+.rating-count {
+    color: #0066cc;
+    font-size: 14px;
+}

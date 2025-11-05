@@ -87,8 +87,13 @@
             <div class="seller-details">
                 <div class="seller-avatar"></div>
                 <div>
-                    <div class="seller-name">谷口 昌哉</div>
-                    <div class="rating">★ 4.3</div>
+                    <div class="seller-name">{{ seller_info.username }}</div>
+                    <span class="stars">
+                    {% for i in range(evaluation)%}★{% endfor %}
+                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                    <span class="rating-count">{{evaluationCount}}</span>
+
+                    <!-- <div class="rating">★ 4.3</div> -->
                 </div>
             </div>
             <button class="follow-btn">フォロー</button>
