@@ -5,27 +5,27 @@
 {% endblock %}
 
 {% block content %}
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/transfer_history.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transfer_history.css') }}">
     <link rel="stylesheet" href="../../../app/static/css/transfer_history.css">
     <main class="main-content">
         <h1 class="page-title">売上履歴</h1>
         <div class="sales-list">
-            {% if sales_list %}
-                {% for item in sales_list %}                      
+            {% if datetimes %}
+                {% for datetime in datetimes %}                      
             <a href="transaction_detail.html">
 
-                <form action="{{url_for('mypage.')}}">
+                <form action="{{url_for('mypage.edit')}}">
                 <div class="sales-item">
                     <div class="sales-info">
                         <div class="sales-type">
-                            {{ item.type }}
+                            販売利益
                         </div>
                         <div class="sales-date">
-                            {{ item.date }}
+                       {{ datetimes[loop.index0] }}
                         </div>
                     </div>
                     <div class="sales-amount">
-                        ¥{{ "{:,}".format(item.amount) }}
+                       ￥{{ prices[loop.index0] }}
                     </div>
                 </div>
                 </form>
