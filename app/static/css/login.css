@@ -49,6 +49,7 @@ h1 {
   font-size: 14px;
   transition: all 0.3s;
   cursor: pointer;
+  text-align: center;
 }
 
 .btn:hover {

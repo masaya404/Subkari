@@ -451,7 +451,7 @@ def verification():
     # 3. m_account への登録 (まず親テーブルから)
     sql_account = """
     INSERT INTO m_account 
-    (mail, password, username, lastName, firstName, lastNameKana, firstNameKana, birthday, tel, smoker, profileImage)
+    (mail, password, userName, lastName, firstName, lastNameKana, firstNameKana, birthday, tel, smoker, profileImage)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'default_profile.jpg');
     """
     cur.execute(sql_account, account_data)
