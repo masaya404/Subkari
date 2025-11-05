@@ -71,9 +71,9 @@
 
         <div class="profile-rating">
             <span class="stars">
-                {% for i in range(evaluationCount)%}★{% endfor %}
-                {% for i in range(5-evaluationCount)%}☆{% endfor %}</span>
-            <span class="rating-count">{{evaluation}}</span>
+                {% for i in range(evaluation)%}★{% endfor %}
+                {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+            <span class="rating-count">{{evaluationCount}}</span>
         </div>
 
         <div class="badge-group">
