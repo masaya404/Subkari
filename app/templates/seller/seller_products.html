@@ -20,8 +20,8 @@
                 
                 <!-- 詳細とボタン -->
                 <div class="flex-1">
-                    <h3 class="font-bold mb-2">最近</h3>
-                    <p class="text-gray-600 mb-6">{{recent.explanation}}</p>
+                    <h3 class="font-bold mb-2">{{recent.name}}</h3>
+                    <p class="text-gray-600 mb-6 h-[120px] overflow-hidden">{{recent.explanation}}</p>
                     <div class="flex flex-col gap-2">
                         <button class="w-full md:w-40 px-6 py-2 border border-gray-300 rounded hover:bg-gray-50 transition cursor-pointer">
                             編集する
@@ -44,6 +44,7 @@
                         alt="商品画像" 
                         class="w-full object-cover">
                 </div>
+                <p class="text-center">{{product.name}}</p>
                 <button class="w-full px-4 py-2 mb-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer" onclick="editProduct()">
                     編集する
                 </button>

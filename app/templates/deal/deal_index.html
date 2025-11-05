@@ -23,7 +23,7 @@
                 <div class="lg:col-span-2 space-y-4 tab-content active" id ="tab1">
                     {% for bought_product in bought_products %}
                     <!-- Item Card 1 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
+                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4 product-item cursor-pointer hover:shadow-lg transition" data-product='{{ bought_product | tojson }}'>
                         <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
                             <img src="{{url_for('static',filename='img/productImg' + (bought_product.img if bought_product.img else 'default.png'))}}" />
                         </div>
@@ -42,7 +42,7 @@
                 <div class="lg:col-span-2 space-y-4 tab-content" id ="tab2">
                     {% for product in products %}
                     <!-- Item Card 1 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4">
+                    <div class="bg-white border border-gray-200 rounded-lg p-4 flex gap-4 product-item cursor-pointer hover:shadow-lg transition" data-product='{{ product | tojson }}'>
                         <div class="w-20 h-20 bg-gray-300 rounded flex items-center justify-center text-3xl flex-shrink-0">
                             <img src="{{url_for('static',filename='img/productImg' + (product.img if product.img else 'default.png'))}}" />
                         </div>
@@ -180,10 +180,10 @@
                 <div class="bg-white border border-gray-200 rounded-lg p-4">
                     <h1 class="text-xl mb-[32px]">取引情報</h1>
                     <div class="w-full h-60 bg-gray-300 rounded-lg mb-4 flex items-center justify-center text-6xl overflow-hidden">
-                        <img src="{{url_for('static',filename='img/cloth.jpg')}}" />
+                        <img id="detailProductImg" src="{{url_for('static',filename='img/cloth.jpg')}}" />
                     </div>
-                    <p class="text-sm text-gray-700 leading-relaxed">
-                        冬に大活躍わわもこファーバーカーゆったりシルエットで体型カバー効果
+                    <p id="detailProductExplanation" class="text-sm text-gray-700 leading-relaxed">
+                        
                     </p>
                 </div>
                 
