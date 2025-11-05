@@ -422,7 +422,7 @@ def salesHistory():
     
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    sql="select * from t_transaction t inner join m_product p on t.product_id=p.id where t.seller_id=%s and t.status='取引完了'" 
+    sql="select * from t_transaction t inner join m_product p on t.product_id=p.id where"
     #売上履歴を取得
     #売上履歴は取引テーブルでステータスが取引完了のものを取得
     
@@ -512,6 +512,17 @@ def terms():
     return render_template("mypage/terms.html" ,  user_id=user_id , result=result)
 #--------------------------------------------------------------------------------------------------------------------
 
+# helpCenter ヘルプセンター表示ページ
+@mypage_bp.route("/helpCenter")
+def helpCenter():
+    if 'user_id' not in session:
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+    return render_template("mypage/helpCenter.html", user_id=user_id)
+
+
 #問い合わせ----------------------------------------------------------------------------------------------------------
 @mypage_bp.route("/inquiry")
 def inquiry():
@@ -525,8 +536,45 @@ def inquiry():
     return render_template("mypage/inquiry.html" , user_id=user_id  )
 #-------------------------------------------------------------------------------------------------------------------
     
+#いいね一覧---------------------------------------------------------------------------------------------------------
+@mypage_bp.route("/likes")
+def likes():
+
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
 
 
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql = """
+    SELECT 
+        p.id, 
+        p.name, 
+        p.purchasePrice, 
+        p.rentalPrice, 
+        p.purchaseFlg, 
+        p.rentalFlg, 
+        MIN(i.img) AS image_path
+    FROM t_favorite f
+    JOIN m_product p ON f.product_id = p.id
+    LEFT JOIN m_productimg i ON p.id = i.product_id
+    WHERE f.account_id = %s
+    GROUP BY p.id, p.name, p.purchasePrice, p.rentalPrice, p.purchaseFlg, p.rentalFlg;
+"""
+
+    cur.execute(sql, (user_id,))
+    likes_list = cur.fetchall()
+
+    cur.close()
+    con.close()  
+    print(likes_list)
+
+
+    return render_template("mypage/likes.html" ,  user_id=user_id , likes_list=likes_list)
+#------------------------------------------------------------------------------------------------------------------
 # htmlの画面遷移url_for
 # {{ url_for('モジュール名.関数名') }}
 # {{ url_for('seller.seller_format') }}

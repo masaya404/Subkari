@@ -37,3 +37,40 @@ startTimer();
         content.classList.toggle('active', index === tabIndex);
     });
 }
+
+//right area
+document.querySelectorAll('.product-item').forEach(item => {
+  item.addEventListener('click', function() {
+    // Remove highlight from all items
+    document.querySelectorAll('.product-item').forEach(el => {
+      el.classList.remove('bg-blue-50', 'border-blue-400');
+    });
+    
+    // Add highlight to clicked item
+    this.classList.add('bg-blue-50', 'border-blue-400');
+    
+    // Get product data
+    const productData = JSON.parse(this.dataset.product);
+    
+    // Update right area with product details
+    // document.getElementById('detailProductName').textContent = productData.name || '商品名なし';
+    document.getElementById('detailProductExplanation').textContent = productData.explanation || '説明文なし';
+    
+    // document.getElementById('detailProductSituation').textContent = productData.situation || '-';
+    // document.getElementById('detailProductStatus').textContent = productData.status || '-';
+    
+    // Update image if available
+    if (productData.img) {
+      const basePath = "{{url_for('static',filename='img/productImg')}}";
+      document.getElementById('detailProductImg').src = basePath + productData.img;
+    }
+  });
+});
+
+// Auto-select first product on load
+window.addEventListener('DOMContentLoaded', function() {
+  const firstProduct = document.querySelector('.product-item');
+  if (firstProduct) {
+    firstProduct.click();
+  }
+});
