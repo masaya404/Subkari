@@ -74,7 +74,6 @@ def get_transaction_info(id):
     #アカウントテーブルからは取れない情報を取得
     con = connect_db()
     cur = con.cursor(dictionary=True)
-      
     #フォロワー数、フォロー数、評価、総評価件数、出品数を取得
     #フォロー数
     sql="select count(*) as フォロー数 from t_connection where execution_id=%s and type='フォロー' group by execution_id"
@@ -97,7 +96,8 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     products=cur.fetchone()
     #評価を変形
-    evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
+    evaluation=round(float(evaluation['評価']))   
+    #小数点型にしてから四捨五入
    
     return evaluation,evaluationCount,follows,followers,products
 #商品データを取得 --------------------------------------------------
