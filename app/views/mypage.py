@@ -89,6 +89,7 @@ def get_user_info(id):
     user_info = cur.fetchone()
     return user_info
 
+
 #プロフィールに表示する取引情報を取得する ------------------------------------------------------------------------------------
 #引数として受け取ったidを持つユーザーの情報を取得
 def get_transaction_info(id):
@@ -140,7 +141,6 @@ def get_product_info(id):
 
     return name,img
 
-
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
 
@@ -164,23 +164,24 @@ def mypage():
     user_info=get_user_info(user_id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
 
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    
+    #売上履歴を取得
+    #売上履歴から売上金を計算する
+    sql="select p.id ,ti.created_at, case when t.situation='購入' then p.purchasePrice else p.rentalPrice end as price from t_transaction t inner join m_product  p on t.product_id=p.id left join t_time ti on t.id=ti.transaction_id where t.status='取引完了' and p.account_id=%s group by ti.created_at,t.seller_id"
+    cur.execute(sql,(user_id,))
+    sales=cur.fetchall()
+    total=0
+    for sale in sales:
+        total+=sale['price']
+    total=comma(total)
     return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],
     evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],
-    followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id)
-    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id )
+    followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id,total=total)
     
 #------------------------------------------------------------------------------------------------
 
-# #userprf表示--------------------------------------------------------------------------------------
-# @mypage_bp.route("mypage/userprf")
-# def userprf():
-#     if 'user_id' not in session:
-#         user_id = None
-#         return redirect(url_for('login.login'))
-#     else:
-#         user_id = session.get('user_id')
-#     return render_template("mypage/mypage.html" , user_id=user_id)
-# #-------------------------------------------------------------------------------------------------
 
 #editProfile プロフィール編集ページ表示--------------------------------------------------------------
 @mypage_bp.route("/editProfile")
