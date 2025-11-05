@@ -204,7 +204,10 @@ def save_product():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-        
+    
+    #編集モード確認
+    edit_product_id = session.get('edit_product_id')
+    
     try:
         product_data_str = request.form.get('productData')
         if not product_data_str:
@@ -213,154 +216,226 @@ def save_product():
                 'message': '商品情報がありません'
             }), 400
 
-        # 解析JSON
         data = json.loads(product_data_str)
-        # data = request.get_json()
-        
-        # DB接続
         con = connect_db()
         cursor = con.cursor()
         
-        #  SQL 文章用意
-        sql = """
-            INSERT INTO m_product (
-                name, 
-                purchasePrice, 
-                rentalPrice, 
-                size,
-                color, 
-                `for`, 
-                upload, 
-                showing, 
-                draft, 
-                updateDate, 
-                purchaseFlg, 
-                rentalFlg, 
-                explanation, 
-                account_id,
-                brand_id, 
-                category_id, 
-                cleanNotes, 
-                smokingFlg, 
-                returnAddress
-            ) VALUES (
-                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s
-            )
-        """
-        
-        # 時間
-        current_date = datetime.now().date()
-        current_datetime = datetime.now()
-        
-        #実際の資料
-        values = (
-            data.get('name'),          
-            int(data.get('purchasePrice')) if data.get('purchasePrice') else None,
-            int(data.get('rentalPrice')) if data.get('rentalPrice') else None,
-            session.get('size_selected', {}).get('notes'),
-            data.get('color'),
-            data.get('category1', 'ユニセックス'), 
-            current_date,
-            '公開', 
-            0,
-            current_datetime,
-            1 if data.get('purchase') else 0,
-            1 if data.get('rental') else 0,
-            data.get('explanation') if data.get('explanation') else None,
-            session.get('user_id'),      
-            int(data.get('brand')) if data.get('brand') else None,
-            int(data.get('category2')) if data.get('category2') else None, 
-            session.get('clean_selected', {}).get('notes'),  # 注意事項
-            1 if data.get('smoking') else 0,
-            data.get('returnLocation') if data.get('returnLocation') else None
-        )
-        
-        #  SQL 実行
-        cursor.execute(sql, values)
-        con.commit()
-        
-        # AUTO INCREMENTの値を取得
-        product_id = cursor.lastrowid
-        
-        #====== size登録の処理 ==============================================================================================================
-        #今のtab確認
-        active_tab = session.get('active_tab')
-        size_selected = session.get('size_selected', {})
-        
-        # tops bottomsの判断######################################################
-        if active_tab == 'tops':
+        if edit_product_id:
+            # 編輯模式：UPDATE
             sql = """
-                INSERT INTO m_topssize (
-                    product_id, shoulderWidth, bodyWidth, sleeveLength, bodyLength, notes
-                ) VALUES (
-                    %s, %s, %s, %s, %s, %s
-                )
+                UPDATE m_product
+                SET name = %s,
+                    purchasePrice = %s,
+                    rentalPrice = %s,
+                    color = %s,
+                    explanation = %s,
+                    purchaseFlg = %s,
+                    rentalFlg = %s,
+                    smokingFlg = %s,
+                    returnAddress = %s,
+                    updateDate = %s
+                WHERE id = %s AND account_id = %s
             """
+            
             values = (
-                product_id,
-                size_selected.get('shoulderWidth'),
-                size_selected.get('bodyWidth'),
-                size_selected.get('sleeveLength'),
-                size_selected.get('bodyLength'),
-                size_selected.get('notes'),
+                data.get('name'),
+                int(data.get('purchasePrice')) if data.get('purchasePrice') else None,
+                int(data.get('rentalPrice')) if data.get('rentalPrice') else None,
+                data.get('color'),
+                data.get('explanation') if data.get('explanation') else None,
+                1 if data.get('purchase') else 0,
+                1 if data.get('rental') else 0,
+                1 if data.get('smoking') else 0,
+                data.get('returnLocation') if data.get('returnLocation') else None,
+                datetime.now(),
+                edit_product_id,
+                user_id
             )
             
-        else:
-            sql = """
-                INSERT INTO m_bottomssize (
-                    product_id, hip, totalLength, rise, inseam, waist, thighWidth, hemWidth, skirtLength, notes
-                ) VALUES (
-                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-                )
-            """
-            values = (
-                product_id,
-                size_selected.get('hip'),
-                size_selected.get('totalLength'),
-                size_selected.get('rise'),
-                size_selected.get('inseam'),
-                size_selected.get('waist'),
-                size_selected.get('thighWidth'),
-                size_selected.get('hemWidth'),
-                size_selected.get('skirtLength'),
-                size_selected.get('notes'),
-            )
-            
-        cursor.execute(sql, values)
-        con.commit()
-        #====== clean登録の処理 ============================================================================================================== 
-        clean_selected = session.get('clean_selected', {})
-        
-        # clean フィールド名を定義
-        clean_fields = ['wash', 'bleach', 'tumble', 'dry', 'iron', 'dryclean', 'wet']
-        
-        inserted_count = 0
-        try:
-            # すべての項目確認
-            for field_name in clean_fields:
-                val = clean_selected.get(field_name)  # フィールド値を取得
-                
-                # "None"、''の場合は処理しない
-                if val in [None, '', 'None']:
-                    continue
-                
-                # SQL用意
-                sql = """
-                    INSERT INTO t_clean (product_id, cleanSign_id)
-                    VALUES (%s, %s)
-                """
-                values = (product_id, val)
-        
-                cursor.execute(sql, values)
-                inserted_count += 1
-
+            cursor.execute(sql, values)
             con.commit()
-
-        except Exception as e:
-            # エラーが発生するとき、前の処理なかったことにする
-            print(f' t_clean 登録エラー: {str(e)}')  #  デバッグ用
-            con.rollback()
+            product_id = edit_product_id
             
+        else:            
+            #  SQL 文章用意
+            sql = """
+                INSERT INTO m_product (
+                    name, 
+                    purchasePrice, 
+                    rentalPrice, 
+                    size,
+                    color, 
+                    `for`, 
+                    upload, 
+                    showing, 
+                    draft, 
+                    updateDate, 
+                    purchaseFlg, 
+                    rentalFlg, 
+                    explanation, 
+                    account_id,
+                    brand_id, 
+                    category_id, 
+                    cleanNotes, 
+                    smokingFlg, 
+                    returnAddress
+                ) VALUES (
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s
+                )
+            """
+            
+            # 時間
+            current_date = datetime.now().date()
+            current_datetime = datetime.now()
+            
+            #実際の資料
+            values = (
+                data.get('name'),          
+                int(data.get('purchasePrice')) if data.get('purchasePrice') else None,
+                int(data.get('rentalPrice')) if data.get('rentalPrice') else None,
+                session.get('size_selected', {}).get('notes'),
+                data.get('color'),
+                data.get('category1', 'ユニセックス'), 
+                current_date,
+                '公開', 
+                0,
+                current_datetime,
+                1 if data.get('purchase') else 0,
+                1 if data.get('rental') else 0,
+                data.get('explanation') if data.get('explanation') else None,
+                session.get('user_id'),      
+                int(data.get('brand')) if data.get('brand') else None,
+                int(data.get('category2')) if data.get('category2') else None, 
+                session.get('clean_selected', {}).get('notes'),  # 注意事項
+                1 if data.get('smoking') else 0,
+                data.get('returnLocation') if data.get('returnLocation') else None
+            )
+            
+            #  SQL 実行
+            cursor.execute(sql, values)
+            con.commit()
+            
+            # AUTO INCREMENTの値を取得
+            product_id = cursor.lastrowid
+            
+            #====== size登録の処理 ==============================================================================================================
+            #今のtab確認
+            active_tab = session.get('active_tab')
+            size_selected = session.get('size_selected', {})
+            
+            # tops bottomsの判断######################################################
+            if active_tab == 'tops':
+                if edit_product_id:
+                    sql = """
+                        UPDATE m_topssize
+                        SET shoulderWidth = %s, bodyWidth = %s, sleeveLength = %s,
+                            bodyLength = %s, notes = %s
+                        WHERE product_id = %s
+                    """
+                    values = (
+                        size_selected.get('shoulderWidth'),
+                        size_selected.get('bodyWidth'),
+                        size_selected.get('sleeveLength'),
+                        size_selected.get('bodyLength'),
+                        size_selected.get('notes'),
+                        product_id
+                    )
+                else:
+                    sql = """
+                        INSERT INTO m_topssize (
+                            product_id, shoulderWidth, bodyWidth, sleeveLength, bodyLength, notes
+                        ) VALUES (
+                            %s, %s, %s, %s, %s, %s
+                        )
+                    """
+                    values = (
+                        product_id,
+                        size_selected.get('shoulderWidth'),
+                        size_selected.get('bodyWidth'),
+                        size_selected.get('sleeveLength'),
+                        size_selected.get('bodyLength'),
+                        size_selected.get('notes'),
+                    )
+                    
+            else:
+                if edit_product_id:
+                    sql = """
+                        UPDATE m_bottomssize
+                        SET hip = %s, totalLength = %s, rise = %s, inseam = %s,
+                            waist = %s, thighWidth = %s, hemWidth = %s, skirtLength = %s, notes = %s
+                        WHERE product_id = %s
+                    """
+                    values = (
+                        size_selected.get('hip'),
+                        size_selected.get('totalLength'),
+                        size_selected.get('rise'),
+                        size_selected.get('inseam'),
+                        size_selected.get('waist'),
+                        size_selected.get('thighWidth'),
+                        size_selected.get('hemWidth'),
+                        size_selected.get('skirtLength'),
+                        size_selected.get('notes'),
+                        product_id
+                    )
+                else:
+                    sql = """
+                        INSERT INTO m_bottomssize (
+                            product_id, hip, totalLength, rise, inseam, waist, thighWidth, hemWidth, skirtLength, notes
+                        ) VALUES (
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                        )
+                    """
+                    values = (
+                        product_id,
+                        size_selected.get('hip'),
+                        size_selected.get('totalLength'),
+                        size_selected.get('rise'),
+                        size_selected.get('inseam'),
+                        size_selected.get('waist'),
+                        size_selected.get('thighWidth'),
+                        size_selected.get('hemWidth'),
+                        size_selected.get('skirtLength'),
+                        size_selected.get('notes'),
+                    )
+                
+            cursor.execute(sql, values)
+            con.commit()
+            #====== clean登録の処理 ============================================================================================================== 
+            clean_selected = session.get('clean_selected', {})
+            
+            if edit_product_id:
+                cursor.execute("DELETE FROM t_clean WHERE product_id = %s", (product_id,))
+                con.commit()
+            # clean フィールド名を定義
+            clean_fields = ['wash', 'bleach', 'tumble', 'dry', 'iron', 'dryclean', 'wet']
+            
+            inserted_count = 0
+            try:
+                # すべての項目確認
+                for field_name in clean_fields:
+                    val = clean_selected.get(field_name)  # フィールド値を取得
+                    
+                    # "None"、''の場合は処理しない
+                    if val in [None, '', 'None']:
+                        continue
+                    
+                    # SQL用意
+                    sql = """
+                        INSERT INTO t_clean (product_id, cleanSign_id)
+                        VALUES (%s, %s)
+                    """
+                    values = (product_id, val)
+            
+                    cursor.execute(sql, values)
+                    inserted_count += 1
+
+                con.commit()
+
+            except Exception as e:
+                # エラーが発生するとき、前の処理なかったことにする
+                print(f' t_clean 登録エラー: {str(e)}')  #  デバッグ用
+                con.rollback()
+                
             
         # ===== 画像アップロードの処理 =====
         uploaded_image_count = 0
@@ -410,6 +485,7 @@ def save_product():
         #session削除
         session.pop('size_selected', None)
         session.pop('clean_selected', None)
+        session.pop('edit_product_id', None)
         
         return jsonify({
             'success': True,
@@ -787,8 +863,8 @@ def seller_draft():
     return render_template('seller/seller_draft.html', products=products, recent=recent, user_id = user_id)  
  
 #データセンター覧画面----------------------------------------------------------------------------------------------------------------------------------------------------------
-@seller_bp.route('/datacenter',methods=['GET'])
-def datacenter():
+# @seller_bp.route('/datacenter',methods=['GET'])
+# def datacenter():
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))
@@ -799,6 +875,124 @@ def datacenter():
             
     return render_template('seller/seller_datacenter.html', user_id = user_id)
 
+#商品アップデート画面----------------------------------------------------------------------------------------------------------------------------------------------------------
+@seller_bp.route('/update/<int:product_id>',methods=['GET'])
+def update(product_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login.login'))
+    
+    user_id = session.get('user_id')
+    
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+        
+        # 取得商品基本資訊
+        sql = """
+            SELECT *
+            FROM m_product
+            WHERE id = %s AND account_id = %s
+        """
+        cur.execute(sql, (product_id, user_id))
+        product = cur.fetchone()
+        print(product)
+        if not product:
+            cur.close()
+            con.close()
+            return redirect(url_for('seller.seller_products'))
+        
+        # 取得尺寸資訊
+        category2 = product.get('category_id')
+        size_data = {}
+        
+        if category2 == 2 :  # トップス
+            sql = "SELECT * FROM m_topssize WHERE product_id = %s"
+            cur.execute(sql, (product_id,))
+            size_data = cur.fetchone() or {}
+            session['active_tab'] = 'tops'
+        else:  # ボトムス
+            sql = "SELECT * FROM m_bottomssize WHERE product_id = %s"
+            cur.execute(sql, (product_id,))
+            size_data = cur.fetchone() or {}
+            session['active_tab'] = 'bottoms'
+        
+        # 取得洗濯表示資訊
+        sql = "SELECT cleanSign_id FROM t_clean WHERE product_id = %s"
+        cur.execute(sql, (product_id,))
+        clean_results = cur.fetchall()
+        clean_data = {}
+        print(clean_results)
+        if clean_results:
+            clean_sign_to_field = {
+                'wash': ['190','170','160','161','150','151','140','141','142','130','131','132','110','111','100'],
+                'bleach': ['220','210','200'],
+                'tumble': ['320','310','300'],
+                'dry': ['440','445','430','435','420','425','410','415'],
+                'iron': ['530','520','510','511','500'],
+                'dryclean': ['620','621','610','611','600'],
+                'wet': ['710','711','712','700']
+                }    
+            for row in clean_results:
+                sign_id = str(row['cleanSign_id'])
+                # 找出這個 cleanSign_id 對應的 field name
+                for field_name, values in clean_sign_to_field.items():
+                    if sign_id in values:
+                        clean_data[field_name] = sign_id
+                        break
+            
+            clean_data['note'] = product['cleanNotes'] 
+        cur.close()
+        con.close()
+        
+        # 存進 session
+        session['size_selected'] = size_data
+        session['clean_selected'] = clean_data
+        session['edit_product_id'] = product_id
+        session.modified = True
+        
+        # 返回 seller_format，並透過 render_template 將資料傳給前端
+        return render_template('seller/seller_format.html',
+                             user_id=user_id,
+                             product=product)
+    
+    except Exception as e:
+        print(f'編輯頁面讀取錯誤: {str(e)}')
+        return redirect(url_for('seller.seller_products'))
+
+#--------------------------------------------------------------------------削除------------------------------------------------------------------------------#
+@seller_bp.route('/format/delete-product/<int:product_id>', methods=['DELETE'])
+def delete_product(product_id):
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'ログインが必要です'}), 401
+    
+    user_id = session.get('user_id')
+    
+    try:
+        con = connect_db()
+        cursor = con.cursor()
+        
+        # 画像
+        cursor.execute("DELETE FROM m_productimg WHERE product_id = %s", (product_id,))
+        
+        # サイズ
+        cursor.execute("DELETE FROM m_topssize WHERE product_id = %s", (product_id,))
+        cursor.execute("DELETE FROM m_bottomssize WHERE product_id = %s", (product_id,))
+        
+        # 洗濯
+        cursor.execute("DELETE FROM t_clean WHERE product_id = %s", (product_id,))
+        
+        # ほか
+        cursor.execute("DELETE FROM m_product WHERE id = %s", (product_id,))
+        
+        con.commit()
+        cursor.close()
+        con.close()
+        
+        return jsonify({'success': True, 'message': '商品を削除しました'}), 200
+    
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'エラー: {str(e)}'}), 500
+    
 #セッション記録----------------------------------------------------------------------------------------------------------------------------------------------------------
 # def save_form_data_to_session(form_data):
 #     """保存session"""

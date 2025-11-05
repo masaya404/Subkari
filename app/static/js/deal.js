@@ -61,7 +61,7 @@ document.querySelectorAll('.product-item').forEach(item => {
     
     // Update image if available
     if (productData.img) {
-      const basePath = "{{url_for('static',filename='img/productImg')}}";
+      const basePath = "/static/img/productImg/";
       document.getElementById('detailProductImg').src = basePath + productData.img;
     }
     updateTimeline(productData.status);
