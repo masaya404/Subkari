@@ -8,6 +8,13 @@ import os
 
 login_bp = Blueprint('login', __name__, url_prefix='/login')
 
+#登録完了画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
+# 登録完了画面表示
+@login_bp.route('/registration_complete', methods=['GET'])
+def registration_complete():
+    # 登録完了画面で表示するメッセージなどを渡す場合
+    message = "ユーザー登録が完了しました。"
+    return render_template('login/registration_complete.html', message=message)
 
 #Login画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/login',methods=['GET'])
