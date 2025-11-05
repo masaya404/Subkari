@@ -8,6 +8,13 @@ import os
 
 login_bp = Blueprint('login', __name__, url_prefix='/login')
 
+#登録完了画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
+# 登録完了画面表示
+@login_bp.route('/registration_complete', methods=['GET'])
+def registration_complete():
+    # 登録完了画面で表示するメッセージなどを渡す場合
+    message = "ユーザー登録が完了しました。"
+    return render_template('login/registration_complete.html', message=message)
 
 #Login画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/login',methods=['GET'])
@@ -451,7 +458,7 @@ def verification():
     # 3. m_account への登録 (まず親テーブルから)
     sql_account = """
     INSERT INTO m_account 
-    (mail, password, username, lastName, firstName, lastNameKana, firstNameKana, birthday, tel, smoker, profileImage)
+    (mail, password, userName, lastName, firstName, lastNameKana, firstNameKana, birthday, tel, smoker, profileImage)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'default_profile.jpg');
     """
     cur.execute(sql_account, account_data)
