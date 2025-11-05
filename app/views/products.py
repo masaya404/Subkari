@@ -6,6 +6,52 @@ import mysql.connector
 import json
 import os
 
+#プロフィールに表示する取引情報を取得する ------------------------------------------------------------------------------------
+#引数として受け取ったidを持つユーザーの情報を取得
+def get_transaction_info(id):
+    #アカウントテーブルからは取れない情報を取得
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+      
+    #フォロワー数、フォロー数、評価、総評価件数、出品数を取得
+    #フォロー数
+    sql="select count(*) as フォロー数 from t_connection where execution_id=%s and type='フォロー' group by execution_id"
+    cur.execute(sql, (id,))
+    follows=cur.fetchone()
+    #フォロワー数
+    sql="select count(*) as フォロワー数 from t_connection where target_id=%s and type='フォロー' group by target_id"
+    cur.execute(sql, (id,))
+    followers=cur.fetchone()
+    #評価
+    sql="select avg(score) as 評価 from t_evaluation where recipient_id=%s group by recipient_id"
+    cur.execute(sql, (id,))
+    evaluation=cur.fetchone()
+    #総評価件数
+    sql="select count(*) as 評価件数 from t_evaluation where recipient_id=%s group by recipient_id"
+    cur.execute(sql, (id,))
+    evaluationCount=cur.fetchone()
+    #出品数
+    sql="select count(*) as 出品数 from m_product where account_id=%s"
+    cur.execute(sql, (id,))
+    products=cur.fetchone()
+    #評価を変形
+    evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
+   
+    return evaluation,evaluationCount
+
+
+#引数として受け取ったidを持つユーザーの情報を取得
+def get_user_info(id):
+    sql = "SELECT * FROM m_account WHERE id = %s"
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql, (id,))  # ← タプルで渡す！
+    user_info = cur.fetchone()
+    return user_info
+
+
+
+
 # Blueprintの設定
 products_bp = Blueprint('products', __name__, url_prefix='/products')
 
@@ -54,23 +100,31 @@ def product_details_stub(product_id):
         cur = con.cursor(dictionary=True)
 
         # 商品情報を取得
-        sql_product = "SELECT name,account_id, rentalPrice, purchasePrice, explanation, image_path, thumbnail1, thumbnail2, thumbnail3 FROM m_product WHERE id = %s;"
+        sql_product = "SELECT name,account_id, rentalPrice, purchasePrice, explanation FROM m_product WHERE id = %s;"
         cur.execute(sql_product, (product_id,))
         product = cur.fetchone()
+        print(product)
 
         #商品が見つからない場合の処理
         # 商品が見つからなかった場合のデフォルト処理
+        # ... 省略 ...
         if not product:
-            product = {
-                'name': '商品が見つかりません',
-                'rentalPrice': '¥0',
-                'purchasePrice': '¥0',
-                'explanation': '該当する商品IDのデータは存在しませんでした。',
-                'image_path': 'default.jpg',  # 画像がない場合のデフォルト画像を設定
-                'thumbnail1': 'default_thumbnail1.jpg',
-                'thumbnail2': 'default_thumbnail2.jpg',
-                'thumbnail3': 'default_thumbnail3.jpg'
-            }
+
+            
+            # 商品が見つからない場合は、エラーページや404を返すのが適切です
+            return render_template('error.html'), 404 # **ここで関数を終了させる**
+
+        # if not product:
+        #     product = {
+        #         'name': '商品が見つかりません',
+        #         'rentalPrice': '¥0',
+        #         'purchasePrice': '¥0',
+        #         'explanation': '該当する商品IDのデータは存在しませんでした。',
+        #         'image_path': 'default.jpg',  # 画像がない場合のデフォルト画像を設定
+        #         'thumbnail1': 'default_thumbnail1.jpg',
+        #         'thumbnail2': 'default_thumbnail2.jpg',
+        #         'thumbnail3': 'default_thumbnail3.jpg'
+        #     }
 
 
         # コメント情報を取得
@@ -125,14 +179,24 @@ def product_details_stub(product_id):
             cur.close()
             con.close()
 
+
+
+    # 評価情報を取得
+    evaluation, evaluationCount = get_transaction_info(product['account_id'])
+
+    #アカウント情報取得
+    seller_info = get_user_info(product['account_id'])
     
 
     # 取得した商品情報 (product) とコメント (comments) をテンプレートに渡す
     resp = make_response(render_template(
         'products/product_details.html',
+        evaluationCount=evaluationCount['評価件数'],
         user_id=user_id,
+        seller_info=seller_info,
         product=product,
-        comments=comments
+        comments=comments,
+        evaluation=evaluation
     ))
     return resp
 #purchase
