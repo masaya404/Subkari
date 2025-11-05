@@ -14,7 +14,7 @@
                 <img src="{{url_for('static',filename='img/cloth.jpg')}}" alt="商品画像" class="w-24 h-24 rounded object-cover flex-shrink-0">
                 <div class="flex-1">
                     <p class="text-gray-700 leading-relaxed">
-                        冬に大活躍☆わもこファーバーカーゆったりシルエットで体型カバー効果
+                        {{transaction.explanation}}
                     </p>
                 </div>
             </div>
@@ -25,28 +25,28 @@
                 
                     <div class="flex flex-row gap-10 items-center">
                         <div class="w-[80px]">
-                            <p class="text-gray-600 text-base">商品代金</p>
+                            <p class="text-gray-600 text-base">金額</p>
                         </div>
-                        <p class="text-lg font-semibold">¥2,222</p>
+                        <p class="text-lg font-semibold"> {%if purchasePrice %}{{transaction.purchasePrice}}{%else%}{{transaction.rentalPrice}}{%endif%}</p>
                     </div>
                     <div class="flex flex-row gap-10 items-center">
                         <div class="w-[80px]">
                             <p class="text-gray-600 text-base">販売手数料</p>
                         </div>
-                        <p class="text-lg font-semibold">¥222</p>
+                        <p class="text-lg font-semibold">{{transaction.charge}}</p>
                     </div>
             
                     <div class="flex flex-row gap-10 items-center">
                         <div class="w-[80px]">
                             <p class="text-gray-600 text-base">販売利益</p>
                         </div>
-                        <p class="text-lg font-semibold">¥2,000</p>
+                        <p class="text-lg font-semibold">{{transaction.benefit}}</p>
                     </div>
                     <div class="flex flex-row gap-10 items-center">
                         <div class="w-[80px]">
                             <p class="text-gray-600 text-base">購入日時</p>
                         </div>
-                        <p class="text-lg font-semibold">2020年6月4日 20:22</p>
+                        <p class="text-lg font-semibold">{{transaction.date}}</p>
                     </div>
             
             
@@ -60,7 +60,7 @@
                         <div class="w-[80px]">
                             <p class="text-gray-600 text-base">商品ID</p>
                         </div>
-                        <p class="text-lg font-semibold">46476853465</p>
+                        <p class="text-lg font-semibold">{{transaction.product_id}}</p>
                     </div>
                 
             </div>
@@ -68,7 +68,7 @@
             <!-- 支払い待ちボタン -->
             <div class="flex justify-end items-end flex-1">
                 <button class="w-[148px] h-[46px] bg-gray-700 hover:bg-gray-800 text-white px-8 py-2 rounded font-semibold">
-                    支払い待ち
+                    {{transaction.status}}
                 </button>
             </div>
         </div>
@@ -192,13 +192,7 @@
 
           <!-- 出品者情報 -->
         <div class="bg-white rounded-lg p-6 mb-8">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-lg font-semibold">出品者</h2>
-                <button class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
-            </div>
-
+           
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <!-- image -->
@@ -223,7 +217,7 @@
                         <div class="flex items-center gap-2 mt-1">
                             <i class="fas fa-check-circle text-green-500 text-sm"></i>
                             <span class="text-xs text-gray-600">本人確認済</span>
-                            <span class="text-xs text-gray-600">喧嘩者</span>
+                            <span class="text-xs text-gray-600">喫煙者</span>
                         </div>
                     </div>
                 </div>
@@ -238,14 +232,15 @@
         <!-- 質問 -->
         <div class="bg-white rounded-lg p-6 mb-6">
             <h3 class="text-lg font-semibold mb-4">質問・相談</h3>
-            
+            <form action="/deal/comment" method = "POST">
             <!-- テキストインプット -->
-            <textarea 
-                class="w-full border border-gray-300 rounded-lg p-4 mb-4 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"
-                rows="4"
-                placeholder="何か分からないことがあれば質問してみましょう。">
-            </textarea>
-
+                <textarea 
+                    class="w-full border border-gray-300 rounded-lg p-4 mb-4 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"
+                    rows="4"
+                    placeholder="何か分からないことがあれば質問してみましょう。"
+                    name="comment">
+                </textarea>
+            </form>
             <!-- 送信 -->
             <button class="w-full bg-white border-2 border-gray-800 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-800 hover:text-white transition duration-200">
                 取引｜メッセージを送る
