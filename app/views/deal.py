@@ -29,6 +29,7 @@ def deal():
             SELECT 
                 p.*, 
                 m.img,
+                t.id,
                 t.status,
                 t.situation
             FROM 
@@ -54,6 +55,7 @@ def deal():
             SELECT 
                 p.*, 
                 m.img,
+                t.id,
                 t.status,t.situation
             FROM 
                 m_product AS p
@@ -69,6 +71,8 @@ def deal():
                 p.account_id = %s
             AND
                 p.draft = 0
+            AND
+                t.status IS NOT NULL
             GROUP BY p.id
             ;
             """   
@@ -81,16 +85,63 @@ def deal():
         
     return render_template('deal/deal_index.html', bought_products = bought_products, products = products, user_id = user_id)
 # 取引一覧画面表示 ----------------------------------------------------------------------------------------------------------------------------------------------------------
-@deal_bp.route('/deal/list', methods=['GET'])
-def deal_list():
+@deal_bp.route('/deal/<int:transaction_id>', methods=['GET'])
+def deal_list(transaction_id):
     # euser検証成功
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+    
+    #comment表示
+    # DB接続
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    
+    #  SQL 文章用意
+    sql = """
+        SELECT 
+            t.*,
+            p.*,
+            m.img
+        FROM 
+            t_transaction AS t
+        LEFT JOIN 
+            m_product AS p
+        ON
+            t.product_id = p.id
+        LEFT JOIN 
+            m_productimg AS m
+        ON
+            p.id = m.product_id
+        WHERE 
+            t.product_id = %s
+        LIMIT 1
+        ;
+        """
+    cur.execute(sql, (transaction_id,))
+    transaction = cur.fetchone()
+    cur.close()
+    con.close()
+    
+    if not transaction:
+        return redirect(url_for('deal.deal'))
+    
+    if transaction['status'] == '購入':
+        charge = int(transaction['purchasePrice'])*0.1
+        benefit = int(transaction['purchasePrice']) - charge
+        transaction['charge'] = charge
+        transaction['benefit'] = benefit
         
-    return render_template('deal/deal_detail.html', user_id = user_id)
+    else:
+        charge = int(transaction['rentalPrice'])*0.1
+        benefit = int(transaction['rentalPrice']) - charge
+        transaction['charge'] = charge
+        transaction['benefit'] = benefit
+    print(transaction)
+    
+    return render_template('deal/deal_detail.html', transaction = transaction, user_id = user_id)
 
 # 取引詳細の画像添付 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 @deal_bp.route('/deal/list/imageUpload', methods=['GET','POST'])
@@ -118,7 +169,7 @@ def deal_list_imageUpload():
     #ここから    
     file = request.files['img']
     
-    # 驗證文件類型
+    # 画像検証
     ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif', 'webp'}
     if not ('.' in file.filename and file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS):
         error = "許可されていないファイル形式です"
@@ -159,7 +210,12 @@ def deal_list_imageUpload():
                              error=error, 
                              user_id=user_id)    
 
-   
+# comment ----------------------------------------------------------------------------------------------------------------------------------------------------------
+@deal_bp.route('/comment', methods=['POST'])
+def deal_comment():
+   comment = request.form.get['comment']
+   if comment:
+       return redirect('/deal/<int:transaction_id>')
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
     con=mysql.connector.connect(

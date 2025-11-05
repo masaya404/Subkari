@@ -71,9 +71,9 @@
 
         <div class="profile-rating">
             <span class="stars">
-                {% for i in range(evaluationCount)%}★{% endfor %}
-                {% for i in range(5-evaluationCount)%}☆{% endfor %}</span>
-            <span class="rating-count">{{evaluation}}</span>
+                {% for i in range(evaluation)%}★{% endfor %}
+                {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+            <span class="rating-count">{{evaluationCount}}</span>
         </div>
 
         <div class="badge-group">
@@ -112,7 +112,7 @@
 
         <div class="sold-info">
             <div class="sold-label">売上金</div>
-            <div class="sold-amount">¥ 2</div>
+            <div class="sold-amount">¥ {{total}}</div>
         </div>
     </section>
 
@@ -361,7 +361,21 @@
     </section>
 
     <section id="logout" class="sec">
-
+        <div class="main-content">
+            <h1 class="page-title">アカウント管理</h1>
+            
+            <div class="logout-section">
+                <h2 class="section-title">ログアウト</h2>
+                
+                <div class="logout-modal">
+                    <p class="logout-message">ログアウトしますか？</p>
+                    <div class="button-group">
+                        <button class="btn primary" >いいえ</button>
+                        <button class="btn" ><a href="{{url_for('login.logout')}}">はい</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </main>
 <script src="../../static/js/mypage.js"></script>

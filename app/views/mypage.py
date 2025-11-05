@@ -17,9 +17,30 @@ def connect_db():
     return con
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 
+#価格をカンマ区切りにして返す ----------------------------------------------------
+def comma(num):
+    string1=""
+    string2=""
+    if type(num)=="string":
+        num=int(num)
+    tmp=num
+   
+    count=0
+ 
+    while tmp/10!=0:
+        string1+=str(tmp%10)
+        tmp//=10
+        count+=1
+        if count%3==0 :
+            string1+=","
+            count+=1
+    tmp=0
+    while tmp<count:
+        string2+=string1[count-tmp-1]
+        tmp+=1
 
-
-
+    return string2
+    
 
 #アカウントの口座情報を取得する ------------------------------------------------------------------------------
 def getAccountInfo():
@@ -68,13 +89,13 @@ def get_user_info(id):
     user_info = cur.fetchone()
     return user_info
 
+
 #プロフィールに表示する取引情報を取得する ------------------------------------------------------------------------------------
 #引数として受け取ったidを持つユーザーの情報を取得
 def get_transaction_info(id):
     #アカウントテーブルからは取れない情報を取得
     con = connect_db()
     cur = con.cursor(dictionary=True)
-      
     #フォロワー数、フォロー数、評価、総評価件数、出品数を取得
     #フォロー数
     sql="select count(*) as フォロー数 from t_connection where execution_id=%s and type='フォロー' group by execution_id"
@@ -97,7 +118,8 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     products=cur.fetchone()
     #評価を変形
-    evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
+    evaluation=round(float(evaluation['評価']))   
+    #小数点型にしてから四捨五入
    
     return evaluation,evaluationCount,follows,followers,products
 #商品データを取得 --------------------------------------------------
@@ -118,7 +140,6 @@ def get_product_info(id):
     con.close()
 
     return name,img
-
 
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
@@ -143,23 +164,24 @@ def mypage():
     user_info=get_user_info(user_id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
 
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    
+    #売上履歴を取得
+    #売上履歴から売上金を計算する
+    sql="select p.id ,ti.created_at, case when t.situation='購入' then p.purchasePrice else p.rentalPrice end as price from t_transaction t inner join m_product  p on t.product_id=p.id left join t_time ti on t.id=ti.transaction_id where t.status='取引完了' and p.account_id=%s group by ti.created_at,t.seller_id"
+    cur.execute(sql,(user_id,))
+    sales=cur.fetchall()
+    total=0
+    for sale in sales:
+        total+=sale['price']
+    total=comma(total)
     return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],
     evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],
-    followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id)
-    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id )
+    followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id,total=total)
     
 #------------------------------------------------------------------------------------------------
 
-# #userprf表示--------------------------------------------------------------------------------------
-# @mypage_bp.route("mypage/userprf")
-# def userprf():
-#     if 'user_id' not in session:
-#         user_id = None
-#         return redirect(url_for('login.login'))
-#     else:
-#         user_id = session.get('user_id')
-#     return render_template("mypage/mypage.html" , user_id=user_id)
-# #-------------------------------------------------------------------------------------------------
 
 #editProfile プロフィール編集ページ表示--------------------------------------------------------------
 @mypage_bp.route("/editProfile")
@@ -419,15 +441,25 @@ def salesHistory():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    
+    datetimes=[]
+    prices=[]
     con=connect_db()
     cur=con.cursor(dictionary=True)
-    sql="select * from t_transaction t inner join m_product p on t.product_id=p.id where"
+    
     #売上履歴を取得
     #売上履歴は取引テーブルでステータスが取引完了のものを取得
-    
+    sql="select p.id ,ti.created_at, case when t.situation='購入' then p.purchasePrice else p.rentalPrice end as price from t_transaction t inner join m_product  p on t.product_id=p.id left join t_time ti on t.id=ti.transaction_id where t.status='取引完了' and p.account_id=%s group by ti.created_at,t.seller_id"
+    cur.execute(sql,(user_id,))
+    #id,created_at,price
+    salesHistory=cur.fetchall()
+    for history  in salesHistory:
+        datetimes.append(history['created_at'])
+        #価格をカンマ区切りにしてから配列に格納
+        prices.append(comma(history['price']))
 
-    return render_template("mypage/salesHistory.html" ,  user_id=user_id)
+    cur.close()
+    con.close()
+    return render_template("mypage/salesHistory.html" ,  user_id=user_id,datetimes=datetimes,prices=prices)
 #-------------------------------------------------------------------------------------------------
 
 #振込履歴-----------------------------------------------------------------------------------------
