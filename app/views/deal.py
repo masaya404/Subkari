@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, make_response, redirect, url_for, current_app, session
+from flask import Blueprint, render_template, request, make_response, redirect, url_for, current_app, session,jsonify
 from PIL import Image
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
@@ -85,7 +85,7 @@ def deal():
         
     return render_template('deal/deal_index.html', bought_products = bought_products, products = products, user_id = user_id)
 # 取引一覧画面表示 ----------------------------------------------------------------------------------------------------------------------------------------------------------
-@deal_bp.route('/deal/<int:transaction_id>', methods=['GET'])
+@deal_bp.route('/deal/<int:transaction_id>', methods=['GET','POST'])
 def deal_list(transaction_id):
     # euser検証成功
     if 'user_id' not in session:
@@ -122,11 +122,22 @@ def deal_list(transaction_id):
         """
     cur.execute(sql, (transaction_id,))
     transaction = cur.fetchone()
-    cur.close()
-    con.close()
     
     if not transaction:
         return redirect(url_for('deal.deal'))
+    # comments
+    product_id = transaction['product_id']
+    sql = """
+        SELECT content, createdDate, account_id
+        FROM t_comments
+        WHERE product_id = %s
+        ORDER BY createdDate DESC
+    """
+    cur.execute(sql, (product_id,))
+    comments = cur.fetchall()
+    
+    cur.close()
+    con.close()   
     
     if transaction['status'] == '購入':
         charge = int(transaction['purchasePrice'])*0.1
@@ -142,7 +153,7 @@ def deal_list(transaction_id):
         
     print(transaction)
     
-    return render_template('deal/deal_detail.html', transaction = transaction, user_id = user_id)
+    return render_template('deal/deal_detail.html', transaction = transaction,comments = comments, user_id = user_id)
 
 # 取引詳細の画像添付 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 @deal_bp.route('/deal/list/imageUpload', methods=['GET','POST'])
@@ -214,9 +225,44 @@ def deal_list_imageUpload():
 # comment ----------------------------------------------------------------------------------------------------------------------------------------------------------
 @deal_bp.route('/comment', methods=['POST'])
 def deal_comment():
-   comment = request.form.get['comment']
-   if comment:
-       return redirect('/deal/<int:transaction_id>')
+    comment = request.form.get('comment')
+    product_id = request.form.get('product_id')
+    transaction_id = request.form.get('transaction_id')
+    
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'ログインが必要です'}), 401
+    
+    user_id = session.get('user_id')
+    
+    if not comment or not product_id:
+        return jsonify({'success': False, 'message': 'コメントと商品IDが必要です'}), 400
+    
+    try:
+        con = connect_db()
+        cursor = con.cursor()
+        
+        # DBに登録
+        sql = """
+            INSERT INTO t_comments (product_id, account_id, content, createdDate)
+            VALUES (%s, %s, %s, NOW())
+        """
+        cursor.execute(sql, (product_id, user_id, comment))
+        con.commit()
+        
+        cursor.close()
+        con.close()
+        
+        return jsonify({
+            'success': True,
+            'message': 'メッセージを送信しました'
+        }), 200
+    
+    except Exception as e:
+        print(f'エラー: {str(e)}')
+        return jsonify({
+            'success': False,
+            'message': f'エラー: {str(e)}'
+        }), 500
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
     con=mysql.connector.connect(
