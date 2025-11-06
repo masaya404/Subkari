@@ -151,7 +151,7 @@ def deal_list(transaction_id):
         transaction['charge'] = charge
         transaction['benefit'] = benefit
         
-    print(transaction)
+    # print(transaction)
     
     return render_template('deal/deal_detail.html', transaction = transaction,comments = comments, user_id = user_id)
 
@@ -228,13 +228,13 @@ def deal_comment():
     comment = request.form.get('comment')
     product_id = request.form.get('product_id')
     transaction_id = request.form.get('transaction_id')
-    
+    print(product_id)
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'ログインが必要です'}), 401
     
     user_id = session.get('user_id')
     
-    if not comment or not product_id:
+    if not comment and not product_id:
         return jsonify({'success': False, 'message': 'コメントと商品IDが必要です'}), 400
     
     try:

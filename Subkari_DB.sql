@@ -97,6 +97,8 @@ CREATE TABLE `m_product` (
   `category_id` INT NOT NULL,
   `cleanNotes` TEXT ,
   `smokingFlg` boolean NOT NULL,
+  `returnAddress` varchar(255),
+
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`brand_id`)

@@ -217,6 +217,7 @@ def save_product():
             }), 400
 
         data = json.loads(product_data_str)
+        print(data)
         con = connect_db()
         cursor = con.cursor()
         
