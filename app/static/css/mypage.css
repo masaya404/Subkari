@@ -262,7 +262,7 @@ h2{
 
 
 
-/* いいね一覧 */
+/* ----------------いいね一覧 --------------*/
 #likes{
     margin: 20px 20px;
     div{
@@ -275,6 +275,95 @@ h2{
         }
     }
 }
+
+/* ---------------------------------------- */
+
+/* ---------------ログアウト------------------ */
+.main-content {
+            flex: 1;
+            background: #fff;
+            padding: 40px;
+            min-height: 500px;
+}
+
+.page-title {
+    text-align: start;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #333;
+}
+
+.logout-section {
+    margin-top: 40px;
+    width: 100%; /* ← 全幅に */
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: start;
+    margin-left: 0px;
+}
+
+.logout-modal {
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    padding: 50px 40px;
+    text-align: center;
+    background: #fafafa;
+    width: 100%; /* ← ここを変更 */
+    max-width: none; /* ← 最大幅制限を解除 */
+}
+
+.logout-message {
+    font-size: 16px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.button-group {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 12px 40px;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid #ddd;
+    background: #fff;
+    color: #666;
+    min-width: 120px;
+}
+
+.btn:hover {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.btn.primary {
+    background: #fff;
+    border-color: #333;
+    color: #333;
+}
+
+.btn.primary:hover {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+}
+/* ------------------------------- */
+
+
+
 
 @media (max-width: 768px) {
     .main-container {

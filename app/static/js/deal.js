@@ -61,9 +61,16 @@ document.querySelectorAll('.product-item').forEach(item => {
     
     // Update image if available
     if (productData.img) {
-      const basePath = "{{url_for('static',filename='img/productImg')}}";
+      const basePath = "/static/img/productImg/";
       document.getElementById('detailProductImg').src = basePath + productData.img;
     }
+    updateTimeline(productData.status);
+
+    const transactionId = productData.transaction_id || productData.id;
+    document.getElementById('detailTransactionId').textContent = transactionId;
+
+    const dealDetailUrl = `/deal/deal/${transactionId}`;
+    document.getElementById('dealDetailLink').href = dealDetailUrl;
   });
 });
 
@@ -74,3 +81,47 @@ window.addEventListener('DOMContentLoaded', function() {
     firstProduct.click();
   }
 });
+
+//medium area
+const statusMap = {
+  '支払い待ち': 1,
+  '発送待ち': 2,
+  '配送中': 3,
+  '到着': 4,
+  'レンタル中': 5,
+  'クリーニング期間': 6,
+  '発送待ち': 7,
+  '取引完了': 8
+};
+
+function updateTimeline(status) {
+  const step = statusMap[status] || 0;
+  
+  // Update all timeline items
+  for (let i = 1; i <= 8; i++) {
+    const circles = document.querySelectorAll(`.timeline-item-${i} .timeline-circle`);
+    
+    if (i < step) {
+      // Completed steps - show checkmark
+      circles.forEach(circle => {
+        circle.classList.remove('bg-white', 'border-2', 'border-gray-400', 'text-gray-600');
+        circle.classList.add('bg-gray-800', 'text-white');
+        circle.innerHTML = '✓';
+      });
+    } else if (i === step) {
+      // Current step - show number with highlight
+      circles.forEach(circle => {
+        circle.classList.remove('bg-white', 'border-2', 'border-gray-400', 'text-gray-600');
+        circle.classList.add('bg-gray-800', 'text-white');
+        circle.innerHTML = i;
+      });
+    } else {
+      // Future steps - show number
+      circles.forEach(circle => {
+        circle.classList.remove('bg-gray-800', 'text-white');
+        circle.classList.add('bg-white', 'border-2', 'border-gray-400', 'text-gray-600');
+        circle.innerHTML = i;
+      });
+    }
+  }
+}

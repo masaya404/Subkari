@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
+    
+
+    const productData = document.getElementById('app').dataset.product 
+    ? JSON.parse(document.getElementById('app').dataset.product) 
+    : null;
+    if (productData) {
+        // 編輯模式：將資料存進 sessionStorage
+        sessionStorage.setItem("name", productData.name);
+        sessionStorage.setItem("rental", productData.rentalFlg ? "true" : "false");
+        sessionStorage.setItem("purchase", productData.purchaseFlg ? "true" : "false");
+        sessionStorage.setItem("rentalPrice", productData.rentalPrice || '');
+        sessionStorage.setItem("purchasePrice", productData.purchasePrice || '');
+        sessionStorage.setItem("smoking", productData.smokingFlg ? "yes" : "no");
+        sessionStorage.setItem("color", productData.color);
+        sessionStorage.setItem("category1",productData.for);
+        sessionStorage.setItem("category2",productData.category_id);
+        sessionStorage.setItem("brand",productData.brand_id);
+        sessionStorage.setItem("explanation", productData.explanation || '');
+        sessionStorage.setItem("returnLocation", productData.returnAddress || '');
+    }
     //このページ入る同時に、画像を表示する（あった場合）
             loadUploadedImages();
     //session資料回復
@@ -170,8 +190,7 @@ function saveToSessionStorage(){
     sessionStorage.setItem("brand", brand);
     sessionStorage.setItem("explanation", explanation);
     sessionStorage.setItem("returnLocation", returnLocation);
-  
-    
+   
 }
 
 
@@ -504,5 +523,45 @@ function saveDraft(url) {
     // alert('下書きが保存されました');
     window.location.href = url;
 }
+//キャンセル
+function backToSeller(url){
+    window.location.href=`${url}`;
+}
 
 
+// 既に出品中の商品まだ編集する
+function editProduct(productId) {
+    window.location.href = `/seller/update/${productId}`;
+}
+
+// 編輯モード
+const isEditMode = document.body.getAttribute('data-edit-mode') === 'true';
+const productId = document.body.getAttribute('data-product-id');
+
+const endpoint = isEditMode ? '/seller/format/update-product' : '/seller/format/save-product';
+
+//削除POP
+function deleteProduct(productId) {
+    // 提示
+    if (confirm('本当に削除しますか？')) {
+        // 「確認」後執行
+        fetch(`/seller/format/delete-product/${productId}`, {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('商品を削除しました');
+                // reload
+                window.location.reload();
+            } else {
+                alert('削除失敗: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('エラーが発生しました');
+        });
+    }
+    // 如果按下「取消」，不執行任何操作
+}

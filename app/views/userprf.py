@@ -23,14 +23,14 @@ userprf_bp = Blueprint('userprf', __name__, url_prefix='/userprf')
 
 
 #userprf ユーザープロフィールを表示------------------------------------------------------
-@userprf_bp.route("/userprf")
-def userprf():
+@userprf_bp.route("/<int:userprf_id>" )
+def userprf(userprf_id):
 
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))
     else:
-        user_id = session.get('user_id')
+        user_id = session.get('userprf_id')
     
     #user情報を取得
     user_info=get_user_info(user_id)

@@ -1263,6 +1263,7 @@ a {
     align-items: flex-start; /* 上部に寄せる */
     padding-top: 100px; /* 上からの余白 */
     padding-bottom: 50px;
+    margin: 100px 0;
 }
 
 .subkari-main {
