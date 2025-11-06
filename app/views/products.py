@@ -100,7 +100,13 @@ def product_details_stub(product_id):
         cur = con.cursor(dictionary=True)
 
         # 商品情報を取得
-        sql_product = "SELECT name,account_id, rentalPrice, purchasePrice, explanation FROM m_product WHERE id = %s;"
+        sql_product = """
+        SELECT pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
+        FROM m_product pr
+        INNER JOIN m_brand br ON br.id = pr.brand_id
+        INNER JOIN m_category ca ON pr.category_id = ca.id
+        WHERE pr.id = %s;
+        """
         cur.execute(sql_product, (product_id,))
         product = cur.fetchone()
         print(product)
@@ -114,18 +120,49 @@ def product_details_stub(product_id):
             # 商品が見つからない場合は、エラーページや404を返すのが適切です
             return render_template('error.html'), 404 # **ここで関数を終了させる**
 
-        # if not product:
-        #     product = {
-        #         'name': '商品が見つかりません',
-        #         'rentalPrice': '¥0',
-        #         'purchasePrice': '¥0',
-        #         'explanation': '該当する商品IDのデータは存在しませんでした。',
-        #         'image_path': 'default.jpg',  # 画像がない場合のデフォルト画像を設定
-        #         'thumbnail1': 'default_thumbnail1.jpg',
-        #         'thumbnail2': 'default_thumbnail2.jpg',
-        #         'thumbnail3': 'default_thumbnail3.jpg'
-        #     }
+        #--レンタル期間情報を取得--
+        sql_rentalPeriod = """
+        SELECT rentalPeriod
+        from t_rentalPeriod
+        where product_id = %s;
 
+        """
+
+        cur.execute(sql_rentalPeriod, (product_id,))
+        rentalPeriod = cur.fetchall()
+
+        # 1. レンタル単価を取得（数値型に変換）
+        try:
+            # product.rentalPrice は文字列の可能性もあるため、int型に変換
+            rental_price_per_day = int(product['rentalPrice'])
+        except (TypeError, ValueError):
+            # エラーハンドリング: 価格が不正な場合は0としておくなど
+            rental_price_per_day = 0
+            
+        # 2. 期間ごとの合計金額を計算し、辞書として保存する
+        calculated_prices = {}
+
+        for period_data in rentalPeriod:
+            # rentalPeriodから期間（日）を取得
+            # キー名はSQLの SELECT rentalPeriod から 'rentalPeriod' になる
+            try:
+                #データを入れるperiod_stringに      
+                period_string = period_data['rentalPeriod']
+                # '日' という文字を空文字に置き換え（例: '4日' -> '4'）
+                days_str = period_string.replace('日', '')
+
+                days = int(days_str)
+                
+                # 計算
+                total_price = rental_price_per_day * days
+                
+                # 結果を辞書に追加
+                # 例: {'4日': 4000, '7日': 7000} のように格納
+                calculated_prices[f'{days}日'] = total_price
+                
+            except (TypeError, ValueError):
+                # 期間のデータが不正な場合はスキップ
+                continue
 
         # コメント情報を取得
         # 2. コメントデータと投稿者名を取得
@@ -166,11 +203,44 @@ def product_details_stub(product_id):
                 # 日付も表示したい場合はここで整形して渡すことも可能
                 'created_date': comment['createdDate'].strftime('%Y/%m/%d %H:%M') if comment['createdDate'] else ''
             })
-        # comments = [
-        #     {'user_name': '中村 輝', 'text': 'コメント失礼します。購入を検討しているのですが、こちらの商品の使用期間はどれくらいでしょうか？', 'is_seller': False},
-        #     {'user_name': '谷口 昌哉', 'text': '商品の使用期間ですね。約○年間（または○か月間）使用しました。', 'is_seller': True},
-        # ]
 
+        #トップサイズ情報を取得
+        sql_topSize ="""
+        SELECT
+        shoulderWidth ,bodyWidth , sleeveLength , bodyLength , notes
+        from
+        m_topsSize
+        where
+        product_id = %s;
+        """
+        cur.execute(sql_topSize, (product_id,))
+        topSize = cur.fetchone()
+
+
+        #ボトムスサイズ情報を取得
+        sql_bottomsSize = """
+        SELECT
+        hip 
+        , totalLength 
+        , rise 
+        , inseam 
+        , waist 
+        , thighWidth 
+        , hemWidth 
+        , skirtLength
+        , notes
+
+        from
+        m_bottomsSize
+
+        where
+        product_id = %s;
+        """
+        cur.execute(sql_bottomsSize, (product_id,))
+        bottomsSize = cur.fetchone()
+
+
+       
     except mysql.connector.Error as err:
         print(f"データベースエラー: {err}")
 
@@ -196,7 +266,10 @@ def product_details_stub(product_id):
         seller_info=seller_info,
         product=product,
         comments=comments,
-        evaluation=evaluation
+        calculated_prices = calculated_prices,
+        evaluation=evaluation,
+        topSize=topSize,
+        bottomsSize=bottomsSize
     ))
     return resp
 #purchase
