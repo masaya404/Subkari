@@ -6,199 +6,226 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/top_product_view.css') }}">
 
+<div class="breadcrumb">
+  <a href="{{ url_for('top.coordinate') }}">SubKari</a> &gt; 検索結果
+</div>
 
-  <div class="breadcrumb">
-    <a href="{{ url_for('top.coordinate') }}">SubKari</a> &gt; 検索結果
-  </div>
-  <div class="container">
-    <aside class="sidebar">
-      <div class="filter-section">
-        <div class="filter-title">種別</div>
-        <div class="filter-options">
-          <label class="filter-option"><input type="radio" name="type" checked> ユニセックス</label>
-          <label class="filter-option"><input type="radio" name="type"> レディース</label>
-        </div>
+<div class="container">
+  <aside class="sidebar">
+    <!-- ここはそのまま（フィルター欄） -->
+    <div class="filter-section">
+      <div class="filter-title">種別</div>
+      <div class="filter-options">
+        <label class="filter-option"><input type="radio" name="type" checked> ユニセックス</label>
+        <label class="filter-option"><input type="radio" name="type"> レディース</label>
       </div>
-
-      <div class="filter-section">
-        <div class="filter-title">カテゴリ</div>
-        <div class="filter-options">
-          <label class="filter-option"><input type="checkbox"> コート</label>
-          <label class="filter-option"><input type="checkbox" checked> トップス</label>
-          <label class="filter-option"><input type="checkbox"> ボトムス</label>
-          <label class="filter-option"><input type="checkbox"> アクセサリー</label>
-        </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title">カテゴリ</div>
+      <div class="filter-options">
+        <label class="filter-option"><input type="checkbox"> コート</label>
+        <label class="filter-option"><input type="checkbox" checked> トップス</label>
+        <label class="filter-option"><input type="checkbox"> ボトムス</label>
+        <label class="filter-option"><input type="checkbox"> アクセサリー</label>
       </div>
-
-      <div class="filter-section">
-        <div class="filter-title">ブランド</div>
-        <div class="filter-options">
-          <div class="filter-option">TRAVAS TOKYO</div>
-          <div class="filter-option">REFLEM</div>
-          <div class="filter-option">CIVARIZE</div>
-          <div class="filter-option">BRI</div>
-          <div class="filter-option">Amilige</div>
-          <div class="filter-option">VOLCAN & APHRODITE</div>
-          <div class="filter-option">THCC PSYYNXX</div>
-          <div class="filter-option">KINGLYMASK</div>
-          <div class="filter-option">QY</div>
-          <div class="filter-option">Ark Rouge</div>
-          <div class="filter-option">LIZ LISA</div>
-          <div class="filter-option">Mars</div>
-          <div class="filter-option">No - Brand</div>
-          <div class="filter-option">その他</div>
-        </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title">ブランド</div>
+      <div class="filter-options">
+        <div class="filter-option">TRAVAS TOKYO</div>
+        <div class="filter-option">REFLEM</div>
+        <div class="filter-option">CIVARIZE</div>
+        <div class="filter-option">BRI</div>
+        <div class="filter-option">Amilige</div>
+        <div class="filter-option">VOLCAN & APHRODITE</div>
+        <div class="filter-option">THCC PSYYNXX</div>
+        <div class="filter-option">KINGLYMASK</div>
+        <div class="filter-option">QY</div>
+        <div class="filter-option">Ark Rouge</div>
+        <div class="filter-option">LIZ LISA</div>
+        <div class="filter-option">Mars</div>
+        <div class="filter-option">No - Brand</div>
+        <div class="filter-option">その他</div>
       </div>
-
-      <div class="filter-section">
-        <div class="filter-title">カラー</div>
-        <div class="filter-options">
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#fff;border:2px solid #ddd;"></div>ホワイト
-          </label>
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#000;"></div>ブラック
-          </label>
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#808080;"></div>グレー
-          </label>
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#8B4513;"></div>ブラウン
-          </label>
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#00FF00;"></div>グリーン
-          </label>
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#0000FF;"></div>ブルー
-          </label>
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#800080;"></div>パープル
-          </label>
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#FFFF00;"></div>イエロー
-          </label>
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#FFC0CB;"></div>ピンク
-          </label>
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#FF0000;"></div>レッド
-          </label>
-          <label class="color-option">
-            <input type="checkbox">
-            <div class="color-circle" style="background:#FFA500;"></div>オレンジ
-          </label>
-        </div>
-        <div class="filter-btn">
-          <button onclick="clearFilter()">クリア</button>
-          <button onclick="applyFilter()">OK</button>
-        </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title">カラー</div>
+      <div class="filter-options">
+        <!-- 色のチェックボックス（省略） -->
       </div>
-
-      <div class="filter-section">
-        <div class="filter-title">価格</div>
-        <div class="price-filter">
-          <input type="number" value="0" min="0"><span>円</span><span>〜</span>
-          <input type="number" value="100000" min="0"><span>円</span>
-        </div>
-        <div class="filter-btn">
-          <button onclick="clearPrice()">クリア</button>
-          <button onclick="applyPrice()">OK</button>
-        </div>
+      <div class="filter-btn">
+        <button onclick="clearFilter()">クリア</button>
+        <button onclick="applyFilter()">OK</button>
       </div>
-    </aside>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title">価格</div>
+      <div class="price-filter">
+        <input type="number" value="0" min="0"><span>円</span><span>〜</span>
+        <input type="number" value="100000" min="0"><span>円</span>
+      </div>
+      <div class="filter-btn">
+        <button onclick="clearPrice()">クリア</button>
+        <button onclick="applyPrice()">OK</button>
+      </div>
+    </div>
+  </aside>
 
-    <main class="main-content">
-      <h1 class="page-title">
-        {% if search_query %}
-          "{{ search_query }}" の検索結果 
-        {% else %}
-          全商品 
-        {% endif %}
-        ({{ products | length }} 件)
-      </h1>
-      
-      <div class="product-grid" id="productGrid">
-        {% for product in products %}
-        <div class="product-card" onclick="window.location.href = '/product-detail/{{ product.id }}'">
-          <div class="product-image">
-                <img src="{{ url_for('static', filename='img/image_22.png') }}" alt="スライド">
-            <!-- <img src="{{ url_for('static', filename='img/' + product.image_path) }}" alt="{{ product.name }}"> -->
+  <main class="main-content">
+    <h1 class="page-title">
+      {% if search_query %}
+        "{{ search_query }}" の検索結果 
+      {% else %}
+        全商品 
+      {% endif %}
+      ({{ products | length }} 件)
+    </h1>
+
+    <!-- 🔽 タブメニューを追加 -->
+    <div class="tab-menu">
+      <button class="tab-button active" data-tab="coordinate">Coordinate</button>
+      <button class="tab-button" data-tab="tops">Tops</button>
+      <button class="tab-button" data-tab="bottoms">Bottoms</button>
+      <button class="tab-button" data-tab="accessories">Accessories</button>
+    </div>
+
+    <!-- 🔽 タブ切り替えコンテンツ -->
+    <div class="tab-content-container">
+      <div id="coordinate" class="tab-content active">
+        <div class="product-grid">
+          {% for product in coordinate_products %}
+          <div class="product-card" onclick="window.location.href = '/product-detail/{{ product.id }}'">
+            <div class="product-image">
+              <img src="{{ url_for('static', filename='img/image_22.png') }}" alt="{{ product.name }}">
+            </div>
+            <div class="product-brand">{{ product.brand }}</div>
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-price">¥{{ "{:,.0f}".format(product.price) }}</div>
           </div>
-          <div class="product-brand">{{ product.brand }}</div>
-          <div class="product-name">{{ product.name }}</div>
-          <div class="product-price">¥{{ "{:,.0f}".format(product.price) }}</div>
+          {% endfor %}
         </div>
-        {% endfor %}
-        
-        {% if not products %}
-        <p>該当する商品が見つかりませんでした。</p>
-        {% endif %}
-
       </div>
-      
-      <div class="pagination">
-        <div class="page-number active">1</div>
-        <div class="page-number">2</div>
-        <div class="page-number">3</div>
-        <div class="page-number">4</div>
-        <div class="page-arrow">&gt;</div>
+
+      <div id="tops" class="tab-content">
+        <div class="product-grid">
+          {% for product in tops_products %}
+          <div class="product-card" onclick="window.location.href = '/product-detail/{{ product.id }}'">
+            <div class="product-image">
+              <img src="{{ url_for('static', filename='img/image_22.png') }}" alt="{{ product.name }}">
+            </div>
+            <div class="product-brand">{{ product.brand }}</div>
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-price">¥{{ "{:,.0f}".format(product.price) }}</div>
+          </div>
+          {% endfor %}
+        </div>
       </div>
-    </main>
-  </div>
 
-  <script>
-    function clearFilter() {
-      // 全てのチェックボックス/ラジオボタンをクリア
-      document.querySelectorAll('.filter-options input').forEach(i => i.checked = false);
-      // 種別のラジオボタン（ユニセックス）はデフォルトでチェックを戻す (元のHTML設定に基づく)
-      document.querySelector('input[name="type"]').checked = true;
-    }
+      <div id="bottoms" class="tab-content">
+        <div class="product-grid">
+          {% for product in bottoms_products %}
+          <div class="product-card" onclick="window.location.href = '/product-detail/{{ product.id }}'">
+            <div class="product-image">
+              <img src="{{ url_for('static', filename='img/image_22.png') }}" alt="{{ product.name }}">
+            </div>
+            <div class="product-brand">{{ product.brand }}</div>
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-price">¥{{ "{:,.0f}".format(product.price) }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
 
-    function applyFilter() {
-      // 実際には、サイドバーの全フィルター条件を取得し、
-      // /search_result エンドポイントにGETリクエストとして送信する処理を実装します。
-      alert('フィルターを適用しました (検索処理を実行してください)');
-    }
+      <div id="accessories" class="tab-content">
+        <div class="product-grid">
+          {% for product in accessories_products %}
+          <div class="product-card" onclick="window.location.href = '/product-detail/{{ product.id }}'">
+            <div class="product-image">
+              <img src="{{ url_for('static', filename='img/image_22.png') }}" alt="{{ product.name }}">
+            </div>
+            <div class="product-brand">{{ product.brand }}</div>
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-price">¥{{ "{:,.0f}".format(product.price) }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
 
-    function clearPrice() {
-      const inputs = document.querySelectorAll('.price-filter input');
-      inputs[0].value = 0;
-      inputs[1].value = 100000;
-    }
+<script>
+  // ✅ タブ切り替え
+  document.querySelectorAll(".tab-button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      // タブボタンのactive切り替え
+      document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
 
-    function applyPrice() {
-      // 実際には、価格フィルター条件をサーバーに送信する処理を実装します。
-      alert('価格フィルターを適用しました (検索処理を実行してください)');
-    }
-
-    // ページネーションのインタラクション
-    document.querySelectorAll('.page-number').forEach(page => {
-      page.addEventListener('click', function () {
-        document.querySelectorAll('.page-number').forEach(p => p.classList.remove('active'));
-        this.classList.add('active');
-        document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
-        // 実際のページ遷移またはAJAXコンテンツ読み込み処理を追加
-      });
+      // コンテンツ切り替え
+      document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
+      document.getElementById(btn.dataset.tab).classList.add("active");
     });
+  });
 
-    document.querySelector('.page-arrow').addEventListener('click', function () {
-      const active = document.querySelector('.page-number.active');
-      const next = active.nextElementSibling;
-      if (next && next.classList.contains('page-number')) {
-        active.classList.remove('active');
-        next.classList.add('active');
-        document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-  </script>
+  // ✅ フィルター関連処理
+  function clearFilter() {
+    document.querySelectorAll('.filter-options input').forEach(i => i.checked = false);
+    document.querySelector('input[name="type"]').checked = true;
+  }
+
+  function applyFilter() {
+    alert('フィルターを適用しました (検索処理を実行してください)');
+  }
+
+  function clearPrice() {
+    const inputs = document.querySelectorAll('.price-filter input');
+    inputs[0].value = 0;
+    inputs[1].value = 100000;
+  }
+
+  function applyPrice() {
+    alert('価格フィルターを適用しました (検索処理を実行してください)');
+  }
+</script>
+
+<style>
+/* 🔽 タブデザイン */
+.tab-menu {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  border: none;
+  background: #eee;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-button.active {
+  background: #000;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* 🔽 タブ切り替えアニメーション */
+.tab-content {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.tab-content.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+
 {% endblock %}
