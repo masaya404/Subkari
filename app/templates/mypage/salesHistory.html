@@ -9,28 +9,29 @@
     <link rel="stylesheet" href="../../../app/static/css/transfer_history.css">
     <main class="main-content">
         <h1 class="page-title">売上履歴</h1>
-        <div class="sales-list">
+            <div class="sales-list">
             {% if datetimes %}
-                {% for datetime in datetimes %}                      
-            <a href="transaction_detail.html">
+                {% for datetime in datetimes %}  
+                <a href="{{url_for('mypage.transaction_detail')}}">
+                        <form action="{{url_for('mypage.transaction_detail')}}" method="post">
 
-                <form action="{{url_for('mypage.edit')}}">
-                <div class="sales-item">
-                    <div class="sales-info">
-                        <div class="sales-type">
-                            販売利益
+                        <div class="sales-item">
+                            <div class="sales-info">
+                                <div class="sales-type" name="profit">
+                                    販売利益
+                                </div>
+                                <div class="sales-date" name="datetime">
+                            {{ datetimes[loop.index0] }}
+                                </div>
+                            </div>
+                            <div class="sales-amount" name="price">
+                            ￥{{ prices[loop.index0] }}
+                            <input type="hidden" name="transacton_id" value="{{ids[loop.index0]}}">
+                            </div>
                         </div>
-                        <div class="sales-date">
-                       {{ datetimes[loop.index0] }}
-                        </div>
-                    </div>
-                    <div class="sales-amount">
-                       ￥{{ prices[loop.index0] }}
-                    </div>
-                </div>
-                </form>
-            </a>
-            {% endfor %}
+                        </form>
+                </a>
+                {% endfor %}
             {% else %}
             <p>売上履歴はまだありません。</p>
             {% endif %}
