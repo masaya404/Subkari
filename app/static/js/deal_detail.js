@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const statusButton = document.getElementById("status");
         const status = statusButton.textContent.trim();
         updateTimeline(status);
+        loadComments();
     });
 
     
@@ -49,39 +50,107 @@ function updateTimeline(status) {
   }
 }
 
-function comment(){
-    const commentText = document.querySelector('textarea[name="comment"]').value;
-    const transactionId = document.querySelector('input[name="transactionID"]').value;  // 
-    const productId = document.querySelector('input[name="productID"]').value;;  // 
+// function comment(){
+//     const commentText = document.querySelector('textarea[name="comment"]').value;
+//     const transactionId = document.querySelector('input[name="transactionID"]').value;  // 
+//     const productId = document.querySelector('input[name="productID"]').value;;  // 
     
-    if (!commentText.trim()) {
-        return;
-    }
+//     if (!commentText.trim()) {
+//         return;
+//     }
     
-    const formData = new FormData();
-    formData.append('comment', commentText);
-    formData.append('transaction_id', transactionId);
-    formData.append('product_id', productId);
+//     const formData = new FormData();
+//     formData.append('comment', commentText);
+//     formData.append('transaction_id', transactionId);
+//     formData.append('product_id', productId);
     
-    fetch('/deal/comment', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('メッセージを送信しました');
-            // clear
-            // document.querySelector('textarea[name="comment"]').value = '';
+//     fetch('/deal/comment', {
+//         method: 'POST',
+//         body: formData
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.success) {
+//             alert('メッセージを送信しました');
+//             // clear
+//             document.querySelector('textarea[name="comment"]').value = '';
         
-            window.location.reload();
-        } else {
-            alert('失敗: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('エラーが発生しました');
-    });
+//             // window.location.reload();
+//         } else {
+//             alert('失敗: ' + data.message);
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//         alert('エラーが発生しました');
+//     });
 
-}
+// }
+
+ // /////////////////////// load comments //////////////////////////////
+    function loadComments() {
+        // const transactionID = document.getElementById('transactionID').value;
+        const productID = document.getElementById('productID').value;
+        fetch(`/deal/get-comments?product_id=${productID}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Comments loaded:', data);
+                renderComments(data);
+            })
+            .catch(error => console.error('Error loading comments:', error));
+    }
+
+    // render comments to page
+    function renderComments(comments) {
+        const container = document.getElementById('commentsContainer');
+        const account = 
+        container.innerHTML = comments.map(comment => `
+            <div class="border rounded-xs p-6 mb-6">
+                <p class="font-semibold">${comment.firstName}</p>
+                <p class="text-gray-700 mt-2">${comment.content}</p>
+                <p class="text-gray-400 text-sm mt-2">${new Date(comment.createdDate).toLocaleString('ja-JP')}</p>
+            </div>
+        `).join('');
+    }
+
+    // 新しい comment　提出
+    function submitComment() {
+        const productID = document.getElementById('productID').value;
+        const content = document.getElementById('commentInput').value.trim();
+
+        if (!content) {
+            return;
+        }
+
+        // バックエンドに送る
+        fetch('/deal/add-comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                product_id: productID,
+                content: content
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Comment added:', data);
+                
+                // clear 
+                document.getElementById('commentInput').value = '';
+                
+                //  comments reload
+                loadComments();
+                
+                alert('メッセージを送信しました');
+            } else {
+                alert('エラー: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('送信に失敗しました');
+        });
+    }
