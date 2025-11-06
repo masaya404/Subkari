@@ -23,7 +23,8 @@ userprf_bp = Blueprint('userprf', __name__, url_prefix='/userprf')
 
 
 #userprf ユーザープロフィールを表示------------------------------------------------------
-@userprf_bp.route("/<int:userprf_id>" )
+# @userprf_bp.route("/<int:userprf_id>" )
+@userprf_bp.route("/userprf" )
 def userprf(userprf_id):
 
     if 'user_id' not in session:
@@ -32,11 +33,11 @@ def userprf(userprf_id):
     else:
         user_id = session.get('userprf_id')
     
-    #user情報を取得
-    user_info=get_user_info(user_id)
-    evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
-    #商品情報を取得
-    productName,productImg=get_product_info(user_id)
+    # #user情報を取得
+    # user_info=get_user_info(user_id)
+    # evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
+    # #商品情報を取得
+    # productName,productImg=get_product_info(user_id)
 
     return render_template("userprf/userprf.html",evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
 
