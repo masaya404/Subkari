@@ -273,8 +273,8 @@ def product_details_stub(product_id):
     ))
     return resp
 #purchase
-@products_bp.route('/purchase', methods=['GET'])
-def purchase():
+@products_bp.route('/purchase/<int:product_id>', methods=['GET'])
+def purchase(product_id):
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))
