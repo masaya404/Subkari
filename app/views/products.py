@@ -101,7 +101,7 @@ def product_details_stub(product_id):
 
         # 商品情報を取得
         sql_product = """
-        SELECT pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
+        SELECT pr.id ,pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
         FROM m_product pr
         INNER JOIN m_brand br ON br.id = pr.brand_id
         INNER JOIN m_category ca ON pr.category_id = ca.id
@@ -273,14 +273,63 @@ def product_details_stub(product_id):
     ))
     return resp
 #purchase
-@products_bp.route('/purchase', methods=['GET'])
-def purchase():
+@products_bp.route('/purchase/<int:product_id>', methods=['GET'])
+def purchase(product_id):
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    return render_template("purchase/purchase.html",user_id = user_id)
+
+    #DBから情報を取得
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        # 商品情報を取得
+        sql_product = """
+        SELECT pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
+        FROM m_product pr
+        INNER JOIN m_brand br ON br.id = pr.brand_id
+        INNER JOIN m_category ca ON pr.category_id = ca.id
+        WHERE pr.id = %s;
+        """
+        cur.execute(sql_product, (product_id,))
+        product = cur.fetchone()
+        #配送情報を取得
+
+        sql_address="""
+        SELECT zip,pref,address1,address2,address3
+        FROM m_address
+        WHERE account_id = %s;
+        """
+        cur.execute(sql_address, (user_id,))
+        address_list = cur.fetchall()
+
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+
+
+
+    return render_template("purchase/purchase.html",user_id = user_id, product = product, address_list=address_list)
+
+#レンタルができるようにする
+@products_bp.route('/rental/<int:product_id>', methods=['GET'])
+def rental(product_id):
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    return render_template("purchase/purchase.html",user_id = user_id )
+
+
 
 # DB接続設定
 def connect_db():
@@ -291,3 +340,4 @@ def connect_db():
         db='db_subkari'
     )
     return con
+

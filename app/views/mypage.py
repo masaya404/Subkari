@@ -106,7 +106,7 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     followers=cur.fetchone()
     #評価
-    sql="select avg(score) as 評価 from t_evaluation where recipient_id=%s group by recipient_id"
+    sql="select round(avg(score),0) as 評価 from t_evaluation where recipient_id=%s group by recipient_id"
     cur.execute(sql, (id,))
     evaluation=cur.fetchone()
     #総評価件数
@@ -117,10 +117,24 @@ def get_transaction_info(id):
     sql="select count(*) as 出品数 from m_product where account_id=%s"
     cur.execute(sql, (id,))
     products=cur.fetchone()
-    #評価を変形
-    evaluation=round(float(evaluation['評価']))   
-    #小数点型にしてから四捨五入
-   
+
+
+    #NoneType入力によるエラーを防ぐ
+    if follows is None:
+        follows={'フォロー数': 0} 
+    if followers is None:
+        followers={'フォロワー数': 0} 
+    if evaluationCount is None:
+        evaluationCount={'評価件数': 0} 
+        evaluation={'評価': 0} 
+    else:
+        evaluation=int(evaluation['評価'])
+        evaluation={'評価' : evaluation}
+
+    if products is None:
+        products={'出品数': 0} 
+ 
+
     return evaluation,evaluationCount,follows,followers,products
 #商品データを取得 --------------------------------------------------
 def get_product_info(id):
@@ -174,11 +188,11 @@ def mypage():
     sales=cur.fetchall()
     total=0
     for sale in sales:
-        total+=sale['price']
+        total+=int(sale['price'] or 0)
     total=comma(total)
     return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],
-    evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],
-    followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id,total=total)
+    evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,
+    followers=followers,products=products,user_info=user_info ,user_id=user_id,total=total)
     
 #------------------------------------------------------------------------------------------------
 
@@ -198,7 +212,7 @@ def editProfile():
     #商品情報を取得
     productName,productImg=get_product_info(user_id)
 
-    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
+    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_info=user_info)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])

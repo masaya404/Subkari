@@ -40,11 +40,11 @@
                 {% endif %}
             </div>
             <div class="action-buttons cursor-pointer">
-                <a href="{{url_for('products.purchase')}}">
+                <a href="{{url_for('products.purchase', product_id=product.id)}}">
                 <button class="btn">購入する</button>
                 </a>
-                <a href="{{url_for('products.purchase')}}">
-                <button class="btn">レンタル</button>
+                <a href="{{url_for('products.rental', product_id=product.id)}}">
+                    <button class="btn">レンタル</button>
                 </a>
             </div>
         </div>
