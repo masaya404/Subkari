@@ -293,6 +293,7 @@ function goToClean(sizeUrl){
 
 // フォーム検証
 function validateForm() {
+    saveToSessionStorage();
     let isValid = true;
 
     // 商品名
@@ -439,13 +440,13 @@ function submitForm() {
     // sessionStorage から画像を取得
     const uploadedImages = JSON.parse(sessionStorage.getItem('uploadedImages') || '[]');
     
-    if (uploadedImages.length === 0) {
-        alert('最低1つの画像をアップロードしてください');
-        return;
-    }
-    console.log('=== 画像の格式確認 ===');
-    console.log('uploadedImages:', uploadedImages);
-    console.log('最初の画像:', uploadedImages[0]);
+    // if (uploadedImages.length === 0) {
+    //     alert('最低1つの画像をアップロードしてください');
+    //     return;
+    // }
+    // console.log('=== 画像の格式確認 ===');
+    // console.log('uploadedImages:', uploadedImages);
+    // console.log('最初の画像:', uploadedImages[0]);
 
     // 全部のデータ変数
     const formData = new FormData();
@@ -487,7 +488,10 @@ function submitForm() {
     console.log('画像の枚数:', uploadedImages.length);
     console.log('商品名:', productData.name);
     console.log('バックエンドに送る');
-
+    console.log('=== 檢查 returnLocation ===');
+    console.log('sessionStorage returnLocation:', sessionStorage.getItem("returnLocation"));
+    console.log('productData:', productData);
+    console.log('formData 內容:', Object.fromEntries(formData));
     fetch('/seller/format/save-product', {
         method: 'POST',
         body:formData

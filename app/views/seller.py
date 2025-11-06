@@ -217,6 +217,7 @@ def save_product():
             }), 400
 
         data = json.loads(product_data_str)
+        print(data)
         con = connect_db()
         cursor = con.cursor()
         
@@ -980,6 +981,9 @@ def delete_product(product_id):
         
         # 洗濯
         cursor.execute("DELETE FROM t_clean WHERE product_id = %s", (product_id,))
+        
+        #コメント
+        cursor.execute("DELETE FROM t_comments WHERE product_id = %s", (product_id,))
         
         # ほか
         cursor.execute("DELETE FROM m_product WHERE id = %s", (product_id,))

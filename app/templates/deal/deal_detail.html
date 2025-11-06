@@ -67,7 +67,7 @@
 
             <!-- 支払い待ちボタン -->
             <div class="flex justify-end items-end flex-1">
-                <button class="w-[148px] h-[46px] bg-gray-700 hover:bg-gray-800 text-white px-2 py-2 rounded font-semibold" id="status">
+                <button class="w-[148px] h-[46px] bg-gray-700 text-white px-2 py-2 rounded font-semibold" id="status">
                     {{transaction.status}}
                 </button>
             </div>
@@ -75,7 +75,7 @@
         <!-- ステップインジケーター -->
         <div class="mb-12">
 
-        <!-- Medium Column -->
+        <!-- 進捗状況 -->
             <div class="bg-white border border-gray-200 rounded-lg p-4">
                     <div class="flex flex-row gap-4">
                         <!-- Timeline Item 1 -->
@@ -262,69 +262,40 @@
 
           <!-- 出品者情報 -->
         <div class="bg-white rounded-lg p-6 mb-8">
-           
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <!-- image -->
-                    <div class="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
-                        <img src="https://via.placeholder.com/64" alt="haltaro" class="w-full h-full object-cover">
-                    </div>
 
-                    <!-- text -->
-                    <div>
-                        <p class="font-semibold text-lg">haltaro</p>
-                        <div class="flex items-center gap-2 mt-1">
-                            <!-- 評価 -->
-                            <div class="flex gap-1">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star-half-alt text-yellow-400"></i>
-                            </div>
-                            <span class="text-sm text-gray-600">255</span>
-                        </div>
-                        <div class="flex items-center gap-2 mt-1">
-                            <i class="fas fa-check-circle text-green-500 text-sm"></i>
-                            <span class="text-xs text-gray-600">本人確認済</span>
-                            <span class="text-xs text-gray-600">喫煙者</span>
-                        </div>
-                    </div>
+            <section id="profile" class="active sec ">
+                <!-- placeholder -->
+                <div id="profileContainer" class="flex items-center gap-4">
+                    <!-- placeholder -->
+                    <div class="loading"></div>
                 </div>
-
-                <!-- やじるし -->
-                <button class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-chevron-right text-2xl"></i>
-                </button>
-            </div>
+            </section>
         </div>
-        {% if comments %}
-            {% for content in comments%}
-            <div class="border rounded-lg p-6 mb-6">
-                <p>{{content.account_id}}</p>
-                <p>{{content.content}}</p>
-                <p>{{content.createdDate}}</p>
-            </div>
-            {%endfor%}
-        {% endif %}
+        <!---====================================コメント領域========================================-->
+        <div id="commentsContainer" class="mb-6">
+            <!-- JavaScript ですべてのコメントを表示する　 -->
+        </div>
         <!-- 質問 -->
         <div class="bg-white rounded-lg p-6 mb-6">
             <h3 class="text-lg font-semibold mb-4">質問・相談</h3>
-            <form action="" method = "POST">
-                <input type="hidden" name="transactionID" value="{{transaction.id}}">
-                <input type="hidden" name="productID" value="{{transaction.product_id}}">
+            <input type="hidden" name="transactionID" value="{{transaction.id}}">
+            <input type="hidden" id="productID" name="productID" value="{{transaction.product_id}}">
+           
             <!-- テキストインプット -->
                 <textarea 
                     class="w-full border border-gray-300 rounded-lg p-4 mb-4 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"
                     rows="4"
                     placeholder="何か分からないことがあれば質問してみましょう。"
-                    name="comment">
+                    id = "commentInput"
+                    name="comment"
+                    value="">
                 </textarea>
             <!-- 送信 -->
-            <button class="w-full bg-white border-2 border-gray-800 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-800 hover:text-white transition duration-200" onclick="comment()">
+            <button class="w-full bg-white border-2 border-gray-800 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-800 hover:text-white transition duration-200" onclick="submitComment()">
                 取引｜メッセージを送る
             </button>
-            </form>
+          
+
         </div>
 
         <!-- 注意事項 -->
