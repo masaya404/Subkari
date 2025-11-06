@@ -298,7 +298,7 @@
                 </button>
             </div>
         </div>
-        {% if comments %}
+       <!-- {% if comments %}
             {% for content in comments%}
             <div class="border rounded-lg p-6 mb-6">
                 <p>{{content.account_id}}</p>
@@ -306,24 +306,30 @@
                 <p>{{content.createdDate}}</p>
             </div>
             {%endfor%}
-        {% endif %}
+        {% endif %} -->
+        <div id="commentsContainer" class="mb-6">
+            <!-- JavaScript ですべてのコメントを表示する　 -->
+        </div>
         <!-- 質問 -->
         <div class="bg-white rounded-lg p-6 mb-6">
             <h3 class="text-lg font-semibold mb-4">質問・相談</h3>
-
-            <form action="" method = "POST">
+            <input type="hidden" name="transactionID" value="{{transaction.id}}">
+            <input type="hidden" id="productID" name="productID" value="{{transaction.product_id}}">
+           
             <!-- テキストインプット -->
                 <textarea 
                     class="w-full border border-gray-300 rounded-lg p-4 mb-4 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"
                     rows="4"
                     placeholder="何か分からないことがあれば質問してみましょう。"
-                    name="comment">
+                    id = "commentInput"
+                    name="comment"
+                    value="">
                 </textarea>
             <!-- 送信 -->
-            <button class="w-full bg-white border-2 border-gray-800 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-800 hover:text-white transition duration-200" onclick="comment()">
+            <button class="w-full bg-white border-2 border-gray-800 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-800 hover:text-white transition duration-200" onclick="submitComment()">
                 取引｜メッセージを送る
             </button>
-            </form>
+          
 
         </div>
 
