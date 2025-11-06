@@ -71,9 +71,9 @@
 
         <div class="profile-rating">
             <span class="stars">
-                {% for i in range(evaluation)%}★{% endfor %}
-                {% for i in range(5-evaluation)%}☆{% endfor %}</span>
-            <span class="rating-count">{{evaluationCount}}</span>
+                {% for i in range(evaluation.評価)%}★{% endfor %}
+                {% for i in range(5-evaluation.評価)%}☆{% endfor %}</span>
+            <span class="rating-count">{{evaluationCount.評価件数}}</span>
         </div>
 
         <div class="badge-group">
@@ -97,15 +97,15 @@
 
         <div class="profile-stats">
             <div class="stat-item">
-                <span class="stat-number">{{products}}</span>
+                <span class="stat-number">{{products.出品数}}</span>
                 <span class="stat-label">出品数</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">{{follows}}</span>
+                <span class="stat-number">{{follows.フォロー数}}</span>
                 <span class="stat-label">フォロー</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">{{followers}}</span>
+                <span class="stat-number">{{followers.フォロワー数}}</span>
                 <span class="stat-label">フォロワー</span>
             </div>
         </div>
@@ -134,9 +134,9 @@
 
         <div class="profile-rating">
             <span class="stars">
-                {% for i in range(evaluation)%}★{% endfor %}
-                {% for i in range(5-evaluation)%}☆{% endfor %}</span>
-            <span class="rating-count">{{evaluationCount}}</span>
+                {% for i in range(evaluation.評価)%}★{% endfor %}
+                {% for i in range(5-evaluation.評価)%}☆{% endfor %}</span>
+            <span class="rating-count">{{evaluationCount.評価件数}}</span>
         </div>
 
         <div class="badge-group">
@@ -164,18 +164,18 @@
                 <span class="stat-label">出品数</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">{{follows}}</span>
+                <span class="stat-number">{{follows.フォロー数}}</span>
                 <span class="stat-label">フォロー</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">{{followers}}</span>
+                <span class="stat-number">{{followers.フォロワー数}}</span>
                 <span class="stat-label">フォロワー</span>
             </div>
         </div>
 
         <div class="sold-info">
             <div class="sold-label">売上金</div>
-            <div class="sold-amount">¥ 2</div>
+            <div class="sold-amount">¥ {{total}}</div>
         </div>
     </section>
 
@@ -248,9 +248,9 @@
 
         <div class="profile-rating">
             <span class="stars">
-                {% for i in range(evaluation)%}★{% endfor %}
-                {% for i in range(5-evaluation)%}☆{% endfor %}</span>
-            <span class="rating-count">{{evaluationCount}}</span>
+                {% for i in range(evaluation.評価)%}★{% endfor %}
+                {% for i in range(5-evaluation.評価)%}☆{% endfor %}</span>
+            <span class="rating-count">{{evaluationCount.評価件数}}</span>
         </div>
 
         <div class="badge-group">
@@ -274,22 +274,22 @@
 
         <div class="profile-stats">
             <div class="stat-item">
-                <span class="stat-number">{{products}}</span>
+                <span class="stat-number">{{products.出品数}}</span>
                 <span class="stat-label">出品数</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">{{follows}}</span>
+                <span class="stat-number">{{follows.フォロー数}}</span>
                 <span class="stat-label">フォロー</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">{{followers}}</span>
+                <span class="stat-number">{{followers.フォロワー数}}</span>
                 <span class="stat-label">フォロワー</span>
             </div>
         </div>
 
         <div class="sold-info">
             <div class="sold-label">売上金</div>
-            <div class="sold-amount">¥ 2</div>
+            <div class="sold-amount">￥ {{total}}</div>
         </div>
 
     </section>
@@ -311,9 +311,9 @@
 
         <div class="profile-rating">
             <span class="stars">
-                {% for i in range(evaluation)%}★{% endfor %}
-                {% for i in range(5-evaluation)%}☆{% endfor %}</span>
-            <span class="rating-count">{{evaluationCount}}</span>
+                {% for i in range(evaluation.評価)%}★{% endfor %}
+                {% for i in range(5-evaluation.評価)%}☆{% endfor %}</span>
+            <span class="rating-count">{{evaluationCount.評価件数}}</span>
         </div>
 
         <div class="badge-group">
@@ -337,22 +337,22 @@
 
         <div class="profile-stats">
             <div class="stat-item">
-                <span class="stat-number">{{products}}</span>
+                <span class="stat-number">{{products.出品数}}</span>
                 <span class="stat-label">出品数</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">{{follows}}</span>
+                <span class="stat-number">{{follows.フォロー数}}</span>
                 <span class="stat-label">フォロー</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">{{followers}}</span>
+                <span class="stat-number">{{followers.フォロワー数}}</span>
                 <span class="stat-label">フォロワー</span>
             </div>
         </div>
 
         <div class="sold-info">
             <div class="sold-label">売上金</div>
-            <div class="sold-amount">¥ 2</div>
+            <div class="sold-amount">¥ {{total}}</div>
         </div>
 
     </section>
