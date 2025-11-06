@@ -15,8 +15,8 @@
                     <div class="product-info">
                         <div class="product-image"><img src="{{url_for('static',filename='img/image_22.png')}}"></div>
                         <div class="product-details">
-                            <div class="product-name">ファーパーカー</div>
-                            <div class="product-price">¥9,900</div>
+                            <div class="product-name">{{ product.product_name }}</div>
+                            <div class="product-price">¥{{ product.purchasePrice }}</div>
                         </div>
                     </div>
                 </div>
@@ -39,11 +39,30 @@
                         <h2 class="section-title">配送先</h2>
                         <a href="#" class="change-btn" onclick="openAddressModal(event)">変更する</a>
                     </div>
-                    <div class="shipping-info" id="selectedAddress">
+                    <!-- <div class="shipping-info" id="selectedAddress">
                         HAL 大阪（ハル オオサカ）<br>
                         〒530-0001<br>
                         大阪府 大阪市 北区 梅田3丁目3−1
+                    </div> -->
+                    <div class="shipping-info" id="selectedAddress">
+                        {# address_list にデータが存在するかチェックします #}
+                        {% if address_list %}
+                            {# address_list の最初の要素 (インデックス 0) を addr という変数に格納します #}
+                            {% set addr = address_list[0] %}
+                            
+                            
+                            {# 住所データを出力します。addr は辞書なので . (ドット) でキーにアクセスします #}
+                            〒{{ addr.zip }}<br>
+                            {{ addr.pref }} {{ addr.address1 }} {{ addr.address2 }}<br>
+                            {% if addr.address3 %}
+                                {{ addr.address3 }}
+                            {% endif %}
+                        {% else %}
+                            {# 住所データがない場合の表示 #}
+                            <p>配送先の住所が登録されていません。「変更する」ボタンから登録してください。</p>
+                        {% endif %}
                     </div>
+
                 </div>
 
                 <!-- 置き配の指定 -->
@@ -303,16 +322,19 @@
             </div>
             <div class="modal-body">
                 <!-- 住所1 -->
+                 {% for addr in address_list %}
                 <div class="address-option" onclick="selectAddress('address1')">
                     <div class="radio-btn selected" id="radio-address1"></div>
                     <div class="address-details">
-                        <div class="address-name">HAL 大阪（ハル オオサカ）</div>
-                        <div class="address-postal">〒530-0001</div>
-                        <div class="address-full">大阪府 大阪市 北区 梅田3丁目3−1</div>
+                        <div class="address-postal">〒{{ addr.zip }}</div>
+                        <div class="address-name">{{ addr.pref }} {{ addr.address1 }} {{ addr.address2 }} {% if addr.address3 %}
+                    {{ addr.address3 }}
+                {% endif %}</div>
                     </div>
                 </div>
+                {% endfor %}
 
-                <!-- 住所2 -->
+                <!-- 住所2
                 <div class="address-option" onclick="selectAddress('address2')">
                     <div class="radio-btn" id="radio-address2"></div>
                     <div class="address-details">
@@ -323,14 +345,14 @@
                 </div>
 
                 <!-- 住所3 -->
-                <div class="address-option" onclick="selectAddress('address3')">
+                <!-- <div class="address-option" onclick="selectAddress('address3')">
                     <div class="radio-btn" id="radio-address3"></div>
                     <div class="address-details">
                         <div class="address-name">HAL 名古屋（ハル ナゴヤ）</div>
                         <div class="address-postal">〒450-0002</div>
                         <div class="address-full">愛知県名古屋市中村区名駅4丁目27−1</div>
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> --> -->
 
                 <!-- 新しい住所追加 -->
                 <div class="add-card-link" onclick="addNewAddress()">
