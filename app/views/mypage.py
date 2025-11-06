@@ -188,7 +188,7 @@ def mypage():
     sales=cur.fetchall()
     total=0
     for sale in sales:
-        total+=sale['price']
+        total+=int(sale['price'] or 0)
     total=comma(total)
     return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],
     evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,
