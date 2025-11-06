@@ -118,6 +118,10 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     products=cur.fetchone()
     #評価を変形
+    sql = "select avg(score) as 評価 from t_evaluation where recipient_id=%s group by recipient_id"
+    cur.execute(sql, (id,))
+    evaluation = cur.fetchone()
+
     evaluation=round(float(evaluation['評価']))   
     #小数点型にしてから四捨五入
    
