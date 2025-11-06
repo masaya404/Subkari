@@ -13,3 +13,87 @@ if __name__ == '__main__':
     app.run(host='localhost', port=5002, debug=True)
     
     # m_admin_contents
+
+
+
+
+
+# {% block header %}
+# <header class="fixed top-0 left-0 right-0 w-full z-50">
+#     <div class="header">
+
+#         <div class="header-left">
+#             <a href="{{url_for('top.member_index')}}" class="header-logo">
+
+#                 <div>SUBKARI</div>
+#             </a>
+
+#             <div class="search-container">
+#                 <form action="/search" method="get" class="search-box">
+#                     <button type="submit" class="search-btn">
+#                         <i class="fa-solid fa-magnifying-glass"></i>
+#                     </button>
+#                     <input type="text" name="keyword" placeholder="すべてのアイテムから探す">
+#                 </form>
+#             </div>
+#         </div>
+
+#         <div class="header-right-guest">
+#             {% if not user_id %}
+#             <div class="header-login">
+#                 <a href="{{ url_for('login.show_register_user') }}" class="">
+#                     <span>新規登録</span>
+#                 </a>
+#                 <a href="{{ url_for('login.login') }}" class="">
+#                     <span>ログイン</span>
+#                 </a>
+#                 <a href="#" class="icon-item">
+#                     <img src="{{ url_for('static', filename='img/hamburger.png') }}" class="icon"></img>
+#                 </a>
+#             </div>
+#             {% else %}
+#             <div class="header-icons">
+#                 <a href="{{url_for('mypage.mypage')}}" class="icon-item">
+#                     <img src="{{ url_for('static', filename='img/mypage.png') }}" class="icon"></img>
+#                     <span>マイページ</span>
+#                 </a>
+#                 <a href="{{url_for('mypage.likes')}}" class="icon-item">
+#                     <img src="{{ url_for('static', filename='img/heart.png') }}" class="icon"></img>
+#                     <span>いいね</span>
+#                 </a>
+#                 <a href="{{url_for('mypage.mypage')}}" class="icon-item">
+#                     <img src="{{ url_for('static', filename='img/inform.png') }}" class="icon"></img>
+#                     <span>通知</span>
+#                 </a>
+#                 <a href="{{url_for('seller.seller')}}" class="icon-item">
+#                     <img src="{{ url_for('static', filename='img/camera.png') }}" class="icon"></img>
+#                     <span>出品</span>
+#                 </a>
+#                 <a href="{{url_for('deal.deal')}}" class="icon-item">
+#                     <img src="{{ url_for('static', filename='img/deal.png') }}" class="icon"></img>
+#                     <span>取引</span>
+#                 </a>
+#                 <a href="{{url_for('login.logout')}}" class="icon-item">
+#                     <img src="{{ url_for('static', filename='img/logout.png') }}" class="icon"></img>
+#                     <span>ログアウト</span>
+#                 </a>
+           
+#             </div>
+#             {% endif %}
+#             <div class="nav-container">
+#                 <nav>
+#                     <a href="{{ url_for('top.coordinate') }}" class="header_list">Coordinate</a>
+#                     <a href="{{ url_for('top.tops') }}" class="header_list">Tops</a>
+#                     <a href="{{ url_for('top.bottoms') }}" class="header_list">Bottoms</a>
+#                     <a href="{{ url_for('top.accessories') }}" class="header_list">Accessories</a> <!-- <a href="#">Coordinate</a>
+#                         <a href="#">Tops</a>
+#                         <a href="#">Bottoms</a>
+#                         <a href="#">Accessories</a> -->
+#                 </nav>
+#             </div>
+#         </div>
+
+
+#     </div>
+# </header>
+# {% endblock %}
