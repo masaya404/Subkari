@@ -3,13 +3,12 @@
 {% block title %}取引詳細{% endblock %}
 
 {% block content %}
-<<<<<<< HEAD
-<!-- <link rel="stylesheet" href="../../../app/static/css/transaction_detail.css"> -->
+
+
+
+    <!-- <link rel="stylesheet" href="../../../app/static/css/transaction_detail.css">  -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/transaction_detail.css') }}">
-=======
-    <link rel="stylesheet" href="../../../app/static/css/transaction_detail.css"> 
-<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/transaction_detail.css') }}"> -->
->>>>>>> b748531f949bf7da263efad6ddbd03fefd8ca143
+
 
 <main class="container">
     <div class="transaction-container">
@@ -22,6 +21,9 @@
             </div>
 
             <div class="info-list">
+                <div class="info-row">
+                   <input type="hidden" name="customer_id" value="{{ }}">
+                </div>
                 <div class="info-row">
                     <div class="info-label">商品代金</div>
                     <div class="info-value">¥2,222</div>
@@ -52,7 +54,7 @@
         <section class="buyer-info">
             <h2>購入者情報</h2>           
 
-            <form action="{{url_for('mypage.')}}">
+            <form action="{{url_for('mypage.edit')}}">
                 <a href="../userprf/userprf.html" class="buyer-profile">
                     <div class="buyer-left">
                         <div class="buyer-avatar">
