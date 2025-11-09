@@ -34,16 +34,11 @@
                 </div>
 
                 <!-- 配送先 -->
-                <div class="section">
+                 <!-- <div class="section">
                     <div class="section-header">
                         <h2 class="section-title">配送先</h2>
                         <a href="#" class="change-btn" onclick="openAddressModal(event)">変更する</a>
                     </div>
-                    <!-- <div class="shipping-info" id="selectedAddress">
-                        HAL 大阪（ハル オオサカ）<br>
-                        〒530-0001<br>
-                        大阪府 大阪市 北区 梅田3丁目3−1
-                    </div> -->
                     <div class="shipping-info" id="selectedAddress">
                         {# address_list にデータが存在するかチェックします #}
                         {% if address_list %}
@@ -63,7 +58,31 @@
                         {% endif %}
                     </div>
 
+                </div> -->
+
+
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">配送先</h2>
+                        <a href="#" class="change-btn" onclick="openAddressModal(event)">変更する</a>
+                    </div>
+                
+                    <div class="shipping-info" id="selectedAddress">
+                    
+                    {# 住所データがある場合の初期表示ロジックは全て削除します #}
+                    
+                    {% if not address_list or address_list|length == 0 %}
+                        {# 住所データがない場合の表示のみ残します #}
+                        <p>配送先の住所が登録されていません。「変更する」ボタンから登録してください。</p>
+                    {% endif %}
+                    
+                    {# 住所データがある場合、初期表示はJavaScript (DOMContentLoaded) に任せます。
+                    このブロックが空の場合は、JavaScriptが実行されるまでの間は何も表示されません。
+                    JavaScriptは address_list[0] の内容でこの div の中身を上書きします。 #}
+                    </div>
                 </div>
+
+
 
                 <!-- 置き配の指定 -->
                 <div class="section">
@@ -144,61 +163,48 @@
         </div>
     </div>
 
-    <!-- 支払い方法モーダル -->
+   
+
+     <!-- 支払い方法モーダル -->
+
     <div class="modal" id="paymentModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">お支払い方法</h3>
-                <a href="#" class="edit-link" onclick="editPaymentMethods(event)">編集する</a>
-            </div>
-            <div class="modal-body">
-                <!-- クレジットカード1 -->
-                <div class="payment-option" onclick="selectPayment('card1')">
-                    <div class="radio-btn selected" id="radio-card1"></div>
-                    <div class="payment-details">
-                        <div class="card-number">************1234 01/01</div>
-                    </div>
+    <div class="modal-body">
+        
+        {% for info in bank_info %}
+        {% set index = loop.index0 %}
+        <div class="payment-option" onclick="selectPayment('bank-{{ index }}')">
+            <div class="radio-btn {% if loop.first %}selected{% endif %}" id="radio-bank-{{ index }}"></div>
+            <div class="payment-details">
+                <div class="card-number">
+                    {{ info.bankName }} ({{ info.branchCode }}) - {{ accountNumbers[index] }}
                 </div>
-
-                <!-- クレジットカード2 -->
-                <div class="payment-option" onclick="selectPayment('card2')">
-                    <div class="radio-btn" id="radio-card2"></div>
-                    <div class="payment-details">
-                        <div class="card-number">************1234 02/02</div>
-                    </div>
-                </div>
-
-                <!-- クレジットカード3 -->
-                <div class="payment-option" onclick="selectPayment('card3')">
-                    <div class="radio-btn" id="radio-card3"></div>
-                    <div class="payment-details">
-                        <div class="card-number">************1234 03/03</div>
-                    </div>
-                </div>
-
-                <!-- 新しいクレジットカード追加 -->
-                <div class="add-card-link" onclick="goToCardRegister()">
-                    <div class="add-icon">+</div>
-                    <span>新しいクレジットカードを登録する</span>
-                </div>
-
-                <!-- コンビニ支払い -->
-                <div class="payment-method-item" onclick="selectPayment('conveni')">
-                    <div class="radio-btn" id="radio-conveni"></div>
-                    <div class="payment-method-name">コンビニ支払い</div>
-                </div>
-
-                <!-- PayPay -->
-                <div class="payment-method-item" onclick="selectPayment('paypay')">
-                    <div class="radio-btn" id="radio-paypay"></div>
-                    <div class="payment-method-name">PayPay</div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="update-btn" onclick="updatePaymentMethod()">更新する</button>
             </div>
         </div>
+        {% endfor %}
+        <div class="add-card-link" onclick="goToCardRegister()">
+                <div class="add-icon">+</div>
+                <span>新しいクレジットカードを登録する</span>
+            </div>
+
+            <div class="payment-method-item" onclick="selectPayment('conveni')">
+                <div class="radio-btn {% if not bank_info and loop.first %}selected{% endif %}" id="radio-conveni"></div>
+                <div class="payment-method-name">コンビニ支払い</div>
+            </div>
+
+            <div class="payment-method-item" onclick="selectPayment('paypay')">
+                <div class="radio-btn" id="radio-paypay"></div>
+                <div class="payment-method-name">PayPay</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="update-btn" onclick="closePaymentModal()">更新する</button>
+        </div>
     </div>
+    </div>
+
+
+
+    
 
     <!-- 支払い方法編集モーダル -->
     <div class="modal" id="paymentEditModal">
@@ -322,7 +328,7 @@
             </div>
             <div class="modal-body">
                 <!-- 住所1 -->
-                 {% for addr in address_list %}
+                 <!-- {% for addr in address_list %}
                 <div class="address-option" onclick="selectAddress('address1')">
                     <div class="radio-btn selected" id="radio-address1"></div>
                     <div class="address-details">
@@ -330,6 +336,23 @@
                         <div class="address-name">{{ addr.pref }} {{ addr.address1 }} {{ addr.address2 }} {% if addr.address3 %}
                     {{ addr.address3 }}
                 {% endif %}</div>
+                    </div>
+                </div>
+                {% endfor %} -->
+
+
+
+                {% for addr in address_list %}
+                <div class="address-option" onclick="selectAddress('address-{{ loop.index0 }}')">
+                    <div class="radio-btn {% if loop.first %}selected{% endif %}" id="radio-address-{{ loop.index0 }}"></div>
+                    <div class="address-details">
+                        <div class="address-postal">〒{{ addr.zip }}</div>
+                        <div class="address-name">
+                            {{ addr.pref }} {{ addr.address1 }} {{ addr.address2 }} 
+                            {% if addr.address3 %}
+                                {{ addr.address3 }}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -344,15 +367,15 @@
                     </div>
                 </div>
 
-                <!-- 住所3 -->
+                 住所3 -->
                 <!-- <div class="address-option" onclick="selectAddress('address3')">
                     <div class="radio-btn" id="radio-address3"></div>
                     <div class="address-details">
                         <div class="address-name">HAL 名古屋（ハル ナゴヤ）</div>
                         <div class="address-postal">〒450-0002</div>
                         <div class="address-full">愛知県名古屋市中村区名駅4丁目27−1</div>
-                    </div> -->
-                <!-- </div> --> -->
+                    </div>
+                </div> -->
 
                 <!-- 新しい住所追加 -->
                 <div class="add-card-link" onclick="addNewAddress()">
@@ -367,7 +390,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="update-btn" onclick="updateAddress()">更新する</button>
+                <button class="update-btn" onclick="closeAddressModal()">更新する</button>
             </div>
         </div>
     </div>
@@ -432,7 +455,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="update-btn" onclick="updateAddress()">更新する</button>
+                <button class="update-btn" onclick="closeAddressModal()">更新する</button>
             </div>
         </div>
     </div>
@@ -458,6 +481,37 @@
             </div>
         </div>
     </div>
+
+    <script>
+    
+    // 住所情報と同様に、支払い方法のデータもJSに渡す
+    const addressDataList = {{ address_list | tojson | default('[]') }}; 
+    const bankInfoList = {{ bank_info | tojson | default('[]') }}; 
+    const maskedAccountNumbers = {{ accountNumbers | tojson | default('[]') }}; 
+
+    let selectedAddressIndex = 0; 
+    
+    // 新しい支払い方法用のインデックス変数 (口座情報がない場合は -1 などで識別)
+    let selectedBankIndex = 0; 
+
+    // ページロード時の処理
+    document.addEventListener('DOMContentLoaded', () => {
+        if (addressDataList.length > 0) {
+            updateShippingInfo(selectedAddressIndex);
+        }
+        
+        // 【支払い方法の初期表示】
+        if (bankInfoList.length > 0) {
+            // 口座情報がある場合、最初の口座を初期選択として表示
+            updatePaymentInfo('bank-0');
+        } else {
+            // 口座情報がない場合、初期選択 ('conveni' など) を表示
+            updatePaymentInfo(selectedPaymentMethod);
+        }
+    });
+
+
+</script>
     <script src="{{url_for('static',filename='js/purchase.js')}}"></script>
 
 {% endblock %}

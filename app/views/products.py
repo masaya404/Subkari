@@ -51,6 +51,42 @@ def get_user_info(id):
 
 
 
+#アカウントの口座情報を取得する ------------------------------------------------------------------------------
+def getAccountInfo():
+    accountNumbers=[]                 #口座番号下位三桁を格納
+    id=session["user_id"]
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select bankName,accountNumber,branchCode from t_transfer  where account_id=%s limit 3"
+    cur.execute(sql,(id,))
+    bank_info=cur.fetchall()
+    cur.close()
+    con.close()
+    count=0
+    #口座がいくつ登録されているかを数える
+    for i in bank_info:
+        count+=1
+
+    #口座番号マスク処理のために口座番号の桁数と下位三桁を抽出し配列に入れる
+    for i in range(count):
+        num=int(bank_info[i]['accountNumber'])
+
+        tmp=num
+        length=0
+        mask=""
+        #口座番号の桁数を取得
+        while tmp>0:
+            tmp=tmp//10
+            length+=1
+        for i in range(length-3):
+        
+            mask+="*"
+
+        num=str(num%1000)
+        num=mask+num                #マスク処理を施した口座番号
+        accountNumbers.append(num)
+    return bank_info,accountNumbers,count
+
 
 # Blueprintの設定
 products_bp = Blueprint('products', __name__, url_prefix='/products')
@@ -313,10 +349,11 @@ def purchase(product_id):
         if con and con.is_connected():
             cur.close()
             con.close()
+        
+    #支払い情報を取得
+    bank_info,accountNumbers,count=getAccountInfo()
 
-
-
-    return render_template("purchase/purchase.html",user_id = user_id, product = product, address_list=address_list)
+    return render_template("purchase/purchase.html",user_id = user_id, product = product, address_list=address_list, bank_info=bank_info, accountNumbers=accountNumbers, count=count)
 
 #レンタルができるようにする
 @products_bp.route('/rental/<int:product_id>', methods=['GET'])
