@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const status = statusButton.textContent.trim();
         updateTimeline(status);
         loadComments();
+        loadSeller();
     });
 
     
@@ -87,70 +88,155 @@ function updateTimeline(status) {
 
 // }
 
+/////////////////////////seller DATA  ////////////////////////////////
+ function loadSeller(){
+  axios.get('/deal/seller_data/get')
+    .then(response=>{
+      console.log('seller_data:',response.data);
+      if (response.data.success){
+        renderSellerProfile(response.data);
+      }else{
+        showError('no data found.');
+      }
+    })
+    .catch(error=>{
+      console.log('CATCH ERROR',error);
+      showError('SERVER ERROR');
+    });
+}
+
+/////////////////////////// render seller DATA  ///////////////////////
+function renderSellerProfile(response){
+  const sellerData = response.data;
+  const container = document.getElementById('profileContainer');
+  const sellerInfo = sellerData.firstName;
+  const sellerImg = sellerData.identifyImg;
+  const sellerStatus = sellerData.status;
+  const sellerSmoker = sellerData.smoker;
+  const sellerCount = sellerData.evaluation_count;
+  const sellerScore = parseFloat(sellerData.average_score);
+
+  //STAR//
+  const stars = generateStars(sellerScore || 0);
+  const statusBadge = sellerStatus === '本人確認済み' ? '本人確認済み' : '未承認';
+  const smokerBadge = sellerSmoker == 0 ? '非喫煙者':'喫煙者';
+
+  const profileHTML = `
+   <div class="img-name w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+      <img src="/static/img/${sellerImg}" 
+                 alt="プロフィール画像"
+                 class="profile-image w-full h-full object-cover">
+    </div>
+
+    <div class="profile-name">
+        <p class="font-semibold text-lg">${sellerInfo}</p>
+        <div class="profile-rating flex items-center gap-2 mt-1">
+          <div>
+            <span class="stars">${stars}</span>
+          </div>
+          <span class="rating-count text-sm text-gray-600">${sellerCount || 0}</span>
+        </div>
+        
+        <div class="badge-group flex items-center gap-2 mt-1">
+          <i id="checkMark" class="fas fa-check-circle text-green-500 text-sm"></i>  
+          <p class="text-xs text-gray-600">${statusBadge}</p>
+          <span class="badge text-xs text-gray-600">${smokerBadge}</span>
+        </div> 
+    </div>
+        
+        
+        
+    `;  
+    container.innerHTML = profileHTML;
+}
+
+/////////////////////////  Score Star //////////////////////////////////////////
+function generateStars(count) {
+    let stars = '';
+    for (let i = 0; i < count; i++) {
+        stars += '★';
+    }
+    for (let i = 0; i < 5 - count; i++) {
+        stars += '☆';
+    }
+    return stars;
+}
+
+////////////////////////// SHOW ERROR /////////////////////////////////////////
+function showError(message) {
+    const container = document.getElementById('profileContainer');
+    container.innerHTML = `
+        <div class="error-message">
+            <p>${message}</p>
+        </div>
+    `;
+}
  // /////////////////////// load comments //////////////////////////////
-    function loadComments() {
-        // const transactionID = document.getElementById('transactionID').value;
-        const productID = document.getElementById('productID').value;
-        fetch(`/deal/get-comments?product_id=${productID}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Comments loaded:', data);
-                renderComments(data);
-            })
-            .catch(error => console.error('Error loading comments:', error));
-    }
 
-    // render comments to page
-    function renderComments(comments) {
-        const container = document.getElementById('commentsContainer');
-        const account = 
-        container.innerHTML = comments.map(comment => `
-            <div class="border rounded-xs p-6 mb-6">
-                <p class="font-semibold">${comment.firstName}</p>
-                <p class="text-gray-700 mt-2">${comment.content}</p>
-                <p class="text-gray-400 text-sm mt-2">${new Date(comment.createdDate).toLocaleString('ja-JP')}</p>
-            </div>
-        `).join('');
-    }
 
-    // 新しい comment　提出
-    function submitComment() {
-        const productID = document.getElementById('productID').value;
-        const content = document.getElementById('commentInput').value.trim();
-
-        if (!content) {
-            return;
-        }
-
-        // バックエンドに送る
-        fetch('/deal/add-comment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                product_id: productID,
-                content: content
-            })
-        })
+function loadComments() {
+    // const transactionID = document.getElementById('transactionID').value;
+    const productID = document.getElementById('productID').value;
+    fetch(`/deal/get-comments?product_id=${productID}`)
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                console.log('Comment added:', data);
-                
-                // clear 
-                document.getElementById('commentInput').value = '';
-                
-                //  comments reload
-                loadComments();
-                
-                alert('メッセージを送信しました');
-            } else {
-                alert('エラー: ' + data.message);
-            }
+            console.log('Comments loaded:', data);
+            renderComments(data);
         })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('送信に失敗しました');
-        });
+        .catch(error => console.error('Error loading comments:', error));
+}
+
+// render comments to page
+function renderComments(comments) {
+    const container = document.getElementById('commentsContainer');
+    const account = 
+    container.innerHTML = comments.map(comment => `
+        <div class="border rounded-xs p-6 mb-6">
+            <p class="font-semibold">${comment.firstName}</p>
+            <p class="text-gray-700 mt-2">${comment.content}</p>
+            <p class="text-gray-400 text-sm mt-2">${new Date(comment.createdDate).toLocaleString('ja-JP')}</p>
+        </div>
+    `).join('');
+}
+
+// 新しい comment　提出
+function submitComment() {
+    const productID = document.getElementById('productID').value;
+    const content = document.getElementById('commentInput').value.trim();
+
+    if (!content) {
+        return;
     }
+
+    // バックエンドに送る
+    fetch('/deal/add-comment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            product_id: productID,
+            content: content
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Comment added:', data);
+            
+            // clear 
+            document.getElementById('commentInput').value = '';
+            
+            //  comments reload
+            loadComments();
+            
+            alert('メッセージを送信しました');
+        } else {
+            alert('エラー: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('送信に失敗しました');
+    });
+}

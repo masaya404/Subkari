@@ -94,11 +94,10 @@ def deal_list(transaction_id):
     else:
         user_id = session.get('user_id')
     
-    #comment表示
+    #取引資料の取得-------------------------------------------------------------
     # DB接続
     con = connect_db()
-    cur = con.cursor(dictionary=True)
-    
+    cur = con.cursor(dictionary=True)  
     #  SQL 文章用意
     sql = """
         SELECT 
@@ -128,8 +127,7 @@ def deal_list(transaction_id):
     
     session['transaction'] = transaction
     
-    # comments
-    
+    # commentsの取得
     product_id = transaction['product_id']
     sql = """
         SELECT content, createdDate, account_id
@@ -139,7 +137,6 @@ def deal_list(transaction_id):
     """
     cur.execute(sql, (product_id,))
     comments = cur.fetchall()
-    
     cur.close()
     con.close()   
     
@@ -159,6 +156,47 @@ def deal_list(transaction_id):
     
     return render_template('deal/deal_detail.html', transaction = transaction,comments = comments, user_id = user_id)
 
+# 出品者資料の取得--------------------------------------------------------------------------------------------------------------------------------------------------------------
+@deal_bp.route('/seller_data/get',methods=['GET'])
+def get_seller_data():
+    id = session.get('transaction', {}).get('account_id')
+    try:
+        seller_data = get_seller_info(id)
+    
+        return jsonify({'success':True,
+                    'data':seller_data})
+
+    except Exception as e:
+        print(f'Error: {str(e)}')
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+#商品の出品者資料--------------------------------------------------
+def get_seller_info(id):
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+
+    #firstName identifyImg status smoker evaluation total
+    sql = """
+            SELECT 
+                a.firstName,
+                a.identifyImg,
+                a.status,
+                a.smoker,
+                COUNT(e.id) as evaluation_count,
+                ROUND(AVG(e.score),1) as average_score
+            FROM m_account a
+            LEFT JOIN t_evaluation e
+            ON a.id = e.recipient_id
+            WHERE a.id=%s
+            GROUP BY a.id           
+        """
+    cur.execute(sql,(id,))
+    result = cur.fetchone()
+    cur.close()
+    con.close()
+    
+    return result    
+     
 # 取引詳細の画像添付 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 @deal_bp.route('/deal/list/imageUpload', methods=['GET','POST'])
 def deal_list_imageUpload():
