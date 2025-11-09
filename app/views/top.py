@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, request, make_response, redirect, 
 from PIL import Image
 from werkzeug.utils import secure_filename
 from datetime import datetime , timedelta
-# import mysql.connector # データベース接続は使用しないためコメントアウト
+import mysql.connector
+import math
 import json
 import os
 
@@ -57,8 +58,61 @@ def member_index():
     else:
         user_id = session.get('user_id')
         
-    resp = make_response(render_template('top/member_index.html', user_id = user_id))
-    return resp
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+
+    # すべての商品を取り出し
+    sql = """
+        SELECT 
+            p.id,
+            p.name,
+            p.name,
+            p.rentalPrice,
+            p.purchasePrice,
+            c.name AS category,
+            b.name AS brand,
+            m.img AS image_path
+        FROM m_product AS p
+        LEFT JOIN m_brand AS b ON p.brand_id = b.id
+        LEFT JOIN m_productimg AS m ON p.id = m.product_id
+        LEFT JOIN m_category AS c ON p.category_id = c.id
+        ORDER BY p.category_id, p.id
+    """
+    cur.execute(sql)
+    rows = cur.fetchall()
+
+    #  KEY is category の辞書
+    categories = {}
+    for row in rows:
+        rental = row.get("rentalPrice")
+        purchase = row.get("purchasePrice")
+
+        # 価格表示の決定
+        if rental is not None and purchase is not None:
+            price_text = f"{rental:,} / {purchase:,}"
+        elif rental is not None:
+            price_text = f"{rental:,}"
+        elif purchase is not None:
+            price_text = f"{purchase:,}"
+        else:
+            price_text = "ー"
+
+        # 分類
+        cat = row["category"] or "その他"
+        if cat not in categories:
+            categories[cat] = []
+        categories[cat].append({
+            "id": row["id"],
+            "name": row["name"],
+            "brand": row["brand"] or "",
+            "price": price_text,
+            "image_path": row["image_path"] or "no_image.png"
+        })
+
+    cur.close()
+    con.close()
+
+    return render_template("top/member_index.html", categories=categories ,user_id = user_id)
 
 # subkariについての表示
 @top_bp.route('/about_subkari', methods=['GET'])
@@ -104,20 +158,84 @@ def coordinate():
     return render_template('top/search_product.html', search_query=None, products=DUMMY_PRODUCTS)
 
 
-# 検索結果についての表示
+# 検索結果についての表示#########################################################################################################################################
 @top_bp.route('/search', methods=['GET'])
 def search():
-    search_query: str = request.args.get('keyword', '')
+    #Get the Keyword and Page
+    search_query = request.args.get('keyword', '').strip()
+    page = int(request.args.get('page', 1))
     
-    # 検索結果が空にならないよう、クエリに関わらずダミーを返す
-    context = {
-        'search_query': search_query,
-        # 検索結果としてDUMMY_PRODUCTSの最初の数件を返すことで、動作確認を容易にする
-        'products': DUMMY_PRODUCTS[:5] 
-    }
+    #Limit of the showed products on page
+    limit = 5
+    offset = (page - 1) * limit
+    
+    #件数計算のsql
+    sql_count = """
+        SELECT COUNT(*) AS count
+        FROM m_product AS p
+        LEFT JOIN m_brand AS b
+        ON p.brand_id = b.id
+        LEFT JOIN m_productimg AS i
+        ON p.id = i.product_id
+        WHERE (%s = '' OR p.name LIKE %s)
+    """
+    params_count = [search_query, f"%{search_query}%"]
+    #sql実行
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql_count, params_count)
+    total_count = cur.fetchone()['count']
+    cur.close()
+    con.close()
+    #page数
+    total_pages = math.ceil(total_count / limit)
 
-    # 結果をHTMLに渡す
-    return render_template('top/search_product.html', **context)
+    #商品資料のsql
+    sql_select = """
+        SELECT 
+            p.id,
+            p.name,
+            p.brand_id,
+            p.rentalPrice,
+            p.purchasePrice,
+            b.name AS brand_name,
+            i.img
+        FROM m_product AS p
+        LEFT JOIN m_brand AS b ON p.brand_id = b.id
+        LEFT JOIN m_productimg AS i ON p.id = i.product_id
+        WHERE (%s = '' OR p.name LIKE %s)
+        ORDER BY p.id DESC
+        LIMIT %s OFFSET %s
+    """
+    params_select = [search_query, f"%{search_query}%", limit, offset]
+    #sql実行
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute(sql_select, params_select)
+    products = cur.fetchall()
+    cur.close()
+    con.close()
+
+    #価格のレンタル/購買処理
+    for p in products:
+        rental = p.get("rentalPrice")
+        purchase = p.get("purchasePrice")
+        if rental is not None and purchase is not None:
+            p["price"] = f"{rental:,} / {purchase:,}"
+        elif rental is not None:
+            p["price"] = rental
+        elif purchase is not None:
+            p["price"] = purchase
+        else:
+            p["price"] = 0
+
+    return render_template(
+        "top/search_product.html",
+        search_query=search_query,
+        products=products,
+        total_pages=total_pages,
+        current_page=page
+        )    
 
 
 # 商品詳細についての表示
@@ -133,11 +251,11 @@ def product_details():
     return resp
 
 # DB設定 (使用しないが元のコードに残す)
-# def connect_db():
-#     con=mysql.connector.connect(
-#         host = 'localhost',
-#         user = 'root',
-#         passwd = '',
-#         db ='db_subkari'
-#     )
-#     return con
+def connect_db():
+    con=mysql.connector.connect(
+        host = 'localhost',
+        user = 'root',
+        passwd = '',
+        db ='db_subkari'
+    )
+    return con

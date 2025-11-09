@@ -83,7 +83,35 @@
         </div>
     </aside>
 
-    <main class="main-content">
+<main class="main-content">
+        <h2>商品一覧</h2>   
+     {% for category, products in categories.items() %}
+  <section class="category-section">
+    <div class="category-header">
+      <h2>{{ category }}</h2>
+      <a href="{{ url_for('products.search_result', category=category) }}" class="view-all">すべて見る</a>
+    </div>
+
+    <div class="product-grid">
+      {% for p in products %}
+      <a href="{{ url_for('products.product_details_stub', product_id=p.id) }}"
+         style="text-decoration: none; color: inherit; display: block;">
+        <div class="product-card">
+          <div class="product-image">
+            <img src="{{ url_for('static', filename='img/productImg/' + p.image_path) }}" alt="{{ p.name }}">
+          </div>
+          <div class="product-info">
+            {% if p.brand %}<div class="product-brand">{{ p.brand }}</div>{% endif %}
+            <div class="product-name">{{ p.name }}</div>
+            <div class="product-price">¥{{ p.price }}</div>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+    <!--
         <section class="category-section">
             <div class="category-header">
                 <h2>コーデ</h2>
@@ -331,6 +359,7 @@
                 </a>
             </div>
         </section>
+-->
 
     </main>
 </div>
