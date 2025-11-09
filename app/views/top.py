@@ -101,7 +101,75 @@ def member_index():
         cat = row["category"] or "その他"
         if cat not in categories:
             categories[cat] = []
-        categories[cat].append({
+        if len(categories[cat]) < 4:
+            categories[cat].append({
+            "id": row["id"],
+            "name": row["name"],
+            "brand": row["brand"] or "",
+            "price": price_text,
+            "image_path": row["image_path"] or "no_image.png"
+            })
+
+    cur.close()
+    con.close()
+
+    return render_template("top/member_index.html", categories=categories ,user_id = user_id)
+
+#categoryによるの商品一覧
+@top_bp.route('/category/<category>',methods=['GET'])
+def category_products(category):
+    if 'user_id' not in session:
+        # エンドポイントは 'login.login'
+        resp = make_response(url_for('login.login'))
+        user_id = None
+    else:
+        user_id = session.get('user_id')
+    
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute("""
+        SELECT 
+            p.id,
+            p.name,
+            p.rentalPrice,
+            p.purchasePrice,
+            b.name AS brand,
+            c.name AS category,
+            m.img AS image_path
+        FROM 
+            m_product AS p
+        LEFT JOIN 
+            m_brand AS b ON p.brand_id = b.id
+        LEFT JOIN 
+            m_productimg AS m ON p.id = m.product_id
+        LEFT JOIN 
+            m_category AS c ON p.category_id = c.id
+        WHERE 
+            c.name = %s
+        ORDER BY 
+            p.id DESC
+    """, (category,))
+    rows = cur.fetchall()
+    cur.close()
+    con.close()
+
+    # ひとつのカテゴリのみ---
+    categories = {}
+    products = []
+    for row in rows:
+        rental = row.get("rentalPrice")
+        purchase = row.get("purchasePrice")
+
+        if rental is not None and purchase is not None:
+            price_text = f"{rental:,} / {purchase:,}"
+        elif rental is not None:
+            price_text = f"{rental:,}"
+        elif purchase is not None:
+            price_text = f"{purchase:,}"
+        else:
+            price_text = "ー"
+
+        products.append({
             "id": row["id"],
             "name": row["name"],
             "brand": row["brand"] or "",
@@ -109,11 +177,18 @@ def member_index():
             "image_path": row["image_path"] or "no_image.png"
         })
 
-    cur.close()
-    con.close()
+    # ひとつのカテゴリの商品
+    categories[category] = products
 
-    return render_template("top/member_index.html", categories=categories ,user_id = user_id)
-
+    return render_template(
+        "top/member_index.html",
+        categories=categories,
+        user_id=user_id,
+        single_category=True  # カテゴリモード
+    )
+    
+        
+    
 # subkariについての表示
 @top_bp.route('/about_subkari', methods=['GET'])
 def about_subkari():
