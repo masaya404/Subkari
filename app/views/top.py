@@ -107,7 +107,7 @@ def member_index():
             "name": row["name"],
             "brand": row["brand"] or "",
             "price": price_text,
-            "image_path": row["image_path"] or "no_image.png"
+            "image_path": row["image_path"] or "default.png"
             })
 
     cur.close()
@@ -187,7 +187,145 @@ def category_products(category):
         single_category=True  # カテゴリモード
     )
     
-        
+#性別によるの商品一覧
+@top_bp.route('/for/<for_value>', methods=['GET'])
+def for_products(for_value):
+    if 'user_id' in session:
+        user_id = session['user_id']
+    else:
+        user_id = None
+
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+
+    sql = """
+        SELECT 
+            p.id,
+            p.name,
+            p.rentalPrice,
+            p.purchasePrice,
+            p.`for`,
+            c.name AS category,
+            b.name AS brand,
+            m.img AS image_path
+        FROM m_product AS p
+        LEFT JOIN m_brand AS b ON p.brand_id = b.id
+        LEFT JOIN m_productimg AS m ON p.id = m.product_id
+        LEFT JOIN m_category AS c ON p.category_id = c.id
+        WHERE p.`for` = %s
+    """
+    cur.execute(sql, (for_value,))
+    rows = cur.fetchall()
+   
+    # TOPページと一緒
+    categories = {}
+    for row in rows:
+        rental = row.get("rentalPrice")
+        purchase = row.get("purchasePrice")
+
+        # 価格表示の決定
+        if rental is not None and purchase is not None:
+            price_text = f"{rental:,} / {purchase:,}"
+        elif rental is not None:
+            price_text = f"{rental:,}"
+        elif purchase is not None:
+            price_text = f"{purchase:,}"
+        else:
+            price_text = "ー"
+
+        # 分類 category
+        cat = row["category"] or "その他"
+        if cat not in categories:
+            categories[cat] = []
+        categories[cat].append({
+            "id": row["id"],
+            "name": row["name"],
+            "brand": row["brand"] or "",
+            "price": price_text,
+            "image_path": row["image_path"] or "default.png"
+        })
+
+    cur.close()
+    con.close()
+
+    #  member_index.htmlで表示
+    return render_template(
+        "top/member_index.html",
+        categories=categories,
+        user_id=user_id,
+        selected_for=for_value,
+        single_category=True
+    )
+            
+#brandによるの商品一覧
+@top_bp.route('/brand/<brand_name>', methods=['GET'])
+def brand_products(brand_name):
+    if 'user_id' in session:
+        user_id = session['user_id']
+    else:
+        user_id = None
+
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+
+    sql = """
+        SELECT 
+            p.id,
+            p.name,
+            p.name,
+            p.rentalPrice,
+            p.purchasePrice,
+            c.name AS category,
+            b.name AS brand,
+            m.img AS image_path
+        FROM m_product AS p
+        LEFT JOIN m_brand AS b ON p.brand_id = b.id
+        LEFT JOIN m_productimg AS m ON p.id = m.product_id
+        LEFT JOIN m_category AS c ON p.category_id = c.id
+        WHERE b.name = %s
+    """
+    cur.execute(sql, (brand_name,))
+    rows = cur.fetchall()
+
+   
+    # TOPページと一緒
+    categories = {}
+    for row in rows:
+        rental = row.get("rentalPrice")
+        purchase = row.get("purchasePrice")
+
+        # 価格表示の決定
+        if rental is not None and purchase is not None:
+            price_text = f"{rental:,} / {purchase:,}"
+        elif rental is not None:
+            price_text = f"{rental:,}"
+        elif purchase is not None:
+            price_text = f"{purchase:,}"
+        else:
+            price_text = "ー"
+
+        # 分類 category
+        cat = row["category"] or "その他"
+        if cat not in categories:
+            categories[cat] = []
+        categories[cat].append({
+            "id": row["id"],
+            "name": row["name"],
+            "brand": row["brand"] or "",
+            "price": price_text,
+            "image_path": row["image_path"] or "default.png"
+        })
+
+    cur.close()
+    con.close()
+
+    #  member_index.htmlで表示
+    return render_template(
+        "top/member_index.html",
+        categories=categories,
+        user_id=user_id,
+        selected_brand=brand_name
+    )
     
 # subkariについての表示
 @top_bp.route('/about_subkari', methods=['GET'])
