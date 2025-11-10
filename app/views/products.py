@@ -6,6 +6,12 @@ import mysql.connector
 import json
 import os
 
+
+
+# Blueprintの設定
+products_bp = Blueprint('products', __name__, url_prefix='/products')
+
+
 #プロフィールに表示する取引情報を取得する ------------------------------------------------------------------------------------
 #引数として受け取ったidを持つユーザーの情報を取得
 def get_transaction_info(id):
@@ -88,8 +94,6 @@ def getAccountInfo():
     return bank_info,accountNumbers,count
 
 
-# Blueprintの設定
-products_bp = Blueprint('products', __name__, url_prefix='/products')
 
 # 商品一覧の表示
 @products_bp.route('/search_result', methods=['GET'])
@@ -335,12 +339,22 @@ def purchase(product_id):
         #配送情報を取得
 
         sql_address="""
-        SELECT zip,pref,address1,address2,address3
+        SELECT id,zip,pref,address1,address2,address3
         FROM m_address
         WHERE account_id = %s;
         """
         cur.execute(sql_address, (user_id,))
         address_list = cur.fetchall()
+
+
+        #カード情報を取得
+        sql_card="""
+        SELECT id,number,expiry,holderName
+        FROM t_creditCard
+        WHERE account_id = %s;
+        """
+        cur.execute(sql_card, (user_id,))
+        card_info = cur.fetchall()
 
     except mysql.connector.Error as err:
         print(f"データベースエラー: {err}")
@@ -353,7 +367,7 @@ def purchase(product_id):
     #支払い情報を取得
     bank_info,accountNumbers,count=getAccountInfo()
 
-    return render_template("purchase/purchase.html",user_id = user_id, product = product, address_list=address_list, bank_info=bank_info, accountNumbers=accountNumbers, count=count)
+    return render_template("purchase/purchase.html",user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count)
 
 #レンタルができるようにする
 @products_bp.route('/rental/<int:product_id>', methods=['GET'])
@@ -366,6 +380,19 @@ def rental(product_id):
 
     return render_template("purchase/purchase.html",user_id = user_id )
 
+
+
+
+#購入完了画面
+@products_bp.route('/purchase_complete', methods=['POST'])
+def purchase_complete():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    return render_template("purchase/purchase_complete.html", user_id=user_id)
 
 
 # DB接続設定
