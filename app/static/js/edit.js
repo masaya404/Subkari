@@ -34,6 +34,15 @@ function validateAccountName() {
     }
 }
 
+// アカウント名が空白の時画面遷移を止める
+document.getElementById("account_info").addEventListener("submit", function(event) {
+  const input = document.getElementById("accountName").value.trim(); // 空白を除去
+
+  if (input.length === 0) {
+    event.preventDefault(); // 画面遷移（フォーム送信）を止める
+  }
+})
+
 // 自己紹介のバリデーション
 function validateBio() {
     const input = document.getElementById('bio');
