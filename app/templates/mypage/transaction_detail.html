@@ -1,3 +1,4 @@
+<!-- このページ無理,,,表示しない -->
 {% extends "base.html" %}
 
 {% block title %}取引詳細{% endblock %}
@@ -15,30 +16,29 @@
         <section class="transaction-info">
             <h2>取引情報</h2>
             <div class="product-detail">
-                <div class="product-image" role="img" aria-label="商品画像">
-                </div>
-                <div class="product-name">ファーパーカー</div>
+                <img class="product-image" src="{{img}}" alt="aa">
+                <div class="product-name">{{name}}</div>
             </div>
 
             <div class="info-list">
                 <div class="info-row">
-                   <input type="hidden" name="customer_id" value="{{ }}">
+                   <input type="hidden" name="customer_id" value="{{customer_id}}">
                 </div>
                 <div class="info-row">
                     <div class="info-label">商品代金</div>
-                    <div class="info-value">¥2,222</div>
+                    <div class="info-value">{{price}}</div>
                 </div>
                 <div class="info-row">
                     <div class="info-label">販売手数料</div>
-                    <div class="info-value">¥222</div>
+                    <div class="info-value">{{fee}}</div>
                 </div>
                 <div class="info-row">
                     <div class="info-label">販売利益</div>
-                    <div class="info-value">¥2,000</div>
+                    <div class="info-value">{{profit}}</div>
                 </div>
                 <div class="info-row">
                     <div class="info-label">購入日時</div>
-                    <div class="info-value">2020年6月4日 20:22</div>
+                    <div class="info-value">{{datetime}}</div>
                 </div>
                 <div class="info-row">
                     <div class="info-label">配送の方法</div>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="info-row">
                     <div class="info-label">商品ID</div>
-                    <div class="info-value">46478853465</div>
+                    <div class="info-value">{{id}}</div>
                 </div>
             </div>
         </section>
