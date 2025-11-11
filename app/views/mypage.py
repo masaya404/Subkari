@@ -478,39 +478,7 @@ def salesHistory():
     return render_template("mypage/salesHistory.html" ,  user_id=user_id,datetimes=datetimes,prices=prices,ids=ids)
 #-------------------------------------------------------------------------------------------------
 
-#取引詳細 transaction_detail ---------------------------------------------------------------------
-@mypage_bp.route("/transaction_detail",methods=['POST','GET'])
-def transaction_detail():
-    if 'user_id' not in session:
-        user_id = None
-        return redirect(url_for('login.login'))
-    else:
-        user_id = session.get('user_id')
-    #必要な情報を前の画面から取得
-    transaction=request.form
-    price=transaction['price']
-    datetime=transaction['datetime']
-    transaction_id=transaction['transaction_id']
 
-    price=int(price)
-    #利益、手数料を計算
-    fee=int(price*0.15)
-    profit=price-fee
-    
-
-    con=connect_db()
-    cur=con.cursor(dictionary=True)
-    
-    #取引情報取得
-    sql="select * from t_transaction where id=%s"
-    cur.execute(sql,(transaction_id,))
-    transaction=cur.fetchone()
-
-    cur.close()
-    con.close()
-    
-
-    return render_template("mypage/transaction_detail.html",user_id=user_id)
 
 #振込履歴-----------------------------------------------------------------------------------------
 @mypage_bp.route("/transferHistory")
