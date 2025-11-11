@@ -62,10 +62,10 @@
             {% endif %}
             <div class="nav-container">
                 <nav>
-                    <a href="{{ url_for('top.coordinate') }}" class="header_list">Coordinate</a>
-                    <a href="{{ url_for('top.tops') }}" class="header_list">Tops</a>
-                    <a href="{{ url_for('top.bottoms') }}" class="header_list">Bottoms</a>
-                    <a href="{{ url_for('top.accessories') }}" class="header_list">Accessories</a> <!-- <a href="#">Coordinate</a>
+                    <a href="{{ url_for('top.category_products', category='コーディネート') }}" class="header_list">Coordinate</a>
+                    <a href="{{ url_for('top.category_products', category='トップス') }}" class="header_list">Tops</a>
+                    <a href="{{ url_for('top.category_products', category='ボトムス') }}" class="header_list">Bottoms</a>
+                    <a href="{{ url_for('top.category_products', category='アクセサリー') }}" class="header_list">Accessories</a> <!-- <a href="#">Coordinate</a>
                         <a href="#">Tops</a>
                         <a href="#">Bottoms</a>
                         <a href="#">Accessories</a> -->
