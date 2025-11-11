@@ -123,7 +123,7 @@ def get_transaction_info(id):
     evaluation = cur.fetchone()
 
     if followers is None:
-        followers={'フォロワー数':0}
+        followers['フォロワー数']=0
     if follows is None:
         follows={'フォロー数':0}
     if products is None:
@@ -192,9 +192,9 @@ def mypage():
         total+=int(sale['price'] if sale['price'] else 0)
     total=comma(total)
 
-    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],
-    evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],
-    followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id,total=total)
+    return render_template("mypage/mypage.html",image_path=user_info,
+    evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,
+    followers=followers,products=products,user_info=user_info ,user_id=user_id,total=total)
     
 #------------------------------------------------------------------------------------------------
 
