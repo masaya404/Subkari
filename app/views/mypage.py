@@ -132,7 +132,7 @@ def get_transaction_info(id):
         evaluation={'評価':0}
         evaluationCount={'評価件数':0}
     else:   
-        evaluation={'評価':int(evaluation)}
+        evaluation=int(evaluation)
         #小数点型にしてから四捨五入
 
     return evaluation,evaluationCount,follows,followers,products
