@@ -114,7 +114,6 @@
         </div>
       </div>
     </aside>
-
     <main class="main-content">
       <h1 class="page-title">
         {% if search_query %}
@@ -129,26 +128,36 @@
         {% for product in products %}
         <div class="product-card" onclick="window.location.href = '/product-detail/{{ product.id }}'">
           <div class="product-image">
-            <img src="{{ url_for('static', filename='img/' + product.image_path) }}" alt="{{ product.name }}">
+            <img src="{{ url_for('static', filename='img/productImg/' + (product.img if product.img else 'default.png')) }}" alt="{{ product.name }}">
           </div>
           <div class="product-brand">{{ product.brand }}</div>
           <div class="product-name">{{ product.name }}</div>
-          <div class="product-price">¥{{ "{:,.0f}".format(product.price) }}</div>
+          <div class="product-price">¥{{ product.price }}</div>
         </div>
         {% endfor %}
         
         {% if not products %}
         <p>該当する商品が見つかりませんでした。</p>
         {% endif %}
-
       </div>
       
+      <!-- page button -->
       <div class="pagination">
-        <div class="page-number active">1</div>
-        <div class="page-number">2</div>
-        <div class="page-number">3</div>
-        <div class="page-number">4</div>
-        <div class="page-arrow">&gt;</div>
+        {% if current_page > 1 %}
+          <a class="page-arrow" href="?keyword={{ search_query }}&page={{ current_page - 1 }}">&lt;</a>
+        {% endif %}
+
+        {% for i in range(1, total_pages + 1) %}
+          {% if i == current_page %}
+            <div class="page-number active">{{ i }}</div>
+          {% else %}
+            <a class="page-number" href="?keyword={{ search_query }}&page={{ i }}">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if current_page < total_pages %}
+          <a class="page-arrow" href="?keyword={{ search_query }}&page={{ current_page + 1 }}">&gt;</a>
+        {% endif %}
       </div>
     </main>
   </div>

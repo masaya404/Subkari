@@ -122,9 +122,19 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     evaluation = cur.fetchone()
 
-    evaluation=round(float(evaluation['評価']))   
+    if followers is None:
+        followers={'フォロワー数':0}
+    if follows is None:
+        follows={'フォロー数':0}
+    if products is None:
+        products={'出品数':0}
+    if evaluation and evaluation['評価'] is not None:
     #小数点型にしてから四捨五入
-   
+        evaluation['評価'] = round(float(evaluation['評価']))
+    else:
+        evaluation={'評価':0}
+        evaluationCount={'評価件数':0}
+
     return evaluation,evaluationCount,follows,followers,products
 #商品データを取得 --------------------------------------------------
 def get_product_info(id):
@@ -178,11 +188,12 @@ def mypage():
     sales=cur.fetchall()
     total=0
     for sale in sales:
-        total+=sale['price']
+        total+=int(sale['price'] if sale['price'] else 0)
     total=comma(total)
-    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],
-    evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],
-    followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id,total=total)
+
+    return render_template("mypage/mypage.html",image_path=user_info,
+    evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,
+    followers=followers,products=products,user_info=user_info ,user_id=user_id,total=total)
     
 #------------------------------------------------------------------------------------------------
 
@@ -202,7 +213,8 @@ def editProfile():
     #商品情報を取得
     productName,productImg=get_product_info(user_id)
 
-    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
+
+    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_info=user_info)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])
@@ -230,11 +242,9 @@ def updateProfile():
     user_info=get_user_info(id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(id)
     productName,productImg=get_product_info(id)
-    return render_template("mypage/editProfile.html",user_info=user_info,evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg)
+    return render_template("mypage/editProfile.html",user_info=user_info,evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_id=user_id)
 
     
-
-
 #--------------------------------------------------------------------------------------------------
 
 #edit プロフィール編集-------------------------------------------------------------------------------
@@ -249,7 +259,7 @@ def edit():
     #ユーザー情報を取得
     user_info=get_user_info(user_id)
 
-    return render_template("mypage/edit.html", user_info=user_info)
+    return render_template("mypage/edit.html", user_info=user_info,user_id=user_id)
     
 
 #--------------------------------------------------------------------------------------------------
