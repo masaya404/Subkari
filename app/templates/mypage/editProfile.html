@@ -42,8 +42,11 @@
                 </div>
                 
                 <div class="profile-description" id="profileDescription">
+                    {% if user_info.introduction!='None' %}
                     {{user_info.introduction}}
-                    <!-- 何文字以上でを作る -->
+                    {% else %}
+
+                    {% endif %}
                     <span id="moreText" style="display: none;">
                         <br><br>
                         【取引について】<br>

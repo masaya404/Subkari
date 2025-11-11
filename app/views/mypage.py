@@ -123,7 +123,7 @@ def get_transaction_info(id):
     evaluation = cur.fetchone()
 
     if followers is None:
-        followers['フォロワー数']=0
+        followers={'フォロワー数':0}
     if follows is None:
         follows={'フォロー数':0}
     if products is None:
@@ -132,9 +132,8 @@ def get_transaction_info(id):
     #小数点型にしてから四捨五入
         evaluation['評価'] = round(float(evaluation['評価']))
     else:
-        evaluation['評価'] = 0 
-        evaluationCount['評価件数']=0
-   
+        evaluation={'評価':0}
+        evaluationCount={'評価件数':0}
 
     return evaluation,evaluationCount,follows,followers,products
 #商品データを取得 --------------------------------------------------
@@ -215,7 +214,7 @@ def editProfile():
     productName,productImg=get_product_info(user_id)
 
 
-    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
+    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_info=user_info)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])
