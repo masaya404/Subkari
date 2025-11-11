@@ -189,7 +189,9 @@ def mypage():
     total=0
     for sale in sales:
         total+=sale['price']
-    total=comma(total)
+    if sales:
+        total=comma(total)
+    
     return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],
     evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,
     followers=followers,products=products,user_info=user_info ,user_id=user_id,total=total)
@@ -212,7 +214,7 @@ def editProfile():
     #商品情報を取得
     productName,productImg=get_product_info(user_id)
 
-    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_info=user_info)
+    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_info=user_info,user_id=user_id)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])
@@ -240,11 +242,9 @@ def updateProfile():
     user_info=get_user_info(id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(id)
     productName,productImg=get_product_info(id)
-    return render_template("mypage/editProfile.html",user_info=user_info,evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg)
+    return render_template("mypage/editProfile.html",user_info=user_info,evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_id=user_id)
 
     
-
-
 #--------------------------------------------------------------------------------------------------
 
 #edit プロフィール編集-------------------------------------------------------------------------------
@@ -259,7 +259,7 @@ def edit():
     #ユーザー情報を取得
     user_info=get_user_info(user_id)
 
-    return render_template("mypage/edit.html", user_info=user_info)
+    return render_template("mypage/edit.html", user_info=user_info,user_id=user_id)
     
 
 #--------------------------------------------------------------------------------------------------

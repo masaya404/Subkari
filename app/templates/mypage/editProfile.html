@@ -19,7 +19,7 @@
                     {% for i in range(evaluation.評価)%}★{% endfor %}
                     {% for i in range(5-evaluation.評価)%}☆{% endfor %}</span>
                     <span class="rating-count">{{evaluationCount.評価件数}}</span>
-                    {% if smoker == 0%}
+                    {% if user_info.smoker == 0%}
                         <span class="reviewer-badge">喫煙者</span>
                     {% else %}
                         <span class="reviewer-badge">非喫煙者</span>
