@@ -6,6 +6,12 @@ import mysql.connector
 import json
 import os
 
+
+
+# Blueprintの設定
+products_bp = Blueprint('products', __name__, url_prefix='/products')
+
+
 #プロフィールに表示する取引情報を取得する ------------------------------------------------------------------------------------
 #引数として受け取ったidを持つユーザーの情報を取得
 def get_transaction_info(id):
@@ -51,9 +57,43 @@ def get_user_info(id):
 
 
 
+#アカウントの口座情報を取得する ------------------------------------------------------------------------------
+def getAccountInfo():
+    accountNumbers=[]                 #口座番号下位三桁を格納
+    id=session["user_id"]
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select bankName,accountNumber,branchCode from t_transfer  where account_id=%s limit 3"
+    cur.execute(sql,(id,))
+    bank_info=cur.fetchall()
+    cur.close()
+    con.close()
+    count=0
+    #口座がいくつ登録されているかを数える
+    for i in bank_info:
+        count+=1
 
-# Blueprintの設定
-products_bp = Blueprint('products', __name__, url_prefix='/products')
+    #口座番号マスク処理のために口座番号の桁数と下位三桁を抽出し配列に入れる
+    for i in range(count):
+        num=int(bank_info[i]['accountNumber'])
+
+        tmp=num
+        length=0
+        mask=""
+        #口座番号の桁数を取得
+        while tmp>0:
+            tmp=tmp//10
+            length+=1
+        for i in range(length-3):
+        
+            mask+="*"
+
+        num=str(num%1000)
+        num=mask+num                #マスク処理を施した口座番号
+        accountNumbers.append(num)
+    return bank_info,accountNumbers,count
+
+
 
 # 商品一覧の表示
 @products_bp.route('/search_result', methods=['GET'])
@@ -101,7 +141,7 @@ def product_details_stub(product_id):
 
         # 商品情報を取得
         sql_product = """
-        SELECT pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
+        SELECT pr.id ,pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
         FROM m_product pr
         INNER JOIN m_brand br ON br.id = pr.brand_id
         INNER JOIN m_category ca ON pr.category_id = ca.id
@@ -280,7 +320,80 @@ def purchase(product_id):
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    return render_template("purchase/purchase.html",user_id = user_id)
+
+    #DBから情報を取得
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        # 商品情報を取得
+        sql_product = """
+        SELECT pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
+        FROM m_product pr
+        INNER JOIN m_brand br ON br.id = pr.brand_id
+        INNER JOIN m_category ca ON pr.category_id = ca.id
+        WHERE pr.id = %s;
+        """
+        cur.execute(sql_product, (product_id,))
+        product = cur.fetchone()
+        #配送情報を取得
+
+        sql_address="""
+        SELECT id,zip,pref,address1,address2,address3
+        FROM m_address
+        WHERE account_id = %s;
+        """
+        cur.execute(sql_address, (user_id,))
+        address_list = cur.fetchall()
+
+
+        #カード情報を取得
+        sql_card="""
+        SELECT id,number,expiry,holderName
+        FROM t_creditCard
+        WHERE account_id = %s;
+        """
+        cur.execute(sql_card, (user_id,))
+        card_info = cur.fetchall()
+
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+        
+    #支払い情報を取得
+    bank_info,accountNumbers,count=getAccountInfo()
+
+    return render_template("purchase/purchase.html",user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count)
+
+#レンタルができるようにする
+@products_bp.route('/rental/<int:product_id>', methods=['GET'])
+def rental(product_id):
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    return render_template("purchase/purchase.html",user_id = user_id )
+
+
+
+
+#購入完了画面
+@products_bp.route('/purchase_complete', methods=['POST'])
+def purchase_complete():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    return render_template("purchase/purchase_complete.html", user_id=user_id)
+
 
 # DB接続設定
 def connect_db():
@@ -291,3 +404,4 @@ def connect_db():
         db='db_subkari'
     )
     return con
+

@@ -1,9 +1,167 @@
 
-let selectedPaymentMethod = 'card1';
+// let selectedPaymentMethod = 'card1';
 let selectedDeliveryLocation = '玄関前';
-let selectedAddress = 'address1';
-let cardToDelete = null;
-let addressToDelete = null;
+let selectedPaymentMethod = 'conveni';
+// let selectedAddress = 'address1';
+// let cardToDelete = null;
+// let addressToDelete = null;
+
+//選択された住所・カードのインデックスを保持する変数を追加
+let selectedAddressId = null; 
+let selectedCardId = null;
+
+
+
+// Pythonから渡された全ての住所データをJSON形式でJSの配列に格納
+    //: tojson と safe フィルタに加えて、default('[]') を追加
+    // 目的: 
+    // 1. |tojson: PythonオブジェクトをJSON形式に変換
+    // 2. |default('[]'): address_listがNoneやUndefinedの場合、空の配列 [] を代入してJSの構文エラーを防ぐ
+    // 3. |safe: Jinja2がJSON文字列をエスケープしないようにし、JSで正しくパースできるようにする
+    // const addressDataList = {{ address_list | tojson | default('[]') }};
+
+    // 【代替案】: address_list が None の場合に先にデフォルト値を設定し、その後で tojson を適用する
+    // const addressDataList = {{ address_list | default([]) | tojson | safe }};
+    // // 現在選択されている住所のインデックス（0, 1, 2, ...）を保持
+    // // 初期値として、最初の住所（0番目）を選択状態とします。
+    // let selectedAddressIndex = 0; 
+    
+    // // ページロード時: 住所リストが存在すれば、初期表示（0番目の住所）をメイン画面に反映
+    // document.addEventListener('DOMContentLoaded', () => {
+    //     if (addressDataList.length > 0) {
+    //         updateShippingInfo(selectedAddressIndex);
+    //     }
+    // });
+
+console.log(addressDataList);
+console.log(cardInfoList);
+
+
+/**
+ * 隠しフォームフィールドを現在の選択状態に合わせて更新する
+ */
+function updateHiddenFormFields() {
+    // 1. 支払い方法 (ID: hidden_payment_method)
+    // selectedPaymentMethod は 'card-ID', 'conveni', 'paypay' の形式
+    const paymentMethodInput = document.getElementById('hidden_payment_method');
+    if (paymentMethodInput) {
+        // 支払い方法は 'card-ID' 形式のまま渡します
+        paymentMethodInput.value = selectedPaymentMethod; 
+    }
+
+    // 2. 配送先住所 ID (ID: hidden_address_index)
+    // 修正: selectedAddressIndex ではなく selectedAddressId を使う
+    const addressIdInput = document.getElementById('hidden_address_index'); // フォーム名が index のままであればそのまま使用
+    if (addressIdInput) {
+        addressIdInput.value = selectedAddressId; 
+    }
+
+    // 3. 置き配の指定 (ID: hidden_delivery_location) は変更なし
+    const deliveryLocationInput = document.getElementById('hidden_delivery_location');
+    if (deliveryLocationInput) {
+        deliveryLocationInput.value = selectedDeliveryLocation;
+    }
+}
+
+
+
+
+
+// /**
+//  * 選択された住所のインデックスに基づいて、メイン画面の配送先情報を更新する
+//  * @param {number} index - 選択された住所データの配列インデックス (0, 1, 2, ...)
+//  */
+
+// function updateShippingInfo(index) {
+//     const shippingInfoElement = document.getElementById('selectedAddress');
+    
+//     // インデックスが有効で、データが存在することを確認
+//     if (index >= 0 && index < addressDataList.length) {
+//         const selectedAddr = addressDataList[index];
+        
+//         // HTML文字列を生成
+//         let htmlContent = `
+//             〒${selectedAddr.zip}<br>
+//             ${selectedAddr.pref} ${selectedAddr.address1} ${selectedAddr.address2}<br>
+//         `;
+        
+//         // address3 が存在する場合のみ追加
+//         if (selectedAddr.address3) {
+//             htmlContent += `${selectedAddr.address3}`;
+//         }
+        
+//         // メイン画面の内容を更新
+//         shippingInfoElement.innerHTML = htmlContent;
+
+//         // グローバル変数に新しいインデックスを保存
+//         selectedAddressIndex = index;
+
+//     } else if (addressDataList.length === 0) {
+//         // 住所データが一つもない場合の表示
+//          shippingInfoElement.innerHTML = '<p>配送先の住所が登録されていません。「変更する」ボタンから登録してください。</p>';
+//     }
+// }
+
+
+
+
+
+/**
+ * 選択された住所のIDに基づいて、メイン画面の配送先情報を更新する
+ * @param {string} addressId - 選択された住所のID (例: 'address-101')
+ */
+
+function updateShippingInfo(addressId) {
+    const shippingInfoElement = document.getElementById('selectedAddress');
+    let htmlContent = '';
+
+    // 1. IDからDB ID (数値) を抽出
+    const dbId = parseInt(addressId.split('-')[1]);
+     
+    // 2. 配列内を検索して住所オブジェクトを見つける
+    const selectedAddr = addressDataList.find(addr => addr.id === dbId); // ★ find メソッドで ID を検索
+    
+    // インデックスが有効で、データが存在することを確認
+    if (selectedAddr) {
+        
+        // HTML文字列を生成
+        let htmlContent = `
+            〒${selectedAddr.zip}<br>
+            ${selectedAddr.pref} ${selectedAddr.address1} ${selectedAddr.address2}<br>
+        `;
+        
+        // address3 が存在する場合のみ追加
+        if (selectedAddr.address3) {
+            htmlContent += `${selectedAddr.address3}`;
+        }
+        
+        selectedAddressId = dbId; // グローバル変数に新しい住所IDを保存
+        // メイン画面の内容を更新
+        shippingInfoElement.innerHTML = htmlContent;
+
+        // グローバル変数に新しいインデックスを保存
+        selectedAddressIndex = index;
+
+    } else if (addressDataList.length === 0) {
+        // 住所データが一つもない場合の表示
+         shippingInfoElement.innerHTML = '<p>配送先の住所が登録されていません。「変更する」ボタンから登録してください。</p>';
+    }
+    else {
+        // IDが不正、または見つからなかったがリストは空ではない場合のフォールバック
+        htmlContent = '<p>エラー: 選択された住所情報が見つかりませんでした。</p>';
+        console.error(`住所ID ${dbId} はリストに見つかりませんでした。`);
+    }
+    // メイン画面の要素を更新
+    if (shippingInfoElement) {
+        shippingInfoElement.innerHTML = htmlContent;
+    }
+}
+
+
+
+
+
+
 
 function openPaymentModal(event) {
     event.preventDefault();
@@ -46,36 +204,155 @@ function selectPayment(method) {
 }
 
 // ▼▼▼ 変更点3: このJavaScript関数を全面的に修正しました ▼▼▼
-function updatePaymentMethod() {
-    const paymentInfoDisplay = document.getElementById('payment-info-display');
-    const paymentSummaryValue = document.getElementById('payment-summary-value');
+// function updatePaymentMethod() {
+//     const paymentInfoDisplay = document.getElementById('payment-info-display');
+//     const paymentSummaryValue = document.getElementById('payment-summary-value');
 
-    switch(selectedPaymentMethod) {
-        case 'card1':
-            paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 01/01</div>`;
-            paymentSummaryValue.textContent = 'クレジットカード';
-            break;
-        case 'card2':
-            paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 02/02</div>`;
-            paymentSummaryValue.textContent = 'クレジットカード';
-            break;
-        case 'card3':
-            paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 03/03</div>`;
-            paymentSummaryValue.textContent = 'クレジットカード';
-            break;
-        case 'conveni':
-            paymentInfoDisplay.innerHTML = 'コンビニ支払い';
-            paymentSummaryValue.textContent = 'コンビニ支払い';
-            break;
-        case 'paypay':
-            paymentInfoDisplay.innerHTML = 'PayPay';
-            paymentSummaryValue.textContent = 'PayPay';
-            break;
-    }
+//     switch(selectedPaymentMethod) {
+//         case 'card1':
+//             paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 01/01</div>`;
+//             paymentSummaryValue.textContent = 'クレジットカード';
+//             break;
+//         case 'card2':
+//             paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 02/02</div>`;
+//             paymentSummaryValue.textContent = 'クレジットカード';
+//             break;
+//         case 'card3':
+//             paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 03/03</div>`;
+//             paymentSummaryValue.textContent = 'クレジットカード';
+//             break;
+//         case 'conveni':
+//             paymentInfoDisplay.innerHTML = 'コンビニ支払い';
+//             paymentSummaryValue.textContent = 'コンビニ支払い';
+//             break;
+//         case 'paypay':
+//             paymentInfoDisplay.innerHTML = 'PayPay';
+//             paymentSummaryValue.textContent = 'PayPay';
+//             break;
+//     }
     
-    closePaymentModal();
-    closePaymentEditModal();
+//     closePaymentModal();
+//     closePaymentEditModal();
+// }
+
+
+
+// /**
+//  * 選択された支払い方法 (bank-X, conveni, paypay) に基づいてメイン画面を更新する
+//  * (住所の updateShippingInfo と同じロジック)
+//  */
+// function updatePaymentInfo(methodId) {
+//     const paymentInfoDisplay = document.getElementById('selectedPaymentInfo');
+//     let htmlContent = '';
+
+//     if (methodId.startsWith('bank-')) {
+//         const index = parseInt(methodId.split('-')[1]);
+//         if (index >= 0 && index < bankInfoList.length) {
+//             const info = bankInfoList[index];
+//             const maskedNum = maskedAccountNumbers[index];
+            
+//             htmlContent = `
+//                 銀行口座 (${info.bankName})<br>
+//                 口座番号: ${maskedNum}
+//             `;
+//             // グローバル変数とサマリー表示を更新
+//             selectedPaymentMethod = methodId; 
+//             document.getElementById('payment-summary-value').textContent = '銀行口座';
+//             selectedBankIndex = index; // インデックスも保存
+//         }
+//     } else {
+//         // 静的な支払い方法 (conveni, paypay)
+//         let methodText = '';
+//         if (methodId === 'conveni') {
+//             methodText = 'コンビニ支払い';
+//         } else if (methodId === 'paypay') {
+//             methodText = 'PayPay';
+//         } else {
+//             // その他、初期値 'card1' など、ハードコードされた古い値の場合のフォールバック
+//             methodText = 'クレジットカード決済'; 
+//         }
+        
+//         htmlContent = methodText;
+//         selectedPaymentMethod = methodId;
+//         document.getElementById('payment-summary-value').textContent = methodText;
+//     }
+
+//     paymentInfoDisplay.innerHTML = htmlContent;
+// }
+
+
+/**
+ * 選択された支払い方法 (card-X, conveni, paypay) に基づいてメイン画面を更新する
+ * @param {string} methodId - 選択された支払い方法のID (例: 'card-0', 'conveni')
+ */
+function updatePaymentInfo(methodId) {
+    const paymentInfoDisplay = document.getElementById('selectedPaymentInfo');
+    const paymentSummaryValueElement = document.getElementById('payment-summary-value');
+    let htmlContent = '';
+    let summaryText = '';
+
+    // エラー保護: payment-summary-value が見つからない場合のエラー回避
+    if (!paymentSummaryValueElement) {
+        console.error("エラー: 'payment-summary-value' 要素が見つかりません。HTMLを確認してください。");
+        return; 
+    }
+
+    if (methodId.startsWith('card')) {
+        // インデックスの抽出を 'card' の直後から行う
+        const indexStr = methodId.substring(4); // 'card' (4文字) の後の文字列を取得
+        const index = parseInt(indexStr);
+        
+        // cardInfoList を使用してカード情報を取得
+        if (index >= 0 && index < cardInfoList.length) { 
+            const card = cardInfoList[index];
+            
+            // カード番号の下4桁を取得 (DBから取得した `number` フィールドを使用)
+            const lastFour = card.number.slice(-4);
+            
+            htmlContent = `
+                クレジットカード決済<br>
+                <div class="masked-card" id="selectedCard">************${lastFour} (${card.expiry})</div>
+            `;
+            summaryText = 'クレジットカード';
+
+            // グローバル変数を更新
+            selectedPaymentMethod = methodId; 
+            selectedCardIndex = index; // カードインデックスを保存
+        }
+    } else {
+        // 静的な支払い方法 (conveni, paypay)
+        if (methodId === 'conveni') {
+            summaryText = 'コンビニ支払い';
+        } else if (methodId === 'paypay') {
+            summaryText = 'PayPay';
+        } else {
+            summaryText = '支払い方法未選択'; 
+        }
+        
+        htmlContent = summaryText;
+        selectedPaymentMethod = methodId;
+    }
+
+    // メイン画面の要素を更新
+    paymentInfoDisplay.innerHTML = htmlContent;
+    paymentSummaryValueElement.textContent = summaryText; 
 }
+
+
+// 既存の selectPayment 関数も、選択後にメイン画面を更新するように修正
+function selectPayment(methodId) {
+    // ... (既存のラジオボタン切り替えロジック) ...
+    
+    // メイン画面の支払い情報を更新
+    updatePaymentInfo(methodId);
+    
+    // グローバル変数 selectedPaymentMethod を更新
+    selectedPaymentMethod = methodId; 
+}
+
+
+
+
 
 function confirmDeleteCard(event, cardId) {
     event.stopPropagation();
@@ -145,32 +422,58 @@ function completeAddressEdit(event) {
     document.getElementById('addressModal').classList.add('active');
 }
 
-function selectAddress(addressId) {
-    selectedAddress = addressId;
+// function selectAddress(addressId) {
+//     selectedAddress = addressId;
     
+//     document.querySelectorAll('[id^="radio-address"], [id^="radio-edit-address"]').forEach(btn => {
+//         btn.classList.remove('selected');
+//     });
+    
+//     const radioBtn = document.getElementById('radio-' + addressId);
+//     const editRadioBtn = document.getElementById('radio-edit-' + addressId);
+//     if (radioBtn) radioBtn.classList.add('selected');
+//     if (editRadioBtn) editRadioBtn.classList.add('selected');
+// }
+
+
+function selectAddress(addressId) {
+    // 例: addressId が 'address-0' の場合、インデックス 0 を抽出
+    const indexStr = addressId.split('-')[1];
+    const index = parseInt(indexStr);
+    
+    // ラジオボタンの選択状態を切り替える (既存のロジック)
     document.querySelectorAll('[id^="radio-address"], [id^="radio-edit-address"]').forEach(btn => {
         btn.classList.remove('selected');
     });
     
+    // 通常用と編集用の両方のラジオボタンを選択状態にする
     const radioBtn = document.getElementById('radio-' + addressId);
     const editRadioBtn = document.getElementById('radio-edit-' + addressId);
     if (radioBtn) radioBtn.classList.add('selected');
     if (editRadioBtn) editRadioBtn.classList.add('selected');
+
+    // 【新しい処理】: メイン画面の配送先情報を更新
+    if (!isNaN(index)) { // インデックスが有効な数値であることを確認
+        updateShippingInfo(index);
+    }
+
+    // 選択後、モーダルを閉じたい場合はここで閉じます
+    // document.getElementById('addressModal').classList.remove('active');
 }
 
-function updateAddress() {
-    const selectedAddressElement = document.getElementById('selectedAddress');
+// function updateAddress() {
+//     const selectedAddressElement = document.getElementById('selectedAddress');
     
-    const addresses = {
-        'address1': 'HAL 大阪（ハル オオサカ）<br>〒530-0001<br>大阪府 大阪市 北区 梅田3丁目3−1',
-        'address2': 'HAL 東京（ハル トウキョウ）<br>〒160-0023<br>東京都新宿区西新宿1丁目7−3',
-        'address3': 'HAL 名古屋（ハル ナゴヤ）<br>〒450-0002<br>愛知県名古屋市中村区名駅4丁目27−1'
-    };
+//     const addresses = {
+//         'address1': 'HAL 大阪（ハル オオサカ）<br>〒530-0001<br>大阪府 大阪市 北区 梅田3丁目3−1',
+//         'address2': 'HAL 東京（ハル トウキョウ）<br>〒160-0023<br>東京都新宿区西新宿1丁目7−3',
+//         'address3': 'HAL 名古屋（ハル ナゴヤ）<br>〒450-0002<br>愛知県名古屋市中村区名駅4丁目27−1'
+//     };
     
-    selectedAddressElement.innerHTML = addresses[selectedAddress];
-    closeAddressModal();
-    closeAddressEditModal();
-}
+//     selectedAddressElement.innerHTML = addresses[selectedAddress];
+//     closeAddressModal();
+//     closeAddressEditModal();
+// }
 
 function confirmDeleteAddress(event, addressId) {
     event.stopPropagation();
