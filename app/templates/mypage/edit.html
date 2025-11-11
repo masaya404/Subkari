@@ -48,13 +48,7 @@
             <!-- 自己紹介 -->
             <div class="form-group">
                 <label class="form-label">自己紹介</label>
-                <textarea class="form-textarea" id="bio" maxlength="1000" oninput="updateCharCount('bio', 'bioCount', 1000); validateBio()" name="introduction">
-                    {% if user_info.introduction!='None' %}
-                    {{user_info.introduction}}
-                    {% else %}
-
-                    {% endif %}
-                </textarea>
+                <textarea class="form-textarea" id="bio" maxlength="1000" oninput="updateCharCount('bio', 'bioCount', 1000); validateBio()" name="introduction">{% if user_info.introduction!='None' %}{{user_info.introduction}}{% else %}{% endif %}</textarea>
                 <div class="error-message" id="bioError">1000文字以下で入力してください</div>
                 <div class="char-count" id="bioCountWrapper"><span id="bioCount">0</span> / 1000</div>
             </div>
