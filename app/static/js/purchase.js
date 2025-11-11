@@ -139,8 +139,7 @@ function updateShippingInfo(addressId) {
         // メイン画面の内容を更新
         shippingInfoElement.innerHTML = htmlContent;
 
-        // グローバル変数に新しいインデックスを保存
-        selectedAddressIndex = index;
+        
 
     } else if (addressDataList.length === 0) {
         // 住所データが一つもない場合の表示
