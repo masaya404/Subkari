@@ -108,7 +108,7 @@ function updateHiddenFormFields() {
 
 /**
  * 選択された住所のIDに基づいて、メイン画面の配送先情報を更新する
- * @param {string} addressId - 選択された住所のID (例: 'address-101')
+ * @param {string|number} addressId - 選択された住所のID (例: 'address-101')
  */
 
 function updateShippingInfo(addressId) {
@@ -116,29 +116,44 @@ function updateShippingInfo(addressId) {
     let htmlContent = '';
 
     // 1. IDからDB ID (数値) を抽出
-    const dbId = parseInt(addressId.split('-')[1]);
-     
+    console.log('ADDRESSID',addressId);
+    let dbId;
+    if (typeof addressId === 'string' && addressId.includes('-')) {
+        // 'address-1' の形式から抽出
+        dbId = parseInt(addressId.split('-')[1]);
+    } else {
+        // 直接数値
+        dbId = parseInt(addressId);
+    }
+    
+    // console.log('DB ID:', dbId);
+    // console.log('ADDRESS LIST:', addressDataList);
+    // const dbId = parseInt(addressId);
+    console.log(dbId); 
     // 2. 配列内を検索して住所オブジェクトを見つける
+    console.log('ADDRESSLIST',addressDataList);
     const selectedAddr = addressDataList.find(addr => addr.id === dbId); // ★ find メソッドで ID を検索
     
     // インデックスが有効で、データが存在することを確認
     if (selectedAddr) {
         
         // HTML文字列を生成
-        let htmlContent = `
-            〒${selectedAddr.zip}<br>
-            ${selectedAddr.pref} ${selectedAddr.address1} ${selectedAddr.address2}<br>
-        `;
+        let htmlContent = `<div>
+            <div class="zip">〒${selectedAddr.zip}</div>
+            <div class="address">${selectedAddr.pref} ${selectedAddr.address1} ${selectedAddr.address2}</div>
+            `;
         
         // address3 が存在する場合のみ追加
         if (selectedAddr.address3) {
-            htmlContent += `${selectedAddr.address3}`;
+            htmlContent += `<div>${selectedAddr.address3}</div>`;
         }
-        
+        htmlContent += `</div>`;
         selectedAddressId = dbId; // グローバル変数に新しい住所IDを保存
         // メイン画面の内容を更新
         shippingInfoElement.innerHTML = htmlContent;
 
+        console.log("selectedAddr選択された");
+        console.log(selectedAddr);
         
 
     } else if (addressDataList.length === 0) {
@@ -151,9 +166,6 @@ function updateShippingInfo(addressId) {
         console.error(`住所ID ${dbId} はリストに見つかりませんでした。`);
     }
     // メイン画面の要素を更新
-    if (shippingInfoElement) {
-        shippingInfoElement.innerHTML = htmlContent;
-    }
 }
 
 
@@ -437,8 +449,13 @@ function completeAddressEdit(event) {
 
 function selectAddress(addressId) {
     // 例: addressId が 'address-0' の場合、インデックス 0 を抽出
-    const indexStr = addressId.split('-')[1];
-    const index = parseInt(indexStr);
+    const dbId = parseInt(addressId.split('-')[1]);
+    console.log("選択されたDB ID:", dbId);
+    // const indexStr = addressId;
+    // console.log("indexStr",indexStr);
+    
+    // const index = parseInt(indexStr);
+    // console.log("index",index);
     
     // ラジオボタンの選択状態を切り替える (既存のロジック)
     document.querySelectorAll('[id^="radio-address"], [id^="radio-edit-address"]').forEach(btn => {
@@ -451,13 +468,11 @@ function selectAddress(addressId) {
     if (radioBtn) radioBtn.classList.add('selected');
     if (editRadioBtn) editRadioBtn.classList.add('selected');
 
-    // 【新しい処理】: メイン画面の配送先情報を更新
-    if (!isNaN(index)) { // インデックスが有効な数値であることを確認
-        updateShippingInfo(index);
-    }
+    // DBのID
+    // const dbId = addressDataList.findIndex(addr => addr.address1 === addressId);
+    console.log("dbId",dbId);
 
-    // 選択後、モーダルを閉じたい場合はここで閉じます
-    // document.getElementById('addressModal').classList.remove('active');
+    updateShippingInfo(addressId); // DB ID
 }
 
 // function updateAddress() {

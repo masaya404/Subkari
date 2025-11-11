@@ -89,9 +89,9 @@
                         <p>配送先の住所が登録されていません。「変更する」ボタンから登録してください。</p>
                     {% endif %}
                     
-                    {# 住所データがある場合、初期表示はJavaScript (DOMContentLoaded) に任せます。
+                    <!-- 住所データがある場合、初期表示はJavaScript (DOMContentLoaded) に任せます。
                     このブロックが空の場合は、JavaScriptが実行されるまでの間は何も表示されません。
-                    JavaScriptは address_list[0] の内容でこの div の中身を上書きします。 #}
+                    JavaScriptは address_list[0] の内容でこの div の中身を上書きします。 -->
                     </div>
                 </div>
 
@@ -447,7 +447,7 @@
                 </div>
 
                 <!-- 住所2 -->
-                <div class="address-option" onclick="selectAddress('address2')">
+                <div class="address-option" onclick="selectAddress(6)">
                     <div class="radio-btn" id="radio-edit-address2"></div>
                     <div class="address-details">
                         <div class="address-name">HAL 東京（ハル トウキョウ）</div>
@@ -516,29 +516,28 @@
 
 
     // 住所情報と同様に、支払い方法のデータもJSに渡す
-    const addressDataList = {{ address_list | tojson | default('[]') | safe }}; 
-    const cardInfoList = {{ card_info | tojson | default('[]') | safe }}; // ★ cardInfoListに変更
+    const addressDataList = {{ address_list | tojson | default('[]') | safe }}; 
+    const cardInfoList = {{ card_info | tojson | default('[]') | safe }}; // ★ cardInfoListに変更
 
-    let selectedAddressIndex = 0; 
-    
-    // 新しい支払い方法用のインデックス変数
-    let selectedCardIndex = 0; // ★ selectedCardIndex に変更
+    let selectedAddressIndex = 0; 
+ 
+     // 新しい支払い方法用のインデックス変数
+    let selectedCardIndex = 0; // ★ selectedCardIndex に変更
 
-    // ページロード時の処理
-    document.addEventListener('DOMContentLoaded', () => {
-        if (addressDataList.length > 0) {
-            updateShippingInfo(selectedAddressIndex);
-        }
-        
-        // 【支払い方法の初期表示】
-        if (cardInfoList.length > 0) {
-            // カード情報がある場合、最初のカードを初期選択として表示
-            updatePaymentInfo('card0');
-        } else {
-            // カード情報がない場合、初期選択 ('conveni') を表示
-            updatePaymentInfo(selectedPaymentMethod);
-        }
-    });
+     // ページロード時の処理
+    document.addEventListener('DOMContentLoaded', () => {
+        if (addressDataList.length > 0) {
+            updateShippingInfo(selectedAddressIndex);
+        }
+        // 【支払い方法の初期表示】
+        if (cardInfoList.length > 0) {
+         // カード情報がある場合、最初のカードを初期選択として表示
+            updatePaymentInfo('card0');
+        } else {
+         // カード情報がない場合、初期選択 ('conveni') を表示
+            updatePaymentInfo(selectedPaymentMethod);
+        }
+    });
 
 
 
