@@ -435,7 +435,7 @@ def purchase_complete():
     payment_method = request.form.get('payment_method')
     addressId = request.form.get('address_index')
     delivery_location = request.form.get('delivery_location')
-    # creditcards_id = request.form.get('creditcards_id')
+    creditcards_id = request.form.get('creditcards_id')
 
     #購入項目があるかチェック
     if not product_id or not payment_method or not addressId or not delivery_location:
