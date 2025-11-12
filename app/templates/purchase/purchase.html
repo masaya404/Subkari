@@ -213,7 +213,7 @@
                     <div class="payment-details">
                         <div class="card-number">
                             {## カード番号の下4桁と有効期限を表示（末尾4桁以外を * でマスク） ##}
-                            **{{ "************" ~ card.number[-4:] }}** ({{ card.expiry }})
+                            {{ "************" ~ card.number[-4:] }} ({{ card.expiry }})
                         </div>
                     </div>
                 </div>
@@ -515,7 +515,6 @@
 
     <script>
 
-
     // 住所情報と同様に、支払い方法のデータもJSに渡す
     const addressDataList = {{ address_list | tojson | default('[]') | safe }}; 
     const cardInfoList = {{ card_info | tojson | default('[]') | safe }}; // ★ cardInfoListに変更
@@ -554,8 +553,6 @@
         // 初期値をフォームにセット
         updateHiddenFormFields();
     });
-
-
 
 
 

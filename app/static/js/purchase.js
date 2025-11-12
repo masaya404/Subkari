@@ -215,6 +215,7 @@ function selectPayment(method) {
      selectedPaymentMethod = method;
 
      // paymentModalとpaymentEditModalの両方のラジオボタンの状態を同期させる
+     //原因はここ
     document.querySelectorAll('#paymentModal .radio-btn, #paymentEditModal .radio-btn').forEach(btn => {
     btn.classList.remove('selected');
     });
@@ -596,15 +597,21 @@ document.querySelectorAll('.modal').forEach(modal => {
 
 
 
+// 修正後: フォームの submit イベントにリスナーを登録する
+const purchaseForm = document.getElementById('purchaseForm');
 
-    
-    //実際にvalue値がはいっているか確認するためのデバッグ用コード
-    document.getElementById('purchaseForm').addEventListener('DOMContentLoaded', function(e) {
+// purchaseForm 要素が存在することを確認する（nullチェック）
+if (purchaseForm) {
+    purchaseForm.addEventListener('submit', function(e) {
         updateHiddenFormFields(); // 送信前に最新の選択状態を反映
-        console.log('Hidden prodcut ID:', document.getElementById('hidden_product_id').value);        
+        console.log('Hidden prodcut ID:', document.getElementById('hidden_product_id').value);        
         console.log('Hidden Payment Method:', document.getElementById('hidden_payment_method').value);
         console.log('Hidden Creditcards ID:', document.getElementById('hidden_creditcards_id').value);
         console.log('Hidden Address Index:', document.getElementById('hidden_address_index').value);
         console.log('Hidden Delivery Location:', document.getElementById('hidden_delivery_location').value);
-        // e.preventDefault(); // フォーム送信を防止（デバッグ用）
+        
+        // e.preventDefault(); // デバッグを続ける場合は有効にし、本番ではコメントアウトまたは削除
     });
+} else {
+    console.error("エラー: ID 'purchaseForm' を持つ要素がDOMに見つかりません。");
+}
