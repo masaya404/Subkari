@@ -600,3 +600,60 @@ document.querySelectorAll('.modal').forEach(modal => {
         }
     });
 });
+
+//  // ページロード時の処理
+//     document.addEventListener('DOMContentLoaded', () => {
+//         // 住所の初期表示
+//         if (addressDataList.length > 0) {
+//             // 最初の住所のIDを取得して表示
+//             const firstAddressId = addressDataList[0].id;
+//             selectedAddressId = firstAddressId; // グローバル変数に保存
+//             updateShippingInfo(`address-${firstAddressId}`);
+//         }
+        
+//         // 【支払い方法の初期表示】
+//         if (cardInfoList.length > 0) {
+//          // カード情報がある場合、最初のカードを初期選択として表示
+//             updatePaymentInfo('card0');
+//         } else {
+//          // カード情報がない場合、初期選択 ('conveni') を表示
+//             updatePaymentInfo(selectedPaymentMethod);
+//         }
+//     });
+
+
+
+    // ページロード時の処理
+    document.addEventListener('DOMContentLoaded', () => {
+        // 住所の初期表示
+        if (addressDataList.length > 0) {
+            // 最初の住所のIDを取得して表示
+            const firstAddressId = addressDataList[0].id;
+            selectedAddressId = firstAddressId; // グローバル変数に保存
+            updateShippingInfo(`address-${firstAddressId}`);
+        }
+        
+        // 【支払い方法の初期表示】
+        if (cardInfoList.length > 0) {
+         // カード情報がある場合、最初のカードを初期選択として表示
+            selectedPaymentMethod = 'card0';
+            updatePaymentInfo('card0');
+        } else {
+         // カード情報がない場合、初期選択 ('conveni') を表示
+            updatePaymentInfo(selectedPaymentMethod);
+        }
+        
+        // 初期値をフォームにセット
+        updateHiddenFormFields();
+    });
+
+    //実際にvalue値がはいっているか確認するためのデバッグ用コード
+    document.getElementById('purchaseForm').addEventListener('DOMContentLoaded', function(e) {
+        updateHiddenFormFields(); // 送信前に最新の選択状態を反映
+        console.log('Hidden prodcut ID:', document.getElementById('hidden_product_id').value);        
+        console.log('Hidden Payment Method:', document.getElementById('hidden_payment_method').value);
+        console.log('Hidden Creditcards ID:', document.getElementById('hidden_creditcards_id').value);
+        console.log('Hidden Address Index:', document.getElementById('hidden_address_index').value);
+        console.log('Hidden Delivery Location:', document.getElementById('hidden_delivery_location').value);
+        // e.preventDefault(); // フォーム送信を防止（デバッグ用）
+    });

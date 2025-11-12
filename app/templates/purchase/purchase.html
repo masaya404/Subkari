@@ -132,7 +132,7 @@
                     <input type="hidden" id="hidden_product_id" name="product_id" value="{{ product.id }}">
                     <input type="hidden" id="hidden_payment_method" name="payment_method" value="initial_payment_value">
                     <input type="hidden" id="hidden_creditcards_id" name="creditcards_id" value="initial_creditcards_id_value">
-                    <input type="hidden" id="hidden_address_index" name="address_index" value="0">
+                    <input type="hidden" id="hidden_address_index" name="address_index" value="initial_address_index_value">
                     <input type="hidden" id="hidden_delivery_location" name="delivery_location" value="玄関前">
                     <button class="confirm-btn" onclick="confirmPurchase()">購入を確定する</button>
                 </form>
@@ -520,10 +520,10 @@
     const addressDataList = {{ address_list | tojson | default('[]') | safe }}; 
     const cardInfoList = {{ card_info | tojson | default('[]') | safe }}; // ★ cardInfoListに変更
 
-    let selectedAddressIndex = 0; 
+    // let selectedAddressIndex = 0; 
  
      // 新しい支払い方法用のインデックス変数
-    let selectedCardIndex = 0; // ★ selectedCardIndex に変更
+    // let selectedCardIndex = 0; // ★ selectedCardIndex に変更
 
      // ページロード時の処理
     document.addEventListener('DOMContentLoaded', () => {
