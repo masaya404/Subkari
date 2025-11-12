@@ -1,14 +1,11 @@
 
 // let selectedPaymentMethod = 'card1';
-let selectedDeliveryLocation = '玄関前';
-let selectedPaymentMethod = 'conveni';
+
 // let selectedAddress = 'address1';
 // let cardToDelete = null;
 // let addressToDelete = null;
 
-//選択された住所・カードのインデックスを保持する変数を追加
-let selectedAddressId = null; 
-let selectedCardId = null;
+
 
 
 
@@ -44,9 +41,24 @@ function updateHiddenFormFields() {
     // 1. 支払い方法 (ID: hidden_payment_method)
     // selectedPaymentMethod は 'card-ID', 'conveni', 'paypay' の形式
     const paymentMethodInput = document.getElementById('hidden_payment_method');
+    const creditcardsIdInput = document.getElementById('hidden_creditcards_id');
+
+
     if (paymentMethodInput) {
         // 支払い方法は 'card-ID' 形式のまま渡します
-        paymentMethodInput.value = selectedPaymentMethod; 
+        if(selectedPaymentMethod.startsWith('card') && creditcardsIdInput){
+            // 'card-ID' 形式から ID 部分を抽出して hidden_creditcards_id にセット
+            const cardId = selectedPaymentMethod.substring(4); // 'card' の後ろの部分を取得
+            creditcardsIdInput.value = cardId;
+            paymentMethodInput.value = 'クレジットカード';
+        } else if (selectedPaymentMethod === 'conveni') {
+            paymentMethodInput.value = 'コンビニ支払い';
+        } else if (selectedPaymentMethod === 'paypay') {
+            paymentMethodInput.value = 'PayPay';
+        } else {
+            // エラー処理: 未知の支払い方法
+            console.error('未知の支払い方法が選択されました:', selectedPaymentMethod);
+        }
     }
 
     // 2. 配送先住所 ID (ID: hidden_address_index)
@@ -200,96 +212,75 @@ function completePaymentEdit(event) {
 }
 
 function selectPayment(method) {
-    selectedPaymentMethod = method;
-    
-    // paymentModalとpaymentEditModalの両方のラジオボタンの状態を同期させる
-    document.querySelectorAll('#paymentModal .radio-btn, #paymentEditModal .radio-btn').forEach(btn => {
-        btn.classList.remove('selected');
-    });
-    
-    const radioBtn = document.getElementById('radio-' + method);
-    const editRadioBtn = document.getElementById('radio-edit-' + method);
+     selectedPaymentMethod = method;
 
-    if (radioBtn) radioBtn.classList.add('selected');
-    if (editRadioBtn) editRadioBtn.classList.add('selected');
+     // paymentModalとpaymentEditModalの両方のラジオボタンの状態を同期させる
+    document.querySelectorAll('#paymentModal .radio-btn, #paymentEditModal .radio-btn').forEach(btn => {
+    btn.classList.remove('selected');
+    });
+    if (methodId.startsWith('card')) {
+        // インデックスの抽出を 'card' の直後から行う
+        const indexStr = methodId.substring(4); // 'card' (4文字) の後の文字列を取得
+        const cardId = parseInt(indexStr);
+        //cardIdに対応するデータが何番目かを特定する
+        // let methodindex = cardInfoList.findIndex(c => c.id === cardId);
+        // console.log("methodindex",methodindex);
+
+        const radioBtn = document.getElementById('radio' + cardId);
+        const editRadioBtn = document.getElementById('radio-edit' + cardId);
+
+        if (radioBtn) radioBtn.classList.add('selected');
+        if (editRadioBtn) editRadioBtn.classList.add('selected');
+    }else if (method === 'conveni' || method === 'paypay') {
+        const radioBtn = document.getElementById('radio-' + method);
+        const editRadioBtn = document.getElementById('radio-edit-' + method);
+
+        if (radioBtn) radioBtn.classList.add('selected');
+        if (editRadioBtn) editRadioBtn.classList.add('selected');
+    }
+    
+    // const radioBtn = document.getElementById('radio-' + method);
+    // const editRadioBtn = document.getElementById('radio-edit-' + method);
+
+    // if (radioBtn) radioBtn.classList.add('selected');
+    // if (editRadioBtn) editRadioBtn.classList.add('selected');
 }
 
-// ▼▼▼ 変更点3: このJavaScript関数を全面的に修正しました ▼▼▼
-// function updatePaymentMethod() {
-//     const paymentInfoDisplay = document.getElementById('payment-info-display');
-//     const paymentSummaryValue = document.getElementById('payment-summary-value');
-
-//     switch(selectedPaymentMethod) {
-//         case 'card1':
-//             paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 01/01</div>`;
-//             paymentSummaryValue.textContent = 'クレジットカード';
-//             break;
-//         case 'card2':
-//             paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 02/02</div>`;
-//             paymentSummaryValue.textContent = 'クレジットカード';
-//             break;
-//         case 'card3':
-//             paymentInfoDisplay.innerHTML = `クレジットカード決済 <div class="masked-card" id="selectedCard">************1234 03/03</div>`;
-//             paymentSummaryValue.textContent = 'クレジットカード';
-//             break;
-//         case 'conveni':
-//             paymentInfoDisplay.innerHTML = 'コンビニ支払い';
-//             paymentSummaryValue.textContent = 'コンビニ支払い';
-//             break;
-//         case 'paypay':
-//             paymentInfoDisplay.innerHTML = 'PayPay';
-//             paymentSummaryValue.textContent = 'PayPay';
-//             break;
-//     }
+//////
+//////
+//////
+// //下参考コード必ず消す
+// function selectAddress(addressId) {
+//     // 例: addressId が 'address-0' の場合、インデックス 0 を抽出
+//     const dbId = parseInt(addressId.split('-')[1]);
+//     console.log("選択されたDB ID:", dbId);
+//     // const indexStr = addressId;
+//     // console.log("indexStr",indexStr);
     
-//     closePaymentModal();
-//     closePaymentEditModal();
+//     // const index = parseInt(indexStr);
+//     // console.log("index",index);
+    
+//     // ラジオボタンの選択状態を切り替える (既存のロジック)
+//     document.querySelectorAll('[id^="radio-address"], [id^="radio-edit-address"]').forEach(btn => {
+//         btn.classList.remove('selected');
+//     });
+    
+//     // 通常用と編集用の両方のラジオボタンを選択状態にする
+//     const radioBtn = document.getElementById('radio-' + addressId);
+//     const editRadioBtn = document.getElementById('radio-edit-' + addressId);
+//     if (radioBtn) radioBtn.classList.add('selected');
+//     if (editRadioBtn) editRadioBtn.classList.add('selected');
+
+//     // DBのID
+//     // const dbId = addressDataList.findIndex(addr => addr.address1 === addressId);
+//     console.log("dbId",dbId);
+
+//     updateShippingInfo(addressId); // DB ID
 // }
+//////
+//////
+//////
 
-
-
-// /**
-//  * 選択された支払い方法 (bank-X, conveni, paypay) に基づいてメイン画面を更新する
-//  * (住所の updateShippingInfo と同じロジック)
-//  */
-// function updatePaymentInfo(methodId) {
-//     const paymentInfoDisplay = document.getElementById('selectedPaymentInfo');
-//     let htmlContent = '';
-
-//     if (methodId.startsWith('bank-')) {
-//         const index = parseInt(methodId.split('-')[1]);
-//         if (index >= 0 && index < bankInfoList.length) {
-//             const info = bankInfoList[index];
-//             const maskedNum = maskedAccountNumbers[index];
-            
-//             htmlContent = `
-//                 銀行口座 (${info.bankName})<br>
-//                 口座番号: ${maskedNum}
-//             `;
-//             // グローバル変数とサマリー表示を更新
-//             selectedPaymentMethod = methodId; 
-//             document.getElementById('payment-summary-value').textContent = '銀行口座';
-//             selectedBankIndex = index; // インデックスも保存
-//         }
-//     } else {
-//         // 静的な支払い方法 (conveni, paypay)
-//         let methodText = '';
-//         if (methodId === 'conveni') {
-//             methodText = 'コンビニ支払い';
-//         } else if (methodId === 'paypay') {
-//             methodText = 'PayPay';
-//         } else {
-//             // その他、初期値 'card1' など、ハードコードされた古い値の場合のフォールバック
-//             methodText = 'クレジットカード決済'; 
-//         }
-        
-//         htmlContent = methodText;
-//         selectedPaymentMethod = methodId;
-//         document.getElementById('payment-summary-value').textContent = methodText;
-//     }
-
-//     paymentInfoDisplay.innerHTML = htmlContent;
-// }
 
 
 /**
@@ -311,12 +302,15 @@ function updatePaymentInfo(methodId) {
     if (methodId.startsWith('card')) {
         // インデックスの抽出を 'card' の直後から行う
         const indexStr = methodId.substring(4); // 'card' (4文字) の後の文字列を取得
-        const index = parseInt(indexStr);
+        const cardId = parseInt(indexStr);
+        // const index = parseInt(indexStr);
+
         
         // cardInfoList を使用してカード情報を取得
-        if (index >= 0 && index < cardInfoList.length) { 
-            const card = cardInfoList[index];
-            
+        if (cardInfoList) { 
+            // 2. ★修正: find() メソッドを使って、IDが一致するカードオブジェクトを検索★
+            const card = cardInfoList.find(c => c.id === cardId)
+            console.log("選択されたカード情報:", card);            
             // カード番号の下4桁を取得 (DBから取得した `number` フィールドを使用)
             const lastFour = card.number.slice(-4);
             
@@ -328,7 +322,6 @@ function updatePaymentInfo(methodId) {
 
             // グローバル変数を更新
             selectedPaymentMethod = methodId; 
-            selectedCardIndex = index; // カードインデックスを保存
         }
     } else {
         // 静的な支払い方法 (conveni, paypay)
@@ -601,52 +594,10 @@ document.querySelectorAll('.modal').forEach(modal => {
     });
 });
 
-//  // ページロード時の処理
-//     document.addEventListener('DOMContentLoaded', () => {
-//         // 住所の初期表示
-//         if (addressDataList.length > 0) {
-//             // 最初の住所のIDを取得して表示
-//             const firstAddressId = addressDataList[0].id;
-//             selectedAddressId = firstAddressId; // グローバル変数に保存
-//             updateShippingInfo(`address-${firstAddressId}`);
-//         }
-        
-//         // 【支払い方法の初期表示】
-//         if (cardInfoList.length > 0) {
-//          // カード情報がある場合、最初のカードを初期選択として表示
-//             updatePaymentInfo('card0');
-//         } else {
-//          // カード情報がない場合、初期選択 ('conveni') を表示
-//             updatePaymentInfo(selectedPaymentMethod);
-//         }
-//     });
 
 
 
-    // ページロード時の処理
-    document.addEventListener('DOMContentLoaded', () => {
-        // 住所の初期表示
-        if (addressDataList.length > 0) {
-            // 最初の住所のIDを取得して表示
-            const firstAddressId = addressDataList[0].id;
-            selectedAddressId = firstAddressId; // グローバル変数に保存
-            updateShippingInfo(`address-${firstAddressId}`);
-        }
-        
-        // 【支払い方法の初期表示】
-        if (cardInfoList.length > 0) {
-         // カード情報がある場合、最初のカードを初期選択として表示
-            selectedPaymentMethod = 'card0';
-            updatePaymentInfo('card0');
-        } else {
-         // カード情報がない場合、初期選択 ('conveni') を表示
-            updatePaymentInfo(selectedPaymentMethod);
-        }
-        
-        // 初期値をフォームにセット
-        updateHiddenFormFields();
-    });
-
+    
     //実際にvalue値がはいっているか確認するためのデバッグ用コード
     document.getElementById('purchaseForm').addEventListener('DOMContentLoaded', function(e) {
         updateHiddenFormFields(); // 送信前に最新の選択状態を反映

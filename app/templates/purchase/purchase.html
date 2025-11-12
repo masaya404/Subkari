@@ -525,19 +525,34 @@
      // 新しい支払い方法用のインデックス変数
     // let selectedCardIndex = 0; // ★ selectedCardIndex に変更
 
-     // ページロード時の処理
+
+    //選択された住所・カードのインデックスを保持する変数を追加
+    let selectedAddressId = null; 
+    let selectedDeliveryLocation = '玄関前';
+    let selectedPaymentMethod = 'conveni';
+    // ページロード時の処理
     document.addEventListener('DOMContentLoaded', () => {
+        // 住所の初期表示
         if (addressDataList.length > 0) {
-            updateShippingInfo(selectedAddressIndex);
+            // 最初の住所のIDを取得して表示
+            const firstAddressId = addressDataList[0].id;
+            selectedAddressId = firstAddressId; // グローバル変数に保存
+            updateShippingInfo(`address-${firstAddressId}`);
         }
+        
         // 【支払い方法の初期表示】
         if (cardInfoList.length > 0) {
          // カード情報がある場合、最初のカードを初期選択として表示
-            updatePaymentInfo('card0');
+            const firstCardId = cardInfoList[0].id;
+            selectedPaymentMethod = `card${firstCardId}`;   // グローバル変数に保存
+            updatePaymentInfo(`card${firstCardId}`);
         } else {
          // カード情報がない場合、初期選択 ('conveni') を表示
             updatePaymentInfo(selectedPaymentMethod);
         }
+        
+        // 初期値をフォームにセット
+        updateHiddenFormFields();
     });
 
 
