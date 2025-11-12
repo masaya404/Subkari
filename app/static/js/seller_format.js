@@ -295,7 +295,7 @@ function goToClean(sizeUrl){
 function validateForm() {
     saveToSessionStorage();
     let isValid = true;
-
+    let rentalflag = false;
     // 商品名
     const productName = document.getElementById('name').value.trim();
     if (!productName) {
@@ -313,6 +313,9 @@ function validateForm() {
         isValid = false;
     } else {
         document.getElementById('rentalPurchaseError').classList.add('hidden');
+    }
+    if(rental){
+        rentalflag = true;
     }
 
     // 系統カラー
@@ -369,7 +372,7 @@ function validateForm() {
 
     // 返却場所
     const returnLocation = document.getElementById('returnLocation').value.trim();
-    if (!returnLocation) {
+    if (!returnLocation && rentalflag ){
         document.getElementById('returnLocationError').classList.remove('hidden');
         isValid = false;
     } else {

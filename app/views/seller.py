@@ -31,7 +31,31 @@ def seller_format():
     else:
         user_id = session.get('user_id')
         
-  
+    # DB接続
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+        
+        #  SQL 文章用意
+        sql = """
+            SELECT 
+                address.*             
+            FROM 
+                m_account AS account
+            LEFT JOIN 
+                m_address AS address 
+            ON 
+                account.id = address.account_id
+            WHERE 
+                account.id = %s
+                ;
+            """   
+        cur.execute(sql, (user_id,))
+        address = cur.fetchall()
+        print(address)
+    # address_content=""
+    # for key,value in address:
+    #     if address[key]:
+    #         address_content += address[key]
     
     return render_template('seller/seller_format.html', 
                          user_id=user_id, 

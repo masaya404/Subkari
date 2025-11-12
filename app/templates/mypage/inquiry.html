@@ -1,42 +1,25 @@
 {% extends "base.html" %}
 {% block title %}
-    ヘルプセンター
+    お問い合わせ
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/helpCenter.css') }}"> 
-    
-<main>
+
+
+
+<main class="maypage_main">
+    <section class="sec">
+      <h2>お問い合わせ</h2>
+      <div class="form-group">
+                <label class="form-label">自己紹介</label>
+                <textarea class="form-textarea" id="bio" maxlength="1000" oninput="updateCharCount('bio', 'bioCount', 1000); validateBio()" name="introduction"></textarea>
+                <div class="error-message" id="bioError">1000文字以下で入力してください</div>
+                <div class="char-count" id="bioCountWrapper"><span id="bioCount">0</span> / 1000</div>
+            </div>
+    </section>
 </main>
-<script>document.addEventListener("DOMContentLoaded", () => {
-  const navItems = document.querySelectorAll(".nav-item");
-  const sections = document.querySelectorAll(".content-section");
+<script src="../../static/js/edit.js"></script>
 
-  // 初期表示（出品・購入・レンタル）
-  sections.forEach(sec => sec.classList.remove("active"));
-  document.querySelector("#selling").classList.add("active");
-
-  navItems.forEach(item => {
-    item.addEventListener("click", () => {
-      const text = item.textContent.trim();
-
-      // 左メニューのアクティブ切り替え
-      navItems.forEach(i => i.classList.remove("active"));
-      item.classList.add("active");
-
-      // 右のセクション切り替え
-      sections.forEach(sec => sec.classList.remove("active"));
-      if (text.includes("出品") || text.includes("レンタル")) {
-        document.querySelector("#selling").classList.add("active");
-      } else if (text.includes("初心者")) {
-        document.querySelector("#guide").classList.add("active");
-      } else if (text.includes("配送")) {
-        document.querySelector("#delivery").classList.add("active");
-      }
-    });
-  });
-});
-</script>
 
 <!-- <script src="{{ url_for('static', filename='js/helpCenter.js') }}"></script> -->
 {% endblock %}
