@@ -118,9 +118,6 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     products=cur.fetchone()
     #評価を変形
-    sql = "select avg(score) as 評価 from t_evaluation where recipient_id=%s group by recipient_id"
-    cur.execute(sql, (id,))
-    evaluation = cur.fetchone()
 
     if followers is None:
         followers={'フォロワー数':0}
@@ -128,13 +125,12 @@ def get_transaction_info(id):
         follows={'フォロー数':0}
     if products is None:
         products={'出品数':0}
-    if evaluation and evaluation['評価'] is not None:
-    #小数点型にしてから四捨五入
+    
+    if evaluation:
         evaluation['評価'] = round(float(evaluation['評価']))
+    #小数点型にしてから四捨五入
     else:
-        evaluation={'評価':0}
-        evaluationCount={'評価件数':0}
-
+        evaluation = {"評価":0}
     return evaluation,evaluationCount,follows,followers,products
 #商品データを取得 --------------------------------------------------
 def get_product_info(id):
