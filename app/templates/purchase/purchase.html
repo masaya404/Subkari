@@ -131,7 +131,8 @@
                 <form method="POST" action="{{ url_for('products.purchase_complete') }}">
                     <input type="hidden" id="hidden_product_id" name="product_id" value="{{ product.id }}">
                     <input type="hidden" id="hidden_payment_method" name="payment_method" value="initial_payment_value">
-                    <input type="hidden" id="hidden_address_index" name="address_index" value="0">
+                    <input type="hidden" id="hidden_creditcards_id" name="creditcards_id" value="initial_creditcards_id_value">
+                    <input type="hidden" id="hidden_address_index" name="address_index" value="initial_address_index_value">
                     <input type="hidden" id="hidden_delivery_location" name="delivery_location" value="玄関前">
                     <button class="confirm-btn" onclick="confirmPurchase()">購入を確定する</button>
                 </form>
@@ -212,7 +213,7 @@
                     <div class="payment-details">
                         <div class="card-number">
                             {## カード番号の下4桁と有効期限を表示（末尾4桁以外を * でマスク） ##}
-                            **{{ "************" ~ card.number[-4:] }}** ({{ card.expiry }})
+                            {{ "************" ~ card.number[-4:] }} ({{ card.expiry }})
                         </div>
                     </div>
                 </div>
@@ -514,32 +515,44 @@
 
     <script>
 
-
     // 住所情報と同様に、支払い方法のデータもJSに渡す
     const addressDataList = {{ address_list | tojson | default('[]') | safe }}; 
     const cardInfoList = {{ card_info | tojson | default('[]') | safe }}; // ★ cardInfoListに変更
 
-    let selectedAddressIndex = 0; 
+    // let selectedAddressIndex = 0; 
  
      // 新しい支払い方法用のインデックス変数
-    let selectedCardIndex = 0; // ★ selectedCardIndex に変更
+    // let selectedCardIndex = 0; // ★ selectedCardIndex に変更
 
-     // ページロード時の処理
+
+    //選択された住所・カードのインデックスを保持する変数を追加
+    let selectedAddressId = null; 
+    let selectedDeliveryLocation = '玄関前';
+    let selectedPaymentMethod = 'conveni';
+    // ページロード時の処理
     document.addEventListener('DOMContentLoaded', () => {
+        // 住所の初期表示
         if (addressDataList.length > 0) {
-            updateShippingInfo(selectedAddressIndex);
+            // 最初の住所のIDを取得して表示
+            const firstAddressId = addressDataList[0].id;
+            selectedAddressId = firstAddressId; // グローバル変数に保存
+            updateShippingInfo(`address-${firstAddressId}`);
         }
+        
         // 【支払い方法の初期表示】
         if (cardInfoList.length > 0) {
          // カード情報がある場合、最初のカードを初期選択として表示
-            updatePaymentInfo('card0');
+            const firstCardId = cardInfoList[0].id;
+            selectedPaymentMethod = `card${firstCardId}`;   // グローバル変数に保存
+            updatePaymentInfo(`card${firstCardId}`);
         } else {
          // カード情報がない場合、初期選択 ('conveni') を表示
             updatePaymentInfo(selectedPaymentMethod);
         }
+        
+        // 初期値をフォームにセット
+        updateHiddenFormFields();
     });
-
-
 
 
 
