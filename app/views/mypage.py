@@ -21,10 +21,12 @@ def connect_db():
 def comma(num):
     string1=""
     string2=""
+    
     if type(num)=="string":
         num=int(num)
     tmp=num
-   
+    if tmp==0:
+        return 0
     count=0
  
     while tmp/10!=0:
@@ -125,12 +127,14 @@ def get_transaction_info(id):
         follows={'フォロー数':0}
     if products is None:
         products={'出品数':0}
-    
+
     if evaluation is not None:
         evaluation['評価'] = round(float(evaluation['評価']))
     #小数点型にしてから四捨五入
     else:
         evaluation = {"評価":0}
+
+        evaluationCount={"評価件数":0}
     return evaluation,evaluationCount,follows,followers,products
 
 #商品データを取得 --------------------------------------------------
@@ -185,7 +189,8 @@ def mypage():
     sales=cur.fetchall()
     total=0
     for sale in sales:
-        total+=int(sale['price'] if sale['price'] else 0)
+        total+=int(sale['price'])
+    
     total=comma(total)
 
     return render_template("mypage/mypage.html",image_path=user_info,

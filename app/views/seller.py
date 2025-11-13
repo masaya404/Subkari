@@ -594,7 +594,7 @@ def save_product_draft():
             int(data.get('purchasePrice')) if data.get('purchasePrice') else None,
             int(data.get('rentalPrice')) if data.get('rentalPrice') else None,
             session.get('size_selected', {}).get('notes'),
-            data.get('color'),
+            data.get('color') if data.get('color') else None,
             data.get('category1', 'ユニセックス'), 
             current_date,
             '公開', 
@@ -610,8 +610,7 @@ def save_product_draft():
             1 if data.get('smoking') else 0,
             data.get('returnLocation') if data.get('returnLocation') else None,
             1
-        )
-        
+        )        
         #  SQL 実行
         cursor.execute(sql, values)
         con.commit()
@@ -619,6 +618,15 @@ def save_product_draft():
         # AUTO INCREMENTの値を取得
         product_id = cursor.lastrowid
         
+        #====== レンタル期間 ================================================================================================================
+        sql = """
+        INSERT INTO t_rentalPeriod ( product_id, rentalPeriod)
+        VALUES ( %s, %s)
+        """
+        values=(product_id,
+                data.get('rentalPeriod') if data.get('rentalPeriod') else None)
+        cursor.execute( sql,values )
+        con.commit()
         #====== size登録の処理 ==============================================================================================================
         #今のtab確認
         active_tab = session.get('active_tab')

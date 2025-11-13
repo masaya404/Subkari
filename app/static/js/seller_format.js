@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-
-    const productData = document.getElementById('app').dataset.product 
-    ? JSON.parse(document.getElementById('app').dataset.product) 
+ 
+    const productData = document.getElementById('app').dataset.product
+    ? JSON.parse(document.getElementById('app').dataset.product)
     : null;
     if (productData) {
         // 編輯模式：將資料存進 sessionStorage
@@ -36,15 +36,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log("Session cleanNotes資料：", cleanNotes);
                 });
         });
-
-
+ 
+ 
 // 価格トグル
 const rentalCheckbox = document.querySelector('.rentalCheckbox');
 const purchaseCheckbox = document.querySelector('.purchaseCheckbox');
 const rentalPriceSection = document.getElementById('rentalPriceSection');
 const purchasePriceSection = document.getElementById('purchasePriceSection');
 const rentalPurchaseError = document.getElementById('rentalPurchaseError');
-
+ 
 // レンタル可能チェックボックス
 rentalCheckbox.addEventListener('change', function() {
     const existingSection = document.getElementById('rentalPriceSection');
@@ -62,7 +62,7 @@ rentalCheckbox.addEventListener('change', function() {
     }
     validateSelection();
 });
-
+ 
 // 購入可能チェックボックス
 purchaseCheckbox.addEventListener('change', function() {
     const existingSection = document.getElementById('purchasePriceSection');
@@ -80,7 +80,7 @@ purchaseCheckbox.addEventListener('change', function() {
     }
     validateSelection();
 });
-
+ 
 // レンタル価格セクション作成
 function createRentalPriceSection() {
     const newSection = document.createElement('div');
@@ -97,7 +97,7 @@ function createRentalPriceSection() {
     
     document.getElementById('rentalPrice').focus();
 }
-
+ 
 // 購入価格セクション作成
 function createPurchasePriceSection() {
     const newSection = document.createElement('div');
@@ -114,7 +114,7 @@ function createPurchasePriceSection() {
     
     document.getElementById('purchasePrice').focus();
 }
-
+ 
 //画像表示
 function loadUploadedImages() {
     const saved = sessionStorage.getItem('uploadedImages');
@@ -141,7 +141,7 @@ function displayFirstImage(image) {
         }
     }
 }
-
+ 
 //sessionに記録の関数//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function saveToSessionStorage(){
     //資料
@@ -164,9 +164,9 @@ function saveToSessionStorage(){
     const rentalPurchaseError = document.getElementById('rentalPurchaseError');   
 ///////////////// Session保存//////////////////////////////////////////////////////////////////
     console.log("session saved");
-
+ 
     sessionStorage.setItem("name", productName);
-
+ 
     if (!rental) {
     sessionStorage.removeItem("rentalPrice");
     sessionStorage.setItem("rental", "false");
@@ -174,7 +174,7 @@ function saveToSessionStorage(){
         sessionStorage.setItem("rental", "true");
         sessionStorage.setItem("rentalPrice", rentalPrice);
     }
-
+ 
     if (!purchase) {
         sessionStorage.removeItem("purchasePrice");
         sessionStorage.setItem("purchase", "false");
@@ -182,7 +182,7 @@ function saveToSessionStorage(){
         sessionStorage.setItem("purchase", "true");
         sessionStorage.setItem("purchasePrice",purchasePrice);
     }
-
+ 
     sessionStorage.setItem("smoking", smokingValue);
     sessionStorage.setItem("color", color);
     sessionStorage.setItem("category1", category1);
@@ -192,16 +192,16 @@ function saveToSessionStorage(){
     sessionStorage.setItem("returnLocation", returnLocation);
    
 }
-
-
+ 
+ 
 // Session恢復////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function loadFromSessionStorage() {
     console.log("sessionStorageからデータを復元");
-
+ 
     // 商品名
     const name = sessionStorage.getItem("name");
     if (name) document.getElementById("name").value = name;
-
+ 
     // レンタル・購入
     const rental = sessionStorage.getItem("rental") === "true";
     const purchase = sessionStorage.getItem("purchase") === "true";
@@ -209,7 +209,7 @@ function loadFromSessionStorage() {
     const purchaseCheckbox = document.getElementById("purchase");
     if (rentalCheckbox) rentalCheckbox.checked = rental;
     if (purchaseCheckbox) purchaseCheckbox.checked = purchase;
-
+ 
     // レンタル価格
     const rentalPrice = sessionStorage.getItem("rentalPrice");
     if (rentalPrice) {
@@ -218,7 +218,7 @@ function loadFromSessionStorage() {
         }
         document.getElementById("rentalPrice").value = rentalPrice;
     }
-
+ 
     // 購入価格
     const purchasePrice = sessionStorage.getItem("purchasePrice");
     if (purchasePrice) {
@@ -227,33 +227,33 @@ function loadFromSessionStorage() {
         }
         document.getElementById("purchasePrice").value = purchasePrice;
     }
-
+ 
     // 喫煙
     const smoking = sessionStorage.getItem("smoking");
     if (smoking) {
         const smokingRadio = document.querySelector(`input[name="smoking"][value="${smoking}"]`);
         if (smokingRadio) smokingRadio.checked = true;
     }
-
+ 
     // 系統カラー
     const color = sessionStorage.getItem("color");
     if (color) document.getElementById("color").value = color;
-
+ 
     // カテゴリー1・2
     const category1 = sessionStorage.getItem("category1");
     if (category1) document.getElementById("category1").value = category1;
-
+ 
     const category2 = sessionStorage.getItem("category2");
     if (category2) document.getElementById("category2").value = category2;
-
+ 
     // ブランド
     const brand = sessionStorage.getItem("brand");
     if (brand) document.getElementById("brand").value = brand;
-
+ 
     // 商品説明
     const explanation = sessionStorage.getItem("explanation");
     if (explanation) document.getElementById("explanation").value = explanation;
-
+ 
     // 返却場所
     const returnLocation = sessionStorage.getItem("returnLocation");
     if (returnLocation) {
@@ -262,7 +262,7 @@ function loadFromSessionStorage() {
     }
     console.log("sessionStorageからの復元完了");
 }
-
+ 
 //他の資料をsessionStorage裡面保存 その後size画面遷移/////////////////////////////////////////////////////////////////////////////////////////
 function goToSize(sizeUrl){
     saveToSessionStorage();
@@ -273,24 +273,24 @@ function goToClean(sizeUrl){
     saveToSessionStorage();
     window.location.href = sizeUrl;
 }
-
+ 
 // document.getElementById("saveBtn").addEventListener("click", function() {
 //   // 各 input 欄位的值を取得
-
-
+ 
+ 
 //   // formDateで囲む
 //   const formData = {
 //     name: name,
 //     email: email,
 //     comment: comment
 //   };
-
+ 
 //   // JSONに変換して保存
 //   sessionStorage.setItem("formData", JSON.stringify(formData));
-
+ 
 //   alert("入力データを sessionStorage に保存しました！");
 // });
-
+ 
 // フォーム検証
 function validateForm() {
     saveToSessionStorage();
@@ -304,7 +304,7 @@ function validateForm() {
     } else {
         document.getElementById('productNameError').classList.add('hidden');
     }
-
+ 
     // レンタル・購入
     const rental = document.getElementById('rental').checked;
     const purchase = document.getElementById('purchase').checked;
@@ -317,7 +317,7 @@ function validateForm() {
     if(rental){
         rentalflag = true;
     }
-
+ 
     // 系統カラー
     const color = document.getElementById('color').value.trim();
     if (!color) {
@@ -326,7 +326,7 @@ function validateForm() {
     } else {
         document.getElementById('colorError').classList.add('hidden');
     }
-
+ 
     // カテゴリー1
     const category1 =document.getElementById('category1').value;
     if (!category1) {
@@ -335,7 +335,7 @@ function validateForm() {
     } else {
         document.getElementById('category1Error').classList.add('hidden');
     }
-
+ 
     // カテゴリー2
     const category2 = document.getElementById('category2').value;
     if (!category2) {
@@ -360,7 +360,7 @@ function validateForm() {
     } else {
         document.getElementById('sizeError').classList.add('hidden');
     }
-
+ 
     // 洗濯表示
     const washingDisplay = document.getElementById('washingDisplay').innerText.trim();
     if (washingDisplay === '未選択') {
@@ -369,7 +369,7 @@ function validateForm() {
     } else {
         document.getElementById('washingError').classList.add('hidden');
     }
-
+ 
     // 返却場所
     const returnLocation = document.getElementById('returnLocation').value.trim();
     if (!returnLocation && rentalflag ){
@@ -378,11 +378,11 @@ function validateForm() {
     } else {
         document.getElementById('returnLocationError').classList.add('hidden');
     }
-
+ 
     return isValid;
 }
-
- //サイズと洗濯表示を sessionStorage から読み込む
+ 
+//サイズと洗濯表示を sessionStorage から読み込む
 // function loadSizeAndWashing() {
 //     // サイズ
 //     const sizeFromSession = sessionStorage.getItem('size');
@@ -411,10 +411,10 @@ function base64ToFile(base64Data, filename) {
   while (n--) u8arr[n] = bstr.charCodeAt(n);
   return new File([u8arr], filename, { type: mime });
 }
-
+ 
 /**
- * フォーム送信
- */
+* フォーム送信
+*/
 // document.getElementById('sellerForm').addEventListener('submit', function(e) {
 //     e.preventDefault();
 //     //検証成功
@@ -424,22 +424,22 @@ function base64ToFile(base64Data, filename) {
 //         console.log('送信データ:', data);
 //         // 実際はここでサーバーに送信
 //         alert('フォームが送信されました');
-//     } 
+//     }
 //     //検証失敗
 //     else {
 //         alert('すべての必須項目を入力してください');
 //     }
 // });
 /**
- * フォーム送信
- */
+* フォーム送信
+*/
 function submitForm() {
     // バリデーション
     if (!validateForm()) {
         console.log("未入力項目存在.")
         return;
     }
-
+ 
     // sessionStorage から画像を取得
     const uploadedImages = JSON.parse(sessionStorage.getItem('uploadedImages') || '[]');
     
@@ -450,15 +450,15 @@ function submitForm() {
     // console.log('=== 画像の格式確認 ===');
     // console.log('uploadedImages:', uploadedImages);
     // console.log('最初の画像:', uploadedImages[0]);
-
+ 
     // 全部のデータ変数
     const formData = new FormData();
-
+ 
      // ===== 画像 →　formData =====
         uploadedImages.forEach((imageData, index) => {
             try {
                 const base64String = imageData.src;
-
+ 
                 // Base64　転換　→　File
                 const file = base64ToFile(base64String, `product_image_${index}.png`);
                 formData.append('images', file);  // keyは'images'，複数あり
@@ -467,7 +467,7 @@ function submitForm() {
                 console.error(`画像${index}形式変換失敗:`, error);
             }
         });
-
+ 
     //  sessionStorage 取得
     const productData = {
         name: sessionStorage.getItem("name"),
@@ -483,10 +483,10 @@ function submitForm() {
         explanation: sessionStorage.getItem("explanation"),
         returnLocation: sessionStorage.getItem("returnLocation"),
     };
-
+ 
     //すべてのデータ　→　formData
     formData.append('productData', JSON.stringify(productData));
-
+ 
     console.log('=== 準備完了 ===');
     console.log('画像の枚数:', uploadedImages.length);
     console.log('商品名:', productData.name);
@@ -519,11 +519,77 @@ function submitForm() {
         console.error('Error:', error);
         alert('catch失敗');
     });
-
-
+ 
+ 
 }
 // 下書き保存
-function saveDraft(url) {
+function saveDraft() {
+    // sessionStorage から画像を取得
+    const uploadedImages = JSON.parse(sessionStorage.getItem('uploadedImages') || '[]');
+    // 全部のデータ変数
+    const formData = new FormData();
+     // ===== 画像 →　formData =====
+        uploadedImages.forEach((imageData, index) => {
+            try {
+                const base64String = imageData.src;
+ 
+                // Base64　転換　→　File
+                const file = base64ToFile(base64String, `product_image_${index}.png`);
+                formData.append('images', file);  // keyは'images'，複数あり
+                console.log(`画像${index}FormDataに追加`);
+            } catch (error) {
+                console.error(`画像${index}形式変換失敗:`, error);
+            }
+        });
+ 
+    //  sessionStorage 取得
+    const productData = {
+        name: sessionStorage.getItem("name") || null,
+        rental: sessionStorage.getItem("rental") === "true",
+        purchase: sessionStorage.getItem("purchase") === "true",
+        rentalPrice: sessionStorage.getItem("rentalPrice") || null,
+        purchasePrice: sessionStorage.getItem("purchasePrice") || null,
+        smoking: sessionStorage.getItem("smoking") === "yes", // "yes" OR "no"
+        color: sessionStorage.getItem("color") || null,
+        category1: sessionStorage.getItem("category1") || null,
+        category2: sessionStorage.getItem("category2") || null,
+        brand: sessionStorage.getItem("brand") || null,
+        explanation: sessionStorage.getItem("explanation") || null,
+        returnLocation: sessionStorage.getItem("returnLocation") || null,
+    };
+ 
+    //すべてのデータ　→　formData
+    formData.append('productData', JSON.stringify(productData));
+ 
+    console.log('=== 準備完了 ===');
+    console.log('画像の枚数:', uploadedImages.length);
+    console.log('商品名:', productData.name);
+    console.log('バックエンドに送る');
+    console.log('=== 檢查 returnLocation ===');
+    console.log('sessionStorage returnLocation:', sessionStorage.getItem("returnLocation"));
+    console.log('productData:', productData);
+    console.log('formData 內容:', Object.fromEntries(formData));
+    fetch('/seller/format/save-product-draft', {
+        method: 'POST',
+        body:formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Success:', data);
+            alert('出品成功しました。');
+            // 成功後　sessionStorageのデータすべて消す
+            sessionStorage.clear();
+            window.location.href="/seller/draft";
+        } else {
+            alert('失敗: ' + data.message);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert('catch失敗');
+    });
+ 
     // const form = document.getElementById('sellerForm');
     // const formData = new FormData(form);
     // const data = Object.fromEntries(formData);
@@ -534,19 +600,19 @@ function saveDraft(url) {
 function backToSeller(url){
     window.location.href=`${url}`;
 }
-
-
+ 
+ 
 // 既に出品中の商品まだ編集する
 function editProduct(productId) {
     window.location.href = `/seller/update/${productId}`;
 }
-
+ 
 // 編輯モード
 const isEditMode = document.body.getAttribute('data-edit-mode') === 'true';
 const productId = document.body.getAttribute('data-product-id');
-
+ 
 const endpoint = isEditMode ? '/seller/format/update-product' : '/seller/format/save-product';
-
+ 
 //削除POP
 function deleteProduct(productId) {
     // 提示
@@ -570,5 +636,6 @@ function deleteProduct(productId) {
             alert('エラーが発生しました');
         });
     }
-    // 如果按下「取消」，不執行任何操作
+    // 
 }
+ 

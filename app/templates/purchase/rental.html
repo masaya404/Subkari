@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}
-    購入の確認
+    レンタルの確認
 {% endblock %}
 
 {% block content %}
     <link href="{{url_for('static',filename='css/purchase.css')}}" rel="stylesheet">
     <div class="container">
-        <h1>購入の確認</h1>
+        <h1>レンタルの確認</h1>
 
         <div class="content-wrapper">
             <div class="left-column">
@@ -20,18 +20,7 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- 支払い方法 -->
-                <!-- <div class="section">
-                    <div class="section-header">
-                        <h2 class="section-title">支払い方法</h2>
-                        <a href="#" class="change-btn" onclick="openPaymentModal(event)">変更する</a>
-                    </div>
-                    <div class="payment-info">
-                        クレジットカード決済
-                        <div class="masked-card" id="selectedCard">************1234 01/01</div>
-                    </div>
-                </div> -->
 
                 <div class="section">
                     <div class="section-header">
@@ -46,34 +35,7 @@
                     </div>
                 </div>
 
-                <!-- 配送先 -->
-                 <!-- <div class="section">
-                    <div class="section-header">
-                        <h2 class="section-title">配送先</h2>
-                        <a href="#" class="change-btn" onclick="openAddressModal(event)">変更する</a>
-                    </div>
-                    <div class="shipping-info" id="selectedAddress">
-                        {# address_list にデータが存在するかチェックします #}
-                        {% if address_list %}
-                            {# address_list の最初の要素 (インデックス 0) を addr という変数に格納します #}
-                            {% set addr = address_list[0] %}
-                            
-                            
-                            {# 住所データを出力します。addr は辞書なので . (ドット) でキーにアクセスします #}
-                            〒{{ addr.zip }}<br>
-                            {{ addr.pref }} {{ addr.address1 }} {{ addr.address2 }}<br>
-                            {% if addr.address3 %}
-                                {{ addr.address3 }}
-                            {% endif %}
-                        {% else %}
-                            {# 住所データがない場合の表示 #}
-                            <p>配送先の住所が登録されていません。「変更する」ボタンから登録してください。</p>
-                        {% endif %}
-                    </div>
-
-                </div> -->
-
-
+                <!-- 配送先情報 -->
                 <div class="section">
                     <div class="section-header">
                         <h2 class="section-title">配送先</h2>
@@ -119,6 +81,10 @@
                         <span class="summary-label">お支払い方法</span>
                         <span class="summary-value" id="payment-summary-value">クレジットカード</span>
                     </div>
+                    <div class="summary-row">
+                        <span class="summary-label">レンタル期間</span>
+                        <span class="summary-value" id="rental-period-summary-value"></span>
+                    </div>
                 </div>
 
                 <div class="terms-notice">
@@ -134,7 +100,7 @@
                     <input type="hidden" id="hidden_creditcards_id" name="creditcard_id" value="initial_creditcards_id_value">
                     <input type="hidden" id="hidden_address_index" name="address_index" value="initial_address_index_value">
                     <input type="hidden" id="hidden_delivery_location" name="delivery_location" value="玄関前">
-                    <button class="confirm-btn" onclick="confirmPurchase()">購入を確定する</button>
+                    <button class="confirm-btn" onclick="confirmPurchase()">レンタルを確定する</button>
                 </form>
             </div>
         </div>

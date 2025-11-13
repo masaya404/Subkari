@@ -211,6 +211,83 @@ function completePaymentEdit(event) {
     document.getElementById('paymentModal').classList.add('active');
 }
 
+function selectPayment(method) {
+     selectedPaymentMethod = method;
+
+     // paymentModalとpaymentEditModalの両方のラジオボタンの状態を同期させる
+     //原因はここ
+    // document.querySelectorAll('#paymentModal .radio-btn, #paymentEditModal .radio-btn').forEach(btn => {
+    // btn.classList.remove('selected');
+
+    // ラジオボタンの選択状態を切り替える (既存のロジック)
+    document.querySelectorAll('[id^="radio-card"], [id^="radio-edit-card"]').forEach(btn => {
+        btn.classList.remove('selected');
+
+    });
+    if (methodId.startsWith('card')) {
+        // インデックスの抽出を 'card' の直後から行う
+        const indexStr = methodId.substring(4); // 'card' (4文字) の後の文字列を取得
+        const cardId = parseInt(indexStr);
+        //cardIdに対応するデータが何番目かを特定する
+        // let methodindex = cardInfoList.findIndex(c => c.id === cardId);
+        // console.log("methodindex",methodindex);
+
+        const radioBtn = document.getElementById('radio' + cardId);
+        const editRadioBtn = document.getElementById('radio-edit' + cardId);
+
+        if (radioBtn) radioBtn.classList.add('selected');
+        if (editRadioBtn) editRadioBtn.classList.add('selected');
+    }else if (method === 'conveni' || method === 'paypay') {
+        const radioBtn = document.getElementById('radio-' + method);
+        const editRadioBtn = document.getElementById('radio-edit-' + method);
+
+        if (radioBtn) radioBtn.classList.add('selected');
+        if (editRadioBtn) editRadioBtn.classList.add('selected');
+    }
+    
+    // const radioBtn = document.getElementById('radio-' + method);
+    // const editRadioBtn = document.getElementById('radio-edit-' + method);
+
+    // if (radioBtn) radioBtn.classList.add('selected');
+    // if (editRadioBtn) editRadioBtn.classList.add('selected');
+}
+
+//////
+//////
+//////
+// //下参考コード必ず消す
+// function selectAddress(addressId) {
+//     // 例: addressId が 'address-0' の場合、インデックス 0 を抽出
+//     const dbId = parseInt(addressId.split('-')[1]);
+//     console.log("選択されたDB ID:", dbId);
+//     // const indexStr = addressId;
+//     // console.log("indexStr",indexStr);
+    
+//     // const index = parseInt(indexStr);
+//     // console.log("index",index);
+    
+//     // ラジオボタンの選択状態を切り替える (既存のロジック)
+//     document.querySelectorAll('[id^="radio-address"], [id^="radio-edit-address"]').forEach(btn => {
+//         btn.classList.remove('selected');
+//     });
+    
+//     // 通常用と編集用の両方のラジオボタンを選択状態にする
+//     const radioBtn = document.getElementById('radio-' + addressId);
+//     const editRadioBtn = document.getElementById('radio-edit-' + addressId);
+//     if (radioBtn) radioBtn.classList.add('selected');
+//     if (editRadioBtn) editRadioBtn.classList.add('selected');
+
+//     // DBのID
+//     // const dbId = addressDataList.findIndex(addr => addr.address1 === addressId);
+//     console.log("dbId",dbId);
+
+//     updateShippingInfo(addressId); // DB ID
+// }
+//////
+//////
+//////
+
+
 
 /**
  * 選択された支払い方法 (card-X, conveni, paypay) に基づいてメイン画面を更新する
@@ -244,7 +321,7 @@ function updatePaymentInfo(methodId) {
             const lastFour = card.number.slice(-4);
             
             htmlContent = `
-                クレジットカード決済<br>
+                <div class="payMethod">クレジットカード決済</div><br>
                 <div class="masked-card" id="selectedCard">************${lastFour} (${card.expiry})</div>
             `;
             summaryText = 'クレジットカード';
