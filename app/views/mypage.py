@@ -126,12 +126,19 @@ def get_transaction_info(id):
     if products is None:
         products={'出品数':0}
     
+<<<<<<< Updated upstream
     if evaluation is not None:
+=======
+    if evaluation:
+>>>>>>> Stashed changes
         evaluation['評価'] = round(float(evaluation['評価']))
     #小数点型にしてから四捨五入
     else:
         evaluation = {"評価":0}
+<<<<<<< Updated upstream
    
+=======
+>>>>>>> Stashed changes
     return evaluation,evaluationCount,follows,followers,products
 
 #商品データを取得 --------------------------------------------------
