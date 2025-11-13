@@ -41,8 +41,11 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     products=cur.fetchone()
     #評価を変形
-    evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
-   
+    if evaluation is not None:
+        evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
+    else:
+        evaluation = 0
+        evaluationCount = {"評価件数":0}
     return evaluation,evaluationCount
 
 
@@ -93,7 +96,46 @@ def getAccountInfo():
         accountNumbers.append(num)
     return bank_info,accountNumbers,count
 
+#商品情報を取得する ------------------------------------------------------------------------------------
+def get_product_info(product_id):
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
 
+        # 商品情報を取得
+        sql_product = """
+        SELECT 
+        pr.name as product_name,
+        pr.account_id, 
+        pr.rentalPrice, 
+        pr.purchasePrice, 
+        pr.explanation ,
+        pr.color,
+        pr.for,
+        pr.category_id,
+        pr.brand_id ,
+        br.name as brand_name  , 
+        ca.name as category_name
+        
+
+        FROM m_product pr
+        INNER JOIN m_brand br ON br.id = pr.brand_id
+        INNER JOIN m_category ca ON pr.category_id = ca.id
+        WHERE pr.id = %s;
+        """
+        cur.execute(sql_product, (product_id,))
+        product = cur.fetchone()
+        return product
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+        return None
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+
+
+    
 
 # 商品一覧の表示
 @products_bp.route('/search_result', methods=['GET'])
@@ -391,6 +433,90 @@ def purchase_complete():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+
+    product_id = request.form.get('product_id')
+    payment_method = request.form.get('payment_method')
+    addressId = request.form.get('address_index')
+    delivery_location = request.form.get('delivery_location')
+    creditcards_id = request.form.get('creditcards_id')
+
+    #購入項目があるかチェック
+    if not product_id or not payment_method or not addressId or not delivery_location:
+
+            
+        # 商品が見つからない場合は、エラーページや404を返すのが適切です
+        return render_template('error.html'), 404 # **ここで関数を終了させる**
+
+    #payment_methodがクレジットならpayment_methodを発送待ちにする
+    if payment_method == "クレジット":
+        status = "発送待ち"
+        paymentDeadline = None
+        creditcards_id = int(creditcards_id)
+    else:
+        status = "支払い待ち"
+        #72時間後の日付を取得
+        paymentDeadline = datetime.now() + timedelta(hours=72)
+        creditcards_id = 'NULL'
+
+    #商品情報を取得
+    product = get_product_info(product_id)
+
+    # get_product_info()で取得した商品の販売者ID
+    seller_id = product['account_id']
+    addressId = int(addressId)
+
+    #預かり書と発送書のフラグ
+    shipping_flg = False
+    received_flg = False
+
+    #取引状況・購入かレンタルか
+    situation = "購入"
+    
+    # dbへの登録処理
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        #住所情報を取得
+        sql_address="""
+        SELECT
+        pref,address1,address2,address3
+        FROM m_address
+        WHERE id = %s;
+        """
+        cur.execute(sql_address, (addressId,))
+        address = cur.fetchone()
+        shippingAddress = f"{address['pref']} {address['address1']} {address['address2']} {address['address3']}"
+
+        
+
+        #購入情報をt_purchaseテーブルに登録
+        sql_purchase="""
+        INSERT INTO t_transaction (
+        customer_id,
+        seller_id, 
+        product_id, 
+        status,
+        situation,
+        paymentMethod,
+        paymentDeadline,
+        shippingAddress,
+        creditcard_id,
+        shippingFlg,
+        receivedFlg)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s);
+        """
+        #situation #取引状態・購入の場合は'購入'レンタルの場合は'レンタル'
+        cur.execute(sql_purchase, (user_id, seller_id, product_id, status,situation,payment_method,paymentDeadline, shippingAddress, creditcards_id,shipping_flg,received_flg))
+        con.commit()
+
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
 
     return render_template("purchase/purchase_complete.html", user_id=user_id)
 

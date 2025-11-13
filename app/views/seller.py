@@ -31,7 +31,31 @@ def seller_format():
     else:
         user_id = session.get('user_id')
         
-  
+    # DB接続
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+        
+        #  SQL 文章用意
+        sql = """
+            SELECT 
+                address.*             
+            FROM 
+                m_account AS account
+            LEFT JOIN 
+                m_address AS address 
+            ON 
+                account.id = address.account_id
+            WHERE 
+                account.id = %s
+                ;
+            """   
+        cur.execute(sql, (user_id,))
+        address = cur.fetchall()
+        print(address)
+    # address_content=""
+    # for key,value in address:
+    #     if address[key]:
+    #         address_content += address[key]
     
     return render_template('seller/seller_format.html', 
                          user_id=user_id, 
@@ -755,7 +779,7 @@ def seller_products():
         con = connect_db()
         cur = con.cursor(dictionary=True)
         
-        #  SQL 文章用意
+        #  SQL 文章用意すべての商品
         sql = """
             SELECT 
                 p.*, 
@@ -774,8 +798,8 @@ def seller_products():
             """   
         cur.execute(sql, (user_id,))
         products = cur.fetchall()
-       
-        #  SQL 文章用意
+        print(products)
+        #  SQL 文章用意　最近商品
         sql = """
             SELECT 
                 p.*, 
@@ -960,7 +984,7 @@ def update(product_id):
         print(f'編輯頁面讀取錯誤: {str(e)}')
         return redirect(url_for('seller.seller_products'))
 
-#--------------------------------------------------------------------------削除------------------------------------------------------------------------------#
+#削除------------------------------------------------------------------------------------------------------------------------------------------------------#
 @seller_bp.route('/format/delete-product/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
     if 'user_id' not in session:
@@ -970,28 +994,43 @@ def delete_product(product_id):
     
     try:
         con = connect_db()
-        cursor = con.cursor()
-        
-        # 画像
-        cursor.execute("DELETE FROM m_productimg WHERE product_id = %s", (product_id,))
-        
-        # サイズ
-        cursor.execute("DELETE FROM m_topssize WHERE product_id = %s", (product_id,))
-        cursor.execute("DELETE FROM m_bottomssize WHERE product_id = %s", (product_id,))
-        
-        # 洗濯
-        cursor.execute("DELETE FROM t_clean WHERE product_id = %s", (product_id,))
-        
-        #コメント
-        cursor.execute("DELETE FROM t_comments WHERE product_id = %s", (product_id,))
-        
-        # ほか
-        cursor.execute("DELETE FROM m_product WHERE id = %s", (product_id,))
-        
-        con.commit()
-        cursor.close()
-        con.close()
-        
+        cursor = con.cursor(dictionary=True)
+        #取引中確認
+        sql = """
+                SELECT t.status FROM m_product AS p
+                LEFT JOIN t_transaction AS t
+                ON p.id = t.product_id
+                WHERE p.id = %s
+                LIMIT 1
+                ;                
+        """
+        cursor.execute(sql,(product_id,))
+        status = cursor.fetchone()
+        if status['status'] =="取引完了" or status['status'] is None: 
+            # 画像
+            cursor.execute("DELETE FROM m_productimg WHERE product_id = %s", (product_id,))
+            
+            # サイズ
+            cursor.execute("DELETE FROM m_topssize WHERE product_id = %s", (product_id,))
+            cursor.execute("DELETE FROM m_bottomssize WHERE product_id = %s", (product_id,))
+            
+            # 洗濯
+            cursor.execute("DELETE FROM t_clean WHERE product_id = %s", (product_id,))
+            
+            #コメント
+            cursor.execute("DELETE FROM t_comments WHERE product_id = %s", (product_id,))
+            
+            # ほか
+            cursor.execute("DELETE FROM m_product WHERE id = %s", (product_id,))
+            
+            con.commit()
+            cursor.close()
+            con.close()
+            
+        else:
+            cursor.close()
+            con.close()
+            return jsonify({'success':False,'message':'取引中は削除できません'})
         return jsonify({'success': True, 'message': '商品を削除しました'}), 200
     
     except Exception as e:

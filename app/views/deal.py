@@ -31,7 +31,8 @@ def deal():
                 m.img,
                 t.id,
                 t.status,
-                t.situation
+                t.situation,
+                t.date
             FROM 
                 m_product AS p
             LEFT JOIN 
@@ -44,6 +45,8 @@ def deal():
                 p.id = t.product_id
             WHERE 
                 t.customer_id = %s
+            GROUP BY
+                t.seller_id
             ORDER BY p.id ASC
             ;
             """   
@@ -56,7 +59,7 @@ def deal():
                 p.*, 
                 m.img,
                 t.id,
-                t.status,t.situation
+                t.status,t.situation,t.date
             FROM 
                 m_product AS p
             LEFT JOIN 
