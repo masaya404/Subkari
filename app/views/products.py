@@ -94,7 +94,7 @@ def getAccountInfo():
         num=str(num%1000)
         num=mask+num                #マスク処理を施した口座番号
         accountNumbers.append(num)
-    return bank_info,accountNumbers,count
+    return accountNumbers,count
 
 #商品情報を取得する ------------------------------------------------------------------------------------
 def get_product_info(product_id):
@@ -355,6 +355,7 @@ def product_details_stub(product_id):
     ))
     return resp
 #purchase
+#購入選択画面 レンタルと似た処理なので修正するときはこっちも修正すること
 @products_bp.route('/purchase/<int:product_id>', methods=['GET'])
 def purchase(product_id):
     if 'user_id' not in session:
@@ -407,11 +408,11 @@ def purchase(product_id):
             con.close()
         
     #支払い情報を取得
-    bank_info,accountNumbers,count=getAccountInfo()
+    accountNumbers,count=getAccountInfo()
 
     return render_template("purchase/purchase.html",user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count)
 
-#レンタルができるようにする
+#レンタルができるようにする/購入と似た処理なので修正するときは注意
 @products_bp.route('/rental/<int:product_id>', methods=['GET'])
 def rental(product_id):
     if 'user_id' not in session:
@@ -420,7 +421,56 @@ def rental(product_id):
     else:
         user_id = session.get('user_id')
 
-    return render_template("purchase/purchase.html",user_id = user_id )
+    #DBから情報を取得
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        # 商品情報を取得
+        sql_product = """
+        SELECT pr.id , pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
+        FROM m_product pr
+        INNER JOIN m_brand br ON br.id = pr.brand_id
+        INNER JOIN m_category ca ON pr.category_id = ca.id
+        WHERE pr.id = %s;
+        """
+        cur.execute(sql_product, (product_id,))
+        product = cur.fetchone()
+        #配送情報を取得
+
+        sql_address="""
+        SELECT id,zip,pref,address1,address2,address3
+        FROM m_address
+        WHERE account_id = %s;
+        """
+        cur.execute(sql_address, (user_id,))
+        address_list = cur.fetchall()
+
+
+        #カード情報を取得
+        sql_card="""
+        SELECT id,number,expiry,holderName
+        FROM t_creditCard
+        WHERE account_id = %s;
+        """
+        cur.execute(sql_card, (user_id,))
+        card_info = cur.fetchall()
+
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+        
+    #支払い情報を取得
+    accountNumbers,count=getAccountInfo()
+
+    return render_template("purchase/rental.html",user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count)
+
+
+
 
 
 
@@ -438,25 +488,39 @@ def purchase_complete():
     payment_method = request.form.get('payment_method')
     addressId = request.form.get('address_index')
     delivery_location = request.form.get('delivery_location')
-    creditcards_id = request.form.get('creditcards_id')
+    creditcard_id = request.form.get('creditcard_id')
+
+    # print("product_id:",product_id)
+    # print("payment_method:",payment_method)
+    # print("addressId:",addressId)
+    # print("delivery_location:",delivery_location)
+    # print("creditcard_id:",creditcard_id)
+
 
     #購入項目があるかチェック
-    if not product_id or not payment_method or not addressId or not delivery_location:
+    if payment_method =="クレジットカード":
+        if not product_id or not payment_method or not addressId or not delivery_location or not creditcard_id:
 
-            
-        # 商品が見つからない場合は、エラーページや404を返すのが適切です
-        return render_template('error.html'), 404 # **ここで関数を終了させる**
+                
+            # 商品が見つからない場合は、エラーページや404を返すのが適切です
+            return render_template('error.html'), 404 # **ここで関数を終了させる**
+    else:
+        if not product_id or not payment_method or not addressId or not delivery_location:
+
+                
+            # 商品が見つからない場合は、エラーページや404を返すのが適切です
+            return render_template('error.html'), 404 # **ここで関数を終了させる**
 
     #payment_methodがクレジットならpayment_methodを発送待ちにする
     if payment_method == "クレジット":
         status = "発送待ち"
         paymentDeadline = None
-        creditcards_id = int(creditcards_id)
+        creditcard_id = int(creditcard_id)
     else:
         status = "支払い待ち"
         #72時間後の日付を取得
         paymentDeadline = datetime.now() + timedelta(hours=72)
-        creditcards_id = 'NULL'
+        creditcard_id = None
 
     #商品情報を取得
     product = get_product_info(product_id)
@@ -507,20 +571,20 @@ def purchase_complete():
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s);
         """
         #situation #取引状態・購入の場合は'購入'レンタルの場合は'レンタル'
-        cur.execute(sql_purchase, (user_id, seller_id, product_id, status,situation,payment_method,paymentDeadline, shippingAddress, creditcards_id,shipping_flg,received_flg))
+        cur.execute(sql_purchase, (user_id, seller_id, product_id, status,situation,payment_method,paymentDeadline, shippingAddress, creditcard_id,shipping_flg,received_flg))
         con.commit()
 
         # 商品テーブルを更新
-        # sql_update_product="""
-        # UPDATE m_product
-        # SET availability = '取引中'
-        # WHERE id = %s;
-        # """
-        # cur.execute(sql_update_product, (product_id,))
-        # con.commit()
+        sql_update_product="""
+        UPDATE m_product
+        SET `condition` = '取引中'
+        WHERE id = %s;
+        """
+        cur.execute(sql_update_product, (product_id,))
+        con.commit()
 
 
-        
+
         
 
     except mysql.connector.Error as err:
