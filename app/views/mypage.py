@@ -126,12 +126,14 @@ def get_transaction_info(id):
     if products is None:
         products={'出品数':0}
     
-    if evaluation:
+    if evaluation is not None:
         evaluation['評価'] = round(float(evaluation['評価']))
     #小数点型にしてから四捨五入
     else:
         evaluation = {"評価":0}
+   
     return evaluation,evaluationCount,follows,followers,products
+
 #商品データを取得 --------------------------------------------------
 def get_product_info(id):
 
@@ -616,7 +618,7 @@ def likes():
 
     cur.close()
     con.close()  
-    print(likes_list)
+    # print(likes_list)
 
 
     return render_template("mypage/likes.html" ,  user_id=user_id , likes_list=likes_list)

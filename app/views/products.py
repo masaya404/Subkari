@@ -41,8 +41,11 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     products=cur.fetchone()
     #評価を変形
-    evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
-   
+    if evaluation is not None:
+        evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
+    else:
+        evaluation = 0
+        evaluationCount = {"評価件数":0}
     return evaluation,evaluationCount
 
 

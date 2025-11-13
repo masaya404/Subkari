@@ -6,7 +6,32 @@ document.addEventListener('DOMContentLoaded', function() {
         loadSeller();
     });
 
-    
+//Timer
+function startTimer() {
+    let hours = 12, minutes = 59, seconds = 59;
+    const timerEl = document.getElementById('timer');
+
+    setInterval(() => {
+        if (seconds > 0) {
+            seconds--;
+        } else if (minutes > 0) {
+            minutes--;
+            seconds = 59;
+        } else if (hours > 0) {
+            hours--;
+            minutes = 59;
+            seconds = 59;
+        }
+
+        const h = String(hours).padStart(2, '0');
+        const m = String(minutes).padStart(2, '0');
+        const s = String(seconds).padStart(2, '0');
+        timerEl.textContent = `${h}:${m}:${s}`;
+    }, 1000);
+}
+
+startTimer();
+
 //medium area
 const statusMap = {
   '支払い待ち': 1,
@@ -21,7 +46,10 @@ const statusMap = {
 
 function updateTimeline(status) {
   const step = statusMap[status] || 0;
-  
+  console.log(step);
+  if (step !=6){
+    $("#cleaningTimer").empty();
+  }
   // Update all timeline items
   for (let i = 1; i <= 8; i++) {
     const circles = document.querySelectorAll(`.timeline-item-${i} .timeline-circle`);
