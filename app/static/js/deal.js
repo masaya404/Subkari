@@ -64,13 +64,38 @@ document.querySelectorAll('.product-item').forEach(item => {
       const basePath = "/static/img/productImg/";
       document.getElementById('detailProductImg').src = basePath + productData.img;
     }
-    updateTimeline(productData.status);
+    //商品が購入かレンタルかの判断
+    let isPurchase = null;
+    if(productData.situation == "購入"){
+      isPurchase = true;
+      $('#rentalBuy').hide();
+    }else{
+      isPurchase = false;
+      $('#rentalBuy').show();
+    }
+    console.log(productData.situation);
+    console.log(isPurchase);
+    
+    updateTimeline(productData.status,isPurchase);
 
     const transactionId = productData.transaction_id || productData.id;
     document.getElementById('detailTransactionId').textContent = transactionId;
 
     const dealDetailUrl = `/deal/deal/${transactionId}`;
     document.getElementById('dealDetailLink').href = dealDetailUrl;
+
+    console.log("start_date:",productData.date);
+    const date = new Date(productData.date);
+    console.log("date",date); 
+    const dateOnly = date.toISOString().split('T')[0];
+    console.log("dateOnly",dateOnly);
+    const timeOnly = date.toTimeString().split(' ')[0];
+    console.log("timeOnly",timeOnly);
+    const formattedTime = `${dateOnly} ${timeOnly}`;
+    console.log("formattedTime",formattedTime);   
+    $("#start_date").empty().append(
+      `<span class="text-gray-600 text-xs" id="startDate">${formattedTime}</span>`
+    );
   });
 });
 
@@ -82,8 +107,20 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+//purchaseFlgの判断
+// document.addEventListener('DOMContentLoaded',function(){
+//     // 購入レンタル判断
+//   let isPurchase = null;
+//   if (productData.status === "購入"){
+//     isPurchase = true;
+//   }
+//   else{
+//     isPurchase = false;
+//   }
+// })
+
 //medium area
-const statusMap = {
+const rentalStatusMap = {
   '支払い待ち': 1,
   '発送待ち': 2,
   '配送中': 3,
@@ -94,13 +131,38 @@ const statusMap = {
   '取引完了': 8
 };
 
-function updateTimeline(status) {
+const purchaseStatusMap = {
+  '支払い待ち': 1,
+  '発送待ち': 2,
+  '配送中': 3,
+  '到着': 4,
+  '取引完了': 5
+};
+
+const rentalHiddenItems = []; // Rental時にすべてのステップを表示
+const purchaseHiddenItems = [5, 6, 7]; // Purchase時に5,6,7のステップを隠す
+
+function updateTimeline(status,isPurchase=false) {
+  //商品のレンタル購入を判断し、ステータスの項目を変える
+  const statusMap = isPurchase ? purchaseStatusMap : rentalStatusMap;
+  const hiddenItems = isPurchase ? purchaseHiddenItems : rentalHiddenItems;
+
   const step = statusMap[status] || 0;
   
-  // Update all timeline items
+  // 進捗状況
   for (let i = 1; i <= 8; i++) {
-    const circles = document.querySelectorAll(`.timeline-item-${i} .timeline-circle`);
+    const timelineItem = document.querySelector(`.timeline-item-${i}`);
+    // const circles = document.querySelectorAll(`.timeline-item-${i} .timeline-circle`);
+    if (!timelineItem) continue;
+
+     if (hiddenItems.includes(i)) {
+      timelineItem.style.display = 'none';
+    } else {
+      timelineItem.style.display = 'flex';
+    }
     
+    const circles = timelineItem.querySelectorAll('.timeline-circle'); 
+
     if (i < step) {
       // Completed steps - show checkmark
       circles.forEach(circle => {

@@ -31,7 +31,8 @@ def deal():
                 m.img,
                 t.id,
                 t.status,
-                t.situation
+                t.situation,
+                t.date
             FROM 
                 m_product AS p
             LEFT JOIN 
@@ -58,7 +59,7 @@ def deal():
                 p.*, 
                 m.img,
                 t.id,
-                t.status,t.situation
+                t.status,t.situation,t.date
             FROM 
                 m_product AS p
             LEFT JOIN 
