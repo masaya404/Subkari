@@ -127,7 +127,11 @@ def get_transaction_info(id):
         products={'出品数':0}
     
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     if evaluation is not None:
+=======
+    if evaluation:
+>>>>>>> Stashed changes
 =======
     if evaluation:
 >>>>>>> Stashed changes
@@ -136,7 +140,10 @@ def get_transaction_info(id):
     else:
         evaluation = {"評価":0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
    
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     return evaluation,evaluationCount,follows,followers,products
