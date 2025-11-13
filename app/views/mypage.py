@@ -133,7 +133,11 @@ def get_transaction_info(id):
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     if evaluation is not None:
+=======
+    if evaluation:
+>>>>>>> Stashed changes
 =======
     if evaluation:
 >>>>>>> Stashed changes
@@ -166,7 +170,10 @@ def get_transaction_info(id):
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
    
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
