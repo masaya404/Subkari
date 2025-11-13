@@ -128,7 +128,7 @@
 
 
 
-                <form method="POST" action="{{ url_for('products.purchase_complete') }}">
+                <form method="POST" id="purchaseForm" action="{{ url_for('products.purchase_complete') }}">
                     <input type="hidden" id="hidden_product_id" name="product_id" value="{{ product.id }}">
                     <input type="hidden" id="hidden_payment_method" name="payment_method" value="initial_payment_value">
                     <input type="hidden" id="hidden_creditcards_id" name="creditcards_id" value="initial_creditcards_id_value">

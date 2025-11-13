@@ -127,12 +127,13 @@ def get_transaction_info(id):
         products={'出品数':0}
     
 
+
     if evaluation is not None:
     # if evaluation:
 
     # if evaluation:
 
-    # if evaluation:
+    # if evaluation
     # if evaluation:
     # if evaluation:
     # if evaluation:
@@ -144,11 +145,14 @@ def get_transaction_info(id):
     # if evaluation:
 
     # if evaluation:
+
 
         evaluation['評価'] = round(float(evaluation['評価']))
     #小数点型にしてから四捨五入
     else:
         evaluation = {"評価":0}
+
+
 
     return evaluation,evaluationCount,follows,followers,products
 
