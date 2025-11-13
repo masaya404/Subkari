@@ -98,6 +98,7 @@ CREATE TABLE `m_product` (
   `cleanNotes` TEXT ,
   `smokingFlg` boolean NOT NULL,
   `returnAddress` varchar(255) NOT NULL,
+  `condition` ENUM('取引可','取引中')
 
 
   PRIMARY KEY (`id`),
