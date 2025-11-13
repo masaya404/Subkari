@@ -128,7 +128,7 @@ function updateShippingInfo(addressId) {
     let htmlContent = '';
 
     // 1. IDからDB ID (数値) を抽出
-    console.log('ADDRESSID',addressId);
+    // console.log('ADDRESSID',addressId);
     let dbId;
     if (typeof addressId === 'string' && addressId.includes('-')) {
         // 'address-1' の形式から抽出
@@ -141,9 +141,9 @@ function updateShippingInfo(addressId) {
     // console.log('DB ID:', dbId);
     // console.log('ADDRESS LIST:', addressDataList);
     // const dbId = parseInt(addressId);
-    console.log(dbId); 
+    // console.log(dbId); 
     // 2. 配列内を検索して住所オブジェクトを見つける
-    console.log('ADDRESSLIST',addressDataList);
+    // console.log('ADDRESSLIST',addressDataList);
     const selectedAddr = addressDataList.find(addr => addr.id === dbId); // ★ find メソッドで ID を検索
     
     // インデックスが有効で、データが存在することを確認
@@ -164,8 +164,8 @@ function updateShippingInfo(addressId) {
         // メイン画面の内容を更新
         shippingInfoElement.innerHTML = htmlContent;
 
-        console.log("selectedAddr選択された");
-        console.log(selectedAddr);
+        // console.log("selectedAddr選択された");
+        // console.log(selectedAddr);
         
 
     } else if (addressDataList.length === 0) {
@@ -224,9 +224,9 @@ function selectPayment(method) {
         btn.classList.remove('selected');
 
     });
-    if (method.startsWith('card')) {
+    if (methodId.startsWith('card')) {
         // インデックスの抽出を 'card' の直後から行う
-        const indexStr = method.substring(4); // 'card' (4文字) の後の文字列を取得
+        const indexStr = methodId.substring(4); // 'card' (4文字) の後の文字列を取得
         const cardId = parseInt(indexStr);
         //cardIdに対応するデータが何番目かを特定する
         // let methodindex = cardInfoList.findIndex(c => c.id === cardId);
@@ -237,7 +237,6 @@ function selectPayment(method) {
 
         if (radioBtn) radioBtn.classList.add('selected');
         if (editRadioBtn) editRadioBtn.classList.add('selected');
-
     }else if (method === 'conveni' || method === 'paypay') {
         const radioBtn = document.getElementById('radio-' + method);
         const editRadioBtn = document.getElementById('radio-edit-' + method);
@@ -317,7 +316,7 @@ function updatePaymentInfo(methodId) {
         if (cardInfoList) { 
             // 2. ★修正: find() メソッドを使って、IDが一致するカードオブジェクトを検索★
             const card = cardInfoList.find(c => c.id === cardId)
-            console.log("選択されたカード情報:", card);            
+            // console.log("選択されたカード情報:", card);            
             // カード番号の下4桁を取得 (DBから取得した `number` フィールドを使用)
             const lastFour = card.number.slice(-4);
             
@@ -350,6 +349,11 @@ function updatePaymentInfo(methodId) {
 }
 
 
+
+
+
+
+
 // 既存の selectPayment 関数も、選択後にメイン画面を更新するように修正
 function selectPayment(methodId) {
     // ... (既存のラジオボタン切り替えロジック) ...
@@ -359,6 +363,40 @@ function selectPayment(methodId) {
     
     // グローバル変数 selectedPaymentMethod を更新
     selectedPaymentMethod = methodId; 
+
+     // paymentModalとpaymentEditModalの両方のラジオボタンの状態を同期させる
+     //原因はここ
+    document.querySelectorAll('#paymentModal .radio-btn, #paymentEditModal .radio-btn').forEach(btn => {
+    btn.classList.remove('selected');
+
+    // ラジオボタンの選択状態を切り替える (既存のロジック)
+    // document.querySelectorAll('[id^="radio-card"], [id^="radio-edit-card"]').forEach(btn => {
+    //     btn.classList.remove('selected');
+
+    });
+    if (methodId.startsWith('card')) {
+        // インデックスの抽出を 'card' の直後から行う
+        const indexStr = methodId.substring(4); // 'card' (4文字) の後の文字列を取得
+        const cardId = parseInt(indexStr);
+        //cardIdに対応するデータが何番目かを特定する
+        // let methodindex = cardInfoList.findIndex(c => c.id === cardId);
+        // console.log("methodindex",methodindex);
+
+        const radioBtn = document.getElementById('radio-card' + cardId);
+        const editRadioBtn = document.getElementById('radio-edit-card' + cardId);
+        
+        // console.log('選択された支払い', radioBtn);
+        // console.log('選択された支払い編集', editRadioBtn);
+        
+        if (radioBtn) radioBtn.classList.add('selected');
+        if (editRadioBtn) editRadioBtn.classList.add('selected');
+    }else if (methodId === 'conveni' || methodId === 'paypay') {
+        const radioBtn = document.getElementById('radio-' + methodId);
+        const editRadioBtn = document.getElementById('radio-edit-' + methodId);
+
+        if (radioBtn) radioBtn.classList.add('selected');
+        if (editRadioBtn) editRadioBtn.classList.add('selected');
+    }
 }
 
 
@@ -450,7 +488,7 @@ function completeAddressEdit(event) {
 function selectAddress(addressId) {
     // 例: addressId が 'address-0' の場合、インデックス 0 を抽出
     const dbId = parseInt(addressId.split('-')[1]);
-    console.log("選択されたDB ID:", dbId);
+    // console.log("選択されたDB ID:", dbId);
     // const indexStr = addressId;
     // console.log("indexStr",indexStr);
     
@@ -470,7 +508,7 @@ function selectAddress(addressId) {
 
     // DBのID
     // const dbId = addressDataList.findIndex(addr => addr.address1 === addressId);
-    console.log("dbId",dbId);
+    // console.log("dbId",dbId);
 
     updateShippingInfo(addressId); // DB ID
 }
@@ -530,6 +568,8 @@ function selectDeliveryLocation(location) {
     if (radioBtn) {
         radioBtn.classList.add('selected');
     }
+
+    
 }
 
 function updateDeliveryLocation() {

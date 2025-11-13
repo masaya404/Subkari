@@ -370,7 +370,7 @@ def purchase(product_id):
 
         # 商品情報を取得
         sql_product = """
-        SELECT pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
+        SELECT pr.id , pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
         FROM m_product pr
         INNER JOIN m_brand br ON br.id = pr.brand_id
         INNER JOIN m_category ca ON pr.category_id = ca.id
@@ -509,6 +509,19 @@ def purchase_complete():
         #situation #取引状態・購入の場合は'購入'レンタルの場合は'レンタル'
         cur.execute(sql_purchase, (user_id, seller_id, product_id, status,situation,payment_method,paymentDeadline, shippingAddress, creditcards_id,shipping_flg,received_flg))
         con.commit()
+
+        # 商品テーブルを更新
+        # sql_update_product="""
+        # UPDATE m_product
+        # SET availability = '取引中'
+        # WHERE id = %s;
+        # """
+        # cur.execute(sql_update_product, (product_id,))
+        # con.commit()
+
+
+        
+        
 
     except mysql.connector.Error as err:
         print(f"データベースエラー: {err}")

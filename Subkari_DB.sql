@@ -98,6 +98,7 @@ CREATE TABLE `m_product` (
   `cleanNotes` TEXT ,
   `smokingFlg` boolean NOT NULL,
   `returnAddress` varchar(255) NOT NULL,
+  `condition` ENUM('取引可','取引中')
 
 
   PRIMARY KEY (`id`),
@@ -228,7 +229,7 @@ CREATE TABLE `t_adminLogin` (
 );
 -- レンタル期間テーブル ---------------------------------------
 CREATE TABLE `t_rentalPeriod` (
-  `id` INT NOT NULL,
+  `id` INT AUTO_INCREMENT NOT NULL,
   `product_id` INT NOT NULL,
   `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
 
