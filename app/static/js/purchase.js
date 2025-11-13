@@ -216,8 +216,13 @@ function selectPayment(method) {
 
      // paymentModalとpaymentEditModalの両方のラジオボタンの状態を同期させる
      //原因はここ
-    document.querySelectorAll('#paymentModal .radio-btn, #paymentEditModal .radio-btn').forEach(btn => {
-    btn.classList.remove('selected');
+    // document.querySelectorAll('#paymentModal .radio-btn, #paymentEditModal .radio-btn').forEach(btn => {
+    // btn.classList.remove('selected');
+
+    // ラジオボタンの選択状態を切り替える (既存のロジック)
+    document.querySelectorAll('[id^="radio-card"], [id^="radio-edit-card"]').forEach(btn => {
+        btn.classList.remove('selected');
+
     });
     if (methodId.startsWith('card')) {
         // インデックスの抽出を 'card' の直後から行う
