@@ -44,6 +44,8 @@ def deal():
                 p.id = t.product_id
             WHERE 
                 t.customer_id = %s
+            GROUP BY
+                t.seller_id
             ORDER BY p.id ASC
             ;
             """   
