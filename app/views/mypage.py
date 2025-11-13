@@ -125,83 +125,13 @@ def get_transaction_info(id):
         follows={'フォロー数':0}
     if products is None:
         products={'出品数':0}
-    
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
     if evaluation is not None:
-=======
-    if evaluation:
->>>>>>> Stashed changes
-=======
-    if evaluation:
->>>>>>> Stashed changes
-=======
-    if evaluation:
->>>>>>> Stashed changes
-=======
-    if evaluation:
->>>>>>> Stashed changes
-=======
-    if evaluation:
->>>>>>> Stashed changes
-=======
-    if evaluation:
->>>>>>> Stashed changes
-=======
-    if evaluation:
->>>>>>> Stashed changes
-=======
-    if evaluation:
->>>>>>> Stashed changes
-=======
-    if evaluation:
->>>>>>> Stashed changes
-=======
-    if evaluation:
->>>>>>> Stashed changes
         evaluation['評価'] = round(float(evaluation['評価']))
     #小数点型にしてから四捨五入
     else:
         evaluation = {"評価":0}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-   
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
     return evaluation,evaluationCount,follows,followers,products
 
 #商品データを取得 --------------------------------------------------

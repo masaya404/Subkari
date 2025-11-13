@@ -224,9 +224,9 @@ function selectPayment(method) {
         btn.classList.remove('selected');
 
     });
-    if (methodId.startsWith('card')) {
+    if (method.startsWith('card')) {
         // インデックスの抽出を 'card' の直後から行う
-        const indexStr = methodId.substring(4); // 'card' (4文字) の後の文字列を取得
+        const indexStr = method.substring(4); // 'card' (4文字) の後の文字列を取得
         const cardId = parseInt(indexStr);
         //cardIdに対応するデータが何番目かを特定する
         // let methodindex = cardInfoList.findIndex(c => c.id === cardId);
@@ -237,6 +237,7 @@ function selectPayment(method) {
 
         if (radioBtn) radioBtn.classList.add('selected');
         if (editRadioBtn) editRadioBtn.classList.add('selected');
+
     }else if (method === 'conveni' || method === 'paypay') {
         const radioBtn = document.getElementById('radio-' + method);
         const editRadioBtn = document.getElementById('radio-edit-' + method);
@@ -321,7 +322,7 @@ function updatePaymentInfo(methodId) {
             const lastFour = card.number.slice(-4);
             
             htmlContent = `
-                クレジットカード決済<br>
+                <div class="payMethod">クレジットカード決済</div><br>
                 <div class="masked-card" id="selectedCard">************${lastFour} (${card.expiry})</div>
             `;
             summaryText = 'クレジットカード';

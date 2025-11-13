@@ -115,6 +115,42 @@ function updateTimeline(status) {
 //     });
 
 // }
+/////////////////////////////評価////////////////////////////////////////
+let selectedRating = 4;
+
+const stars = document.querySelectorAll('.star');
+
+stars.forEach(star => {
+    star.addEventListener('click', function() {
+        selectedRating = this.dataset.rating;
+        updateStars(selectedRating);
+    });
+
+    star.addEventListener('mouseover', function() {
+        updateStars(this.dataset.rating);
+    });
+});
+
+document.getElementById('starsContainer').addEventListener('mouseleave', function() {
+    updateStars(selectedRating);
+});
+
+function updateStars(rating) {
+    stars.forEach(star => {
+        if (star.dataset.rating <= rating) {
+            star.classList.remove('empty');
+        } else {
+            star.classList.add('empty');
+        }
+    });
+}
+
+function handleSubmit() {
+    alert(`${selectedRating}つ星で評価しました`);
+}
+
+// 初期表示
+updateStars(selectedRating);
 
 /////////////////////////seller DATA  ////////////////////////////////
  function loadSeller(){
