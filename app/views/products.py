@@ -510,7 +510,7 @@ def purchase_complete():
         cur.execute(sql_purchase, (user_id, seller_id, product_id, status,situation,payment_method,paymentDeadline, shippingAddress, creditcards_id,shipping_flg,received_flg))
         con.commit()
 
-        #商品テーブルを更新
+        # 商品テーブルを更新
         # sql_update_product="""
         # UPDATE m_product
         # SET availability = '取引中'
@@ -518,6 +518,10 @@ def purchase_complete():
         # """
         # cur.execute(sql_update_product, (product_id,))
         # con.commit()
+
+
+        
+        
 
     except mysql.connector.Error as err:
         print(f"データベースエラー: {err}")

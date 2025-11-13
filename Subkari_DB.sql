@@ -228,7 +228,7 @@ CREATE TABLE `t_adminLogin` (
 );
 -- レンタル期間テーブル ---------------------------------------
 CREATE TABLE `t_rentalPeriod` (
-  `id` INT NOT NULL,
+  `id` INT AUTO_INCREMENT NOT NULL,
   `product_id` INT NOT NULL,
   `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
 
