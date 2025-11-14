@@ -183,7 +183,24 @@ def product_details_stub(product_id):
 
         # 商品情報を取得
         sql_product = """
-        SELECT pr.id ,pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name ,pr.rentalPeriod
+        SELECT 
+
+        pr.id ,
+        pr.name as product_name,
+        pr.account_id, 
+        pr.rentalPrice, 
+        pr.purchasePrice, 
+        pr.explanation ,
+        pr.color,
+        pr.for,
+        pr.category_id,
+        pr.brand_id ,
+        br.name as brand_name  , 
+        ca.name as category_name ,
+        pr.rentalPeriod,
+        pr.purchaseFlg,
+        pr.rentalFlg
+
         FROM m_product pr
         INNER JOIN m_brand br ON br.id = pr.brand_id
         INNER JOIN m_category ca ON pr.category_id = ca.id
@@ -218,7 +235,7 @@ def product_details_stub(product_id):
         calculated_prices = {}
 
         # 1. レンタル単価を取得（数値型に変換）
-        if( product['rentalPrice'] is None):
+        if( product['rentalFlg'] == 0):
             rental_price_per_day = 0
         else:
             try:

@@ -22,12 +22,16 @@
         <div class="product-info">
             <h1 class="product-title">{{ product.product_name }}</h1>
             <div class="price-section">
+                {% if product.purchaseFlg == 1 %}
                 
                 <div class="price-row">
                     <span>購入価格</span>
                     <span class="price">{{ product.purchasePrice }}円<span style="font-size:14px; font-weight:normal;">
                             送料込み</span></span>
                 </div>
+                {% endif %}
+                
+                {% if product.rentalFlg == 1 %}
                 {% if calculated_prices %}
                 {% for period_text, total_price in calculated_prices.items() %}
                 <div class="price-row">
@@ -37,6 +41,7 @@
                             送料込み</span></span>
                             </div>
                 {% endfor %}
+                {% endif %}
                 {% endif %}
             </div>
             <div class="action-buttons cursor-pointer">
