@@ -1,3 +1,4 @@
+DROP DATABASE db_subkari;
 -- データベース作成
 create database db_subkari
 default character set utf8;
@@ -18,7 +19,7 @@ CREATE TABLE `m_account` (
   `tel` VARCHAR(20) NOT NULL,
   `mail` VARCHAR(255) NOT NULL,
   `smoker` boolean NOT NULL,
-  `introduction` TEXT  ,
+  `introduction` TEXT,
   `money` INT,
   `created_at` timestamp default current_timestamp,
   `updateDate` timestamp default current_timestamp on update current_timestamp,
@@ -37,10 +38,7 @@ CREATE TABLE `m_account` (
   `firstName` VARCHAR(50) NOT NULL,
   `lastNameKana` VARCHAR(50) NOT NULL,
   `firstNameKana` VARCHAR(50) NOT NULL,
-  `profileImage` VARCHAR(255) NOT NULL,
-
-
-  
+  `profileImage` VARCHAR(255) NOT NULL
   PRIMARY KEY (`id`)
 );
 
@@ -79,27 +77,27 @@ CREATE TABLE `m_category` (
 -- 商品テーブル ------------------------------------
 CREATE TABLE `m_product` (
   `id` INT AUTO_INCREMENT NOT NULL,
-  `name` VARCHAR(255) ,
+  `name` VARCHAR(255) NULL,
   `purchasePrice` INT NULL,
   `rentalPrice` INT NULL,
-  `size` VARCHAR(255) ,
+  `size` VARCHAR(255) NULL,
   `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','シルバー','ピンク','レッド','オレンジ')  NULL,
-  `for` ENUM('ユニセックス','レディース') ,
-  `upload` DATE ,
-  `showing` ENUM('公開','非公開','非表示') ,
-  `draft` boolean ,
-  `updateDate` DATETIME ,
-  `purchaseFlg` boolean ,
-  `rentalFlg` boolean ,
-  `explanation` TEXT ,
-  `account_id` INT ,
-  `brand_id` INT ,
-  `category_id` INT ,
+  `for` ENUM('ユニセックス','レディース') NULL,
+  `upload` DATE NULL,
+  `showing` ENUM('公開','非公開','非表示') NULL,
+  `draft` boolean NULL,
+  `updateDate` DATETIME NULL,
+  `purchaseFlg` boolean NULL,
+  `rentalFlg` boolean NULL,
+  `explanation` TEXT NULL,
+  `account_id` INT NULL,
+  `brand_id` INT NULL,
+  `category_id` INT NULL,
   `cleanNotes` TEXT ,
-  `smokingFlg` boolean ,
-  `returnAddress` varchar(255) ,
+  `smokingFlg` boolean NULL,
+  `returnAddress` varchar(255) NULL,
   `condition` ENUM('取引可','取引中'),
-  `rentalPeriod` INT,
+  `rentalPeriod` INT NULL
 
 
   PRIMARY KEY (`id`),
@@ -229,16 +227,16 @@ CREATE TABLE `t_adminLogin` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 -- レンタル期間テーブル ---------------------------------------
--- CREATE TABLE `t_rentalPeriod` (
---   `id` INT AUTO_INCREMENT NOT NULL,
---   `product_id` INT NOT NULL,
---   `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
+CREATE TABLE `t_rentalPeriod` (
+  `id` INT AUTO_INCREMENT NOT NULL,
+  `product_id` INT NOT NULL,
+  `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
 
---   PRIMARY KEY (`id`),
---   FOREIGN KEY (`product_id`)
---     REFERENCES `m_product`(`id`)
---     ON DELETE RESTRICT ON UPDATE CASCADE
--- );
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`product_id`)
+    REFERENCES `m_product`(`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+);
 
 -- お気に入りテーブル --------------------------------
 CREATE TABLE `t_favorite` (

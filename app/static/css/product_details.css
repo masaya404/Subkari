@@ -343,3 +343,39 @@
     color: #0066cc;
     font-size: 14px;
 }
+
+
+/* エラーメッセージのスタイル */
+.error-message {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    padding: 25px;
+    margin: 30px 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.error-icon {
+    font-size: 48px;
+    flex-shrink: 0;
+}
+
+.error-text {
+    flex: 1;
+}
+
+.error-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #856404;
+    margin: 0 0 8px 0;
+}
+
+.error-description {
+    font-size: 14px;
+    color: #856404;
+    margin: 0;
+    line-height: 1.6;
+}

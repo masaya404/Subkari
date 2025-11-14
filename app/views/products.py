@@ -105,6 +105,7 @@ def get_product_info(product_id):
         # 商品情報を取得
         sql_product = """
         SELECT 
+        pr.id ,
         pr.name as product_name,
         pr.account_id, 
         pr.rentalPrice, 
@@ -115,7 +116,11 @@ def get_product_info(product_id):
         pr.category_id,
         pr.brand_id ,
         br.name as brand_name  , 
-        ca.name as category_name
+        ca.name as category_name,
+        pr.purchaseFlg,
+        pr.rentalFlg,
+        pr.rentalPeriod,
+        pr.condition
         
 
         FROM m_product pr
@@ -135,7 +140,173 @@ def get_product_info(product_id):
             con.close()
 
 
-    
+
+#レンタル情報を計算する関数 ------------------------------------------------------------------------------------
+def calculate_rental_price(product_id):
+
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        # 商品情報を取得
+        product = get_product_info(product_id)
+
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+
+    # 2. 期間ごとの合計金額を計算し、辞書として保存する
+    calculated_prices = {}
+
+    # 1. レンタル単価を取得（数値型に変換）
+    if( product['rentalFlg'] == 0):
+        rental_price_per_day = 0
+    else:
+        try:
+            # product.rentalPrice は文字列の可能性もあるため、int型に変換
+            rental_price_per_day = int(product['rentalPrice'])
+            #データを入れるperiod_stringに      
+            period_string = product['rentalPeriod']
+            # '日' という文字を空文字に置き換え（例: '4日' -> '4'）
+            days_str = period_string.replace('日', '')
+
+            days = int(days_str)
+        
+            # 計算
+            total_price = rental_price_per_day * days
+        
+            # 結果を辞書に追加
+            # 例: {'4日': 4000, '7日': 7000} のように格納
+            calculated_prices[f'{days}日'] = total_price
+        except (TypeError, ValueError):
+            # エラーハンドリング: 価格が不正な場合は0としておくなど
+            pass
+
+    return calculated_prices
+            
+
+
+#コメントの情報を取得する関数 ------------------------------------------------------------------------------------
+def get_comments(product_id):
+    # 2. コメントデータと投稿者名を取得
+        # t_comments と m_account を結合し、投稿日時の降順で取得
+    comments = []  # コメントリストを初期化
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        # 商品情報を取得
+        product = get_product_info(product_id)
+
+
+
+        sql_comments = """
+            SELECT 
+                t.content AS text, 
+                m.username AS user_name, 
+                t.account_id AS comment_acouunt_id,
+                t.createdDate
+
+            FROM 
+                t_comments t
+            JOIN 
+                m_account m ON t.account_id = m.id
+            WHERE 
+                t.product_id = %s
+            ORDER BY 
+                t.createdDate ASC;
+        """
+
+        cur.execute(sql_comments, (product_id,))
+        fetched_comments = cur.fetchall()
+
+        
+        # 3. HTMLテンプレートに渡す形式にデータを整形
+        # 商品の出品者IDと比較して、出品者かどうかを判定するフラグを追加
+        seller_id = product['account_id'] # m_productから取得した出品者のaccount_id
+        
+        for comment in fetched_comments:
+            is_seller = (comment['comment_acouunt_id'] == seller_id)
+            
+            # テンプレートに渡すコメントリストに追加
+            comments.append({
+                'user_name': comment['user_name'],
+                'text': comment['text'],
+                'is_seller': is_seller,
+                # 日付も表示したい場合はここで整形して渡すことも可能
+                'created_date': comment['createdDate'].strftime('%Y/%m/%d %H:%M') if comment['createdDate'] else ''
+            })
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+    return comments
+
+#トップサイズ情報を取得する関数 ------------------------------------------------------------------------------------
+def get_topsSize(product_id):
+    topsSize = None
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        sql_topSize ="""
+        SELECT
+        shoulderWidth ,bodyWidth , sleeveLength , bodyLength , notes
+        from
+        m_topsSize
+        where
+        product_id = %s;
+        """
+        cur.execute(sql_topSize, (product_id,))
+        topsSize = cur.fetchone()
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+    return topsSize
+
+#ボトムスサイズ情報を取得する関数 ------------------------------------------------------------------------------------
+def get_bottomsSize(product_id):
+    bottomsSize = None
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        sql_bottomsSize = """
+        SELECT
+        hip 
+        , totalLength 
+        , rise 
+        , inseam 
+        , waist 
+        , thighWidth 
+        , hemWidth 
+        , skirtLength
+        , notes
+
+        from
+        m_bottomsSize
+
+        where
+        product_id = %s;
+        """
+        cur.execute(sql_bottomsSize, (product_id,))
+        bottomsSize = cur.fetchone()
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+    return bottomsSize
+
 
 # 商品一覧の表示
 @products_bp.route('/search_result', methods=['GET'])
@@ -182,16 +353,8 @@ def product_details_stub(product_id):
         cur = con.cursor(dictionary=True)
 
         # 商品情報を取得
-        sql_product = """
-        SELECT pr.id ,pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
-        FROM m_product pr
-        INNER JOIN m_brand br ON br.id = pr.brand_id
-        INNER JOIN m_category ca ON pr.category_id = ca.id
-        WHERE pr.id = %s;
-        """
-        cur.execute(sql_product, (product_id,))
-        product = cur.fetchone()
-        print(product)
+        product = get_product_info(product_id)
+        
 
         #商品が見つからない場合の処理
         # 商品が見つからなかった場合のデフォルト処理
@@ -202,50 +365,10 @@ def product_details_stub(product_id):
             # 商品が見つからない場合は、エラーページや404を返すのが適切です
             return render_template('error.html'), 404 # **ここで関数を終了させる**
 
-        #--レンタル期間情報を取得--
-        sql_rentalPeriod = """
-        SELECT rentalPeriod
-        from t_rentalPeriod
-        where product_id = %s;
+        # #--レンタル期間情報を取得--
 
-        """
-
-        cur.execute(sql_rentalPeriod, (product_id,))
-        rentalPeriod = cur.fetchall()
-
-        # 1. レンタル単価を取得（数値型に変換）
-        try:
-            # product.rentalPrice は文字列の可能性もあるため、int型に変換
-            rental_price_per_day = int(product['rentalPrice'])
-        except (TypeError, ValueError):
-            # エラーハンドリング: 価格が不正な場合は0としておくなど
-            rental_price_per_day = 0
-            
-        # 2. 期間ごとの合計金額を計算し、辞書として保存する
-        calculated_prices = {}
-
-        for period_data in rentalPeriod:
-            # rentalPeriodから期間（日）を取得
-            # キー名はSQLの SELECT rentalPeriod から 'rentalPeriod' になる
-            try:
-                #データを入れるperiod_stringに      
-                period_string = period_data['rentalPeriod']
-                # '日' という文字を空文字に置き換え（例: '4日' -> '4'）
-                days_str = period_string.replace('日', '')
-
-                days = int(days_str)
-                
-                # 計算
-                total_price = rental_price_per_day * days
-                
-                # 結果を辞書に追加
-                # 例: {'4日': 4000, '7日': 7000} のように格納
-                calculated_prices[f'{days}日'] = total_price
-                
-            except (TypeError, ValueError):
-                # 期間のデータが不正な場合はスキップ
-                continue
-
+        
+    
         # コメント情報を取得
         # 2. コメントデータと投稿者名を取得
         # t_comments と m_account を結合し、投稿日時の降順で取得
@@ -332,12 +455,17 @@ def product_details_stub(product_id):
             con.close()
 
 
+    #レンタル価格計算
+    calculated_prices = calculate_rental_price(product_id)
+
 
     # 評価情報を取得
     evaluation, evaluationCount = get_transaction_info(product['account_id'])
 
     #アカウント情報取得
     seller_info = get_user_info(product['account_id'])
+
+    erroer_message = ""
     
 
     # 取得した商品情報 (product) とコメント (comments) をテンプレートに渡す
@@ -351,7 +479,8 @@ def product_details_stub(product_id):
         calculated_prices = calculated_prices,
         evaluation=evaluation,
         topSize=topSize,
-        bottomsSize=bottomsSize
+        bottomsSize=bottomsSize,
+        error_message=erroer_message
     ))
     return resp
 #purchase
@@ -364,21 +493,65 @@ def purchase(product_id):
     else:
         user_id = session.get('user_id')
 
+    product = get_product_info(product_id)
+
+    if not product:
+        # 商品が見つからない場合は、エラーページや404を返すのが適切です
+        return render_template('error.html'), 404 # **ここで関数を終了させる**
+    if product['condition'] == '取引中':
+        return render_template('error.html'), 404 # **ここで関数を終了させる**
+
+    if product['purchaseFlg'] == 0:
+        
+        # 評価情報を取得
+        evaluation, evaluationCount = get_transaction_info(product['account_id'])
+
+        #アカウント情報取得
+        seller_info = get_user_info(product['account_id'])
+
+        #コメント情報を取得
+        comments = get_comments(product_id)
+
+        #レンタル価格計算
+        calculated_prices = calculate_rental_price(product_id)
+
+        #--トップサイズ情報を取得--
+        topSize = get_topsSize(product_id)
+
+        #--ボトムスサイズ情報を取得--
+        bottomsSize = get_bottomsSize(product_id)
+
+        erroer_message = "この商品は購入できません。"
+
+
+        # 購入不可の商品に対して購入ページにアクセスした場合の処理
+        return render_template('product_details.html',evaluationCount=evaluationCount['評価件数'],
+        user_id=user_id,
+        seller_info=seller_info,
+        product=product,
+        comments=comments,
+        calculated_prices = calculated_prices,
+        evaluation=evaluation,
+        topSize=topSize,
+        bottomsSize=bottomsSize
+        , error_message=erroer_message
+        ), 404 # **ここで関数を終了させる**
+
     #DBから情報を取得
     try:
         con = connect_db()
         cur = con.cursor(dictionary=True)
 
-        # 商品情報を取得
-        sql_product = """
-        SELECT pr.id , pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
-        FROM m_product pr
-        INNER JOIN m_brand br ON br.id = pr.brand_id
-        INNER JOIN m_category ca ON pr.category_id = ca.id
-        WHERE pr.id = %s;
-        """
-        cur.execute(sql_product, (product_id,))
-        product = cur.fetchone()
+        # # 商品情報を取得
+        # sql_product = """
+        # SELECT pr.id , pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
+        # FROM m_product pr
+        # INNER JOIN m_brand br ON br.id = pr.brand_id
+        # INNER JOIN m_category ca ON pr.category_id = ca.id
+        # WHERE pr.id = %s;
+        # """
+        # cur.execute(sql_product, (product_id,))
+        # product = cur.fetchone()
         #配送情報を取得
 
         sql_address="""
@@ -421,21 +594,65 @@ def rental(product_id):
     else:
         user_id = session.get('user_id')
 
+    #商品情報を取得
+    product = get_product_info(product_id)
+    if not product:
+        # 商品が見つからない場合は、エラーページや404を返すのが適切です
+        return render_template('error.html'), 404 # **ここで関数を終了させる**
+    
+    if product['condition'] == '取引中':
+        return render_template('error.html'), 404 # **ここで関数を終了させる**
+
+    if product['rentalFlg'] == 0:
+        # 評価情報を取得
+        evaluation, evaluationCount = get_transaction_info(product['account_id'])
+
+        #アカウント情報取得
+        seller_info = get_user_info(product['account_id'])
+
+        #コメント情報を取得
+        comments = get_comments(product_id)
+
+        #レンタル価格計算
+        calculated_prices = calculate_rental_price(product_id)
+
+        #--トップサイズ情報を取得--
+        topSize = get_topsSize(product_id)
+
+        #--ボトムスサイズ情報を取得--
+        bottomsSize = get_bottomsSize(product_id)
+
+        erroer_message = "この商品はレンタルできません。"
+
+
+        # 購入不可の商品に対して購入ページにアクセスした場合の処理
+        return render_template('product_details.html',evaluationCount=evaluationCount['評価件数'],
+        user_id=user_id,
+        seller_info=seller_info,
+        product=product,
+        comments=comments,
+        calculated_prices = calculated_prices,
+        evaluation=evaluation,
+        topSize=topSize,
+        bottomsSize=bottomsSize
+        , error_message=erroer_message
+        ), 404 # **ここで関数を終了させる**
+
     #DBから情報を取得
     try:
         con = connect_db()
         cur = con.cursor(dictionary=True)
 
         # 商品情報を取得
-        sql_product = """
-        SELECT pr.id , pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
-        FROM m_product pr
-        INNER JOIN m_brand br ON br.id = pr.brand_id
-        INNER JOIN m_category ca ON pr.category_id = ca.id
-        WHERE pr.id = %s;
-        """
-        cur.execute(sql_product, (product_id,))
-        product = cur.fetchone()
+        # sql_product = """
+        # SELECT pr.id , pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
+        # FROM m_product pr
+        # INNER JOIN m_brand br ON br.id = pr.brand_id
+        # INNER JOIN m_category ca ON pr.category_id = ca.id
+        # WHERE pr.id = %s;
+        # """
+        # cur.execute(sql_product, (product_id,))
+        # product = cur.fetchone()
         #配送情報を取得
 
         sql_address="""
@@ -463,11 +680,16 @@ def rental(product_id):
         if con and con.is_connected():
             cur.close()
             con.close()
+
+    # #--レンタル期間情報を取得--
+
+    #レンタル価格計算
+    calculated_prices = calculate_rental_price(product_id)
         
     #支払い情報を取得
     accountNumbers,count=getAccountInfo()
 
-    return render_template("purchase/rental.html",user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count)
+    return render_template("purchase/rental.html",user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count ,calculated_prices=calculated_prices)
 
 
 
@@ -475,9 +697,9 @@ def rental(product_id):
 
 
 
-#購入完了画面
-@products_bp.route('/purchase_complete', methods=['POST'])
-def purchase_complete():
+#購入・レンタル完了画面
+@products_bp.route('/transaction_complete', methods=['POST'])
+def transaction_complete():
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))
@@ -489,6 +711,8 @@ def purchase_complete():
     addressId = request.form.get('address_index')
     delivery_location = request.form.get('delivery_location')
     creditcard_id = request.form.get('creditcard_id')
+    situation = request.form.get('situation')
+
 
     # print("product_id:",product_id)
     # print("payment_method:",payment_method)
@@ -533,8 +757,6 @@ def purchase_complete():
     shipping_flg = False
     received_flg = False
 
-    #取引状況・購入かレンタルか
-    situation = "購入"
     
     # dbへの登録処理
     try:
@@ -595,8 +817,21 @@ def purchase_complete():
             cur.close()
             con.close()
 
-    return render_template("purchase/purchase_complete.html", user_id=user_id)
+    return render_template("purchase/transaction_complete.html", user_id=user_id)
 
+
+#レンタル完了画面
+@products_bp.route('/rental_complete', methods=['POST'])
+def rental_complete():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+        
+
+    return render_template("purchase/rental_complete.html", user_id=user_id)
 
 # DB接続設定
 def connect_db():

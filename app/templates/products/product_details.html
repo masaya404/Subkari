@@ -22,31 +22,51 @@
         <div class="product-info">
             <h1 class="product-title">{{ product.product_name }}</h1>
             <div class="price-section">
+                {% if product.purchaseFlg == 1 %}
                 
                 <div class="price-row">
                     <span>購入価格</span>
                     <span class="price">{{ product.purchasePrice }}円<span style="font-size:14px; font-weight:normal;">
                             送料込み</span></span>
                 </div>
+                {% endif %}
+                
+                {% if product.rentalFlg == 1 %}
                 {% if calculated_prices %}
                 {% for period_text, total_price in calculated_prices.items() %}
                 <div class="price-row">
                     <span>レンタル価格</span>
                     <span class="price">{{ period_text }}：</span>
-                    <span class="price">{{ total_price | int }}円<span style="font-size:14px; font-weight:normal;">
+                    <span class="price">{{ product.rentalPrice }}円<span style="font-size:14px; font-weight:normal;">
                             送料込み</span></span>
                             </div>
                 {% endfor %}
                 {% endif %}
+                {% endif %}
             </div>
             <div class="action-buttons cursor-pointer">
+                {% if product.purchaseFlg == 1 %}
+
                 <a href="{{url_for('products.purchase', product_id=product.id)}}">
                 <button class="btn">購入する</button>
                 </a>
+                {% endif %}
+                
+                {% if product.rentalFlg == 1 %}
                 <a href="{{url_for('products.rental', product_id=product.id)}}">
                     <button class="btn">レンタル</button>
                 </a>
+                {% endif %}
             </div>
+            {%if product.condition == '取引中' %}
+            <div class="error-message">
+                <div class="error-icon">⚠️</div>
+                <div class="error-text">
+                    <p class="error-title">現在この商品は利用できません</p>
+                    <p class="error-description">購入もレンタルも現在ご利用いただけません。</p>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
     <div class="tabs">
@@ -70,7 +90,7 @@
         {% if topSize %}
         <p><strong>肩幅:</strong> {{topSize.shoulderWidth}}<br>
             <strong>身幅:</strong> {{topSize.bodyWidth}}<br>
-            <strong>そで丈:</strong>{{topSize.sleeveLength}}%<br>
+            <strong>そで丈:</strong>{{topSize.sleeveLength}}<br>
             <strong>着丈:</strong> {{topSize.bodyLength}}<br>
             <strong>サイズ備考欄:</strong> {{topSize.notes}}
         </p>
@@ -79,7 +99,7 @@
 
         <p><strong>ヒップ:</strong> {{bottomsSize.hip}}<br>
             <strong>パンツ丈:</strong> {{bottomsSize.totalLength}}<br>
-            <strong>股上:</strong>{{bottomsSize.rise}}%<br>
+            <strong>股上:</strong>{{bottomsSize.rise}}<br>
             <strong>股下:</strong> {{bottomsSize.inseam}}<br>
             <strong>ウエスト:</strong> {{bottomsSize.waist}}<br>
             <strong>もも周り:</strong> {{bottomsSize.thighWidth}}<br>

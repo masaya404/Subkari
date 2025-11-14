@@ -48,19 +48,26 @@ const rentalPurchaseError = document.getElementById('rentalPurchaseError');
 // レンタル可能チェックボックス
 rentalCheckbox.addEventListener('change', function() {
     const existingSection = document.getElementById('rentalPriceSection');
-    
+    const existingPeriod = document.getElementById('rental_period');
+     
     if (this.checked) {
         // 存在しない場合のみ作成
         if (!existingSection) {
-            createRentalPriceSection();
+            createRentalPriceSection();         
+        }
+        if(!existingPeriod){
+            createRentalPeriod();
         }
     } else {
         // 削除
         if (existingSection) {
             existingSection.remove();
         }
+        if(existingPeriod){
+            existingPeriod.remove();
+        }
     }
-    validateSelection();
+    // validateSelection();
 });
  
 // 購入可能チェックボックス
@@ -78,7 +85,7 @@ purchaseCheckbox.addEventListener('change', function() {
             existingSection.remove();
         }
     }
-    validateSelection();
+    // validateSelection();
 });
  
 // レンタル価格セクション作成
@@ -89,6 +96,7 @@ function createRentalPriceSection() {
     newSection.innerHTML = `
         <div class="price-input-wrapper">
         <input type="number" id="rentalPrice" name="rentalPrice" placeholder="0" min="0" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+        <span class="text-red-500 text-sm hidden" id="rentalPriceError">レンタル価格を入力してください</span>
         </div>
         `;
     
@@ -96,6 +104,29 @@ function createRentalPriceSection() {
     rentalLabel.after(newSection);
     
     document.getElementById('rentalPrice').focus();
+}
+// レンタル期間作成
+function createRentalPeriod() {
+    const newSection = document.createElement('div');
+    newSection.id = 'rental_period';
+    newSection.className = 'flex flex-col gap-2';
+    newSection.innerHTML = `
+                    <label class="block text-sm font-semibold mb-2">
+                       レンタル期間 <span class="text-red-500">*</span>
+                    </label>
+                    <select name="period" id="rentalPeriod" class="w-full px-4 py-2 border border-[#9a9a9a] rounded focus:outline-none focus:border-blue-500">
+                        <option value="4" selected>4</option>
+                        <option value="7">7</option>
+                        <option value="14">14</option>
+                    </select>
+                    <span class="text-red-500 text-sm hidden" id="rentalPeriodError">レンタル期間を選択してください</span>
+
+        `;
+    
+    const rentalLabel = rentalCheckbox.closest('label');
+    rentalLabel.after(newSection);
+    
+    document.getElementById('rentalPeriod').focus();
 }
  
 // 購入価格セクション作成
@@ -106,6 +137,7 @@ function createPurchasePriceSection() {
     newSection.innerHTML = `
         <div class="price-input-wrapper">
         <input type="number" id="purchasePrice" name="purchasePrice" placeholder="0" min="0" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
+        <span class="text-red-500 text-sm hidden" id="purchasePriceError">購入価格を入力してください</span>
         </div>
         `;
     
@@ -149,6 +181,7 @@ function saveToSessionStorage(){
     const rental = document.getElementById("rental").checked;
     const purchase = document.getElementById("purchase").checked;
     const rentalPrice = document.getElementById("rentalPrice")?.value || '';
+    const rentalPeriod = document.getElementById("rentalPeriod")?.value || '';
     const purchasePrice = document.getElementById("purchasePrice")?.value || '';
     const smokingValue = document.querySelector('input[name="smoking"]:checked').value;
     const color = document.getElementById("color").value;
@@ -169,10 +202,12 @@ function saveToSessionStorage(){
  
     if (!rental) {
     sessionStorage.removeItem("rentalPrice");
+    sessionStorage.removeItem("rentalPeriod");
     sessionStorage.setItem("rental", "false");
     } else {
         sessionStorage.setItem("rental", "true");
         sessionStorage.setItem("rentalPrice", rentalPrice);
+        sessionStorage.setItem("rentalPeriod",rentalPeriod);
     }
  
     if (!purchase) {
@@ -212,13 +247,20 @@ function loadFromSessionStorage() {
  
     // レンタル価格
     const rentalPrice = sessionStorage.getItem("rentalPrice");
+    const rentalPeriod = sessionStorage.getItem("rentalPeriod");
     if (rentalPrice) {
         if (!document.getElementById("rentalPrice")) {
             createRentalPriceSection(); // 動的に生成
         }
         document.getElementById("rentalPrice").value = rentalPrice;
     }
- 
+    if (rentalPeriod) {
+        if (!document.getElementById("rentalPeriod")) {
+            createRentalPeriod();// 動的に生成
+           
+        }
+        document.getElementById("rentalPeriod").value = rentalPeriod;
+    } 
     // 購入価格
     const purchasePrice = sessionStorage.getItem("purchasePrice");
     if (purchasePrice) {
@@ -274,23 +316,6 @@ function goToClean(sizeUrl){
     window.location.href = sizeUrl;
 }
  
-// document.getElementById("saveBtn").addEventListener("click", function() {
-//   // 各 input 欄位的值を取得
- 
- 
-//   // formDateで囲む
-//   const formData = {
-//     name: name,
-//     email: email,
-//     comment: comment
-//   };
- 
-//   // JSONに変換して保存
-//   sessionStorage.setItem("formData", JSON.stringify(formData));
- 
-//   alert("入力データを sessionStorage に保存しました！");
-// });
- 
 // フォーム検証
 function validateForm() {
     saveToSessionStorage();
@@ -308,21 +333,61 @@ function validateForm() {
     // レンタル・購入
     const rental = document.getElementById('rental').checked;
     const purchase = document.getElementById('purchase').checked;
+    const rentalPrice = document.getElementById('rentalPrice')?.value || '';
+    const rentalPeriod = document.getElementById('rentalPeriod')?.value || '';
+    const purchasePrice = document.getElementById('purchasePrice')?.value || '';
+
     if (!rental && !purchase) {
         document.getElementById('rentalPurchaseError').classList.remove('hidden');
         isValid = false;
+        console.log("レンタルと購入エラー");
     } else {
         document.getElementById('rentalPurchaseError').classList.add('hidden');
     }
     if(rental){
         rentalflag = true;
+        if(!rentalPrice){
+        document.getElementById('rentalPriceError').classList.remove('hidden');
+        isValid = false;
+        console.log("レンタル価格エラー");
+        }
+        else{
+        document.getElementById('rentalPriceError').classList.add('hidden');
+        }
+        if(!rentalPeriod){
+        document.getElementById('rentalPeriodError').classList.remove('hidden');
+        isValid = false;
+        console.log("レンタル期間エラー");    
+        }
+        else{
+        document.getElementById('rentalPeriodError').classList.add('hidden');
+        }
     }
+    // else {
+    // document.getElementById('rentalPriceError').classList.add('hidden');
+    // document.getElementById('rentalPeriodError').classList.add('hidden');
+    // }
+
+    if(purchase){
+        if(!purchasePrice){
+        document.getElementById('purchasePriceError').classList.remove('hidden');
+        isValid = false;
+        console.log("購入エラー");
+        }
+        else{
+        document.getElementById('purchasePriceError').classList.add('hidden');
+        }
+    }
+    // else {
+    // document.getElementById('purchasePriceError').classList.add('hidden');
+    // }
  
     // 系統カラー
     const color = document.getElementById('color').value.trim();
     if (!color) {
         document.getElementById('colorError').classList.remove('hidden');
         isValid = false;
+        console.log("カラーエラー");
     } else {
         document.getElementById('colorError').classList.add('hidden');
     }
@@ -332,6 +397,7 @@ function validateForm() {
     if (!category1) {
         document.getElementById('category1Error').classList.remove('hidden');
         isValid = false;
+        console.log("カテゴリ１エラー");
     } else {
         document.getElementById('category1Error').classList.add('hidden');
     }
@@ -341,6 +407,7 @@ function validateForm() {
     if (!category2) {
         document.getElementById('category2Error').classList.remove('hidden');
         isValid = false;
+        console.log("カテゴリ２エラー");
     } else {
         document.getElementById('category2Error').classList.add('hidden');
     }
@@ -349,6 +416,7 @@ function validateForm() {
     if (!brand) {
         document.getElementById('brandError').classList.remove('hidden');
         isValid = false;
+        console.log("ブランドエラー");
     } else {
         document.getElementById('brandError').classList.add('hidden');
     }
@@ -357,6 +425,7 @@ function validateForm() {
     if (sizeDisplay === '未選択') {
         document.getElementById('sizeError').classList.remove('hidden');
         isValid = false;
+        console.log("サイズエラー");
     } else {
         document.getElementById('sizeError').classList.add('hidden');
     }
@@ -366,6 +435,7 @@ function validateForm() {
     if (washingDisplay === '未選択') {
         document.getElementById('washingError').classList.remove('hidden');
         isValid = false;
+        console.log("洗濯エラー");
     } else {
         document.getElementById('washingError').classList.add('hidden');
     }
@@ -375,32 +445,16 @@ function validateForm() {
     if (!returnLocation && rentalflag ){
         document.getElementById('returnLocationError').classList.remove('hidden');
         isValid = false;
+        console.log("返却場所エラー");
+        
     } else {
         document.getElementById('returnLocationError').classList.add('hidden');
     }
- 
+    
     return isValid;
 }
  
-//サイズと洗濯表示を sessionStorage から読み込む
-// function loadSizeAndWashing() {
-//     // サイズ
-//     const sizeFromSession = sessionStorage.getItem('size');
-//     if (sizeFromSession && sizeFromSession !== '未選択') {
-//         document.getElementById('sizeDisplay').innerText = sizeFromSession;
-//     }
-//     else{
-//         isValid = false;
-//     }
-//     // 洗濯表示
-//     const washingFromSession = sessionStorage.getItem('washing');
-//     if (washingFromSession && washingFromSession !== '未選択') {
-//         document.getElementById('washingDisplay').innerText = washingFromSession;
-//     }
-//     else{
-//         isValid = false;
-//     }
-// }
+
 ///////////////////////////////////////////////////////画像の形式変換の関数///////////////////////////////////////////////////////////////////////////
 function base64ToFile(base64Data, filename) {
   const arr = base64Data.split(',');
@@ -415,21 +469,7 @@ function base64ToFile(base64Data, filename) {
 /**
 * フォーム送信
 */
-// document.getElementById('sellerForm').addEventListener('submit', function(e) {
-//     e.preventDefault();
-//     //検証成功
-//     if (validateForm()) {
-//         const formData = new FormData(this);
-//         const data = Object.fromEntries(formData);
-//         console.log('送信データ:', data);
-//         // 実際はここでサーバーに送信
-//         alert('フォームが送信されました');
-//     }
-//     //検証失敗
-//     else {
-//         alert('すべての必須項目を入力してください');
-//     }
-// });
+
 /**
 * フォーム送信
 */
@@ -474,6 +514,7 @@ function submitForm() {
         rental: sessionStorage.getItem("rental") === "true",
         purchase: sessionStorage.getItem("purchase") === "true",
         rentalPrice: sessionStorage.getItem("rentalPrice") || null,
+        rentalPeriod: sessionStorage.getItem("rentalPeriod") || null,
         purchasePrice: sessionStorage.getItem("purchasePrice") || null,
         smoking: sessionStorage.getItem("smoking") === "yes", // "yes" OR "no"
         color: sessionStorage.getItem("color"),
@@ -522,8 +563,102 @@ function submitForm() {
  
  
 }
+// 更新のフォーム送信
+function submitUpdateForm() {
+    // バリデーション
+    if (!validateForm()) {
+        console.log("未入力項目存在.")
+        return;
+    }
+ 
+    // sessionStorage から画像を取得
+    const uploadedImages = JSON.parse(sessionStorage.getItem('uploadedImages') || '[]');
+    
+    // if (uploadedImages.length === 0) {
+    //     alert('最低1つの画像をアップロードしてください');
+    //     return;
+    // }
+    // console.log('=== 画像の格式確認 ===');
+    // console.log('uploadedImages:', uploadedImages);
+    // console.log('最初の画像:', uploadedImages[0]);
+ 
+    // 全部のデータ変数
+    const formData = new FormData();
+ 
+     // ===== 画像 →　formData =====
+        uploadedImages.forEach((imageData, index) => {
+            try {
+                const base64String = imageData.src;
+ 
+                // Base64　転換　→　File
+                const file = base64ToFile(base64String, `product_image_${index}.png`);
+                formData.append('images', file);  // keyは'images'，複数あり
+                console.log(`画像${index}FormDataに追加`);
+            } catch (error) {
+                console.error(`画像${index}形式変換失敗:`, error);
+            }
+        });
+ 
+    //  sessionStorage 取得
+    const productData = {
+        name: sessionStorage.getItem("name"),
+        rental: sessionStorage.getItem("rental") === "true",
+        purchase: sessionStorage.getItem("purchase") === "true",
+        rentalPrice: sessionStorage.getItem("rentalPrice") || null,
+        rentalPeriod: sessionStorage.getItem("rentalPeriod") || null,
+        purchasePrice: sessionStorage.getItem("purchasePrice") || null,
+        smoking: sessionStorage.getItem("smoking") === "yes", // "yes" OR "no"
+        color: sessionStorage.getItem("color"),
+        category1: sessionStorage.getItem("category1"),
+        category2: sessionStorage.getItem("category2"),
+        brand: sessionStorage.getItem("brand"),
+        explanation: sessionStorage.getItem("explanation"),
+        returnLocation: sessionStorage.getItem("returnLocation"),
+    };
+ 
+    //すべてのデータ　→　formData
+    formData.append('productData', JSON.stringify(productData));
+ 
+    console.log('=== 準備完了 ===');
+    console.log('画像の枚数:', uploadedImages.length);
+    console.log('商品名:', productData.name);
+    console.log('バックエンドに送る');
+    console.log('=== 檢查 returnLocation ===');
+    console.log('sessionStorage returnLocation:', sessionStorage.getItem("returnLocation"));
+    console.log('productData:', productData);
+    console.log('formData 內容:', Object.fromEntries(formData));
+    fetch('/seller/format/update-product', {
+        method: 'POST',
+        body:formData
+        // headers: {
+        //     'Content-Type': 'application/json',
+        // },
+        // body: JSON.stringify(productData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Success:', data);
+            alert('出品成功しました。');
+            // 成功後　sessionStorageのデータすべて消す
+            sessionStorage.clear();
+            window.location.href="/seller/seller";
+        } else {
+            alert('失敗: ' + data.message);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert('catch失敗');
+    });
+ 
+}
+
 // 下書き保存
 function saveDraft() {
+    console.log("save draft");
+    
+    saveToSessionStorage();
     // sessionStorage から画像を取得
     const uploadedImages = JSON.parse(sessionStorage.getItem('uploadedImages') || '[]');
     // 全部のデータ変数
@@ -549,6 +684,7 @@ function saveDraft() {
         purchase: sessionStorage.getItem("purchase") === "true",
         rentalPrice: sessionStorage.getItem("rentalPrice") || null,
         purchasePrice: sessionStorage.getItem("purchasePrice") || null,
+        rentalPeriod: sessionStorage.getItem("rentalPeriod") || null,
         smoking: sessionStorage.getItem("smoking") === "yes", // "yes" OR "no"
         color: sessionStorage.getItem("color") || null,
         category1: sessionStorage.getItem("category1") || null,
@@ -577,10 +713,10 @@ function saveDraft() {
     .then(data => {
         if (data.success) {
             console.log('Success:', data);
-            alert('出品成功しました。');
+            alert('下書きに保存しました。');
             // 成功後　sessionStorageのデータすべて消す
             sessionStorage.clear();
-            window.location.href="/seller/draft";
+            window.location.href="/seller/seller/draft";
         } else {
             alert('失敗: ' + data.message);
         }
@@ -590,11 +726,7 @@ function saveDraft() {
         alert('catch失敗');
     });
  
-    // const form = document.getElementById('sellerForm');
-    // const formData = new FormData(form);
-    // const data = Object.fromEntries(formData);
-    // alert('下書きが保存されました');
-    window.location.href = url;
+    // window.location.href = url;
 }
 //キャンセル
 function backToSeller(url){
