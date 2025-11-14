@@ -1,3 +1,4 @@
+DROP DATABASE db_subkari;
 -- データベース作成
 create database db_subkari
 default character set utf8;
@@ -18,7 +19,7 @@ CREATE TABLE `m_account` (
   `tel` VARCHAR(20) NOT NULL,
   `mail` VARCHAR(255) NOT NULL,
   `smoker` boolean NOT NULL,
-  `introduction` TEXT  ,
+  `introduction` TEXT,
   `money` INT,
   `created_at` timestamp default current_timestamp,
   `updateDate` timestamp default current_timestamp on update current_timestamp,
@@ -37,10 +38,7 @@ CREATE TABLE `m_account` (
   `firstName` VARCHAR(50) NOT NULL,
   `lastNameKana` VARCHAR(50) NOT NULL,
   `firstNameKana` VARCHAR(50) NOT NULL,
-  `profileImage` VARCHAR(255) NOT NULL,
-
-
-  
+  `profileImage` VARCHAR(255) NOT NULL
   PRIMARY KEY (`id`)
 );
 
@@ -99,7 +97,8 @@ CREATE TABLE `m_product` (
   `smokingFlg` boolean NULL,
   `returnAddress` varchar(255) NULL,
   `condition` ENUM('取引可','取引中'),
-  `rentalPeriod` INT NULL,
+  `rentalPeriod` INT NULL
+
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`brand_id`)
