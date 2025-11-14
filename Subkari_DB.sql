@@ -79,27 +79,28 @@ CREATE TABLE `m_category` (
 -- 商品テーブル ------------------------------------
 CREATE TABLE `m_product` (
   `id` INT AUTO_INCREMENT NOT NULL,
-  `name` VARCHAR(255) NULL,
+  `name` VARCHAR(255) ,
   `purchasePrice` INT NULL,
   `rentalPrice` INT NULL,
-  `size` VARCHAR(255) NULL,
+  `size` VARCHAR(255) ,
   `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','シルバー','ピンク','レッド','オレンジ')  NULL,
-  `for` ENUM('ユニセックス','レディース') NULL,
-  `upload` DATE NULL,
-  `showing` ENUM('公開','非公開','非表示') NULL,
-  `draft` boolean NULL,
-  `updateDate` DATETIME NULL,
-  `purchaseFlg` boolean NULL,
-  `rentalFlg` boolean NULL,
-  `explanation` TEXT NULL,
-  `account_id` INT NULL,
-  `brand_id` INT NULL,
-  `category_id` INT NULL,
+  `for` ENUM('ユニセックス','レディース') ,
+  `upload` DATE ,
+  `showing` ENUM('公開','非公開','非表示') ,
+  `draft` boolean ,
+  `updateDate` DATETIME ,
+  `purchaseFlg` boolean ,
+  `rentalFlg` boolean ,
+  `explanation` TEXT ,
+  `account_id` INT ,
+  `brand_id` INT ,
+  `category_id` INT ,
   `cleanNotes` TEXT ,
-  `smokingFlg` boolean NULL,
-  `returnAddress` varchar(255) NULL,
+  `smokingFlg` boolean ,
+  `returnAddress` varchar(255) ,
   `condition` ENUM('取引可','取引中'),
-  `rentalPeriod` INT NULL,
+  `rentalPeriod` INT,
+
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`brand_id`)
@@ -228,16 +229,16 @@ CREATE TABLE `t_adminLogin` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 -- レンタル期間テーブル ---------------------------------------
-CREATE TABLE `t_rentalPeriod` (
-  `id` INT AUTO_INCREMENT NOT NULL,
-  `product_id` INT NOT NULL,
-  `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
+-- CREATE TABLE `t_rentalPeriod` (
+--   `id` INT AUTO_INCREMENT NOT NULL,
+--   `product_id` INT NOT NULL,
+--   `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
 
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`product_id`)
-    REFERENCES `m_product`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
-);
+--   PRIMARY KEY (`id`),
+--   FOREIGN KEY (`product_id`)
+--     REFERENCES `m_product`(`id`)
+--     ON DELETE RESTRICT ON UPDATE CASCADE
+-- );
 
 -- お気に入りテーブル --------------------------------
 CREATE TABLE `t_favorite` (
