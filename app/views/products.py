@@ -183,7 +183,7 @@ def product_details_stub(product_id):
 
         # 商品情報を取得
         sql_product = """
-        SELECT pr.id ,pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
+        SELECT pr.id ,pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name ,pr.rentalPeriod
         FROM m_product pr
         INNER JOIN m_brand br ON br.id = pr.brand_id
         INNER JOIN m_category ca ON pr.category_id = ca.id
@@ -202,49 +202,57 @@ def product_details_stub(product_id):
             # 商品が見つからない場合は、エラーページや404を返すのが適切です
             return render_template('error.html'), 404 # **ここで関数を終了させる**
 
-        #--レンタル期間情報を取得--
-        sql_rentalPeriod = """
-        SELECT rentalPeriod
-        from t_rentalPeriod
-        where product_id = %s;
+        # #--レンタル期間情報を取得--
+        # sql_rentalPeriod = """
+        # SELECT rentalPeriod
+        # from t_rentalPeriod
+        # where product_id = %s;
 
-        """
+        # """
 
-        cur.execute(sql_rentalPeriod, (product_id,))
-        rentalPeriod = cur.fetchall()
+        # cur.execute(sql_rentalPeriod, (product_id,))
+        # rentalPeriod = cur.fetchall()
 
-        # 1. レンタル単価を取得（数値型に変換）
-        try:
-            # product.rentalPrice は文字列の可能性もあるため、int型に変換
-            rental_price_per_day = int(product['rentalPrice'])
-        except (TypeError, ValueError):
-            # エラーハンドリング: 価格が不正な場合は0としておくなど
-            rental_price_per_day = 0
-            
-        # 2. 期間ごとの合計金額を計算し、辞書として保存する
+
+         # 2. 期間ごとの合計金額を計算し、辞書として保存する
         calculated_prices = {}
 
-        for period_data in rentalPeriod:
-            # rentalPeriodから期間（日）を取得
-            # キー名はSQLの SELECT rentalPeriod から 'rentalPeriod' になる
+        # 1. レンタル単価を取得（数値型に変換）
+        if( product['rentalPrice'] is None):
+            rental_price_per_day = 0
+        else:
             try:
+                # product.rentalPrice は文字列の可能性もあるため、int型に変換
+                rental_price_per_day = int(product['rentalPrice'])
                 #データを入れるperiod_stringに      
-                period_string = period_data['rentalPeriod']
+                period_string = product['rentalPeriod']
                 # '日' という文字を空文字に置き換え（例: '4日' -> '4'）
                 days_str = period_string.replace('日', '')
 
                 days = int(days_str)
-                
+            
                 # 計算
                 total_price = rental_price_per_day * days
-                
+            
                 # 結果を辞書に追加
                 # 例: {'4日': 4000, '7日': 7000} のように格納
                 calculated_prices[f'{days}日'] = total_price
-                
             except (TypeError, ValueError):
-                # 期間のデータが不正な場合はスキップ
-                continue
+                # エラーハンドリング: 価格が不正な場合は0としておくなど
+                pass
+            
+       
+
+    
+        # # rentalPeriodから期間（日）を取得
+        # # キー名はSQLの SELECT rentalPeriod から 'rentalPeriod' になる
+        # try:
+
+            
+            
+        # except (TypeError, ValueError):
+        #     # 期間のデータが不正な場合はスキップ
+        #     pass
 
         # コメント情報を取得
         # 2. コメントデータと投稿者名を取得
