@@ -191,7 +191,7 @@ def calculate_rental_price(product_id):
             #データを入れるperiod_stringに      
             period_string = product['rentalPeriod']
             # '日' という文字を空文字に置き換え（例: '4日' -> '4'）
-            days_str = period_string.replace('日', '')
+            days_str = period_string
 
             days = int(days_str)
         
@@ -272,7 +272,6 @@ def product_details_stub(product_id):
         pr.rentalPeriod,
         pr.purchaseFlg,
         pr.rentalFlg
-
         FROM m_product pr
         INNER JOIN m_brand br ON br.id = pr.brand_id
         INNER JOIN m_category ca ON pr.category_id = ca.id
@@ -280,9 +279,21 @@ def product_details_stub(product_id):
         """
         cur.execute(sql_product, (product_id,))
         product = cur.fetchone()
-        print(product)
 
+
+        sql_images = """
+            SELECT img
+            FROM m_productimg
+            WHERE product_id = %s;
+        """
+        cur.execute(sql_images,(product_id,))
+        images = cur.fetchall()
+        print(images)
+        #images=["img":"image1.png","img":"image2.png",...]
         #商品が見つからない場合の処理
+        # sql_img = """
+        #     SELECT
+        # """
         # 商品が見つからなかった場合のデフォルト処理
         # ... 省略 ...
         if not product:
@@ -321,7 +332,7 @@ def product_details_stub(product_id):
         
         # 3. HTMLテンプレートに渡す形式にデータを整形
         # 商品の出品者IDと比較して、出品者かどうかを判定するフラグを追加
-        seller_id = product['account_id'] # m_productから取得した出品者のaccount_id
+        seller_id = int(product['account_id']) # m_productから取得した出品者のaccount_id
         
         for comment in fetched_comments:
             is_seller = (comment['comment_acouunt_id'] == seller_id)
@@ -399,6 +410,7 @@ def product_details_stub(product_id):
         user_id=user_id,
         seller_info=seller_info,
         product=product,
+        images = images,
         comments=comments,
         calculated_prices = calculated_prices,
         evaluation=evaluation,
