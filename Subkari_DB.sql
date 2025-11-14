@@ -99,7 +99,7 @@ CREATE TABLE `m_product` (
   `smokingFlg` boolean ,
   `returnAddress` varchar(255) ,
   `condition` ENUM('取引可','取引中'),
-  `rentalPeriod` ENUM('4日','7日','14日'),
+  `rentalPeriod` INT,
 
 
   PRIMARY KEY (`id`),

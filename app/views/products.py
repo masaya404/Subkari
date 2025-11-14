@@ -135,7 +135,79 @@ def get_product_info(product_id):
             con.close()
 
 
-    
+
+#レンタル情報を計算する関数 ------------------------------------------------------------------------------------
+def calculate_rental_price(product_id):
+
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        # 商品情報を取得
+        sql_product = """
+        SELECT 
+
+        pr.id ,
+        pr.name as product_name,
+        pr.account_id, 
+        pr.rentalPrice, 
+        pr.purchasePrice, 
+        pr.explanation ,
+        pr.color,
+        pr.for,
+        pr.category_id,
+        pr.brand_id ,
+        br.name as brand_name  , 
+        ca.name as category_name ,
+        pr.rentalPeriod,
+        pr.purchaseFlg,
+        pr.rentalFlg
+
+        FROM m_product pr
+        INNER JOIN m_brand br ON br.id = pr.brand_id
+        INNER JOIN m_category ca ON pr.category_id = ca.id
+        WHERE pr.id = %s;
+        """
+        cur.execute(sql_product, (product_id,))
+        product = cur.fetchone()
+
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+
+    # 2. 期間ごとの合計金額を計算し、辞書として保存する
+    calculated_prices = {}
+
+    # 1. レンタル単価を取得（数値型に変換）
+    if( product['rentalFlg'] == 0):
+        rental_price_per_day = 0
+    else:
+        try:
+            # product.rentalPrice は文字列の可能性もあるため、int型に変換
+            rental_price_per_day = int(product['rentalPrice'])
+            #データを入れるperiod_stringに      
+            period_string = product['rentalPeriod']
+            # '日' という文字を空文字に置き換え（例: '4日' -> '4'）
+            days_str = period_string.replace('日', '')
+
+            days = int(days_str)
+        
+            # 計算
+            total_price = rental_price_per_day * days
+        
+            # 結果を辞書に追加
+            # 例: {'4日': 4000, '7日': 7000} のように格納
+            calculated_prices[f'{days}日'] = total_price
+        except (TypeError, ValueError):
+            # エラーハンドリング: 価格が不正な場合は0としておくなど
+            pass
+
+    return calculated_prices
+            
+       
 
 # 商品一覧の表示
 @products_bp.route('/search_result', methods=['GET'])
@@ -220,57 +292,9 @@ def product_details_stub(product_id):
             return render_template('error.html'), 404 # **ここで関数を終了させる**
 
         # #--レンタル期間情報を取得--
-        # sql_rentalPeriod = """
-        # SELECT rentalPeriod
-        # from t_rentalPeriod
-        # where product_id = %s;
 
-        # """
-
-        # cur.execute(sql_rentalPeriod, (product_id,))
-        # rentalPeriod = cur.fetchall()
-
-
-         # 2. 期間ごとの合計金額を計算し、辞書として保存する
-        calculated_prices = {}
-
-        # 1. レンタル単価を取得（数値型に変換）
-        if( product['rentalFlg'] == 0):
-            rental_price_per_day = 0
-        else:
-            try:
-                # product.rentalPrice は文字列の可能性もあるため、int型に変換
-                rental_price_per_day = int(product['rentalPrice'])
-                #データを入れるperiod_stringに      
-                period_string = product['rentalPeriod']
-                # '日' という文字を空文字に置き換え（例: '4日' -> '4'）
-                days_str = period_string.replace('日', '')
-
-                days = int(days_str)
-            
-                # 計算
-                total_price = rental_price_per_day * days
-            
-                # 結果を辞書に追加
-                # 例: {'4日': 4000, '7日': 7000} のように格納
-                calculated_prices[f'{days}日'] = total_price
-            except (TypeError, ValueError):
-                # エラーハンドリング: 価格が不正な場合は0としておくなど
-                pass
-            
-       
-
+        
     
-        # # rentalPeriodから期間（日）を取得
-        # # キー名はSQLの SELECT rentalPeriod から 'rentalPeriod' になる
-        # try:
-
-            
-            
-        # except (TypeError, ValueError):
-        #     # 期間のデータが不正な場合はスキップ
-        #     pass
-
         # コメント情報を取得
         # 2. コメントデータと投稿者名を取得
         # t_comments と m_account を結合し、投稿日時の降順で取得
@@ -356,6 +380,9 @@ def product_details_stub(product_id):
             cur.close()
             con.close()
 
+
+    #レンタル価格計算
+    calculated_prices = calculate_rental_price(product_id)
 
 
     # 評価情報を取得
@@ -488,11 +515,16 @@ def rental(product_id):
         if con and con.is_connected():
             cur.close()
             con.close()
+
+    # #--レンタル期間情報を取得--
+
+    #レンタル価格計算
+    calculated_prices = calculate_rental_price(product_id)
         
     #支払い情報を取得
     accountNumbers,count=getAccountInfo()
 
-    return render_template("purchase/rental.html",user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count)
+    return render_template("purchase/rental.html",user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count ,calculated_prices=calculated_prices)
 
 
 
