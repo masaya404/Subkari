@@ -197,70 +197,83 @@
         </div>
 
         <!-- クリーニング期間セクション -->
-        <div class="text-center mb-12" id="cleaningTimer">
-            <p class="text-gray-600 mb-4">クリーニング期間</p>
-            <p class="text-5xl font-bold mb-2">
-                <span class="text-2xl">あと</span>
-                <span class="font-mono" id="timer"></span>
-            </p>
-        </div>
+        <div class="" id="cleaningTimer">
+            <div class="text-center mb-12">
+                <p class="text-gray-600 mb-4">クリーニング期間</p>
+                <p class="text-5xl font-bold mb-2">
+                    <span class="text-2xl">あと</span>
+                    <span class="font-mono" id="timer"></span>
+                </p>
+            </div>
 
-        <!-- 注意事項 -->
-        <div class="bg-gray-50 border border-gray-200 rounded p-6 mb-8">
-            <p class="text-gray-700 text-center mb-4">
-                注意事項を必ずご確認の上、クリーニング期間中にお預かり証明書を添付して、送信してください。
-            </p>
-            <div class="text-center">
-                <a href="#" class="text-blue-500 hover:text-blue-600 text-sm">
-                    お預かり証明書とは▶
-                </a>
-                <br />
-                <a href="#" class="text-blue-500 hover:text-blue-600 text-sm">
-                    クリーニング期間のヘルプ▶
-                </a>
-            </div>
-        </div>
-        {% if upload_success %}
-        <div class="max-w-2xl mx-auto">
-            <div class="bg-green-50 border-2 border-green-300 rounded-lg p-12 text-center">
-                <div class="text-green-600 text-5xl mb-4">✓</div>
-                <h2 class="text-2xl font-bold text-green-700 mb-4">アップロード成功</h2>
-                <p class="text-gray-700 mb-6">ファイルが正常にアップロードされました。</p>
-                
-                {% if image_url %}
-                <div class="mb-6">
-                    <img src="{{ image_url }}" alt="アップロード画像" class="w-48 h-48 object-cover rounded-lg mx-auto">
-                </div>
-                {% endif %}
-                
-                <div class="space-y-3">
-                    <a href="{{ url_for('deal.deal') }}" class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
-                        一覧に戻る
-                    </a>
-                    <br>
-                    <a href="{{ url_for('deal.deal_list_imageUpload') }}" class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
-                        別のファイルをアップロード
-                    </a>
-                </div>
-            </div>
-        </div>
-        {%else%}
-        <form action="{{url_for('deal.deal_list_imageUpload')}}" method="POST" enctype="multipart/form-data">
-            <!-- ファイル選択エリア -->
-            <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8">
+            <!-- 注意事項 -->
+            <div class="bg-gray-50 border border-gray-200 rounded p-6 mb-8">
+                <p class="text-gray-700 text-center mb-4">
+                    注意事項を必ずご確認の上、クリーニング期間中にお預かり証明書を添付して、送信してください。
+                </p>
                 <div class="text-center">
-                    <input type="file" name="img" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-semibold cursor-pointer" required>                  
+                    <a href="#" class="text-blue-500 hover:text-blue-600 text-sm">
+                        お預かり証明書とは▶
+                    </a>
+                    <br />
+                    <a href="#" class="text-blue-500 hover:text-blue-600 text-sm">
+                        クリーニング期間のヘルプ▶
+                    </a>
                 </div>
             </div>
-
-        <!-- 送信ボタン -->     
-            <div class="flex justify-center">
-                <input type="submit" VALUE="送信する" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-12 py-3 rounded font-semibold cursor-pointer">
+            {% if upload_success %}
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-green-50 border-2 border-green-300 rounded-lg p-12 text-center">
+                    <div class="text-green-600 text-5xl mb-4">✓</div>
+                    <h2 class="text-2xl font-bold text-green-700 mb-4">アップロード成功</h2>
+                    <p class="text-gray-700 mb-6">ファイルが正常にアップロードされました。</p>
+                    
+                    {% if image_url %}
+                    <div class="mb-6">
+                        <img src="{{ image_url }}" alt="アップロード画像" class="w-48 h-48 object-cover rounded-lg mx-auto">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="space-y-3">
+                        <a href="{{ url_for('deal.deal') }}" class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
+                            一覧に戻る
+                        </a>
+                        <br>
+                        <a href="{{ url_for('deal.deal_list_imageUpload') }}" class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
+                            別のファイルをアップロード
+                        </a>
+                    </div>
+                </div>
             </div>
-        </form>
-        {%endif%}
+            {%else%}
+            <form action="{{url_for('deal.deal_list_imageUpload')}}" method="POST" enctype="multipart/form-data">
+                <!-- ファイル選択エリア -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8">
+                    <div class="text-center">
+                        <input type="file" name="img" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-semibold cursor-pointer" required>                  
+                    </div>
+                </div>
 
-          <!-- 出品者情報 -->
+            <!-- 送信ボタン -->     
+                <div class="flex justify-center">
+                    <input type="submit" VALUE="送信する" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-12 py-3 rounded font-semibold cursor-pointer">
+                </div>
+            </form>
+            {%endif%}
+        </div>
+        <!--評価-->
+        <div class="container" id="productEvaluation">
+           <h1>取引の評価としてください</h1>      
+            <div class="stars" id="starsContainer">
+                <span class="star" data-rating="1">★</span>
+                <span class="star" data-rating="2">★</span>
+                <span class="star" data-rating="3">★</span>
+                <span class="star" data-rating="4">★</span>
+                <span class="star" data-rating="5" class="empty">★</span>
+            </div>
+            <button onclick="handleSubmit()">評価する</button>
+        </div>
+        <!-- 出品者情報 -->
         <div class="bg-white rounded-lg p-6 mb-8">
 
             <section id="profile" class="active sec ">
