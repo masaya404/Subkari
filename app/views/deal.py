@@ -144,7 +144,7 @@ def deal_list(transaction_id):
     con.close()   
     
     if transaction['situation'] == '購入':
-        charge = int(transaction['purchasePrice'])*0.1
+        charge = int(transaction.get('rentalPrice') or 0) * 0.1
         benefit = int(transaction['purchasePrice']) - charge
         transaction['charge'] = charge
         transaction['benefit'] = benefit
