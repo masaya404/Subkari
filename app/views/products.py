@@ -308,6 +308,77 @@ def get_bottomsSize(product_id):
     return bottomsSize
 
 
+#商品写真のデータを取得する関数 ------------------------------------------------------------------------------------
+def get_product_images(product_id):
+        
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        
+        #商品画像
+        sql_images = """
+            SELECT img
+            FROM m_productimg
+            WHERE product_id = %s;
+        """
+        cur.execute(sql_images,(product_id,))
+        images = cur.fetchall()
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+        images = []
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+
+    return images
+
+#出品者の他の商品写真を取得する関数 ------------------------------------------------------------------------------------
+def get_other_products_images(seller_id , current_product_id):
+        
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        
+        #同じ出品者の他の商品画像
+        sql_images = """
+            SELECT
+                p.id AS product_id,
+                p.name AS product_name,
+                p.purchasePrice,
+                p.rentalPrice,
+                p.condition,
+                pi_main.img AS first_image
+            FROM
+                m_product AS p
+            INNER JOIN
+                m_productImg AS pi_main ON p.id = pi_main.product_id
+            LEFT JOIN
+                m_productImg AS pi_prev ON p.id = pi_prev.product_id AND pi_prev.id < pi_main.id
+            WHERE
+                pi_prev.id IS NULL           
+                AND p.account_id = %s        -- 出品者IDで絞り込み
+                AND p.id != %s               -- 現在の商品を除外
+                AND p.showing = '公開'       -- 公開中の商品のみ
+                AND p.`condition` = '取引可'  -- 取引可能な商品に限定
+            ORDER BY
+                p.updateDate DESC;
+        """
+        cur.execute(sql_images,(seller_id , current_product_id))
+        other_products_images = cur.fetchall()
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+        other_products_images = []
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+
+    return other_products_images
+
+
 # 商品一覧の表示
 @products_bp.route('/search_result', methods=['GET'])
 def search_result():
@@ -355,15 +426,16 @@ def product_details_stub(product_id):
         # 商品情報を取得
         product = get_product_info(product_id)
         
-        #商品画像
-        sql_images = """
-            SELECT img
-            FROM m_productimg
-            WHERE product_id = %s;
-        """
-        cur.execute(sql_images,(product_id,))
-        images = cur.fetchall()
-        print(images)
+        #商品画像の情報を取得
+        images = get_product_images(product_id)
+        # sql_images = """
+        #     SELECT img
+        #     FROM m_productimg
+        #     WHERE product_id = %s;
+        # """
+        # cur.execute(sql_images,(product_id,))
+        # images = cur.fetchall()
+        # print(images)
         #images=["img":"image1.png","img":"image2.png",...]
 
         #商品が見つからない場合の処理
@@ -479,6 +551,9 @@ def product_details_stub(product_id):
     seller_info = get_user_info(product['account_id'])
 
     erroer_message = ""
+
+    #出品者の他の商品画像を取得
+    other_products_images = get_other_products_images(seller_id=product['account_id'] , current_product_id=product_id)
     
 
     # 取得した商品情報 (product) とコメント (comments) をテンプレートに渡す
@@ -489,6 +564,7 @@ def product_details_stub(product_id):
         seller_info=seller_info,
         product=product,
         images = images,
+        other_products_images=other_products_images,
         comments=comments,
         calculated_prices = calculated_prices,
         evaluation=evaluation,
@@ -514,6 +590,11 @@ def purchase(product_id):
         return render_template('error.html'), 404 # **ここで関数を終了させる**
     if product['condition'] == '取引中' or product['condition'] == '売却済み':
         return render_template('error.html'), 404 # **ここで関数を終了させる**
+    
+
+    #共通処理
+    #商品画像の情報を取得
+    images = get_product_images(product_id)
 
     if product['purchaseFlg'] == 0:
         
@@ -535,7 +616,13 @@ def purchase(product_id):
         #--ボトムスサイズ情報を取得--
         bottomsSize = get_bottomsSize(product_id)
 
+        
+
         erroer_message = "この商品は購入できません。"
+
+        #出品者の他の商品画像を取得
+        other_products_images = get_other_products_images(seller_id=product['account_id'] , current_product_id=product_id)
+    
 
 
         # 購入不可の商品に対して購入ページにアクセスした場合の処理
@@ -543,6 +630,8 @@ def purchase(product_id):
         user_id=user_id,
         seller_info=seller_info,
         product=product,
+        other_products_images=other_products_images,
+        images = images,
         comments=comments,
         calculated_prices = calculated_prices,
         evaluation=evaluation,
@@ -597,7 +686,7 @@ def purchase(product_id):
     #支払い情報を取得
     accountNumbers,count=getAccountInfo()
 
-    return render_template("purchase/purchase.html",user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count)
+    return render_template("purchase/purchase.html",images = images ,user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count)
 
 #レンタルができるようにする/購入と似た処理なので修正するときは注意
 @products_bp.route('/rental/<int:product_id>', methods=['GET'])
@@ -617,6 +706,10 @@ def rental(product_id):
     if product['condition'] == '取引中' or product['condition'] == '売却済み':
 
         return render_template('error.html'), 404 # **ここで関数を終了させる**
+
+    #共通処理
+    #商品画像の情報を取得
+    images = get_product_images(product_id)
 
     if product['rentalFlg'] == 0:
         # 評価情報を取得
@@ -639,12 +732,13 @@ def rental(product_id):
 
         erroer_message = "この商品はレンタルできません。"
 
-
+        
         # 購入不可の商品に対して購入ページにアクセスした場合の処理
         return render_template('product_details.html',evaluationCount=evaluationCount['評価件数'],
         user_id=user_id,
         seller_info=seller_info,
         product=product,
+        images = images,
         comments=comments,
         calculated_prices = calculated_prices,
         evaluation=evaluation,
@@ -658,18 +752,7 @@ def rental(product_id):
         con = connect_db()
         cur = con.cursor(dictionary=True)
 
-        # 商品情報を取得
-        # sql_product = """
-        # SELECT pr.id , pr.name as product_name,pr.account_id, pr.rentalPrice, pr.purchasePrice, pr.explanation ,pr.color,pr.for,pr.category_id,pr.brand_id ,br.name as brand_name  , ca.name as category_name
-        # FROM m_product pr
-        # INNER JOIN m_brand br ON br.id = pr.brand_id
-        # INNER JOIN m_category ca ON pr.category_id = ca.id
-        # WHERE pr.id = %s;
-        # """
-        # cur.execute(sql_product, (product_id,))
-        # product = cur.fetchone()
         #配送情報を取得
-
         sql_address="""
         SELECT id,zip,pref,address1,address2,address3
         FROM m_address
@@ -704,7 +787,15 @@ def rental(product_id):
     #支払い情報を取得
     accountNumbers,count=getAccountInfo()
 
-    return render_template("purchase/rental.html",user_id = user_id, product = product, address_list=address_list, card_info=card_info, accountNumbers=accountNumbers, count=count ,calculated_prices=calculated_prices)
+    return render_template("purchase/rental.html",
+    user_id = user_id,
+    product = product,
+    images = images ,
+    address_list=address_list, 
+    card_info=card_info,
+    accountNumbers=accountNumbers, 
+    count=count ,
+    calculated_prices=calculated_prices)
 
 
 

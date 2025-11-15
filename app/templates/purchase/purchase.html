@@ -13,11 +13,16 @@
                 <!-- 商品情報 -->
                 <div class="section">
                     <div class="product-info">
-                        <div class="product-image"><img src="{{url_for('static',filename='img/image_22.png')}}"></div>
-                        <div class="product-details">
-                            <div class="product-name">{{ product.product_name }}</div>
-                            <div class="product-price">¥{{ product.purchasePrice }}</div>
-                        </div>
+                        <div class="product-image">
+                            {% if images %}
+                            <img src="{{url_for('static', filename='img/productImg/' + images[0].img)}}" alt="{{product.name }}"></div>
+                            {% else %}
+                            <img src="{{url_for('static', filename='img/productImg/default.png')}}" alt="デフォルト画像"></div>
+                            {% endif %}
+                            <div class="product-details">
+                                <div class="product-name">{{ product.product_name }}</div>
+                                <div class="product-price">¥{{ product.purchasePrice }}</div>
+                            </div>
                     </div>
                 </div>
 

@@ -162,7 +162,15 @@
     </div>
     <div class="section-title">この出品者の他のアイテム</div>
     <div class="item-grid">
+        {% for other_product in other_products_images %}
         <div class="item-card">
+                <a href="{{ url_for('products.product_details_stub', product_id=other_product.product_id) }}">
+                <img class="thumbnail" src="{{url_for('static', filename='img/productImg/' + other_product.first_image)}}" alt="other_product.product_name">
+                </a>
+                
+        </div>
+        {% endfor %}
+        <!-- <div class="item-card">
                 <img class="thumbnail" src="{{ url_for('static', filename='img/image 43.png') }}" alt="スライド">
         </div>
         <div class="item-card">
@@ -170,10 +178,7 @@
         </div>
         <div class="item-card">
                 <img class="thumbnail" src="{{ url_for('static', filename='img/image 43.png') }}" alt="スライド">
-        </div>
-        <div class="item-card">
-                <img class="thumbnail" src="{{ url_for('static', filename='img/image 43.png') }}" alt="スライド">
-        </div>
+        </div> -->
     </div>
     <div class="section-title">おすすめアイテム</div>
     <div class="item-grid">
