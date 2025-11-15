@@ -512,7 +512,7 @@ def purchase(product_id):
     if not product:
         # 商品が見つからない場合は、エラーページや404を返すのが適切です
         return render_template('error.html'), 404 # **ここで関数を終了させる**
-    if product['condition'] == '取引中':
+    if product['condition'] == '取引中' or product['condition'] == '売却済み':
         return render_template('error.html'), 404 # **ここで関数を終了させる**
 
     if product['purchaseFlg'] == 0:
@@ -614,7 +614,8 @@ def rental(product_id):
         # 商品が見つからない場合は、エラーページや404を返すのが適切です
         return render_template('error.html'), 404 # **ここで関数を終了させる**
     
-    if product['condition'] == '取引中':
+    if product['condition'] == '取引中' or product['condition'] == '売却済み':
+
         return render_template('error.html'), 404 # **ここで関数を終了させる**
 
     if product['rentalFlg'] == 0:

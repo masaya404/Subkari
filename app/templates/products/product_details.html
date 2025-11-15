@@ -67,7 +67,7 @@
                 </a>
                 {% endif %}
             </div>
-            {%if product.condition == '取引中' %}
+            {%if product.condition == '取引中' or product.condition == '売却済み' %}
             <div class="error-message">
                 <div class="error-icon">⚠️</div>
                 <div class="error-text">

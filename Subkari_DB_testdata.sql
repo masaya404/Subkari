@@ -94,105 +94,129 @@ INSERT INTO `m_product` (`id`, `name`, `purchasePrice`, `rentalPrice`, `size`, `
 (22, 'ネオンカラースニーカー', 12000, 2500, '27.0cm', 'イエロー', 'ユニセックス', '2024-11-20', '公開', 0, '2025-09-05 15:30:00', 1, 1, 'ストリートファッションに。購入、レンタル両方可だが、今回は購入で売却済み。', 2, 5, 1, '防水スプレー', 0, '大阪府中央区2-2-2', '売却済み', 7); -- **新規: 売却済み**
 
 
--- 商品画像テーブルのテストデータ-----------------------------------------------------------------
-INSERT INTO m_productImg (product_id, img)
-VALUES
--- 商品ID: 1
-(1, 'img/00000000001_01.png'),
-(1, 'img/00000000001_02.png'),
-(1, 'img/00000000001_03.png'),
+-- 商品画像テーブルのテストデータ -----------------------------------------------------------------
+-- m_productImg テーブルのテストデータ (product_id 1から22まで、各商品につき3枚以上)
+INSERT INTO `m_productImg` (`product_id`, `img`) VALUES
+-- 商品ID: 1 (地雷系フリルブラウス)
+(1, 'image_sample_01.png'),
+(1, 'image_sample_03.jpg'), -- ★ 修正
+(1, 'image_sample_07.png'),
+(1, 'image_sample_09.png'),
 
--- 商品ID: 2
-(2, 'img/00000000002_01.png'),
-(2, 'img/00000000002_02.png'),
-(2, 'img/00000000002_03.png'),
+-- 商品ID: 2 (オーバーサイズシャツ)
+(2, 'image_sample_02.png'),
+(2, 'image_sample_04.png'),
+(2, 'image_sample_06.png'),
 
--- 商品ID: 3
-(3, 'img/00000000003_01.png'),
-(3, 'img/00000000003_02.png'),
-(3, 'img/00000000003_03.png'),
+-- 商品ID: 3 (モードチェーンネックレス)
+(3, 'image_sample_03.jpg'), -- ★ 修正
+(3, 'image_sample_08.png'),
+(3, 'image_sample_02.png'),
+(3, 'image_sample_05.png'),
 
--- 商品ID: 1
-(4, 'img/00000000001_01.png'),
-(4, 'img/00000000001_02.png'),
-(4, 'img/00000000001_03.png'),
+-- 商品ID: 4 (くすみピンクカーディガン)
+(4, 'image_sample_01.png'),
+(4, 'image_sample_05.png'),
+(4, 'image_sample_09.png'),
 
--- 商品ID: 2
-(5, 'img/00000000002_01.png'),
-(5, 'img/00000000002_02.png'),
-(5, 'img/00000000002_03.png'),
+-- 商品ID: 5 (グランジダメージデニム)
+(5, 'image_sample_04.png'),
+(5, 'image_sample_07.png'),
+(5, 'image_sample_01.png'),
+(5, 'image_sample_06.png'),
 
--- 商品ID: 3
-(6, 'img/00000000003_01.png'),
-(6, 'img/00000000003_02.png'),
-(6, 'img/00000000003_03.png'),
--- 商品ID: 1
-(7, 'img/00000000001_01.png'),
-(7, 'img/00000000001_02.png'),
-(7, 'img/00000000001_03.png'),
+-- 商品ID: 6 (黒地レーススカート)
+(6, 'image_sample_08.png'),
+(6, 'image_sample_02.png'),
+(6, 'image_sample_05.png'),
 
--- 商品ID: 2
-(8, 'img/00000000002_01.png'),
-(8, 'img/00000000002_02.png'),
-(8, 'img/00000000002_03.png'),
+-- 商品ID: 7 (ダークアシメトリートップス)
+(7, 'image_sample_03.jpg'), -- ★ 修正
+(7, 'image_sample_09.png'),
+(7, 'image_sample_06.png'),
 
--- 商品ID: 3
-(9, 'img/00000000003_01.png'),
-(9, 'img/00000000003_02.png'),
-(9, 'img/00000000003_03.png'),
--- 商品ID: 1
-(10, 'img/00000000001_01.png'),
-(10, 'img/00000000001_02.png'),
-(10, 'img/00000000001_03.png'),
+-- 商品ID: 8 (オーバーサイズパーカー)
+(8, 'image_sample_01.png'),
+(8, 'image_sample_04.png'),
+(8, 'image_sample_07.png'),
+(8, 'image_sample_02.png'),
 
--- 商品ID: 2
-(11, 'img/00000000002_01.png'),
-(11, 'img/00000000002_02.png'),
-(11, 'img/00000000002_03.png'),
+-- 商品ID: 9 (ゆるだぼ古着風Tシャツ)
+(9, 'image_sample_05.png'),
+(9, 'image_sample_08.png'),
+(9, 'image_sample_03.jpg'), -- ★ 修正
 
--- 商品ID: 3
-(12, 'img/00000000003_01.png'),
-(12, 'img/00000000003_02.png'),
-(12, 'img/00000000003_03.png'),
--- 商品ID: 1
-(13, 'img/00000000001_01.png'),
-(13, 'img/00000000001_02.png'),
-(13, 'img/00000000001_03.png'),
+-- 商品ID: 10 (地雷系リボンカチューシャ)
+(10, 'image_sample_09.png'),
+(10, 'image_sample_01.png'),
+(10, 'image_sample_04.png'),
+(10, 'image_sample_06.png'),
 
--- 商品ID: 2
-(14, 'img/00000000002_01.png'),
-(14, 'img/00000000002_02.png'),
-(14, 'img/00000000002_03.png'),
+-- 商品ID: 11 (チェック柄プリーツスカート)
+(11, 'image_sample_02.png'),
+(11, 'image_sample_05.png'),
+(11, 'image_sample_07.png'),
 
--- 商品ID: 3
-(15, 'img/00000000003_01.png'),
-(15, 'img/00000000003_02.png'),
-(15, 'img/00000000003_03.png'),
--- 商品ID: 1
-(16, 'img/00000000001_01.png'),
-(16, 'img/00000000001_02.png'),
-(16, 'img/00000000001_03.png'),
+-- 商品ID: 12 (パンクスタッズベルト)
+(12, 'image_sample_03.jpg'), -- ★ 修正
+(12, 'image_sample_06.png'),
+(12, 'image_sample_08.png'),
+(12, 'image_sample_09.png'),
 
--- 商品ID: 2
-(17, 'img/00000000002_01.png'),
-(17, 'img/00000000002_02.png'),
-(17, 'img/00000000002_03.png'),
+-- 商品ID: 13 (スモーキーグレーニット)
+(13, 'image_sample_04.png'),
+(13, 'image_sample_07.png'),
+(13, 'image_sample_01.png'),
 
--- 商品ID: 3
-(18, 'img/00000000003_01.png'),
-(18, 'img/00000000003_02.png'),
-(18, 'img/00000000003_03.png'),
--- 商品ID: 1
-(19, 'img/00000000001_01.png'),
-(19, 'img/00000000001_02.png'),
-(19, 'img/00000000001_03.png'),
+-- 商品ID: 14 (レトロ刺繍ブラウス)
+(14, 'image_sample_05.png'),
+(14, 'image_sample_02.png'),
+(14, 'image_sample_06.png'),
+(14, 'image_sample_03.jpg'), -- ★ 修正
 
--- 商品ID: 2
-(20, 'img/00000000002_01.png'),
-(20, 'img/00000000002_02.png'),
-(20, 'img/00000000002_03.png');
+-- 商品ID: 15 (クラッシュデニムパンツ)
+(15, 'image_sample_08.png'),
+(15, 'image_sample_09.png'),
+(15, 'image_sample_04.png'),
 
+-- 商品ID: 16 (黒蝶ネックレス)
+(16, 'image_sample_01.png'),
+(16, 'image_sample_07.png'),
+(16, 'image_sample_05.png'),
+(16, 'image_sample_02.png'),
 
+-- 商品ID: 17 (ゆめかわハートイヤリング)
+(17, 'image_sample_03.jpg'), -- ★ 修正
+(17, 'image_sample_06.png'),
+(17, 'image_sample_09.png'),
+
+-- 商品ID: 18 (グラデーションスウェット)
+(18, 'image_sample_04.png'),
+(18, 'image_sample_08.png'),
+(18, 'image_sample_01.png'),
+(18, 'image_sample_05.png'),
+
+-- 商品ID: 19 (フェイクレザージャケット)
+(19, 'image_sample_07.png'),
+(19, 'image_sample_02.png'),
+(19, 'image_sample_03.jpg'), -- ★ 修正
+
+-- 商品ID: 20 (ダークフリルワンピース)
+(20, 'image_sample_06.png'),
+(20, 'image_sample_09.png'),
+(20, 'image_sample_04.png'),
+(20, 'image_sample_08.png'),
+
+-- 商品ID: 21 (量産型パールバッグ)
+(21, 'image_sample_01.png'),
+(21, 'image_sample_05.png'),
+(21, 'image_sample_07.png'),
+
+-- 商品ID: 22 (ネオンカラースニーカー)
+(22, 'image_sample_02.png'),
+(22, 'image_sample_04.png'),
+(22, 'image_sample_06.png'),
+(22, 'image_sample_08.png');
 
 
 -- 洗濯表示テーブルのテストデータ
