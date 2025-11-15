@@ -1,3 +1,5 @@
+drop database if exists db_subkari;
+
 -- データベース作成
 create database db_subkari
 default character set utf8;
@@ -25,7 +27,8 @@ CREATE TABLE `m_account` (
   `status` ENUM('未確認','本人確認済み','凍結','削除','強制削除') NOT NULL,
   `updaterId` INT,
   `password` VARCHAR(255) NOT NULL,
-  `identifyImg` varchar(255) NOT NULL,
+  `identifyfrontImg` varchar(255) NOT NULL,
+  `identifybackImg` VARCHAR(255) NOT NULL,
   `apiFavoriteAnnounce` boolean,
   `apiFollowAnnounce` boolean,
   `apiSystemAnnounce` boolean,

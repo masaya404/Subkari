@@ -709,8 +709,11 @@ def product_details_stub(product_id):
     recommended_products, logic_name= get_recommended_products(product_id)
 
     #コネクション情報取得
-    connection = get_connection(product['account_id'])
-
+    if user_id:
+        connection = get_connection(product['account_id'])
+    else:
+        connection = None
+    
     
 
     # 取得した商品情報 (product) とコメント (comments) をテンプレートに渡す

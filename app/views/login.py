@@ -8,6 +8,20 @@ import os
 
 login_bp = Blueprint('login', __name__, url_prefix='/login')
 
+
+
+# ----------------------------------------------------------------------
+# 設定
+# ----------------------------------------------------------------------
+# 保存先: SUBKARI/app/static/img/IdentityImg/
+UPLOADS_RELATIVE_PATH = 'app/static/img/IdentityImg'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+def allowed_file(filename):
+    """許可された拡張子かどうかをチェックするヘルパー関数"""
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 #登録完了画面表示----------------------------------------------------------------------------------------------------------------------------------------------------------
 # 登録完了画面表示
 @login_bp.route('/registration_complete', methods=['GET'])
@@ -377,6 +391,15 @@ def verification():
     if 'registration_data' not in session:
         return redirect(url_for('login.show_register_user')) # ★登録フォームのGETルート
         
+
+    front_image = request.files.get('front_image')
+    back_image = request.files.get('back_image')
+
+    if not front_image or front_image.filename == '':
+        message = "本人確認書類の表面画像をアップロードしてください。"
+        return render_template('login/identity_verification.html', message=message)
+
+
     #セッションに入っているデータをdbに登録する。
 
     # セッションから全登録データを取得
@@ -475,6 +498,107 @@ def verification():
     # account_id を address_data の先頭に追加して実行
     full_address_data = (new_account_id,) + address_data
     cur.execute(sql_address, full_address_data)
+
+    #アカウントIDを取得
+    user_id = new_account_id
+
+
+    # 本人確認画像アップロード処理
+    if request.method == 'POST':
+        # 実際にはセッションや認証情報から取得するユーザーID
+        # 例: user_id = session.get('user_id') 
+        # user_id = 101 # ★ 実際のユーザーIDに置き換えてください
+
+        # 1. DB接続を確立
+        con = None
+        cur = None
+        try:
+            con = connect_db()
+            cur = con.cursor()
+        except mysql.connector.Error as err:
+            return render_template('login/identity_verification.html', message=f"DB接続エラー: {err}")
+
+        # 2. 保存先のディレクトリ準備
+        upload_path = os.path.join(UPLOADS_RELATIVE_PATH)
+        os.makedirs(upload_path, exist_ok=True)
+        
+        uploaded_files = {
+            'front_image': request.files.get('front_image'),
+            'back_image': request.files.get('back_image')
+        }
+        
+        db_updates = {} # DB更新用のファイル名を保持
+        messages = []
+        is_error = False
+
+        # 3. ファイルの保存処理
+        for file_key, file in uploaded_files.items():
+            if file and file.filename != '':
+                if allowed_file(file.filename):
+                    original_filename = secure_filename(file.filename)
+                    extension = original_filename.rsplit('.', 1)[1].lower()
+                    
+                    # DBのカラム名に対応する変数名を設定
+                    db_column_name = 'identifyfrontImg' if file_key == 'front_image' else 'identifybackImg'
+
+                    # 独自のファイル名を作成 (例: 101_front_image.jpg)
+                    timestamp = int(datetime.now().timestamp() * 1000)
+                    new_filename = f"{user_id}_{file_key}_{timestamp}.{extension}"
+                    save_path = os.path.join(upload_path, new_filename)
+
+                    
+                    try:
+                        # ★ ファイルをサーバーに保存
+                        file.save(save_path)
+                        messages.append(f"{file_key}のアップロード成功。")
+                        
+                        # DB更新用にファイル名を記録
+                        db_updates[db_column_name] = new_filename
+
+                    except Exception as e:
+                        messages.append(f"ファイルの保存中にエラーが発生しました: {e}")
+                        is_error = True
+                        break # ファイル保存エラーが発生したら次のループに進まず抜ける
+                        
+                else:
+                    messages.append(f"{file_key}のファイル形式が無効です。")
+                    is_error = True
+                    break
+
+        # 4. データベースの更新処理
+        if not is_error and db_updates:
+            # 更新するカラムと値を動的に構築
+            update_clauses = [f"{col} = %s" for col in db_updates.keys()]
+            update_sql = f"UPDATE m_account SET {', '.join(update_clauses)} WHERE id = %s"
+            
+            # パラメータリスト (ファイル名 + ユーザーID)
+            params = list(db_updates.values())
+            params.append(user_id)
+            
+            try:
+                # ★ DBにファイル名を保存
+                cur.execute(update_sql, tuple(params))
+                con.commit()
+                messages.append("データベースのファイル名情報が更新されました。")
+                
+            except mysql.connector.Error as err:
+                messages.append(f"DB更新エラー: {err}")
+                is_error = True
+
+        # 5. 結果の反映
+        if is_error:
+            # エラーが発生した場合は、エラーメッセージを渡してレンダリング
+            return render_template('login/verification.html', message="アップロードまたはDB更新に失敗しました。", result_messages=messages)
+        else:
+            # 成功した場合は、確認完了ページなどにリダイレクト
+            return redirect(url_for('login.verification_complete')) 
+
+    # GETリクエストの場合
+    return render_template('login/verification.html')
+
+    # finally ブロックで DB接続を必ず閉じる処理を追加すべきですが、
+    # この例ではシンプル化のため省略しています。実際のコードでは必ず閉じてください。
+    # 実際には try...except の外側で、接続を閉じる処理を記述します。
 
     # 6. コミットとセッションのクリア
     con.commit()
