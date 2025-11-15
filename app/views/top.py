@@ -475,7 +475,8 @@ def search():
         search_query=search_query,
         products=products,
         total_pages=total_pages,
-        current_page=page
+        current_page=page,
+        user_id = user_id
         )    
 
 

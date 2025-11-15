@@ -54,18 +54,20 @@
                 {% endif %}
             </div>
             <div class="action-buttons cursor-pointer">
-                {% if product.purchaseFlg == 1 %}
+                {%if product.condition != '取引中' and product.condition != '売却済み' %}
+                    {% if product.purchaseFlg == 1 %}
 
-                <a href="{{url_for('products.purchase', product_id=product.id)}}">
-                <button class="btn">購入する</button>
-                </a>
-                {% endif %}
-                
-                {% if product.rentalFlg == 1 %}
-                <a href="{{url_for('products.rental', product_id=product.id)}}">
-                    <button class="btn">レンタル</button>
-                </a>
-                {% endif %}
+                    <a href="{{url_for('products.purchase', product_id=product.id)}}">
+                    <button class="btn">購入する</button>
+                    </a>
+                    {% endif %}
+                    
+                    {% if product.rentalFlg == 1 %}
+                    <a href="{{url_for('products.rental', product_id=product.id)}}">
+                        <button class="btn">レンタル</button>
+                    </a>
+                    {% endif %}
+                {%endif%}
             </div>
             {%if product.condition == '取引中' or product.condition == '売却済み' %}
             <div class="error-message">
