@@ -39,6 +39,8 @@ startTimer();
 }
 
 //right area
+let currentProductId = null;
+
 document.querySelectorAll('.product-item').forEach(item => {
   item.addEventListener('click', function() {
     // Remove highlight from all items
@@ -51,6 +53,9 @@ document.querySelectorAll('.product-item').forEach(item => {
     
     // Get product data
     const productData = JSON.parse(this.dataset.product);
+
+    //今のIDを保存
+    currentProductId = productData.id;
     
     // Update right area with product details
     // document.getElementById('detailProductName').textContent = productData.name || '商品名なし';
@@ -186,4 +191,8 @@ function updateTimeline(status,isPurchase=false) {
       });
     }
   }
+}
+
+function rentalBuy(product_id){
+  window.location.href=`/products/purchase/${product_id}`;
 }

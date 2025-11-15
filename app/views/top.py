@@ -422,7 +422,11 @@ def search():
     con = connect_db()
     cur = con.cursor(dictionary=True)
     cur.execute(sql_count, params_count)
-    total_count = cur.fetchone()['count']
+    result = cur.fetchone()
+    if result is None:
+        total_count = 0
+    else:        
+        total_count = int(result['count'])
     cur.close()
     con.close()
     #page数
@@ -471,7 +475,8 @@ def search():
         search_query=search_query,
         products=products,
         total_pages=total_pages,
-        current_page=page
+        current_page=page,
+        user_id = user_id
         )    
 
 

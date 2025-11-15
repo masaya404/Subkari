@@ -54,20 +54,22 @@
                 {% endif %}
             </div>
             <div class="action-buttons cursor-pointer">
-                {% if product.purchaseFlg == 1 %}
+                {%if product.condition != '取引中' and product.condition != '売却済み' %}
+                    {% if product.purchaseFlg == 1 %}
 
-                <a href="{{url_for('products.purchase', product_id=product.id)}}">
-                <button class="btn">購入する</button>
-                </a>
-                {% endif %}
-                
-                {% if product.rentalFlg == 1 %}
-                <a href="{{url_for('products.rental', product_id=product.id)}}">
-                    <button class="btn">レンタル</button>
-                </a>
-                {% endif %}
+                    <a href="{{url_for('products.purchase', product_id=product.id)}}">
+                    <button class="btn">購入する</button>
+                    </a>
+                    {% endif %}
+                    
+                    {% if product.rentalFlg == 1 %}
+                    <a href="{{url_for('products.rental', product_id=product.id)}}">
+                        <button class="btn">レンタル</button>
+                    </a>
+                    {% endif %}
+                {%endif%}
             </div>
-            {%if product.condition == '取引中' %}
+            {%if product.condition == '取引中' or product.condition == '売却済み' %}
             <div class="error-message">
                 <div class="error-icon">⚠️</div>
                 <div class="error-text">
@@ -137,10 +139,12 @@
             </div>
         </div>
         {% endfor %}
+        <form method="POST" action="{{ url_for('products.submit_comment', product_id=product.id) }}">
         <div class="comment-form">
-            <input type="text" class="comment-input" placeholder="商品について質問や気になることがコメントしてください。">
-            <button class="submit-btn">投稿</button>
+            <input type="text" class="comment-input" name = "comment_text" placeholder="商品について質問や気になることがコメントしてください。">
+            <button class="submit-btn">投稿</button>     
         </div>
+        </form>
     </div>
     
     <div class="seller-info">
@@ -157,12 +161,29 @@
                     <!-- <div class="rating">★ 4.3</div> -->
                 </div>
             </div>
+            {% if not user_id == product.account_id %}
+            {% if connection.type == 'フォロー' %}
+            <button class="follow-btn">フォロー済み</button>
+            
+            {% else %}
+            <form method="POST" action="{{ url_for('products.follow', seller_id=product.account_id) }}">
             <button class="follow-btn">フォロー</button>
+            </form>
+            {% endif %}
+            {% endif %}
         </div>
     </div>
     <div class="section-title">この出品者の他のアイテム</div>
     <div class="item-grid">
+        {% for other_product in other_products_images %}
         <div class="item-card">
+                <a href="{{ url_for('products.product_details_stub', product_id=other_product.product_id) }}">
+                <img class="thumbnail" src="{{url_for('static', filename='img/productImg/' + other_product.first_image)}}" alt="other_product.product_name">
+                </a>
+                
+        </div>
+        {% endfor %}
+        <!-- <div class="item-card">
                 <img class="thumbnail" src="{{ url_for('static', filename='img/image 43.png') }}" alt="スライド">
         </div>
         <div class="item-card">
@@ -170,14 +191,30 @@
         </div>
         <div class="item-card">
                 <img class="thumbnail" src="{{ url_for('static', filename='img/image 43.png') }}" alt="スライド">
-        </div>
-        <div class="item-card">
-                <img class="thumbnail" src="{{ url_for('static', filename='img/image 43.png') }}" alt="スライド">
-        </div>
+        </div> -->
     </div>
     <div class="section-title">おすすめアイテム</div>
+    <p>{{ logic_name }}</p>
     <div class="item-grid">
+        {% if recommended_products %}
+        {% for item in recommended_products %}
         <div class="item-card">
+            <a href="{{ url_for('products.product_details_stub', product_id=item.product_id) }}">
+                <img class="thumbnail" src="{{url_for('static', filename='img/productImg/' + item.first_image)}}" alt="スライド">
+            </a>
+            <div class="item-title">{{ item.name }}</div>
+            {% if item.purchaseFlg == 1 %}
+            <div class="item-price">購入 : ￥{{ item.purchasePrice }}</div>
+            {% endif %}
+            {% if item.rentalFlg == 1 %}
+            <div class="item-price">レンタル : ￥{{ item.rentalPrice }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>おすすめ商品はありません。</p>
+        {% endif %}
+        <!-- <div class="item-card">
                 <img class="thumbnail" src="{{ url_for('static', filename='img/image 43.png') }}" alt="スライド">
             <div class="item-title">出品タイトル</div>
             <div class="item-price">¥●●●●●</div>
@@ -191,12 +228,7 @@
                 <img class="thumbnail" src="{{ url_for('static', filename='img/image 43.png') }}" alt="スライド">
             <div class="item-title">出品タイトル</div>
             <div class="item-price">¥●●●●●</div>
-        </div>
-        <div class="item-card">
-                <img class="thumbnail" src="{{ url_for('static', filename='img/image 43.png') }}" alt="スライド">
-            <div class="item-title">出品タイトル</div>
-            <div class="item-price">¥●●●●●</div>
-        </div>
+        </div> -->
     </div>
 </div>
 <script src="{{ url_for('static', filename='js/product_details.js') }}"></script>

@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="{{url_for('static',filename="css/popup.css")}}">
     <div class="max-w-2xl mx-auto px-4 py-8">
         <!-- ページタイトル -->
         <h1 class="text-3xl font-bold text-center mb-10">取引詳細</h1>
@@ -209,17 +210,65 @@
                     注意事項を必ずご確認の上、クリーニング期間中にお預かり証明書を添付して、送信してください。
                 </p>
                 <div class="text-center">
-                    <a href="#" class="text-blue-500 hover:text-blue-600 text-sm">
+                    <button class="button" id="popupBtn" class="text-blue-500 hover:text-blue-600 text-sm">
                         お預かり証明書とは▶
-                    </a>
+                    </button>
                     <br />
-                    <a href="#" class="text-blue-500 hover:text-blue-600 text-sm">
+                     <button class="button" id="popupBtnClean" class="text-blue-500 hover:text-blue-600 text-sm">
                         クリーニング期間のヘルプ▶
-                    </a>
+                     </button>
                 </div>
             </div>
+            
+            <div id="popupModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">お預かり証明書とは</div>
+                    <div class="modal-text">
+                        「お預かり証明書」とは、レンタルサービスなどにおいて、レンタル事業者が利用者から物品（例：衣服、アクセサリー）を一時的に預かったことを証明する書類です。物品を受け取った側がこの書類を発行し、物品を提供した側（利用者）が受け取ります。
+
+                        この証明書の重要なポイントの一つは、「預かった物品の所有権が移転していない」ことを明確に示す点です。すなわち、レンタル品の所有者は利用者のままであり、レンタル事業者はあくまで一時的に保管・管理・貸出をしている立場であることを記録するものです。
+
+                        今回この証明書は 預かった物品の「実際の画像」を添付した形態 で作成されます。これは、受領時点の物品の状態を視覚的に記録し、後日返却時や汚損・破損・紛失などのトラブルが発生した場合の確認材料として活用できるようにするためです。
+
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="btn-close" onclick="closeModal()">閉じる</button>
+                        <button class="btn-confirm" onclick="closeModal()">了解</button>
+                    </div>
+                </div>
+            </div>
+
+             <div id="popupModalClean" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">クリーニング期間のご案内</div>
+                    <div class="modal-text">
+                        本レンタルサービスでは、お受け取り後 3日以内 にクリーニングをお願いいたします。これは、「クリーニング期間」として定められている重要なルールです。クリーニングはご自宅の 近くのクリーニング店（どこでも結構です） をご利用いただいて構いません。
+
+                        また、クリーニング後には 必ずクリーニング伝票（レシート・明細）をお受け取りのうえ、写真またはスキャンデータをアップロードしてください。
+                        この手続きは、レンタル品の状態確認や返却時のトラブル防止のために非常に重要です。
+
+                        必要性としては：
+
+                        3日以内の期間を設けることで、汚れ・破損の早期把握がしやすくなります
+
+                        クリーニング伝票の提出によって、クリーニング実施が確実に行われたことを証明できます
+
+                        近所の店を自由に選べることで、お客様の負担を軽減できます
+
+                        写真やデータで記録が残るため、返却時に状態を確認する際の客観資料となります
+
+                        以上、ご理解とご協力をお願いいたします。
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="btn-close" onclick="closeModalClean()">閉じる</button>
+                        <button class="btn-confirm" onclick="closeModalClean()">了解</button>
+                    </div>
+                </div>
+            </div>
+
+
             {% if upload_success %}
-            <div class="max-w-2xl mx-auto">
+            <div class="max-w-2xl mx-auto mb-[100px]">
                 <div class="bg-green-50 border-2 border-green-300 rounded-lg p-12 text-center">
                     <div class="text-green-600 text-5xl mb-4">✓</div>
                     <h2 class="text-2xl font-bold text-green-700 mb-4">アップロード成功</h2>
@@ -243,7 +292,7 @@
                 </div>
             </div>
             {%else%}
-            <form action="{{url_for('deal.deal_list_imageUpload')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{url_for('deal.deal_list_imageUpload')}}" method="POST" enctype="multipart/form-data" class="mb-[100px]">
                 <!-- ファイル選択エリア -->
                 <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8">
                     <div class="text-center">
@@ -259,7 +308,7 @@
             {%endif%}
         </div>
         <!--評価-->
-        <div class="container w-[600px] flex flex-col justify-center items-center" id="productEvaluation">
+        <div class="container flex flex-col justify-center items-center gap-[30px] border border-gray-500 rounded-lg py-[50px] w-[550px] mb-[100px] mx-auto" id="productEvaluation">
             <input type="hidden" id="transaction_id" value="{{transaction.id}}">
             <h1 class="inline-block" id="evaluation_check">取引の評価としてください</h1>      
             <div class="stars" id="starsContainer">
@@ -322,5 +371,6 @@
     </div>
     </div>
     <script src="{{url_for('static',filename='js/deal_detail.js')}}"></script>
+    <script src="{{url_for('static',filename="js/popup.js")}}"></script>
 {% endblock %}
   
