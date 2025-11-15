@@ -98,7 +98,7 @@ CREATE TABLE `m_product` (
   `cleanNotes` TEXT ,
   `smokingFlg` boolean ,
   `returnAddress` varchar(255) ,
-  `condition` ENUM('取引可','取引中'),
+  `condition` ENUM('取引可','取引中','売却済み'),
   `rentalPeriod` INT,
 
 
