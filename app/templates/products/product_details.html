@@ -8,15 +8,24 @@
     <div class="product-main">
         <div class="product-images">
             <div class="main-image-container">
-                <img src="{{ url_for('static', filename='img/image_22.png') }}" alt="スライド">
-                <div class="sold-badge">通報</div>
+                <img id="mainImage" src="{{url_for('static',filename='img/productImg/'+  (images[0].img if images and images.img else 'default.png'))}}" alt="スライド">
                 <button class="nav-arrow left" onclick="changeImage(-1)">‹</button>
                 <button class="nav-arrow right" onclick="changeImage(1)">›</button>
             </div>
+            
             <div class="thumbnail-list">
-                <img class="thumbnail" src="{{ url_for('static', filename='img/image 66.png') }}" alt="スライド">
-                <img class="thumbnail" src="{{ url_for('static', filename='img/image 66.png') }}" alt="スライド">
-                <img class="thumbnail" src="{{ url_for('static', filename='img/image 66.png') }}" alt="スライド">
+                {% if images %}
+                    {% for image in images %}
+                        <img class="thumbnail" 
+                            src="{{url_for('static', filename='img/productImg/' + image.img)}}" 
+                            alt="サムネイル"
+                            onclick="selectImage(this)">
+                    {% endfor %}
+                {% else %}
+                    <img class="thumbnail" 
+                        src="{{url_for('static', filename='img/productImg/default.png')}}" 
+                        alt="デフォルト画像">
+                {% endif %}
             </div>
         </div>
         <div class="product-info">
