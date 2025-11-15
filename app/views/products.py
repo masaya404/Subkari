@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import mysql.connector
 import json
 import os
+import random
 
 
 
@@ -379,6 +380,155 @@ def get_other_products_images(seller_id , current_product_id):
     return other_products_images
 
 
+#おすすめの商品をランダムに取得する関数 ------------------------------------------------------------------------------------
+def get_recommended_products(current_product_id, limit=4):
+    """
+    color, for, brand_id, category_id の中から、ランダムに一つだけ条件を選んでおすすめ商品を取得する。
+    """
+    
+    # --- 1. 現在の商品の情報を取得 ---
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+        
+        sql_current = """
+            SELECT brand_id, category_id, color, `for`, account_id 
+            FROM m_product 
+            WHERE id = %s;
+        """
+        cur.execute(sql_current, (current_product_id,))
+        current_product = cur.fetchone()
+        
+        if not current_product:
+            return [], "商品情報が見つかりません" 
+            
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+        return [], "DBエラー"
+    finally:
+        if 'con' in locals() and con and con.is_connected():
+            # DB接続を閉じる前にカーソルを閉じる
+            if 'cur' in locals() and cur:
+                cur.close()
+            con.close()
+
+
+    # --- 2. 検索ロジックをランダムに決定（どれか一つだけ） ---
+    
+    # 候補となる条件を辞書で定義 (値がNoneでないもののみ)
+    conditions = {}
+    if current_product['brand_id']: conditions['brand_id'] = current_product['brand_id']
+    if current_product['category_id']: conditions['category_id'] = current_product['category_id']
+    if current_product['color']: conditions['color'] = current_product['color']
+    if current_product['for']: conditions['for'] = current_product['for']
+    
+    where_clauses = []
+    params = []
+    
+    if not conditions:
+        # すべての条件がNULLの場合
+        logic_name = "条件なし（ランダム）"
+        where_clauses.append("p.account_id != %s") # 自出品者を除外
+        params.append(current_product['account_id'])
+    else:
+        # 有効な条件の中から一つだけランダムに選ぶ
+        chosen_key = random.choice(list(conditions.keys()))
+        chosen_value = conditions[chosen_key]
+        
+        # SQLのWHERE句とパラメータを設定
+        where_clauses.append(f"p.{chosen_key} = %s")
+        params.append(chosen_value)
+        
+        # HTML表示用の条件名を生成
+        display_name = {
+            'brand_id': 'ブランド',
+            'category_id': 'カテゴリ',
+            'color': 'カラー',
+            'for': '対象'
+        }.get(chosen_key, chosen_key)
+        
+        logic_name = f"{display_name} ({chosen_value}) が一致"
+
+        # 現在の商品IDを除外
+        where_clauses.insert(0, "p.id != %s")
+        params.insert(0, current_product_id)
+
+
+    # --- 3. データベースを検索して商品を取得 ---
+    
+    where_sql = " AND ".join(where_clauses)
+    
+    # 最初の画像を取得する効率的なSQLを組み合わせる
+    sql_recommendations = f"""
+        SELECT
+            p.id AS product_id,
+            p.name,
+            p.purchasePrice,
+            p.rentalPrice,
+            pi_main.img AS first_image,
+            p.purchaseFlg,
+            p.rentalFlg
+        FROM
+            m_product AS p
+        INNER JOIN
+            m_productImg AS pi_main ON p.id = pi_main.product_id
+        LEFT JOIN
+            m_productImg AS pi_prev ON p.id = pi_prev.product_id AND pi_prev.id < pi_main.id
+        WHERE
+            pi_prev.id IS NULL
+            AND p.showing = '公開'
+            AND p.condition = '取引可'
+            AND {where_sql}
+        ORDER BY
+            RAND()
+        LIMIT %s;
+    """
+    params.append(limit)
+
+    try:
+        # 再度DB接続
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+
+        cur.execute(sql_recommendations, tuple(params))
+        recommended_products = cur.fetchall()
+
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+        recommended_products = []
+        
+    finally:
+        if 'con' in locals() and con and con.is_connected():
+            if 'cur' in locals() and cur:
+                cur.close()
+            con.close()
+            
+    return recommended_products, logic_name
+
+
+#コネクション情報取得関数 ------------------------------------------------------------------------------------
+def get_connection(target_id):
+
+    try:
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+        connection_sql = """
+            SELECT * FROM t_connection WHERE execution_id = %s AND target_id = %s AND type = 'フォロー';
+        """
+        cur.execute(connection_sql, (session['user_id'],target_id))
+        connection = cur.fetchone()
+
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+        connection = None
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+    return connection
+
+    
+
 # 商品一覧の表示
 @products_bp.route('/search_result', methods=['GET'])
 def search_result():
@@ -555,6 +705,13 @@ def product_details_stub(product_id):
     #出品者の他の商品画像を取得
     other_products_images = get_other_products_images(seller_id=product['account_id'] , current_product_id=product_id)
     
+    #おすすめ商品を取得
+    recommended_products, logic_name= get_recommended_products(product_id)
+
+    #コネクション情報取得
+    connection = get_connection(product['account_id'])
+
+    
 
     # 取得した商品情報 (product) とコメント (comments) をテンプレートに渡す
     resp = make_response(render_template(
@@ -562,6 +719,7 @@ def product_details_stub(product_id):
         evaluationCount=evaluationCount['評価件数'],
         user_id=user_id,
         seller_info=seller_info,
+        connection=connection,
         product=product,
         images = images,
         other_products_images=other_products_images,
@@ -570,9 +728,77 @@ def product_details_stub(product_id):
         evaluation=evaluation,
         topSize=topSize,
         bottomsSize=bottomsSize,
+        recommended_products=recommended_products,
+        logic_name=logic_name,
         error_message=erroer_message
     ))
     return resp
+
+#コメント送信処理
+@products_bp.route('/submit_comment/<int:product_id>', methods=['POST'])
+def submit_comment(product_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login.login'))
+
+    user_id = session.get('user_id')
+    comment_text = request.form.get('comment_text')
+
+    if not comment_text:
+        return redirect(url_for('products.product_details_stub', product_id=product_id))
+
+    # コメントをデータベースに保存
+    try:
+        con = connect_db()
+        cur = con.cursor()
+
+        sql_insert = """
+            INSERT INTO t_comments (product_id, account_id, content)
+            VALUES (%s, %s, %s);
+        """
+        cur.execute(sql_insert, (product_id, user_id, comment_text))
+        con.commit()
+
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+
+    return redirect(url_for('products.product_details_stub', product_id=product_id))
+
+#フォロー処理
+@products_bp.route('/follow/<int:seller_id>', methods=['POST'])
+def follow(seller_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login.login'))
+
+    user_id = session.get('user_id')
+
+    try:
+        con = connect_db()
+        cur = con.cursor()
+
+        # フォロー関係を挿入
+        sql_follow = """
+            INSERT INTO t_connection (execution_id, target_id, type)
+            VALUES (%s, %s, 'フォロー');
+        """
+        cur.execute(sql_follow, (user_id, seller_id))
+        con.commit()
+
+    except mysql.connector.Error as err:
+        print(f"データベースエラー: {err}")
+
+    finally:
+        if con and con.is_connected():
+            cur.close()
+            con.close()
+
+    return redirect(request.referrer or url_for('products.product_details_stub', product_id=0))
+
+
 #purchase
 #購入選択画面 レンタルと似た処理なので修正するときはこっちも修正すること
 @products_bp.route('/purchase/<int:product_id>', methods=['GET'])
@@ -597,48 +823,57 @@ def purchase(product_id):
     images = get_product_images(product_id)
 
     if product['purchaseFlg'] == 0:
-        
-        # 評価情報を取得
-        evaluation, evaluationCount = get_transaction_info(product['account_id'])
 
-        #アカウント情報取得
-        seller_info = get_user_info(product['account_id'])
-
-        #コメント情報を取得
-        comments = get_comments(product_id)
-
-        #レンタル価格計算
-        calculated_prices = calculate_rental_price(product_id)
-
-        #--トップサイズ情報を取得--
-        topSize = get_topsSize(product_id)
-
-        #--ボトムスサイズ情報を取得--
-        bottomsSize = get_bottomsSize(product_id)
+        return redirect(url_for('products.product_details_stub', product_id=product_id))
 
         
+        # # 評価情報を取得
+        # evaluation, evaluationCount = get_transaction_info(product['account_id'])
 
-        erroer_message = "この商品は購入できません。"
+        # #アカウント情報取得
+        # seller_info = get_user_info(product['account_id'])
 
-        #出品者の他の商品画像を取得
-        other_products_images = get_other_products_images(seller_id=product['account_id'] , current_product_id=product_id)
+        # #コメント情報を取得
+        # comments = get_comments(product_id)
+
+        # #レンタル価格計算
+        # calculated_prices = calculate_rental_price(product_id)
+
+        # #--トップサイズ情報を取得--
+        # topSize = get_topsSize(product_id)
+
+        # #--ボトムスサイズ情報を取得--
+        # bottomsSize = get_bottomsSize(product_id)
+
+        
+
+        # erroer_message = "この商品は購入できません。"
+
+        # #出品者の他の商品画像を取得
+        # other_products_images = get_other_products_images(seller_id=product['account_id'] , current_product_id=product_id)
     
+        # #おすすめ商品を取得
+        # recommended_products, logic_name= get_recommended_products(product_id)
 
 
-        # 購入不可の商品に対して購入ページにアクセスした場合の処理
-        return render_template('product_details.html',evaluationCount=evaluationCount['評価件数'],
-        user_id=user_id,
-        seller_info=seller_info,
-        product=product,
-        other_products_images=other_products_images,
-        images = images,
-        comments=comments,
-        calculated_prices = calculated_prices,
-        evaluation=evaluation,
-        topSize=topSize,
-        bottomsSize=bottomsSize
-        , error_message=erroer_message
-        ), 404 # **ここで関数を終了させる**
+
+        # # 購入不可の商品に対して購入ページにアクセスした場合の処理
+        # return render_template('product_details.html',evaluationCount=evaluationCount['評価件数'],
+        # evaluationCount=evaluationCount['評価件数'],
+        # user_id=user_id,
+        # seller_info=seller_info,
+        # product=product,
+        # images = images,
+        # other_products_images=other_products_images,
+        # comments=comments,
+        # calculated_prices = calculated_prices,
+        # evaluation=evaluation,
+        # topSize=topSize,
+        # bottomsSize=bottomsSize,
+        # recommended_products=recommended_products,
+        # logic_name=logic_name,
+        # error_message=erroer_message
+        # ), 404 # **ここで関数を終了させる**
 
     #DBから情報を取得
     try:
@@ -712,40 +947,55 @@ def rental(product_id):
     images = get_product_images(product_id)
 
     if product['rentalFlg'] == 0:
-        # 評価情報を取得
-        evaluation, evaluationCount = get_transaction_info(product['account_id'])
 
-        #アカウント情報取得
-        seller_info = get_user_info(product['account_id'])
+        return redirect(url_for('products.product_details_stub', product_id=product_id))
 
-        #コメント情報を取得
-        comments = get_comments(product_id)
+        # # 評価情報を取得
+        # evaluation, evaluationCount = get_transaction_info(product['account_id'])
 
-        #レンタル価格計算
-        calculated_prices = calculate_rental_price(product_id)
+        # #アカウント情報取得
+        # seller_info = get_user_info(product['account_id'])
 
-        #--トップサイズ情報を取得--
-        topSize = get_topsSize(product_id)
+        # #コメント情報を取得
+        # comments = get_comments(product_id)
 
-        #--ボトムスサイズ情報を取得--
-        bottomsSize = get_bottomsSize(product_id)
+        # #レンタル価格計算
+        # calculated_prices = calculate_rental_price(product_id)
 
-        erroer_message = "この商品はレンタルできません。"
+        # #--トップサイズ情報を取得--
+        # topSize = get_topsSize(product_id)
+
+        # #--ボトムスサイズ情報を取得--
+        # bottomsSize = get_bottomsSize(product_id)
+
+        # erroer_message = "この商品はレンタルできません。"
+
+        # #出品者の他の商品画像を取得
+        # other_products_images = get_other_products_images(seller_id=product['account_id'] , current_product_id=product_id)
+    
+        # #おすすめ商品を取得
+        # recommended_products, logic_name= get_recommended_products(product_id)
+
+
 
         
-        # 購入不可の商品に対して購入ページにアクセスした場合の処理
-        return render_template('product_details.html',evaluationCount=evaluationCount['評価件数'],
-        user_id=user_id,
-        seller_info=seller_info,
-        product=product,
-        images = images,
-        comments=comments,
-        calculated_prices = calculated_prices,
-        evaluation=evaluation,
-        topSize=topSize,
-        bottomsSize=bottomsSize
-        , error_message=erroer_message
-        ), 404 # **ここで関数を終了させる**
+        # # 購入不可の商品に対して購入ページにアクセスした場合の処理
+        # return render_template('product_details.html',evaluationCount=evaluationCount['評価件数'],
+        # evaluationCount=evaluationCount['評価件数'],
+        # user_id=user_id,
+        # seller_info=seller_info,
+        # product=product,
+        # images = images,
+        # other_products_images=other_products_images,
+        # comments=comments,
+        # calculated_prices = calculated_prices,
+        # evaluation=evaluation,
+        # topSize=topSize,
+        # bottomsSize=bottomsSize,
+        # recommended_products=recommended_products,
+        # logic_name=logic_name,
+        # error_message=erroer_message
+        # ), 404 # **ここで関数を終了させる**
 
     #DBから情報を取得
     try:
