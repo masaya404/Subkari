@@ -143,19 +143,19 @@ def deal_list(transaction_id):
     cur.close()
     con.close()   
     
-    if transaction['status'] == '購入':
-        charge = int(transaction['purchasePrice'])*0.1
+    if transaction['situation'] == '購入':
+        charge = int(transaction.get('rentalPrice') or 0) * 0.1
         benefit = int(transaction['purchasePrice']) - charge
         transaction['charge'] = charge
         transaction['benefit'] = benefit
         
-    else:
+    if transaction['situation'] == 'レンタル':
         charge = int(transaction['rentalPrice'])*0.1
         benefit = int(transaction['rentalPrice']) - charge
         transaction['charge'] = charge
         transaction['benefit'] = benefit
         
-    # print(transaction)
+    print(transaction)
     
     return render_template('deal/deal_detail.html', transaction = transaction,comments = comments, user_id = user_id)
 
@@ -269,6 +269,36 @@ def deal_list_imageUpload():
                              error=error, 
                              user_id=user_id)    
 
+# 評価 ----------------------------------------------------------------------------------------------------------------------------------------------------------
+@deal_bp.route('/evaluation', methods=['POST'])
+def evaluation():
+    data = request.json
+    evaluation_rating = int(data.get('evaluation'))
+    transaction_id = int(data.get('transaction_id'))
+    user_id = session.get('user_id')
+    
+    # 検証
+    if not evaluation_rating or not transaction_id:
+        return {'error': '評価またはID が不足しています'}, 400
+
+    try:
+        # DB操作
+        con = connect_db()
+        cur = con.cursor()
+        
+        sql = """
+            INSERT INTO t_evaluation (transaction_id, score, evaluationTime, recipient_id) 
+            VALUES (%s, %s, %s, %s)
+        """
+        cur.execute(sql, (transaction_id, evaluation_rating, datetime.now(), user_id))
+    
+        con.commit()
+        cur.close()
+        con.close()
+
+        return {'success': True, 'message': '評価しました'}
+    except Exception as e:
+        return {'error': str(e)}, 500
 # comment ----------------------------------------------------------------------------------------------------------------------------------------------------------
 # 既に存在するcommentsの取り処理
 @deal_bp.route('/get-comments', methods=['GET'])

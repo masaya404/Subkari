@@ -52,7 +52,8 @@
                                 <span class="text-lg font-bold text-gray-900">￥{%if product.purchaseFlg%}{{product.purchasePrice}}{%else%}{{product.rentalPrice}}{%endif%}</span>
                                 <span class="text-red-500 text-xs font-medium">{%if product.situation%}{{product.situation}}{%else%} {%endif%}</span>
                             </div>
-                            <p class="text-gray-500 text-xs mt-2">{%if product.situation%} {%elif product.purchaseFlg%}購入可能{%else%}レンタル可能{%endif%}</p>  
+                            <p class="text-gray-500 text-xs mt-2">{%if product.situation%} {%elif product.purchaseFlg%}購入可能{%else%}レンタル可能{%endif%}</p>
+                            <p class="text-gray-500 text-xs mt-2">{{product.status}}</p>
                         </div>
                     </div>
                     {% endfor %}
@@ -198,9 +199,11 @@
                             取引詳細へ
                         </button>
                         </a>
-                        <button class="w-[192px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition cursor-pointer" id="rentalBuy">
+
+                        <button class="w-[192px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition cursor-pointer" id="rentalBuy" onclick="rentalBuy(currentProductId)">
                             レンタル中購入
                         </button>
+                      
                     </div>
                 </div>
            

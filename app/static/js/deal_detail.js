@@ -1,7 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
         const statusButton = document.getElementById("status");
         const status = statusButton.textContent.trim();
-        updateTimeline(status);
+        const situation = $("#situation").val();
+        //商品が購入かレンタルかの判断
+        let isPurchase = null;
+        if(situation == "購入"){
+            isPurchase = true;
+        }else{
+            isPurchase = false;
+        }
+        console.log(situation);
+        console.log(isPurchase);
+        $("#cleaningTimer").toggle(status == "クリーニング期間");
+        updateTimeline(status,isPurchase);
         loadComments();
         loadSeller();
     });
@@ -33,6 +44,24 @@ function startTimer() {
 startTimer();
 
 //medium area
+const rentalStatusMap = {
+  '支払い待ち': 1,
+  '発送待ち': 2,
+  '配送中': 3,
+  '到着': 4,
+  'レンタル中': 5,
+  'クリーニング期間': 6,
+  '発送待ち': 7,
+  '取引完了': 8
+};
+
+const purchaseStatusMap = {
+  '支払い待ち': 1,
+  '発送待ち': 2,
+  '配送中': 3,
+  '到着': 4,
+  '取引完了': 5
+};
 const statusMap = {
   '支払い待ち': 1,
   '発送待ち': 2,
@@ -44,16 +73,30 @@ const statusMap = {
   '取引完了': 8
 };
 
-function updateTimeline(status) {
+const rentalHiddenItems = []; // Rental時にすべてのステップを表示
+const purchaseHiddenItems = [5, 6, 7]; // Purchase時に5,6,7のステップを隠す
+
+function updateTimeline(status,isPurchase=false) {
+  //商品のレンタル購入を判断し、ステータスの項目を変える
+  const statusMap = isPurchase ? purchaseStatusMap : rentalStatusMap;
+  const hiddenItems = isPurchase ? purchaseHiddenItems : rentalHiddenItems;
+
   const step = statusMap[status] || 0;
-  console.log(step);
-  if (step !=6){
-    $("#cleaningTimer").empty();
-  }
-  // Update all timeline items
+  
+  // 進捗状況
   for (let i = 1; i <= 8; i++) {
-    const circles = document.querySelectorAll(`.timeline-item-${i} .timeline-circle`);
+    const timelineItem = document.querySelector(`.timeline-item-${i}`);
+    // const circles = document.querySelectorAll(`.timeline-item-${i} .timeline-circle`);
+    if (!timelineItem) continue;
+
+     if (hiddenItems.includes(i)) {
+      timelineItem.style.display = 'none';
+    } else {
+      timelineItem.style.display = 'flex';
+    }
     
+    const circles = timelineItem.querySelectorAll('.timeline-circle'); 
+
     if (i < step) {
       // Completed steps - show checkmark
       circles.forEach(circle => {
@@ -79,42 +122,76 @@ function updateTimeline(status) {
   }
 }
 
-// function comment(){
-//     const commentText = document.querySelector('textarea[name="comment"]').value;
-//     const transactionId = document.querySelector('input[name="transactionID"]').value;  // 
-//     const productId = document.querySelector('input[name="productID"]').value;;  // 
-    
-//     if (!commentText.trim()) {
-//         return;
-//     }
-    
-//     const formData = new FormData();
-//     formData.append('comment', commentText);
-//     formData.append('transaction_id', transactionId);
-//     formData.append('product_id', productId);
-    
-//     fetch('/deal/comment', {
-//         method: 'POST',
-//         body: formData
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.success) {
-//             alert('メッセージを送信しました');
-//             // clear
-//             document.querySelector('textarea[name="comment"]').value = '';
-        
-//             // window.location.reload();
-//         } else {
-//             alert('失敗: ' + data.message);
-//         }
-//     })
-//     .catch(error => {
-//         console.error('Error:', error);
-//         alert('エラーが発生しました');
-//     });
+/////////////////////////////評価////////////////////////////////////////
+console.log("evaluation function loaded");
 
-// }
+let selectedRating = 4;
+let isEvaluationSubmitted = false; 
+const stars = document.querySelectorAll('.star');
+
+stars.forEach(star => {
+    star.addEventListener('click', function() {
+        if (isEvaluationSubmitted) return;
+        selectedRating = this.dataset.rating;
+        updateStars(selectedRating);
+    });
+
+    star.addEventListener('mouseover', function() {
+        if (isEvaluationSubmitted) return;
+        updateStars(this.dataset.rating);
+    });
+});
+
+document.getElementById('starsContainer').addEventListener('mouseleave', function() {
+    if (isEvaluationSubmitted) return;
+    updateStars(selectedRating);
+});
+
+function updateStars(rating) {
+    stars.forEach(star => {
+        if (star.dataset.rating <= rating) {
+            star.classList.remove('empty');
+        } else {
+            star.classList.add('empty');
+        }
+    });
+}
+
+function handleSubmit() {
+    const evaluation = selectedRating;
+    axios.post('/deal/evaluation',{
+        evaluation:evaluation,
+        transaction_id: document.getElementById('transaction_id').value 
+        }
+     )
+     .then(response=>{
+        isEvaluationSubmitted = true;
+        const submitButton = document.querySelector('button[onclick="handleSubmit()"]');
+        if (submitButton) {
+            submitButton.style.display = 'none';  // 隠す
+            //submitButton.remove() 
+        }
+        const evaluationCheck = document.getElementById('evaluation_check');
+        if (evaluationCheck) {
+            evaluationCheck.textContent = '✓ 評価が完了しました';
+            evaluationCheck.style.color = '#252525ff';
+        }
+        
+        // star禁止
+        stars.forEach(star => {
+            star.style.cursor = 'default';  // 
+        }); 
+        alert(`${selectedRating}つ星で評価しました`);
+        //window
+     })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('評価の送信に失敗しました');
+    });
+}
+
+// 初期表示
+updateStars(selectedRating);
 
 /////////////////////////seller DATA  ////////////////////////////////
  function loadSeller(){
