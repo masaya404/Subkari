@@ -164,11 +164,12 @@
             {% if not user_id == product.account_id %}
             {% if connection.type == 'フォロー' %}
             <button class="follow-btn">フォロー済み</button>
-            
-            {% else %}
+            {% endif %}
+            {% if connection.type != 'フォロー' or not connection  %}
             <form method="POST" action="{{ url_for('products.follow', seller_id=product.account_id) }}">
             <button class="follow-btn">フォロー</button>
             </form>
+            
             {% endif %}
             {% endif %}
         </div>
