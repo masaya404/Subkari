@@ -16,10 +16,17 @@
                         <div class="product-image"><img src="{{url_for('static',filename='img/image_22.png')}}"></div>
                         <div class="product-details">
                             <div class="product-name">{{ product.product_name }}</div>
-                            <div class="product-price">¥{{ product.purchasePrice }}</div>
+                            {% if calculated_prices %}
+                            {% for period_text, total_price in calculated_prices.items() %}
+                            
+                            <div class="product-price">¥{{ product.rentalPrice }}</div>
+                            {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
+
+
                 <!-- 支払い方法 -->
 
                 <div class="section">
@@ -75,7 +82,12 @@
                 <div class="summary-box">
                     <div class="summary-row">
                         <span class="summary-label">商品代金</span>
-                        <span class="summary-value">¥{{ product.purchasePrice }}</span>
+                        {% if calculated_prices %}
+                        {% for period_text, total_price in calculated_prices.items() %}
+                                    
+                        <span class="summary-value">¥{{ product.rentalPrice }}</span>
+                        {% endfor %}
+                        {% endif %}
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">お支払い方法</span>
@@ -83,7 +95,12 @@
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">レンタル期間</span>
-                        <span class="summary-value" id="rental-period-summary-value"></span>
+                        {% if calculated_prices %}
+                        {% for period_text, total_price in calculated_prices.items() %}
+                        
+                        <span class="summary-value" id="rental-period-summary-value">{{ period_text }}</span>
+                        {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
 
@@ -94,12 +111,13 @@
 
 
 
-                <form method="POST" id="purchaseForm" action="{{ url_for('products.purchase_complete') }}">
+                <form method="POST" id="purchaseForm" action="{{ url_for('products.transaction_complete') }}">
                     <input type="hidden" id="hidden_product_id" name="product_id" value="{{ product.id }}">
                     <input type="hidden" id="hidden_payment_method" name="payment_method" value="initial_payment_value">
                     <input type="hidden" id="hidden_creditcards_id" name="creditcard_id" value="initial_creditcards_id_value">
                     <input type="hidden" id="hidden_address_index" name="address_index" value="initial_address_index_value">
                     <input type="hidden" id="hidden_delivery_location" name="delivery_location" value="玄関前">
+                    <input type="hidden" id="hidden_situation" name="situation" value="レンタル">
                     <button class="confirm-btn" onclick="confirmPurchase()">レンタルを確定する</button>
                 </form>
             </div>

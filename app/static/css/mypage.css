@@ -11,7 +11,7 @@
     grid-template-columns: 280px 1fr;
     gap: 40px;
     align-items: start;
-    overflow: hidden; /* 全体でのスクロールを防止 */
+    overflow: hidden; /*全体でのスクロールを防止*/
     min-height: calc(100vh - 80px); /* ← 固定heightをmin-heightに変更！ */}
 
 .mypage_main > section:not(.nav) {
@@ -90,7 +90,7 @@ h2{
 /* ----------プロフィールカード -----------------------*/
 #profile{
     min-height: 600px; /* 任意の高さを確保 */
-    min-width: 1000px; /* 任意の横幅を確保 */
+     min-width: 1000px; /*任意の横幅を確保  */
     background: #fff;
     border-radius: 8px;
     padding: 40px;
@@ -276,7 +276,254 @@ h2{
     }
 }
 
-/* ---------------------------------------- */
+/* -------------------個人情報設定--------------------- */
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* サイドバー */
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            border-right: 1px solid #e0e0e0;
+            padding: 30px 20px;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .profile-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e3a5f, #4a90e2);
+            margin: 0 auto 10px;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .page-title {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .menu-section {
+            margin-bottom: 25px;
+        }
+
+        .menu-title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .menu-item {
+            font-size: 12px;
+            padding: 8px 0;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .menu-item:hover {
+            color: #e85d75;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            flex: 1;
+            padding: 40px 60px;
+        }
+
+        .page-heading {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .edit-btn {
+            float: right;
+            padding: 8px 24px;
+            background-color: #fff;
+            color: #e85d75;
+            border: 2px solid #e85d75;
+            border-radius: 25px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .edit-btn:hover {
+            background-color: #e85d75;
+            color: #fff;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .info-table tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-table td {
+            padding: 20px 15px;
+            font-size: 14px;
+        }
+
+        .info-table td:first-child {
+            width: 150px;
+            color: #666;
+        }
+
+        /* 通知設定 */
+        .notification-group {
+            margin-bottom: 30px;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+        }
+
+        .toggle-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            padding: 6px 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            background-color: #e85d75;
+            color: #fff;
+            border-color: #e85d75;
+        }
+
+        /* 自動ログイン */
+        .auto-login-section {
+            padding: 20px;
+            background-color: #fafafa;
+            border-radius: 8px;
+        }
+
+        .auto-login-note {
+            font-size: 12px;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        /* ブロック一覧 */
+        .block-list {
+            margin-top: 20px;
+        }
+
+        .block-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .block-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            margin-right: 20px;
+        }
+
+        .block-info {
+            flex: 1;
+        }
+
+        .block-name {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .block-rating {
+            color: #ffa500;
+            font-size: 12px;
+        }
+
+        .block-action-btn {
+            padding: 6px 18px;
+            background-color: #fff;
+            color: #e85d75;
+            border: 1px solid #e85d75;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .block-action-btn:hover {
+            background-color: #e85d75;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+        }
 
 /* ---------------ログアウト------------------ */
 .main-content {

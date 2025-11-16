@@ -13,11 +13,16 @@
                 <!-- 商品情報 -->
                 <div class="section">
                     <div class="product-info">
-                        <div class="product-image"><img src="{{url_for('static',filename='img/image_22.png')}}"></div>
-                        <div class="product-details">
-                            <div class="product-name">{{ product.product_name }}</div>
-                            <div class="product-price">¥{{ product.purchasePrice }}</div>
-                        </div>
+                        <div class="product-image">
+                            {% if images %}
+                            <img src="{{url_for('static', filename='img/productImg/' + images[0].img)}}" alt="{{product.name }}"></div>
+                            {% else %}
+                            <img src="{{url_for('static', filename='img/productImg/default.png')}}" alt="デフォルト画像"></div>
+                            {% endif %}
+                            <div class="product-details">
+                                <div class="product-name">{{ product.product_name }}</div>
+                                <div class="product-price">¥{{ product.purchasePrice }}</div>
+                            </div>
                     </div>
                 </div>
 
@@ -128,12 +133,13 @@
 
 
 
-                <form method="POST" id="purchaseForm" action="{{ url_for('products.purchase_complete') }}">
+                <form method="POST" id="purchaseForm" action="{{ url_for('products.transaction_complete') }}">
                     <input type="hidden" id="hidden_product_id" name="product_id" value="{{ product.id }}">
                     <input type="hidden" id="hidden_payment_method" name="payment_method" value="initial_payment_value">
                     <input type="hidden" id="hidden_creditcards_id" name="creditcard_id" value="initial_creditcards_id_value">
                     <input type="hidden" id="hidden_address_index" name="address_index" value="initial_address_index_value">
                     <input type="hidden" id="hidden_delivery_location" name="delivery_location" value="玄関前">
+                    <input type="hidden" id="hidden_situation" name="situation" value="購入">
                     <button class="confirm-btn" onclick="confirmPurchase()">購入を確定する</button>
                 </form>
             </div>
