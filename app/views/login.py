@@ -80,10 +80,42 @@ def logout():
     return render_template('top/guest_index.html')
 
 #Register-------------------------------------------------------------------------------------------------------------------------------------------------------------
+# @login_bp.route("/register_user", methods=["GET"])
+# def show_register_user():
+#     account = {}
+#     result = {"content_detail": ""}
+#     return render_template("login/new_account.html", account=account, result=result)
+
 @login_bp.route("/register_user", methods=["GET"])
 def show_register_user():
     account = {}
-    return render_template("login/new_account.html", account=account )
+    
+    # 利用規約を DB から取得
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute("SELECT content_detail FROM m_admin_contents WHERE id=1")
+    result = cur.fetchone()
+    cur.close()
+    con.close()
+    
+    # DB にデータがない場合の安全策
+    if not result:
+        result = {"content_detail": "利用規約の内容が登録されていません。"}
+    
+    return render_template("login/new_account.html", account=account, result=result)
+@login_bp.route("/terms", methods=["GET"])
+def show_terms():
+    # DBから利用規約を取得
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+    cur.execute("SELECT content_detail FROM terms WHERE id = 1")
+    result = cur.fetchone()
+    cur.close()
+    con.close()
+    if not result:
+        result = {"content_detail": ""}
+    return render_template("mypage/terms.html", result=result)
+
 
 #プライバシーポリシー表示---------------------------------------------------------------------------------------------------------------------------------------------------------- 
 @login_bp.route('/privacy_policy',methods=['GET'])
