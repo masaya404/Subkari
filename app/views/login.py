@@ -85,6 +85,13 @@ def show_register_user():
     account = {}
     return render_template("login/new_account.html", account=account )
 
+#プライバシーポリシー表示---------------------------------------------------------------------------------------------------------------------------------------------------------- 
+@login_bp.route('/privacy_policy',methods=['GET'])
+def privacy_policy():
+    return render_template('login/privacy.html')
+
+
+
 
 
 #Register確認----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -95,7 +102,7 @@ def register_user_complete():
     error_same = ""
     # 入力確認
     if account['password'] != account['password_confirm']:
-        error = "パスワードと確認用パスワードが一致していません。"
+        error = "メールアドレスまたはパスワードが正しくありません。"
         return render_template('login/new_account.html', error=error, account=account)
     
     
@@ -120,7 +127,7 @@ def register_user_complete():
     
     # existing_user が None でない場合 ＝ データが取得できた ＝ 既に使用されている
     if userExist:
-        error_same = "このメールアドレスは既に使用されています。"
+        error_same = "メールアドレスまたはパスワードが正しくありません。"
         # エラーなので、テンプレートをレンダリングして処理を終了します
 
         cur.close()
