@@ -398,6 +398,9 @@ def verification():
     if not front_image or front_image.filename == '':
         message = "本人確認書類の表面画像をアップロードしてください。"
         return render_template('login/identity_verification.html', message=message)
+    if not back_image or back_image.filename == '':
+        message = "本人確認書類の裏面画像をアップロードしてください。"
+        return render_template('login/identity_verification.html', message=message)
 
 
     #セッションに入っているデータをdbに登録する。
@@ -485,6 +488,7 @@ def verification():
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'default_profile.jpg');
     """
     cur.execute(sql_account, account_data)
+    con.commit()
 
     # 4. 登録されたアカウントのIDを取得 (m_addressで必要)
     new_account_id = cur.lastrowid
@@ -498,6 +502,7 @@ def verification():
     # account_id を address_data の先頭に追加して実行
     full_address_data = (new_account_id,) + address_data
     cur.execute(sql_address, full_address_data)
+    con.commit()
 
     #アカウントIDを取得
     user_id = new_account_id
@@ -584,35 +589,26 @@ def verification():
             except mysql.connector.Error as err:
                 messages.append(f"DB更新エラー: {err}")
                 is_error = True
+            finally:
+                if con and con.is_connected():
+                    cur.close()
+                    con.close()
+            
 
         # 5. 結果の反映
         if is_error:
             # エラーが発生した場合は、エラーメッセージを渡してレンダリング
             return render_template('login/verification.html', message="アップロードまたはDB更新に失敗しました。", result_messages=messages)
         else:
+
+            
+            # 登録完了したのでセッションデータを削除
+            session.pop('registration_data', None)
             # 成功した場合は、確認完了ページなどにリダイレクト
-            return redirect(url_for('login.verification_complete')) 
+            return render_template('login/registration_complete.html')
 
     # GETリクエストの場合
     return render_template('login/verification.html')
-
-    # finally ブロックで DB接続を必ず閉じる処理を追加すべきですが、
-    # この例ではシンプル化のため省略しています。実際のコードでは必ず閉じてください。
-    # 実際には try...except の外側で、接続を閉じる処理を記述します。
-
-    # 6. コミットとセッションのクリア
-    con.commit()
-    
-    # 登録完了したのでセッションデータを削除
-    session.pop('registration_data', None)
-
-    cur.close()
-    con.close()
-
-
-    return render_template('login/registration_complete.html')
-
-
 #
 
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
