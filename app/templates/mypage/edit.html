@@ -14,7 +14,7 @@
             <div class="form-section">
                 <div class="section-title">画像</div>
                 <div class="image-upload">
-                    <img src="{{url_for('static' , filename='img/'+user_info.identifyImg)}}" alt="プロフィール画像" class="profile-image">
+                    <img src="{{url_for('static' , filename='img/'+user_info.identifyfrontImg)}}" alt="プロフィール画像" class="profile-image">
 
                     <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="previewImage(event)">
                     <button type="button" class="upload-btn" onclick="document.getElementById('imageInput').click()">画像を選択</button>
