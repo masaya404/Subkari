@@ -538,6 +538,10 @@ def todo():
 
     return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
+@mypage_bp.route('/personal_info')
+def personal_info():
+    # 個人情報編集ページの処理
+    return render_template('mypage/personal_info.html')
 
 
 #privacy_policy プライバシーポリシー表示---------------------------------------------------------------
