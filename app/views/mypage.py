@@ -211,7 +211,7 @@ def mypage():
         total+=int(sale['price'] if sale['price'] else 0)
     total=comma(total)
 
-    return render_template("mypage/mypage.html",image_path=user_info,
+    return render_template("mypage/mypage.html",
     evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,
     followers=followers,products=products,user_info=user_info ,user_id=user_id,total=total)
     
@@ -538,6 +538,10 @@ def todo():
 
     return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
+@mypage_bp.route('/personal_info')
+def personal_info():
+    # 個人情報編集ページの処理
+    return render_template('mypage/personal_info.html')
 
 
 #privacy_policy プライバシーポリシー表示---------------------------------------------------------------
