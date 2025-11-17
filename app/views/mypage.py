@@ -211,7 +211,7 @@ def mypage():
         total+=int(sale['price'] if sale['price'] else 0)
     total=comma(total)
 
-    return render_template("mypage/mypage.html",image_path=user_info,
+    return render_template("mypage/mypage.html",
     evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,
     followers=followers,products=products,user_info=user_info ,user_id=user_id,total=total)
     
