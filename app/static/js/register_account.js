@@ -1,6 +1,6 @@
 console.log("register_account is loaded.");
 const errorMes = {
-    email: "メールを入力してください",
+    mail: "メールを入力してください",
     password: "パスワードを入力してください",
     password_confirm: "確認用パスワードを入力してください",
 };
@@ -9,13 +9,13 @@ $("#register_btn").on("click", function () {
     console.log("check");
 
     $(".error").remove();
-    const email = $("input[name='email']").val();
+    const mail = $("input[name='mail']").val();
     const password = $("input[name='password']").val();
     const password_confirm = $("input[name='password_confirm']").val();
 
     // email check
-    if (email === "") {
-        $("input[name='email']").after(`<div class="error" style="color: red;">${errorMes.email}</div>`);
+    if (mail === "") {
+        $("input[name='mail']").after(`<div class="error" style="color: red;">${errorMes.mail}</div>`);
 
     }
 
@@ -63,4 +63,33 @@ document.addEventListener("DOMContentLoaded", () => {
     declinePopup.addEventListener("click", () => {
         window.location.href = "/top"; // トップページのURLに遷移
     });
+});
+
+$("#register_btn").on("click", function (event) {
+    let hasError = false;
+
+    $(".error").remove();
+    const email = $("input[name='mail']").val();
+    const password = $("input[name='password']").val();
+    const password_confirm = $("input[name='password_confirm']").val();
+
+    if (email === "") {
+        $("input[name='mail']").after(`<div class="error" style="color: red;">メールアドレスを入力してください</div>`);
+        hasError = true;
+    }
+
+    if (password === "") {
+        $("input[name='password']").after(`<div class="error" style="color: red;">パスワードを入力してください</div>`);
+        hasError = true;
+    }
+
+    if (password_confirm === "") {
+        $("input[name='password_confirm']").after(`<div class="error" style="color: red;">確認用パスワードを入力してください</div>`);
+        hasError = true;
+    }
+
+    // ❗ エラーがあればフォーム送信を止める
+    if (hasError) {
+        event.preventDefault();
+    }
 });
