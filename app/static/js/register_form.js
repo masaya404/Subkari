@@ -1,151 +1,156 @@
-    // ------------------------------------
-    // フォーム送信ハンドラ (デモ用)
-    // ------------------------------------
-    // function handleRegisterForm(event) {
-    //     event.preventDefault();
-        
-    //     const account = document.getElementById('account').value.trim();
-    //     const lastname = document.getElementById('lastname').value.trim();
-    //     const prefecture = document.querySelector('.rfo-prefecture-selected').textContent;
-    //     const phone = document.getElementById('phone').value.trim();
-    //     const postal = document.getElementById('postal').value.trim();
-
-    //     if (prefecture === '選択してください') {
-    //          alert('都道府県を選択してください。');
-    //          return false;
-    //     }
-
-    //     if (phone.length < 10 || phone.length > 11 || postal.length !== 7) {
-    //          alert('入力内容に誤りがあります。（電話番号は10-11桁、郵便番号は7桁）');
-    //          return false;
-    //     }
-
-    //     console.log('登録実行:', { account, lastname, prefecture, phone });
-    //     alert(`アカウント名: ${account} での登録を完了しました！`);
-    //     // 実際の遷移: window.location.href = 'registration-complete.html';
-    //     return false;
-    // }
-
-
-    // // ------------------------------------
-    // // カスタムセレクトボックス (都道府県) 動作
-    // // ------------------------------------
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     const prefectureFrame = document.getElementById('prefectureFrame');
-    //     if (!prefectureFrame) return;
-
-    //     const selectedDiv = prefectureFrame.querySelector('.rfo-prefecture-selected');
-    //     const optionsList = prefectureFrame.querySelector('.rfo-prefecture-options');
-    //     const options = optionsList.querySelectorAll('li');
-
-    //     // 1. フレームをクリックしたらリストの表示/非表示を切り替える
-    //     prefectureFrame.addEventListener('click', function(e) {
-    //         // クリックがリスト内の要素でない場合、リストの表示を切り替える
-    //         if (e.target.closest('.rfo-prefecture-options') === null) {
-    //             optionsList.style.display = optionsList.style.display === 'block' ? 'none' : 'block';
-    //         }
-    //     });
-
-    //     // 2. リストの項目をクリックしたときの処理
-    //     options.forEach(option => {
-    //         option.addEventListener('click', function() {
-    //             // 選択された値を表示部に反映させる
-    //             selectedDiv.textContent = this.textContent;
-                
-    //             // リストを非表示にする
-    //             optionsList.style.display = 'none';
-    //         });
-    //     });
-
-    //     // 3. 画面のどこかをクリックしたらリストを閉じる（UX向上）
-    //     document.addEventListener('click', function(e) {
-    //         if (!prefectureFrame.contains(e.target)) {
-    //             optionsList.style.display = 'none';
-    //         }
-    //     });
-    // });
-
-    // ------------------------------------
-    // 郵便番号から住所を自動入力するダミー機能
-    // ------------------------------------
-document.getElementById('postal').addEventListener('blur', function() {
-    const postal = this.value.replace(/[^0-9]/g, ''); // 数字だけ抽出
-    if (postal.length === 7) {
-        fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postal}`)
-        .then(res => res.json())
-        // .then(data => {
-        //     if (data.status === 200 && data.results) {
-        //         const result = data.results[0];
-        //         document.querySelector('.rfo-prefecture-selected').textContent = result.address1; // 都道府県
-        //         document.getElementById('city').value = result.address2; // 市区町村
-        //         document.getElementById('address').value = result.address3; // 番地
-        //         document.getElementById('building').focus(); // 次の入力欄にフォーカス
-        //     } else {
-        //         console.log('住所が見つかりません');
-        //     }
-            .then(data => {
-            if (data.status === 200 && data.results) {
-                const result = data.results[0];
-                
-                const prefectureInput = document.getElementById('prefecture'); // hidden input
-                const prefectureDisplay = document.querySelector('.rfo-prefecture-selected'); // 表示部分
-
-                prefectureDisplay.textContent = result.address1; // 表示部分の更新
-                prefectureInput.value = result.address1; // ★隠しフィールドにも値を設定★
-                
-                document.getElementById('city').value = result.address2; // 市区町村
-                document.getElementById('address').value = result.address3; // 番地
-                document.getElementById('building').focus(); // 次の入力欄にフォーカス
-            } else {
-                console.log('住所が見つかりません');
-            }
-        })
-        .catch(err => console.error(err));
-    }
-});
-
-// DOM（HTML）の読み込みが完了したら実行
 document.addEventListener('DOMContentLoaded', function() {
-    
-    // 必要な要素を取得
+
+    // ------------------------------------
+    // 共通関数: エラー表示/クリア
+    // ------------------------------------
+    function showError(element, message) {
+        const errorElem = element.closest('.rfo-form-group').querySelector('.rfo-error');
+        if (errorElem) errorElem.textContent = message;
+    }
+
+    function clearError(element) {
+        const errorElem = element.closest('.rfo-form-group').querySelector('.rfo-error');
+        if (errorElem) errorElem.textContent = '';
+    }
+
+    // ------------------------------------
+    // 郵便番号から住所を自動入力
+    // ------------------------------------
+    const postalInput = document.getElementById('postal');
+    postalInput.addEventListener('blur', function() {
+        const postalVal = this.value.replace(/[^0-9]/g,''); // 数字だけ
+        if (postalVal.length===7) {
+            fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postalVal}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 200 && data.results) {
+                    const r = data.results[0];
+
+                    const prefectureInput = document.getElementById('prefecture');
+                    const prefectureDisplay = document.querySelector('.rfo-prefecture-selected');
+
+                    prefectureDisplay.textContent = r.address1;
+                    prefectureInput.value = r.address1;
+                    document.getElementById('city').value = r.address2;
+                    document.getElementById('address').value = r.address3;
+                    document.getElementById('building').focus();
+                    clearError(prefectureDisplay);
+                } else {
+                    console.log('住所が見つかりません');
+                }
+            })
+            .catch(err => console.error(err));
+        }
+    });
+
+    // ------------------------------------
+    // カスタムセレクトボックス (都道府県)
+    // ------------------------------------
     const frame = document.getElementById('prefectureFrame');
     const selectedDisplay = frame.querySelector('.rfo-prefecture-selected');
     const optionsList = frame.querySelector('.rfo-prefecture-options');
     const options = optionsList.querySelectorAll('li');
-    
-    // 「隠しフィールド」を取得
     const hiddenInput = document.getElementById('prefecture');
 
-    // --- 1. ドロップダウンの「開閉」処理 ---
+    // ドロップダウン開閉
     selectedDisplay.addEventListener('click', function() {
-        // 現在の表示状態を取得し、逆にする
-        const isHidden = optionsList.style.display === 'none';
-        optionsList.style.display = isHidden ? 'block' : 'none';
+        optionsList.style.display = optionsList.style.display==='block'?'none':'block';
     });
 
-    // --- 2. 選択肢（li）がクリックされたときの処理 ---
-    options.forEach(function(li) {
+    // 選択肢クリック
+    options.forEach(li => {
         li.addEventListener('click', function() {
-            
-            // クリックされた li から値（都道府県名）を取得
-            const selectedValue = li.textContent; // "東京都" など
-            
-            // (A) 「選択してください」の表示テキストを更新
-            selectedDisplay.textContent = selectedValue || '選択してください';
-            
-            // (B) ★最重要★ 隠しフィールドの value を更新
-            hiddenInput.value = selectedValue;
-
-            // (C) 選択肢リストを閉じる
+            const value = li.textContent || '選択してください';
+            selectedDisplay.textContent = value;
+            hiddenInput.value = value;
             optionsList.style.display = 'none';
+            clearError(selectedDisplay);
         });
     });
 
-    // --- (オプション) ドロップダウンの外側をクリックしたら閉じる ---
-    document.addEventListener('click', function(event) {
-        // クリックされた場所がフレーム（frame）の内側でない場合
-        if (!frame.contains(event.target)) {
-            optionsList.style.display = 'none';
-        }
+    // 外側クリックで閉じる
+    document.addEventListener('click', e => {
+        if (!frame.contains(e.target)) optionsList.style.display='none';
     });
+
+    // ------------------------------------
+    // フォーム送信ハンドラ
+    // ------------------------------------
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', function(event) {
+        let valid = true;
+        let firstErrorElement = null;
+
+        const account = document.getElementById('account');
+        const lastname = document.getElementById('lastname');
+        const firstname = document.getElementById('firstname');
+        const lastnameKana = document.getElementById('lastname-kana');
+        const firstnameKana = document.getElementById('firstname-kana');
+        const birthday = document.getElementById('birthday');
+        const postal = document.getElementById('postal');
+        const prefectureInput = document.getElementById('prefecture');
+        const prefectureDisplay = document.querySelector('.rfo-prefecture-selected');
+        const city = document.getElementById('city');
+        const address = document.getElementById('address');
+        const phone = document.getElementById('phone');
+
+        // ----- 未入力チェック -----
+        if (!account.value.trim()) { showError(account, 'アカウント名を入力してください'); valid=false; if(!firstErrorElement) firstErrorElement = account; } else { clearError(account); }
+        if (!lastname.value.trim()) { showError(lastname, '姓(全角)を入力してください'); valid=false; if(!firstErrorElement) firstErrorElement = lastname; } else { clearError(lastname); }
+        if (!firstname.value.trim()) { showError(firstname, '名(全角)を入力してください'); valid=false; if(!firstErrorElement) firstErrorElement = firstname; } else { clearError(firstname); }
+        if (!lastnameKana.value.trim()) { showError(lastnameKana, 'セイ(全角)を入力してください'); valid=false; if(!firstErrorElement) firstErrorElement = lastnameKana; } else { clearError(lastnameKana); }
+        if (!firstnameKana.value.trim()) { showError(firstnameKana, 'メイ(全角)を入力してください'); valid=false; if(!firstErrorElement) firstErrorElement = firstnameKana; } else { clearError(firstnameKana); }
+        if (!birthday.value.trim()) { showError(birthday, '生年月日を入力してください'); valid=false; if(!firstErrorElement) firstErrorElement = birthday; } else { clearError(birthday); }
+
+        if (!/^\d{7}$/.test(postal.value.trim())) { showError(postal, '郵便番号は7桁で入力してください'); valid=false; if(!firstErrorElement) firstErrorElement = postal; } else { clearError(postal); }
+        if (!prefectureInput.value || prefectureInput.value==='選択してください') { showError(prefectureDisplay,'都道府県を選択してください'); valid=false; if(!firstErrorElement) firstErrorElement = prefectureDisplay; } else { clearError(prefectureDisplay); }
+        if (!city.value.trim()) { showError(city,'市区町村を入力してください'); valid=false; if(!firstErrorElement) firstErrorElement = city; } else { clearError(city); }
+        if (!address.value.trim()) { showError(address,'番地を入力してください'); valid=false; if(!firstErrorElement) firstErrorElement = address; } else { clearError(address); }
+        if (!/^\d{10,11}$/.test(phone.value.trim())) { showError(phone,'電話番号は10〜11桁で入力してください'); valid=false; if(!firstErrorElement) firstErrorElement = phone; } else { clearError(phone); }
+
+        // ----- 喫煙の有無チェック -----
+        const smokingRadios = document.getElementsByName('smoker');
+        let smokingChecked = false;
+        for (let i = 0; i < smokingRadios.length; i++) {
+            if (smokingRadios[i].checked) { smokingChecked = true; break; }
+        }
+        const radioGroup = document.querySelector('.rfo-radio-group');
+        if (!smokingChecked) {
+            showError(radioGroup, '喫煙の有無を選択してください');
+            valid = false;
+            if(!firstErrorElement) firstErrorElement = radioGroup;
+        } else {
+            clearError(radioGroup);
+        }
+
+        // ----- エラーがあればスクロールしてフォーカス -----
+        if (!valid) {
+            event.preventDefault(); // 送信停止
+            if(firstErrorElement) {
+                firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                if(firstErrorElement.focus) firstErrorElement.focus();
+            }
+            return false;
+        }
+
+        // バリデーションOKの場合は通常送信で画面遷移
+        // もし画面遷移先を JS で指定したい場合は以下を使う：
+        // event.preventDefault();
+        // window.location.href = 'registration-complete.html';
+
+        console.log('登録実行:', {
+            account: account.value,
+            lastname: lastname.value,
+            firstname: firstname.value,
+            prefecture: prefectureInput.value,
+            phone: phone.value,
+            postal: postal.value,
+            smoking: smokingChecked ? document.querySelector('input[name="smoker"]:checked').value : null
+        });
+
+        // alertで確認だけする場合
+        // alert(`アカウント名: ${account.value} で登録が完了しました！`);
+        // return false; // これを残すと画面遷移は止まるので注意
+    });
+
 });
