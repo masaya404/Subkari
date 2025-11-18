@@ -123,9 +123,6 @@ def privacy_policy():
     return render_template('login/privacy.html')
 
 
-
-
-
 #Register確認----------------------------------------------------------------------------------------------------------------------------------------------------------
 @login_bp.route('/register_user/complete',methods=['POST'])
 def register_user_complete():
