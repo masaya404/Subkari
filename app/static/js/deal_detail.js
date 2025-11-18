@@ -123,9 +123,21 @@ function updateTimeline(status,isPurchase=false) {
     }
   }
 }
+/////////////////////////////画像アップロードブロック//////////////////////////////////
+console.log("image upload block");
+
+const status_data = document.getElementById("status").textContent;
+console.log(status_data);
 
 /////////////////////////////評価////////////////////////////////////////
 console.log("evaluation function loaded");
+
+const evaluation_block = $("#productEvaluation");
+if (status_data != "取引完了"){
+    evaluation_block.hide();
+}else{
+    evaluation_block.show();
+}
 
 let selectedRating = 4;
 let isEvaluationSubmitted = false; 

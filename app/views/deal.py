@@ -45,8 +45,6 @@ def deal():
                 p.id = t.product_id
             WHERE 
                 t.customer_id = %s
-            GROUP BY
-                t.seller_id
             ORDER BY p.id ASC
             ;
             """   
@@ -144,7 +142,7 @@ def deal_list(transaction_id):
     con.close()   
     
     if transaction['situation'] == '購入':
-        charge = int(transaction.get('rentalPrice') or 0) * 0.1
+        charge = int(transaction.get('purchasePrice') or 0) * 0.1
         benefit = int(transaction['purchasePrice']) - charge
         transaction['charge'] = charge
         transaction['benefit'] = benefit
