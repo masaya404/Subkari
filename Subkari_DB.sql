@@ -308,7 +308,7 @@ CREATE TABLE `t_transaction` (
   `receivedFlg` boolean NOT NULL,
   `cleaningPhoto` VARCHAR(255),
   `cleaningFlg` boolean NOT NULL,
-  `rentalPeriod` DATETIME,
+  `rentalPeriod` INT,
   `creditcard_id` INT ,
 
   PRIMARY KEY (`id`),
