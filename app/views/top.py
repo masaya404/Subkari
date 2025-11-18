@@ -105,10 +105,9 @@ def guest_index():
 
     cur.close()
     con.close()
-    
-    resp = make_response(render_template('top/guest_index.html', user_id = user_id,  categories=categories ,))
-    return resp
-    
+    print(categories)
+    return render_template('top/guest_index.html', user_id = user_id,  categories=categories)
+
 # 会員のtop page表示
 @top_bp.route('/top',methods=['GET'])
 def member_index():

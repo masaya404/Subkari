@@ -77,7 +77,7 @@ def login_auth():
 @login_bp.route('/login/logout',methods=['GET'])
 def logout():
     session.pop('user_id', None)
-    return render_template('top/guest_index.html')
+    return redirect(url_for('top.guest_index'))
 
 #Register-------------------------------------------------------------------------------------------------------------------------------------------------------------
 # @login_bp.route("/register_user", methods=["GET"])
