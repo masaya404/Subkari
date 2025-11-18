@@ -6,9 +6,6 @@ default character set utf8;
 
 use db_subkari
 
--- アラートとタイムテーブルがまだ
--- アラートはenum内が空
-
 
 
 -- テーブル作成 
