@@ -53,6 +53,7 @@
                                 <span class="text-red-500 text-xs font-medium">{%if product.situation%}{{product.situation}}{%else%} {%endif%}</span>
                             </div>
                             <p class="text-gray-500 text-xs mt-2">{%if product.situation%} {%elif product.purchaseFlg%}購入可能{%else%}レンタル可能{%endif%}</p>
+                            <p class="text-gray-500 text-xs mt-2">{{product.status}}</p>
                         </div>
                     </div>
                     {% endfor %}
@@ -72,7 +73,7 @@
                             <div class="flex-1 pt-1">
                                 <div class="flex justify-between items-start">
                                     <span class="text-gray-700 font-medium text-sm">支払い待ち</span>
-                                    <span class="text-gray-600 text-xs">2025/09/16</span>
+                                    <div id="start_date"></div>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +89,7 @@
                             <div class="flex-1 pt-1">
                                 <div class="flex justify-between items-start">
                                     <span class="text-gray-700 font-medium text-sm">発送待ち</span>
-                                    <span class="text-gray-600 text-xs">2025/09/16</span>
+                                  
                                 </div>
                             </div>
                         </div>
@@ -198,9 +199,11 @@
                             取引詳細へ
                         </button>
                         </a>
-                        <button class="w-[192px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition cursor-pointer">
+
+                        <button class="w-[192px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition cursor-pointer" id="rentalBuy" onclick="rentalBuy(currentProductId)">
                             レンタル中購入
                         </button>
+                      
                     </div>
                 </div>
            

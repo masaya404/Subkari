@@ -35,19 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-//コンタンツswitch toggle
-//  function switchTab(tabIndex) {
-//     const tabs = document.querySelectorAll('.tab');
-//     const contents = document.querySelectorAll('.tab-content');
-    
-//     tabs.forEach((tab, index) => {
-//         tab.classList.toggle('active', index === tabIndex);
-//     });
-    
-//     contents.forEach((content, index) => {
-//         content.classList.toggle('active', index === tabIndex);
-//     });
-// }
 
 function switchTab(tabIndex) {
     const tabs = document.querySelectorAll('.tab');
@@ -62,5 +49,6 @@ function switchTab(tabIndex) {
     });
     
     //  tabIndex による active tab の名稱判断　True tops False bottoms
-    activeTabInput.value = (tabIndex === 0) ? 'tops' : 'bottoms';
+    const tabNames = ['tops', 'bottoms', 'coordinate', 'accessory'];
+    activeTabInput.value = tabNames[tabIndex] || 'tops';
 }

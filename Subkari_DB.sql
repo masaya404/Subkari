@@ -1,3 +1,5 @@
+drop database if exists db_subkari;
+
 -- データベース作成
 create database db_subkari
 default character set utf8;
@@ -25,7 +27,8 @@ CREATE TABLE `m_account` (
   `status` ENUM('未確認','本人確認済み','凍結','削除','強制削除') NOT NULL,
   `updaterId` INT,
   `password` VARCHAR(255) NOT NULL,
-  `identifyImg` varchar(255) NOT NULL,
+  `identifyfrontImg` varchar(255) NOT NULL,
+  `identifybackImg` VARCHAR(255) NOT NULL,
   `apiFavoriteAnnounce` boolean,
   `apiFollowAnnounce` boolean,
   `apiSystemAnnounce` boolean,
@@ -79,25 +82,27 @@ CREATE TABLE `m_category` (
 -- 商品テーブル ------------------------------------
 CREATE TABLE `m_product` (
   `id` INT AUTO_INCREMENT NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) ,
   `purchasePrice` INT NULL,
   `rentalPrice` INT NULL,
-  `size` VARCHAR(255) NOT NULL,
+  `size` VARCHAR(255) ,
   `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','シルバー','ピンク','レッド','オレンジ')  NULL,
-  `for` ENUM('ユニセックス','レディース') NOT NULL,
-  `upload` DATE NOT NULL,
-  `showing` ENUM('公開','非公開','非表示') NOT NULL,
-  `draft` boolean NOT NULL,
-  `updateDate` DATETIME NOT NULL,
-  `purchaseFlg` boolean NOT NULL,
-  `rentalFlg` boolean NOT NULL,
-  `explanation` TEXT NULL,
-  `account_id` INT NOT NULL,
-  `brand_id` INT NOT NULL,
-  `category_id` INT NOT NULL,
+  `for` ENUM('ユニセックス','レディース') ,
+  `upload` DATE ,
+  `showing` ENUM('公開','非公開','非表示') ,
+  `draft` boolean ,
+  `updateDate` DATETIME ,
+  `purchaseFlg` boolean ,
+  `rentalFlg` boolean ,
+  `explanation` TEXT ,
+  `account_id` INT ,
+  `brand_id` INT ,
+  `category_id` INT ,
   `cleanNotes` TEXT ,
-  `smokingFlg` boolean NOT NULL,
-  `returnAddress` varchar(255) NOT NULL,
+  `smokingFlg` boolean ,
+  `returnAddress` varchar(255) ,
+  `condition` ENUM('取引可','取引中','売却済み'),
+  `rentalPeriod` INT,
 
 
   PRIMARY KEY (`id`),
@@ -227,16 +232,16 @@ CREATE TABLE `t_adminLogin` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 -- レンタル期間テーブル ---------------------------------------
-CREATE TABLE `t_rentalPeriod` (
-  `id` INT NOT NULL,
-  `product_id` INT NOT NULL,
-  `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
+-- CREATE TABLE `t_rentalPeriod` (
+--   `id` INT AUTO_INCREMENT NOT NULL,
+--   `product_id` INT NOT NULL,
+--   `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
 
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`product_id`)
-    REFERENCES `m_product`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
-);
+--   PRIMARY KEY (`id`),
+--   FOREIGN KEY (`product_id`)
+--     REFERENCES `m_product`(`id`)
+--     ON DELETE RESTRICT ON UPDATE CASCADE
+-- );
 
 -- お気に入りテーブル --------------------------------
 CREATE TABLE `t_favorite` (

@@ -45,7 +45,68 @@ def guest_index():
     else :
         user_id = None
     
-    resp = make_response(render_template('top/guest_index.html', user_id = user_id))
+    con = connect_db()
+    cur = con.cursor(dictionary=True)
+
+    # すべての商品を取り出し
+    sql = """
+        SELECT 
+            p.id,
+            p.name,
+            p.rentalPrice,
+            p.purchasePrice,
+            c.name AS category,
+            b.name AS brand,
+            (
+                SELECT m2.img 
+                FROM m_productimg AS m2
+                WHERE m2.product_id = p.id
+                ORDER BY m2.id ASC
+                LIMIT 1
+            ) AS image_path
+        FROM m_product AS p
+        LEFT JOIN m_brand AS b ON p.brand_id = b.id
+        LEFT JOIN m_category AS c ON p.category_id = c.id
+        WHERE p.draft = 0
+        GROUP BY p.id
+        ORDER BY p.category_id, p.id
+    """
+    cur.execute(sql)
+    rows = cur.fetchall()
+
+    #  KEY is category の辞書
+    categories = {}
+    for row in rows:
+        rental = row.get("rentalPrice")
+        purchase = row.get("purchasePrice")
+
+        # 価格表示の決定
+        if rental is not None and purchase is not None:
+            price_text = f"{rental:,} / {purchase:,}"
+        elif rental is not None:
+            price_text = f"{rental:,}"
+        elif purchase is not None:
+            price_text = f"{purchase:,}"
+        else:
+            price_text = "ー"
+
+        # 分類
+        cat = row["category"] or "その他"
+        if cat not in categories:
+            categories[cat] = []
+        if len(categories[cat]) < 4:
+            categories[cat].append({
+            "id": row["id"],
+            "name": row["name"],
+            "brand": row["brand"] or "",
+            "price": price_text,
+            "image_path": row["image_path"] or "default.png"
+            })
+
+    cur.close()
+    con.close()
+    
+    resp = make_response(render_template('top/guest_index.html', user_id = user_id,  categories=categories ,))
     return resp
     
 # 会員のtop page表示
@@ -66,16 +127,22 @@ def member_index():
         SELECT 
             p.id,
             p.name,
-            p.name,
             p.rentalPrice,
             p.purchasePrice,
             c.name AS category,
             b.name AS brand,
-            m.img AS image_path
+            (
+                SELECT m2.img 
+                FROM m_productimg AS m2
+                WHERE m2.product_id = p.id
+                ORDER BY m2.id ASC
+                LIMIT 1
+            ) AS image_path
         FROM m_product AS p
         LEFT JOIN m_brand AS b ON p.brand_id = b.id
-        LEFT JOIN m_productimg AS m ON p.id = m.product_id
         LEFT JOIN m_category AS c ON p.category_id = c.id
+        WHERE p.draft = 0
+        GROUP BY p.id
         ORDER BY p.category_id, p.id
     """
     cur.execute(sql)
@@ -135,17 +202,23 @@ def category_products(category):
             p.purchasePrice,
             b.name AS brand,
             c.name AS category,
-            m.img AS image_path
+             (
+                SELECT m2.img 
+                FROM m_productimg AS m2
+                WHERE m2.product_id = p.id
+                ORDER BY m2.id ASC
+                LIMIT 1
+            ) AS image_path
         FROM 
             m_product AS p
         LEFT JOIN 
             m_brand AS b ON p.brand_id = b.id
         LEFT JOIN 
-            m_productimg AS m ON p.id = m.product_id
-        LEFT JOIN 
             m_category AS c ON p.category_id = c.id
         WHERE 
             c.name = %s
+        AND
+            p.draft = 0
         ORDER BY 
             p.id DESC
     """, (category,))
@@ -174,7 +247,7 @@ def category_products(category):
             "name": row["name"],
             "brand": row["brand"] or "",
             "price": price_text,
-            "image_path": row["image_path"] or "no_image.png"
+            "image_path": row["image_path"] or "default.png"
         })
 
     # ひとつのカテゴリの商品
@@ -213,6 +286,8 @@ def for_products(for_value):
         LEFT JOIN m_productimg AS m ON p.id = m.product_id
         LEFT JOIN m_category AS c ON p.category_id = c.id
         WHERE p.`for` = %s
+        AND
+            p.draft = 0
     """
     cur.execute(sql, (for_value,))
     rows = cur.fetchall()
@@ -283,6 +358,8 @@ def brand_products(brand_name):
         LEFT JOIN m_productimg AS m ON p.id = m.product_id
         LEFT JOIN m_category AS c ON p.category_id = c.id
         WHERE b.name = %s
+        AND
+            p.draft = 0
     """
     cur.execute(sql, (brand_name,))
     rows = cur.fetchall()
@@ -374,6 +451,12 @@ def coordinate():
 # 検索結果についての表示#########################################################################################################################################
 @top_bp.route('/search', methods=['GET'])
 def search():
+     # user検証成功
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     #Get the Keyword and Page
     search_query = request.args.get('keyword', '').strip()
     page = int(request.args.get('page', 1))
@@ -391,13 +474,20 @@ def search():
         LEFT JOIN m_productimg AS i
         ON p.id = i.product_id
         WHERE (%s = '' OR p.name LIKE %s)
+        AND
+            p.draft = 0
+        GROUP BY p.id
     """
     params_count = [search_query, f"%{search_query}%"]
     #sql実行
     con = connect_db()
     cur = con.cursor(dictionary=True)
     cur.execute(sql_count, params_count)
-    total_count = cur.fetchone()['count']
+    result = cur.fetchone()
+    if result is None:
+        total_count = 0
+    else:        
+        total_count = int(result['count'])
     cur.close()
     con.close()
     #page数
@@ -406,17 +496,16 @@ def search():
     #商品資料のsql
     sql_select = """
         SELECT 
-            p.id,
-            p.name,
-            p.brand_id,
-            p.rentalPrice,
-            p.purchasePrice,
+            p.*,
             b.name AS brand_name,
             i.img
         FROM m_product AS p
         LEFT JOIN m_brand AS b ON p.brand_id = b.id
         LEFT JOIN m_productimg AS i ON p.id = i.product_id
         WHERE (%s = '' OR p.name LIKE %s)
+        AND
+            p.draft = 0
+        GROUP BY p.id
         ORDER BY p.id DESC
         LIMIT %s OFFSET %s
     """
@@ -447,7 +536,8 @@ def search():
         search_query=search_query,
         products=products,
         total_pages=total_pages,
-        current_page=page
+        current_page=page,
+        user_id = user_id
         )    
 
 

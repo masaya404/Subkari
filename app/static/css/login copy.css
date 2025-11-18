@@ -121,3 +121,129 @@ footer.register-footer {
     font-size: 11px;
     color: #999;
 }
+
+/* オーバーレイ（中央に配置） */
+.popup-overlay {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+    backdrop-filter: blur(3px); /* 背景ぼかし */
+}
+
+/* モーダル本体 */
+.popup-content {
+    background:white;
+    width:90%;
+    max-width:600px;
+    max-height:80%;
+    border-radius:12px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    box-shadow:0 4px 20px rgba(0,0,0,0.2);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    text-align: left;
+    line-height: 1.6; /* 読みやすく */
+    padding:0;
+}
+
+/* ヘッダー */
+.popup-content h2#popupTitle {
+    margin:0;
+    padding:16px;
+    font-size:1.5rem;
+    font-weight:600;
+    border-bottom:1px solid #ddd;
+    background-color:#f8f8f8;
+    position:sticky;
+    top:0;
+    z-index:10;
+    text-align: center;
+}
+
+/* 利用規約本文（スクロール可能） */
+.popup-text {
+    padding:16px; /* 修正：20px → 16px */
+    overflow-y:auto;
+    flex:1;
+    font-size:0.95rem;
+    color:#333;
+    line-height:1.7; /* 読みやすく */
+}
+
+/* 条ごとに1行空ける */
+.popup-text p {
+    margin: 0 0 1em 0;
+}
+
+/* スクロールバーカスタム（Webkitのみ） */
+.popup-text::-webkit-scrollbar {
+    width:8px;
+}
+.popup-text::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.2);
+    border-radius:4px;
+}
+.popup-text::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ボタン部分 */
+.popup-buttons {
+    display:flex;
+    justify-content:space-between;
+    padding:12px 16px;
+    border-top:1px solid #ddd;
+    background-color:#f8f8f8;
+}
+
+.popup-buttons button {
+    flex:1;
+    margin:0 4px;
+    padding:10px 0;
+    font-size:1rem;
+    font-weight:600;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+#agreePopup {
+    background-color:#f44e3f; /* メルカリ赤 */
+    color:white;
+}
+
+#agreePopup:hover {
+    background-color:#d73c2f;
+}
+
+#declinePopup {
+    background-color:#eee;
+    color:#333;
+}
+
+#declinePopup:hover {
+    background-color:#ddd;
+}
+
+/* モバイル対応 */
+@media (max-width:480px){
+    .popup-content {
+        width:95%;
+        max-height:85%;
+    }
+    .popup-buttons {
+        flex-direction: column;
+    }
+    .popup-buttons button {
+        margin:4px 0;
+        width:100%;
+        font-size:0.9rem;
+    }
+}

@@ -126,12 +126,36 @@ def get_transaction_info(id):
     if products is None:
         products={'出品数':0}
     
-    if evaluation:
+
+
+    if evaluation is not None:
+    # if evaluation:
+
+    # if evaluation:
+
+    # if evaluation
+    # if evaluation:
+    # if evaluation:
+    # if evaluation:
+
+
+    # if evaluation:
+    # if evaluation:
+
+    # if evaluation:
+
+    # if evaluation:
+
+
         evaluation['評価'] = round(float(evaluation['評価']))
     #小数点型にしてから四捨五入
     else:
         evaluation = {"評価":0}
+
+
+
     return evaluation,evaluationCount,follows,followers,products
+
 #商品データを取得 --------------------------------------------------
 def get_product_info(id):
 
@@ -187,7 +211,7 @@ def mypage():
         total+=int(sale['price'] if sale['price'] else 0)
     total=comma(total)
 
-    return render_template("mypage/mypage.html",image_path=user_info,
+    return render_template("mypage/mypage.html",
     evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,
     followers=followers,products=products,user_info=user_info ,user_id=user_id,total=total)
     
@@ -514,6 +538,10 @@ def todo():
 
     return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
+@mypage_bp.route('/personal_info')
+def personal_info():
+    # 個人情報編集ページの処理
+    return render_template('mypage/personal_info.html')
 
 
 #privacy_policy プライバシーポリシー表示---------------------------------------------------------------
@@ -616,7 +644,7 @@ def likes():
 
     cur.close()
     con.close()  
-    print(likes_list)
+    # print(likes_list)
 
 
     return render_template("mypage/likes.html" ,  user_id=user_id , likes_list=likes_list)

@@ -19,18 +19,23 @@
                 </div>
                 
                 <!-- 詳細とボタン -->
+                {% if recent %}
                 <div class="flex-1">
-                    <h3 class="font-bold mb-2">最近</h3>
+                    <h3 class="font-bold mb-2">最近の商品</h3>
+                    <h3>{{recent.name}}</h3>
                     <p class="text-gray-600 mb-6">{{recent.explanation}}</p>
                     <div class="flex flex-col gap-2">
-                        <button class="w-full md:w-40 px-6 py-2 border border-gray-300 rounded hover:bg-gray-50 transition cursor-pointer">
+                        <button class="w-full md:w-40 px-6 py-2 border border-gray-300 rounded hover:bg-gray-50 transition cursor-pointer" onclick="editProduct({{ recent.id }})">
                             編集する
                         </button>
-                        <button class="w-full md:w-40 px-6 py-2 border border-gray-300 rounded hover:bg-gray-50 transition cursor-pointer">
+                        <button class="w-full md:w-40 px-6 py-2 border border-gray-300 rounded hover:bg-gray-50 transition cursor-pointer" onclick="deleteProduct({{ recent.id }})">
                             削除する
                         </button>
                     </div>
                 </div>
+                {% else %}
+                <div class="mx-auto my-auto"><p>まだ下書きが存在していません</p></div>
+                {% endif %}
             </div>
         </div>
 
@@ -41,13 +46,13 @@
             <div class="bg-white rounded-lg shadow-sm p-3 product-item {% if loop.index > 4 %}hidden{% endif %}" data-index="{{ loop.index }}" >
                 <div class="w-[148px] h-[176px] bg-gray-500 shadow-sm overflow-hidden mb-3 flex align-center justify-center">
                     <img src="{{url_for('static',filename='img/productImg/'+  (product.img if product and product.img else 'default.png'))}}" 
-                        alt="商品画像" 
+                        alt="商品画像"
                         class="w-full object-cover">
                 </div>
-                <button class="w-full px-4 py-2 mb-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer" onclick="editProduct()">
+                <button class="w-full px-4 py-2 mb-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer" onclick="editProduct({{ product.id }})">
                     編集する
                 </button>
-                <button class="w-full px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer" onclick="deleteProduct()">
+                <button class="w-full px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer" onclick="deleteProduct({{ product.id }})">
                     削除する
                 </button>
             </div>
@@ -61,43 +66,6 @@
             </div>
             {% endif %}
 
-            <!-- サンプル 
-            <div class="bg-white rounded-lg shadow-sm p-3">
-                <img src="{{url_for("static",filename="img/image_22.png")}}" 
-                     alt="商品画像3" 
-                     class="w-full rounded mb-3">
-                <button class="w-full px-4 py-2 mb-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer">
-                    編集する
-                </button>
-                <button class="w-full px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer">
-                    削除する
-                </button>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-sm p-3">
-                <img src="{{url_for("static",filename="img/data_sample.png")}}" 
-                     alt="商品画像4" 
-                     class="w-full rounded mb-3">
-                <button class="w-full px-4 py-2 mb-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer">
-                    編集する
-                </button>
-                <button class="w-full px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer">
-                    削除する
-                </button>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-sm p-3">
-                <img src="{{url_for("static",filename="img/image51.png")}}" 
-                     alt="商品画像5" 
-                     class="w-full rounded mb-3">
-                <button class="w-full px-4 py-2 mb-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer">
-                    編集する
-                </button>
-                <button class="w-full px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition cursor-pointer">
-                    削除する
-                </button>
-            </div>
-        -->
         
         <!-- 下矢印アイコン 
         <div class="flex justify-center mb-8">
@@ -121,4 +89,5 @@
         </div>
     </div>
     <script src="{{url_for('static',filename='js/folder.js')}}"></script>
+    <script src="{{url_for('static',filename='js/seller_format.js')}}"></script>
 {% endblock %}
