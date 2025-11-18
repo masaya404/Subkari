@@ -13,7 +13,7 @@
                 <a href="{{ url_for('products.product_details_stub', product_id=item.id) }}" class="sales-item-link">
                     <div class="sales-item">
                         <p>
-                            <img src="{{ url_for('static', filename='img/' + item.image_path) }}" alt="商品画像" class="item-image">
+                            <img src="{{ url_for('static', filename='img/' + (item.image_path or 'default.png')) }}" alt="商品画像" class="item-image">
                         </p>
                         <div class="sales-info">
                             <div class="sales-name">{{ item.name }}</div>

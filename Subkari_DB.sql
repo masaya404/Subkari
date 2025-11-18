@@ -6,9 +6,6 @@ default character set utf8;
 
 use db_subkari
 
--- アラートとタイムテーブルがまだ
--- アラートはenum内が空
-
 
 
 -- テーブル作成 
@@ -299,7 +296,7 @@ CREATE TABLE `t_transaction` (
   `product_id` INT NOT NULL,
   `customer_id` INT NOT NULL,
   `seller_id` INT NOT NULL,
-  `status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','取引完了') NOT NULL,
+  `status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','返送待ち','返送中','取引完了') NOT NULL,
   `situation` ENUM('購入','レンタル') NOT NULL,
   `paymentMethod` ENUM('クレジットカード','PayPay','コンビニ払い') NOT NULL,
   `date` timestamp default current_timestamp ,
@@ -309,7 +306,9 @@ CREATE TABLE `t_transaction` (
   `shippingFlg` boolean NOT NULL,
   `receivedPhoto` VARCHAR(255),
   `receivedFlg` boolean NOT NULL,
-  `rentalPeriod` DATETIME,
+  `cleaningPhoto` VARCHAR(255),
+  `cleaningFlg` boolean NOT NULL,
+  `rentalPeriod` INT,
   `creditcard_id` INT ,
 
   PRIMARY KEY (`id`),

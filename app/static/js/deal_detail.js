@@ -51,8 +51,9 @@ const rentalStatusMap = {
   '到着': 4,
   'レンタル中': 5,
   'クリーニング期間': 6,
-  '発送待ち': 7,
-  '取引完了': 8
+  '返送待ち': 7,
+  '返送中':8,
+  '取引完了': 9
 };
 
 const purchaseStatusMap = {
@@ -60,7 +61,7 @@ const purchaseStatusMap = {
   '発送待ち': 2,
   '配送中': 3,
   '到着': 4,
-  '取引完了': 5
+  '取引完了': 9
 };
 const statusMap = {
   '支払い待ち': 1,
@@ -69,12 +70,13 @@ const statusMap = {
   '到着': 4,
   'レンタル中': 5,
   'クリーニング期間': 6,
-  '発送待ち': 7,
-  '取引完了': 8
+  '返送待ち': 7,
+  '返送中':8,
+  '取引完了': 9
 };
 
 const rentalHiddenItems = []; // Rental時にすべてのステップを表示
-const purchaseHiddenItems = [5, 6, 7]; // Purchase時に5,6,7のステップを隠す
+const purchaseHiddenItems = [5, 6, 7,8]; // Purchase時に5,6,7のステップを隠す
 
 function updateTimeline(status,isPurchase=false) {
   //商品のレンタル購入を判断し、ステータスの項目を変える
@@ -121,9 +123,21 @@ function updateTimeline(status,isPurchase=false) {
     }
   }
 }
+/////////////////////////////画像アップロードブロック//////////////////////////////////
+console.log("image upload block");
+
+const status_data = document.getElementById("status").textContent;
+console.log(status_data);
 
 /////////////////////////////評価////////////////////////////////////////
 console.log("evaluation function loaded");
+
+const evaluation_block = $("#productEvaluation");
+if (status_data != "取引完了"){
+    evaluation_block.hide();
+}else{
+    evaluation_block.show();
+}
 
 let selectedRating = 4;
 let isEvaluationSubmitted = false; 

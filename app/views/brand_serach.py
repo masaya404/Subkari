@@ -26,9 +26,20 @@ def TRAVASTOKYO():
     cur = con.cursor(dictionary=True)
 
     cur.execute("""
-        select brand_id
-        from m_products
-        where brand_id = 1
+                
+        SELECT p.id AS product_id, p.name AS product_name, p.rentalPrice, p.`for`,
+                
+        (
+        SELECT i.img
+        FROM m_productImg AS i
+        WHERE i.product_id = p.id
+        ORDER BY i.img ASC
+        LIMIT 1
+        ) AS img
+                
+        FROM m_product AS p
+        WHERE p.brand_id = 1;
+                
     """)
 
     rows = cur.fetchall()

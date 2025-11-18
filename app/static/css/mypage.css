@@ -1,9 +1,8 @@
 /* --- セクション切り替え --- */
 .mypage_main {
     max-width: 1280px;
-    padding-top:50px;
+    padding-top: 50px;
     padding-bottom: 200px;
-    /* margin-top: 20px; */
     margin-bottom: 50px;
     margin-left: auto;
     margin-right: auto;
@@ -11,13 +10,14 @@
     grid-template-columns: 280px 1fr;
     gap: 40px;
     align-items: start;
-    overflow: hidden; /*全体でのスクロールを防止*/
-    min-height: calc(100vh - 80px); /* ← 固定heightをmin-heightに変更！ */}
+    
+    /* コンテンツが短い場合の画面の途切れを防ぐ最小の高さを設定 */
+    /* min-height: calc(100vh - 80px);  */
+}
 
+/* 右側コンテンツ (section) から、高さ固定と内部スクロールを完全に排除 */
 .mypage_main > section:not(.nav) {
     display: none;
-    height: calc(100vh - 80px);
-    overflow-y: auto;
     padding-right: 16px;
     box-sizing: border-box;
 }
@@ -30,7 +30,6 @@ h2{
     font-size: 24px;
     font-weight: 500;
     margin: 30px 40px;
-    /* border-bottom: 2px solid #f0f0f0; */
 }
 
 /* --- --------サイドナビ ----------------------- */
@@ -38,7 +37,8 @@ h2{
     position: sticky;
     top: 80px;
     align-self: start;
-    height: calc(100vh - 80px);
+    /* サイドナビは画面高さを超えたら内部スクロールを許可 */
+    max-height: calc(100vh - 80px); 
     border-right: #727171 2px solid;
     overflow-y: auto;
     scrollbar-width: thin;
@@ -83,9 +83,6 @@ h2{
 .sec{
     min-width: 1000px; /* 任意の横幅を確保 */
 }
-
-
-
 
 /* ----------プロフィールカード -----------------------*/
 #profile{
@@ -282,7 +279,7 @@ h2{
             max-width: 1200px;
             margin: 0 auto;
             background-color: #fff;
-            min-height: 100vh;
+            /* height/min-height の設定を削除済み */
         }
 
         /* サイドバー */
@@ -345,6 +342,7 @@ h2{
         .main-content {
             flex: 1;
             padding: 40px 60px;
+            /* 修正点: 高さ制限を削除し、コンテンツの量に合わせて伸びるようにする */
         }
 
         .page-heading {
@@ -530,7 +528,7 @@ h2{
             flex: 1;
             background: #fff;
             padding: 40px;
-            min-height: 500px;
+            /* 修正点: 高さ制限を削除済みを維持 */
 }
 
 .page-title {
@@ -544,7 +542,7 @@ h2{
 
 .logout-section {
     margin-top: 40px;
-    width: 100%; /* ← 全幅に */
+    width: 100%;
 }
 
 .section-title {
@@ -561,8 +559,8 @@ h2{
     padding: 50px 40px;
     text-align: center;
     background: #fafafa;
-    width: 100%; /* ← ここを変更 */
-    max-width: none; /* ← 最大幅制限を解除 */
+    width: 100%;
+    max-width: none;
 }
 
 .logout-message {
@@ -623,5 +621,3 @@ h2{
         gap: 30px;
     }
 }
-
-

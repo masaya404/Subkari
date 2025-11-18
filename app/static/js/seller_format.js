@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sessionStorage.setItem("rental", productData.rentalFlg ? "true" : "false");
         sessionStorage.setItem("purchase", productData.purchaseFlg ? "true" : "false");
         sessionStorage.setItem("rentalPrice", productData.rentalPrice || '');
+        sessionStorage.setItem("rentalPeriod", productData.rentalPeriod || '');
         sessionStorage.setItem("purchasePrice", productData.purchasePrice || '');
         sessionStorage.setItem("smoking", productData.smokingFlg ? "yes" : "no");
         sessionStorage.setItem("color", productData.color);
@@ -248,19 +249,24 @@ function loadFromSessionStorage() {
     // レンタル価格
     const rentalPrice = sessionStorage.getItem("rentalPrice");
     const rentalPeriod = sessionStorage.getItem("rentalPeriod");
-    if (rentalPrice) {
+    if (rental) {
         if (!document.getElementById("rentalPrice")) {
             createRentalPriceSection(); // 動的に生成
+            
         }
         document.getElementById("rentalPrice").value = rentalPrice;
-    }
-    if (rentalPeriod) {
+        
         if (!document.getElementById("rentalPeriod")) {
             createRentalPeriod();// 動的に生成
-           
+            console.log("createRentalPeriod called");
         }
-        document.getElementById("rentalPeriod").value = rentalPeriod;
-    } 
+        const element = document.getElementById("rentalPeriod");
+        console.log("element found:", !!element);
+        console.log("setting value to:", rentalPeriod);
+        element.value = rentalPeriod;
+        console.log("actual value now:", element.value);
+    }
+
     // 購入価格
     const purchasePrice = sessionStorage.getItem("purchasePrice");
     if (purchasePrice) {

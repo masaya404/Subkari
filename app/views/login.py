@@ -77,7 +77,7 @@ def login_auth():
 @login_bp.route('/login/logout',methods=['GET'])
 def logout():
     session.pop('user_id', None)
-    return render_template('top/guest_index.html')
+    return redirect(url_for('top.guest_index'))
 
 #Register-------------------------------------------------------------------------------------------------------------------------------------------------------------
 # @login_bp.route("/register_user", methods=["GET"])
@@ -121,9 +121,6 @@ def show_terms():
 @login_bp.route('/privacy_policy',methods=['GET'])
 def privacy_policy():
     return render_template('login/privacy.html')
-
-
-
 
 
 #Register確認----------------------------------------------------------------------------------------------------------------------------------------------------------
