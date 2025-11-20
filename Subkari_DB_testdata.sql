@@ -232,7 +232,8 @@ INSERT INTO `m_productImg` (`product_id`, `img`) VALUES
 (20, 'image_sample_06.png'),
 (20, 'image_sample_09.png'),
 (20, 'image_sample_04.png'),
-(20, 'image_sample_08.png'),
+(20, 'image_sample_08.png')
+;
 
 
 -- 洗濯表示テーブルのテストデータ
