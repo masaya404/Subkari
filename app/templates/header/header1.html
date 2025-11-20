@@ -27,9 +27,30 @@
                 <a href="{{ url_for('login.login') }}" class="">
                     <span>ログイン</span>
                 </a>
-                <a href="#" class="icon-item">
+                <button popovertarget="hamburger">
                     <img src="{{ url_for('static', filename='img/hamburger.png') }}" class="icon"></img>
-                </a>
+                </button>
+                <div popover id="hamburger">
+                    <div>
+                        <p><span>商品を探す</span></p>
+                        <p>ブランド/カテゴリから探す</p>
+                        <p>高評価の商品</p>
+                        <p>新着の商品</p>
+                        <p>喫煙者の出品</p>
+                    </div>
+                    <div>
+                        <p><span>ヘルプ・その他</span></p>
+                        <p>初めての方へ</p>
+                        <p>ヘルプセンター</p>
+                        <p>よくある質問</p>
+                        <p>お問い合わせ</p>
+                    </div>
+                </div>
+
+
+                <!-- <a href="#" class="icon-item">
+                    <img src="{{ url_for('static', filename='img/hamburger.png') }}" class="icon"></img>
+                </a> -->
             </div>
             {% else %}
             <div class="header-icons">

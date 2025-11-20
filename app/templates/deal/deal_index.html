@@ -206,12 +206,20 @@
                     <p class="text-sm text-gray-600 hidden"><strong>交易ID:</strong> <span id="detailTransactionId">-</span></p>
 
                     <div class="flex flex-col justify-center items-center">
-                        <a id="dealDetailLink" href="#">
-                        <button class="w-[192px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition mb-3 cursor-pointer">
-                            取引詳細へ
-                        </button>
-                        </a>
-
+                        <div class="tab-button active" id="dealDetailLinkButton">
+                            <a id="dealDetailLink" href="#">
+                            <button class="w-[192px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition mb-3 cursor-pointer">
+                                取引詳細へ
+                            </button>
+                            </a>
+                        </div>
+                        <div class="tab-button" id="dealDetailSellerLinkButton">
+                            <a id="dealDetailSellerLink" href="#">
+                            <button class="w-[192px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition mb-3 cursor-pointer">
+                                取引詳細へ
+                            </button>
+                            </a>
+                        </div>
                         <button class="w-[192px] bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition cursor-pointer" id="rentalBuy" onclick="rentalBuy(currentProductId)">
                             レンタル中購入
                         </button>
