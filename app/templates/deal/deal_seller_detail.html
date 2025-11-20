@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{url_for('static',filename="css/popup.css")}}">
     <div class="max-w-2xl mx-auto px-4 py-8">
         <!-- ページタイトル -->
-        <h1 class="text-3xl font-bold text-center mb-10">取引詳細</h1>
+        <h1 class="text-3xl font-bold text-center mb-10">出品者側　取引詳細</h1>
 
         <!-- 商品情報セクション -->
         <div class="border-b border-gray-300 pb-8 mb-8">
@@ -27,9 +27,27 @@
         <!-- 取引情報テーブル -->
             <div class="flex flex-col gap-[10px] flex-1">
                     <input type="hidden" id="situation" value="{{transaction.situation}}">
-                    
                     <div class="flex flex-row gap-10 items-center">
-                        <div class="w-[100px]">
+                        <div class="w-[80px]">
+                            <p class="text-gray-600 text-base">金額</p>
+                        </div>
+                        <p class="text-lg font-semibold"> {%if transaction.purchasePrice %}{{transaction.purchasePrice}}{%else%}{{transaction.rentalPrice}}{%endif%}</p>
+                    </div>
+                    <div class="flex flex-row gap-10 items-center">
+                        <div class="w-[80px]">
+                            <p class="text-gray-600 text-base">販売手数料</p>
+                        </div>
+                        <p class="text-lg font-semibold">{{transaction.charge}}</p>
+                    </div>
+            
+                    <div class="flex flex-row gap-10 items-center">
+                        <div class="w-[80px]">
+                            <p class="text-gray-600 text-base">販売利益</p>
+                        </div>
+                        <p class="text-lg font-semibold">{{transaction.benefit}}</p>
+                    </div>
+                    <div class="flex flex-row gap-10 items-center">
+                        <div class="w-[80px]">
                             <p class="text-gray-600 text-base">取引開始日時</p>
                         </div>
                         <p class="text-lg font-semibold">{{transaction.date}}</p>
@@ -37,7 +55,7 @@
             
             
                     <div class="flex flex-row gap-10 items-center">
-                        <div class="w-[100px]">
+                        <div class="w-[80px]">
                             <p class="text-gray-600 text-base">配送の方法</p>
                         </div>
                         <p class="text-lg font-semibold">普通郵便</p>

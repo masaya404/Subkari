@@ -15,3 +15,11 @@
     background-color: white;
     color:#7A7A7A;
 }
+
+.tab-button.active{
+    display:block;
+}
+
+.tab-button{
+    display:none;
+}

@@ -85,7 +85,7 @@ def deal():
         
         
     return render_template('deal/deal_index.html', bought_products = bought_products, products = products, user_id = user_id)
-# 取引一覧画面表示 ----------------------------------------------------------------------------------------------------------------------------------------------------------
+# 取引商品詳細の表示（購入側） ----------------------------------------------------------------------------------------------------------------------------------------------------------
 @deal_bp.route('/deal/<int:transaction_id>', methods=['GET','POST'])
 def deal_list(transaction_id):
     # euser検証成功
@@ -156,6 +156,78 @@ def deal_list(transaction_id):
     print(transaction)
     
     return render_template('deal/deal_detail.html', transaction = transaction,comments = comments, user_id = user_id)
+
+# 取引商品詳細の表示（出品側） ----------------------------------------------------------------------------------------------------------------------------------------------------------
+@deal_bp.route('/deal_seller/<int:transaction_id>', methods=['GET','POST'])
+def deal_list_seller(transaction_id):
+       # euser検証成功
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+    #取引資料の取得-------------------------------------------------------------
+    # DB接続
+    con = connect_db()
+    cur = con.cursor(dictionary=True)  
+    #  SQL 文章用意
+    sql = """
+        SELECT 
+            t.*,
+            p.*,
+            m.img
+        FROM 
+            t_transaction AS t
+        LEFT JOIN 
+            m_product AS p
+        ON
+            t.product_id = p.id
+        LEFT JOIN 
+            m_productimg AS m
+        ON
+            t.product_id = m.product_id
+        WHERE 
+            t.id = %s
+        LIMIT 1
+        ;
+        """
+    cur.execute(sql, (transaction_id,))
+    transaction = cur.fetchone()
+    
+    if not transaction:
+        return redirect(url_for('deal.deal'))
+    
+    session['transaction'] = transaction
+    
+    # commentsの取得
+    product_id = transaction['product_id']
+    sql = """
+        SELECT content, createdDate, account_id
+        FROM t_comments
+        WHERE product_id = %s
+        ORDER BY createdDate DESC
+    """
+    cur.execute(sql, (product_id,))
+    comments = cur.fetchall()
+    cur.close()
+    con.close()   
+    
+    if transaction['situation'] == '購入':
+        charge = int(transaction.get('purchasePrice') or 0) * 0.1
+        benefit = int(transaction['purchasePrice']) - charge
+        transaction['charge'] = charge
+        transaction['benefit'] = benefit
+        
+    if transaction['situation'] == 'レンタル':
+        charge = int(transaction['rentalPrice'])*0.1
+        benefit = int(transaction['rentalPrice']) - charge
+        transaction['charge'] = charge
+        transaction['benefit'] = benefit
+        
+    print(transaction)
+    
+    return render_template('deal/deal_seller_detail.html', transaction = transaction,comments = comments, user_id = user_id)
 
 # 出品者資料の取得--------------------------------------------------------------------------------------------------------------------------------------------------------------
 @deal_bp.route('/seller_data/get',methods=['GET'])
@@ -402,48 +474,6 @@ def add_comment():
         print(f'Error adding comment: {str(e)}')
         return jsonify({'success': False, 'message': str(e)}), 500
 
-
-# @deal_bp.route('/comment', methods=['POST'])
-# def deal_comment():
-#     comment = request.form.get('comment')
-#     product_id = request.form.get('product_id')
-#     transaction = session.get('transaction')
-#     print(product_id)
-#     if 'user_id' not in session:
-#         return jsonify({'success': False, 'message': 'ログインが必要です'}), 401
-    
-#     user_id = session.get('user_id')
-    
-#     if not comment and not product_id:
-#         return jsonify({'success': False, 'message': 'コメントと商品IDが必要です'}), 400
-    
-#     try:
-#         con = connect_db()
-#         cursor = con.cursor()
-        
-#         # DBに登録
-#         sql = """
-#             INSERT INTO t_comments (product_id, account_id, content, createdDate)
-#             VALUES (%s, %s, %s, NOW())
-#         """
-#         cursor.execute(sql, (product_id, user_id, comment))
-#         con.commit()
-        
-#         cursor.close()
-#         con.close()
-        
-#         return jsonify({
-#             'success': True,
-#             'message': 'メッセージを送信しました',
-#             'transactin':transaction
-#         }), 200
-    
-#     except Exception as e:
-#         print(f'エラー: {str(e)}')
-#         return jsonify({
-#             'success': False,
-#             'message': f'エラー: {str(e)}'
-#         }), 500
 #DB設定------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def connect_db():
     con=mysql.connector.connect(
