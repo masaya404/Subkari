@@ -1074,7 +1074,7 @@ def transaction_complete():
 
 
     # print("product_id:",product_id)
-    # print("payment_method:",payment_method)
+    print("payment_method:",payment_method)
     # print("addressId:",addressId)
     # print("delivery_location:",delivery_location)
     # print("creditcard_id:",creditcard_id)
@@ -1095,7 +1095,7 @@ def transaction_complete():
             return render_template('error.html'), 404 # **ここで関数を終了させる**
 
     #payment_methodがクレジットならpayment_methodを発送待ちにする
-    if payment_method == "クレジット":
+    if payment_method == "クレジットカード":
         status = "発送待ち"
         paymentDeadline = None
         creditcard_id = int(creditcard_id)

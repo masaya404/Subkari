@@ -234,7 +234,7 @@ def editProfile():
     productName,productImg=get_product_info(user_id)
 
 
-    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_info=user_info)
+    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_info=user_info,user_id=user_id)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])

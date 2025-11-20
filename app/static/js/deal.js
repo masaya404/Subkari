@@ -28,13 +28,16 @@ startTimer();
  function switchTab(tabIndex) {
     const tabs = document.querySelectorAll('.tab');
     const contents = document.querySelectorAll('.tab-content');
-    
+    const buttons = document.querySelectorAll('.tab-button');
     tabs.forEach((tab, index) => {
         tab.classList.toggle('active', index === tabIndex);
     });
     
     contents.forEach((content, index) => {
         content.classList.toggle('active', index === tabIndex);
+    });
+    buttons.forEach((button,index) =>{
+        button.classList.toggle('active',index === tabIndex);
     });
 }
 
@@ -86,8 +89,14 @@ document.querySelectorAll('.product-item').forEach(item => {
     const transactionId = productData.transaction_id || productData.id;
     document.getElementById('detailTransactionId').textContent = transactionId;
 
+    const activeCheck = $("button.active").text();
+    console.log(activeCheck);
+    
     const dealDetailUrl = `/deal/deal/${transactionId}`;
     document.getElementById('dealDetailLink').href = dealDetailUrl;
+
+    const dealDetailSellerUrl = `/deal/deal_seller/${transactionId}`;
+    document.getElementById('dealDetailSellerLink').href = dealDetailSellerUrl;
 
     console.log("start_date:",productData.date);
     const date = new Date(productData.date);
@@ -132,8 +141,9 @@ const rentalStatusMap = {
   '到着': 4,
   'レンタル中': 5,
   'クリーニング期間': 6,
-  '発送待ち': 7,
-  '取引完了': 8
+  '返送待ち': 7,
+  '返送中':8,
+  '取引完了': 9
 };
 
 const purchaseStatusMap = {
@@ -141,7 +151,18 @@ const purchaseStatusMap = {
   '発送待ち': 2,
   '配送中': 3,
   '到着': 4,
-  '取引完了': 5
+  '取引完了': 9
+};
+const statusMap = {
+  '支払い待ち': 1,
+  '発送待ち': 2,
+  '配送中': 3,
+  '到着': 4,
+  'レンタル中': 5,
+  'クリーニング期間': 6,
+  '返送待ち': 7,
+  '返送中':8,
+  '取引完了': 9
 };
 
 const rentalHiddenItems = []; // Rental時にすべてのステップを表示

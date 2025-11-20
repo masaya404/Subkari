@@ -51,8 +51,9 @@ const rentalStatusMap = {
   '到着': 4,
   'レンタル中': 5,
   'クリーニング期間': 6,
-  '発送待ち': 7,
-  '取引完了': 8
+  '返送待ち': 7,
+  '返送中':8,
+  '取引完了': 9
 };
 
 const purchaseStatusMap = {
@@ -60,7 +61,7 @@ const purchaseStatusMap = {
   '発送待ち': 2,
   '配送中': 3,
   '到着': 4,
-  '取引完了': 5
+  '取引完了': 9
 };
 const statusMap = {
   '支払い待ち': 1,
@@ -69,12 +70,13 @@ const statusMap = {
   '到着': 4,
   'レンタル中': 5,
   'クリーニング期間': 6,
-  '発送待ち': 7,
-  '取引完了': 8
+  '返送待ち': 7,
+  '返送中':8,
+  '取引完了': 9
 };
 
 const rentalHiddenItems = []; // Rental時にすべてのステップを表示
-const purchaseHiddenItems = [5, 6, 7]; // Purchase時に5,6,7のステップを隠す
+const purchaseHiddenItems = [5, 6, 7,8]; // Purchase時に5,6,7のステップを隠す
 
 function updateTimeline(status,isPurchase=false) {
   //商品のレンタル購入を判断し、ステータスの項目を変える
@@ -121,9 +123,60 @@ function updateTimeline(status,isPurchase=false) {
     }
   }
 }
+/////////////////////////////画像アップロードブロック//////////////////////////////////
+console.log("image upload block");
+const newImgUP = `
+            <div class="max-w-2xl mx-auto mb-[100px]">
+                <div class="bg-green-50 border-2 border-green-300 rounded-lg p-12 text-center">
+                    <div class="text-green-600 text-5xl mb-4">✓</div>
+                    <h2 class="text-2xl font-bold text-green-700 mb-4">アップロード成功</h2>
+                    <p class="text-gray-700 mb-6">ファイルが正常にアップロードされました。</p>
+                    
+                    {% if image_url %}
+                    <div class="mb-6">
+                        <img src="{{ image_url }}" alt="アップロード画像" class="w-48 h-48 object-cover rounded-lg mx-auto">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="space-y-3">
+                        <a href="{{ url_for('deal.deal') }}" class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
+                            一覧に戻る
+                        </a>
+                        <br>
+                        <a href="{{ url_for('deal.deal_list_imageUpload') }}" class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
+                            別のファイルをアップロード
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {%else%}
+            <form action="{{url_for('deal.deal_list_imageUpload')}}" method="POST" enctype="multipart/form-data" class="mb-[100px]">
+                <!-- ファイル選択エリア -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8">
+                    <div class="text-center">
+                        <input type="file" name="img" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-semibold cursor-pointer" required>                  
+                    </div>
+                </div>
+
+            <!-- 送信ボタン -->     
+                <div class="flex justify-center">
+                    <input type="submit" VALUE="送信する" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-12 py-3 rounded font-semibold cursor-pointer">
+                </div>
+            </form>
+           `
+$("#image-container").append();
+const status_data = document.getElementById("status").textContent;
+console.log(status_data);
 
 /////////////////////////////評価////////////////////////////////////////
 console.log("evaluation function loaded");
+
+const evaluation_block = $("#productEvaluation");
+if (status_data != "取引完了"){
+    evaluation_block.hide();
+}else{
+    evaluation_block.show();
+}
 
 let selectedRating = 4;
 let isEvaluationSubmitted = false; 
