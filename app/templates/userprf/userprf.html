@@ -6,9 +6,14 @@
 
 {% block content %}
 <link rel="stylesheet" href="../../static/css/userprf.css">
-<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/userprf.css') }}"> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/userprf.css') }}">
+<style>
+    main{
+        margin-top: 190px;
+    }
 
-    <main>
+</style>
+    <main >
         <h1></h1>
         <div class="profile-header">
             <img src="{{url_for('static' , filename='img/'+user_info.profileImage)}}" alt="プロフィール画像" class="profile-image">
@@ -32,11 +37,11 @@
                         <span class="stat-label">出品数</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">{{follows.フォロー}}</span>
+                        <span class="stat-number">{{follows.フォロー数}}</span>
                         <span class="stat-label">フォロー</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">{{followers.フォロワー}}</span>
+                        <span class="stat-number">{{followers.フォロワー数}}</span>
                         <span class="stat-label">フォロワー</span>
                     </div>
                 </div>
@@ -72,23 +77,28 @@
         </div>
 
         <!-- 商品グリッド -->
-        <form action="{{url_for('products.product_details_stub')}}" method="post"> <!--商品詳細へ遷移-->
-            <div class="products-grid">
+        <div class="products-grid">
+                {% if productName %}
                 {% for name in productName %}
-                <div class="product-card">
-                    <button><img src="{{productImg[loop.index0]['img']}}" alt="{{name.name}}の画像" class="product-image"></button>
-                    <div class="product-name" name="product_name">{{name.name}}</div> 
+                <form action="{{ url_for('products.product_details_stub', product_id=productId[loop.index0]["id"]) }}" method="get"> <!--商品詳細へ遷移-->
+
+      
+                    <button>
+                        {% if productImg %}
+                        <img src="{{url_for('static',filename='img/productImg/'+productImg[loop.index0]["img"])}}" alt="{{name.name}}の画像" class="product-image"></button>
+                        {% endif %}
+                    <div class="product-name" name="product_name">{{productName[loop.index0]["name"]}}</div>
+                    
                 </div>
                 {% endfor %}
+                {% else %}
+                <p>まだ出品していません</p>
+                {% endif %}
             </div>
         </form>
 
-        <!-- もっと見るボタン -->
-        <div class="load-more">
-            <button class="load-more-btn">もっと見る</button>
-        </div>
-
-        <!-- ポップアップ（モーダル） -->
+<!-- 
+        ポップアップ（モーダル） 
         <div id="modalOverlay" class="modal-overlay" style="display: none;">
             <div class="modal-box">
                 <h2 id="modalTitle">確認</h2>
@@ -98,7 +108,7 @@
                     <button id="confirmBtn" class="confirm-btn">OK</button>
                 </div>
             </div>
-        </div>
+        </div> -->
     </main>
 
 
