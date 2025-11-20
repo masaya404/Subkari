@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-    プロフィール編集
+    フォローリスト表示
 {% endblock %}
 
 {% block content %}
@@ -8,22 +8,31 @@
 <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/followList.css') }}"> -->
 
 <main>
-    <h1>フォロー一覧</h1>
+    <h1>フォローリスト</h1>
     <div class="sales-list">
-        {% if sales_list %}
-            {% for item in sales_list %}
-                <form action="{{url_for('mypage.transaction_detail')}}">
-                    <div class="sales-item" >
-                        <div class="sales-info">
-                            <div class="sales-type">{{ item.type }}</div>
-                            <div class="sales-date">{{ item.date }}</div>
-                        </div>
-                        <div class="sales-amount">¥{{ "{:,}".format(item.amount) }}</div>
+        {% if follow_list %}
+            {% for user in follow_list %}
+            <form action="{{ url_for('userprf.userprf') }}" method="post">
+                <input type="hidden" name="id" value="{{ user.id }}">
+                <button type="submit" class="sales-item">
+                    <div class="user-info">
+                        <img src="{{ url_for('static', filename='img/'+user.アイコン) }}" class="profile-image">
+                        <div class="profile-name">{{user.ユーザー名}}</div>
                     </div>
-                </form>
+                    <div class="profile-rating">
+                        <span class="stars">
+                            {% for i in range(user.評価) %}★{% endfor %}
+                            {% for i in range(5-user.評価) %}☆{% endfor %}
+                        </span>
+                        <div class="rating-count">{{user.評価件数}}</div>
+                    </div>
+                </button>
+            </form>
+
             {% endfor %}
         {% else %}
-            <p>フォロー一覧まだありません。</p>
+            <p>まだフォローしていません</p>
         {% endif %}
     </div>
 </main>
+{% endblock %}

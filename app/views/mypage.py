@@ -19,6 +19,10 @@ def connect_db():
 
 #価格をカンマ区切りにして返す ----------------------------------------------------
 def comma(num):
+    #0が来た場合の処理
+    if num==0:
+        return str(num)
+    
     string1=""
     string2=""
     if type(num)=="string":
@@ -129,22 +133,6 @@ def get_transaction_info(id):
 
 
     if evaluation is not None:
-    # if evaluation:
-
-    # if evaluation:
-
-    # if evaluation
-    # if evaluation:
-    # if evaluation:
-    # if evaluation:
-
-
-    # if evaluation:
-    # if evaluation:
-
-    # if evaluation:
-
-    # if evaluation:
 
 
         evaluation['評価'] = round(float(evaluation['評価']))
@@ -649,9 +637,54 @@ def likes():
 
     return render_template("mypage/likes.html" ,  user_id=user_id , likes_list=likes_list)
 #------------------------------------------------------------------------------------------------------------------
-# htmlの画面遷移url_for
-# {{ url_for('モジュール名.関数名') }}
-# {{ url_for('seller.seller_format') }}
-# {{ url_for('mypage.mypage') }}
-# {{ url_for('mypage.userprf') }}
-# >>>>>>> 3380b182aa575165ef27f84ca612b9c047078a8d
+
+#フォローリスト ---------------------------------------------------------------------------------------------------------
+@mypage_bp.route("/follow")
+def follow():
+
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    follow_list=[]
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+
+    #フォローしているアカウントのid、アカウント名、評価、評価件数を取得
+    sql='''
+    SELECT 
+        a.id as id, a.username as ユーザー名,a.profileImage as アイコン,
+        (
+            SELECT AVG(e.score)
+            FROM t_evaluation e
+            WHERE e.recipient_id = a.id
+        ) AS 評価,
+        (
+            SELECT count(e.score)
+            FROM t_evaluation e
+            WHERE e.recipient_id = a.id
+        ) as 評価件数
+    FROM m_account a
+    WHERE a.id IN (
+        SELECT target_id
+        FROM t_connection 
+        WHERE type='フォロー'
+        AND execution_id=%s
+    );
+        '''
+    cur.execute(sql,(user_id,))
+    follow_list=cur.fetchall()
+    #評価を整数値に変換
+    for f in follow_list:
+        if f['評価'] is not None:
+            f['評価']=int(f['評価'])
+        else:
+            f['評価']=0   # 評価が無い人は0
+            f['評価件数']=0
+
+    cur.close()
+    con.close()
+    return render_template("mypage/followList.html",follow_list=follow_list,user_id=user_id)
+
