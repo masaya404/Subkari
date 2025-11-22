@@ -137,7 +137,7 @@ window.addEventListener('DOMContentLoaded', function() {
 const rentalStatusMap = {
   '支払い待ち': 1,
   '発送待ち': 2,
-  '配送中': 3,
+  '配達中': 3,
   '到着': 4,
   'レンタル中': 5,
   'クリーニング期間': 6,
@@ -149,14 +149,14 @@ const rentalStatusMap = {
 const purchaseStatusMap = {
   '支払い待ち': 1,
   '発送待ち': 2,
-  '配送中': 3,
+  '配達中': 3,
   '到着': 4,
   '取引完了': 9
 };
 const statusMap = {
   '支払い待ち': 1,
   '発送待ち': 2,
-  '配送中': 3,
+  '配達中': 3,
   '到着': 4,
   'レンタル中': 5,
   'クリーニング期間': 6,
@@ -166,7 +166,7 @@ const statusMap = {
 };
 
 const rentalHiddenItems = []; // Rental時にすべてのステップを表示
-const purchaseHiddenItems = [5, 6, 7]; // Purchase時に5,6,7のステップを隠す
+const purchaseHiddenItems = [5, 6, 7,8]; // Purchase時に5,6,7のステップを隠す
 
 function updateTimeline(status,isPurchase=false) {
   //商品のレンタル購入を判断し、ステータスの項目を変える
@@ -176,7 +176,7 @@ function updateTimeline(status,isPurchase=false) {
   const step = statusMap[status] || 0;
   
   // 進捗状況
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 9; i++) {
     const timelineItem = document.querySelector(`.timeline-item-${i}`);
     // const circles = document.querySelectorAll(`.timeline-item-${i} .timeline-circle`);
     if (!timelineItem) continue;

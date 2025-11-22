@@ -11,43 +11,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         console.log(situation);
         console.log(isPurchase);
-        $("#cleaningTimer").toggle(status == "クリーニング期間");
         updateTimeline(status,isPurchase);
         loadComments();
         loadSeller();
     });
 
-//Timer
-function startTimer() {
-    let hours = 12, minutes = 59, seconds = 59;
-    const timerEl = document.getElementById('timer');
-
-    setInterval(() => {
-        if (seconds > 0) {
-            seconds--;
-        } else if (minutes > 0) {
-            minutes--;
-            seconds = 59;
-        } else if (hours > 0) {
-            hours--;
-            minutes = 59;
-            seconds = 59;
-        }
-
-        const h = String(hours).padStart(2, '0');
-        const m = String(minutes).padStart(2, '0');
-        const s = String(seconds).padStart(2, '0');
-        timerEl.textContent = `${h}:${m}:${s}`;
-    }, 1000);
-}
-
-startTimer();
-
 //medium area
 const rentalStatusMap = {
   '支払い待ち': 1,
   '発送待ち': 2,
-  '配送中': 3,
+  '配達中': 3,
   '到着': 4,
   'レンタル中': 5,
   'クリーニング期間': 6,
@@ -59,14 +32,14 @@ const rentalStatusMap = {
 const purchaseStatusMap = {
   '支払い待ち': 1,
   '発送待ち': 2,
-  '配送中': 3,
+  '配達中': 3,
   '到着': 4,
   '取引完了': 9
 };
 const statusMap = {
   '支払い待ち': 1,
   '発送待ち': 2,
-  '配送中': 3,
+  '配達中': 3,
   '到着': 4,
   'レンタル中': 5,
   'クリーニング期間': 6,
@@ -76,7 +49,7 @@ const statusMap = {
 };
 
 const rentalHiddenItems = []; // Rental時にすべてのステップを表示
-const purchaseHiddenItems = [5, 6, 7,8]; // Purchase時に5,6,7のステップを隠す
+const purchaseHiddenItems = [5, 6, 7,8]; // Purchase時に5,6,7,8のステップを隠す
 
 function updateTimeline(status,isPurchase=false) {
   //商品のレンタル購入を判断し、ステータスの項目を変える
@@ -86,7 +59,7 @@ function updateTimeline(status,isPurchase=false) {
   const step = statusMap[status] || 0;
   
   // 進捗状況
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 9; i++) {
     const timelineItem = document.querySelector(`.timeline-item-${i}`);
     // const circles = document.querySelectorAll(`.timeline-item-${i} .timeline-circle`);
     if (!timelineItem) continue;
@@ -122,49 +95,9 @@ function updateTimeline(status,isPurchase=false) {
       });
     }
   }
-}
-/////////////////////////////画像アップロードブロック//////////////////////////////////
-console.log("image upload block");
-const newImgUP = `
-            <div class="max-w-2xl mx-auto mb-[100px]">
-                <div class="bg-green-50 border-2 border-green-300 rounded-lg p-12 text-center">
-                    <div class="text-green-600 text-5xl mb-4">✓</div>
-                    <h2 class="text-2xl font-bold text-green-700 mb-4">アップロード成功</h2>
-                    <p class="text-gray-700 mb-6">ファイルが正常にアップロードされました。</p>
-                    
-                    {% if image_url %}
-                    <div class="mb-6">
-                        <img src="{{ image_url }}" alt="アップロード画像" class="w-48 h-48 object-cover rounded-lg mx-auto">
-                    </div>
-                    {% endif %}
-                    
-                    <div class="space-y-3">
-                        <a href="{{ url_for('deal.deal') }}" class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
-                            一覧に戻る
-                        </a>
-                        <br>
-                        <a href="{{ url_for('deal.deal_list_imageUpload') }}" class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
-                            別のファイルをアップロード
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {%else%}
-            <form action="{{url_for('deal.deal_list_imageUpload')}}" method="POST" enctype="multipart/form-data" class="mb-[100px]">
-                <!-- ファイル選択エリア -->
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8">
-                    <div class="text-center">
-                        <input type="file" name="img" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-semibold cursor-pointer" required>                  
-                    </div>
-                </div>
 
-            <!-- 送信ボタン -->     
-                <div class="flex justify-center">
-                    <input type="submit" VALUE="送信する" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-12 py-3 rounded font-semibold cursor-pointer">
-                </div>
-            </form>
-           `
-$("#image-container").append();
+}
+
 const status_data = document.getElementById("status").textContent;
 console.log(status_data);
 
@@ -247,21 +180,7 @@ function handleSubmit() {
 updateStars(selectedRating);
 
 /////////////////////////seller DATA  ////////////////////////////////
- function loadSeller(){
-  axios.get('/deal/seller_data/get')
-    .then(response=>{
-      console.log('seller_data:',response.data);
-      if (response.data.success){
-        renderSellerProfile(response.data);
-      }else{
-        showError('no data found.');
-      }
-    })
-    .catch(error=>{
-      console.log('CATCH ERROR',error);
-      showError('SERVER ERROR');
-    });
-}
+
 
 /////////////////////////// render seller DATA  ///////////////////////
 function renderSellerProfile(response){

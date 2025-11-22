@@ -5,7 +5,7 @@
 
 {% block content %}
     <link rel="stylesheet" href="{{url_for('static',filename="css/popup.css")}}">
-    <div class="max-w-2xl mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto px-4 py-8" data-transaction-id="{{transaction.id}}">
         <!-- ページタイトル -->
         <h1 class="text-3xl font-bold text-center mb-10">取引詳細</h1>
 
@@ -27,7 +27,24 @@
         <!-- 取引情報テーブル -->
             <div class="flex flex-col gap-[10px] flex-1">
                     <input type="hidden" id="situation" value="{{transaction.situation}}">
-                    
+                    <div class="flex flex-row gap-10 items-center">
+                        <div class="w-[100px]">
+                            <p class="text-gray-600 text-base">取引番号</p>
+                        </div>
+                        <p class="text-lg font-semibold">{{transaction.id}}</p>
+                    </div>
+                    <div class="flex flex-row gap-10 items-center">
+                        <div class="w-[100px]">
+                            <p class="text-gray-600 text-base">金額</p>
+                        </div>
+                        <p class="text-lg font-semibold"> {%if transaction.purchasePrice %}{{transaction.purchasePrice}}{%else%}{{transaction.rentalPrice}}{%endif%}</p>
+                    </div>
+                    <div class="flex flex-row gap-10 items-center">
+                        <div class="w-[100px]">
+                            <p class="text-gray-600 text-base">出品者ID</p>
+                        </div>
+                        <p class="text-lg font-semibold" data-seller-id = "{{transaction.seller_id}}">{{transaction.seller_id}}</p>
+                    </div>
                     <div class="flex flex-row gap-10 items-center">
                         <div class="w-[100px]">
                             <p class="text-gray-600 text-base">取引開始日時</p>
@@ -95,7 +112,7 @@
                             </div>
                             <div class="pt-1 w-full flex justify-center items-center">
                                 
-                                    <span class="text-gray-700 font-medium  text-xs">配送中</span>
+                                    <span class="text-gray-700 font-medium  text-xs">配達中</span>
                                
                             </div>
                         </div>
@@ -173,7 +190,7 @@
                         </div>
 
                          <!-- Timeline Item 9 -->
-                        <div class="flex flex-col gap-2 timeline-item-8 w-[65px]">
+                        <div class="flex flex-col gap-2 timeline-item-9 w-[65px]">
                             <div class="flex flex-col items-center flex-shrink-0">
                                 <div class="w-8 h-8 rounded-full bg-white border-2 border-gray-400 text-gray-600 flex items-center justify-center font-bold text-sm timeline-circle">
                                     9
@@ -289,7 +306,7 @@
                 </div>
             </div>
             {%else%}
-            <form action="{{url_for('deal.deal_list_imageUpload')}}" method="POST" enctype="multipart/form-data" class="mb-[100px]">
+            <form action="{{url_for('deal.deal_list_imageUpload',transaction_id = transaction.id)}}" method="POST" enctype="multipart/form-data" class="mb-[100px]">
                 <!-- ファイル選択エリア -->
                 <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8">
                     <div class="text-center">
@@ -304,6 +321,41 @@
             </form>
             {%endif%}
         </div>
+
+        <!--receivedPhoto-->
+        <div class="" id="receivedPhotoContainer">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8 cursor-pointer">
+                <input type="file" class="cursor-pointer" id="imageInput" name="img" accept="image/*" required>
+                </div>
+                <div class="flex justify-center">
+                <button type="button" id="uploadBtn">アップロード</button>
+                </div>
+            </form>
+
+            <div id="uploadMessage"></div>
+            <img id="uploadedImage" style="display:none;" />
+        </div>
+
+         <!--shippingPhoto-->
+        <div class="" id="shippingPhotoContainer">
+            <div class="max-w-2xl mx-auto mb-[100px]">
+                <p class="text-gray-700 text-center mb-4">
+                    商品の発送画像はここで表示されます。
+                </p>
+                <div class="bg-green-50 border-2 border-green-300 rounded-lg p-12 text-center">
+                    {% if transaction.shippingPhoto %}
+                    <div class="mb-6">
+                        <img src="{{ transaction.shippingPhotoimage_url }}" alt="アップロード画像" class="w-48 h-48 object-cover rounded-lg mx-auto">
+                    </div>
+                    {% endif %}
+                    <div class="space-y-3">
+                       まだ画像がありません。
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--評価-->
         <div class="container flex flex-col justify-center items-center gap-[30px] border border-gray-500 rounded-lg py-[50px] w-[550px] mb-[100px] mx-auto" id="productEvaluation">
             <input type="hidden" id="transaction_id" value="{{transaction.id}}">
@@ -369,5 +421,6 @@
     </div>
     <script src="{{url_for('static',filename='js/deal_detail.js')}}"></script>
     <script src="{{url_for('static',filename="js/popup.js")}}"></script>
+    <script src="{{url_for('static',filename="js/deal_detail_upload.js")}}"></script>
 {% endblock %}
   
