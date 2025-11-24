@@ -299,7 +299,7 @@
                             一覧に戻る
                         </a>
                         <br>
-                        <a href="{{ url_for('deal.deal_list_imageUpload') }}" class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
+                        <a href="{{ url_for('deal.deal_list_imageUpload',transaction_id = transaction.id) }}" class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
                             別のファイルをアップロード
                         </a>
                     </div>
