@@ -286,7 +286,7 @@ def get_seller_info(id):
     return result    
      
 # cleaning取引詳細の画像添付 ----------------------------------------------------------------------------------------------------------------------------------------------------------
-@deal_bp.route('/deal/list/imageUpload', methods=['GET','POST'])
+@deal_bp.route('/deal/list/imageUpload/<int:transaction_id>', methods=['GET','POST'])
 def deal_list_imageUpload(transaction_id):
     # euser検証成功
     if 'user_id' not in session:
@@ -319,7 +319,8 @@ def deal_list_imageUpload(transaction_id):
         return render_template('deal/deal_detail.html', 
                              upload_success=False, 
                              error=error, 
-                             user_id=user_id)
+                             user_id=user_id,
+                             transaction = transaction)
     
     try:
         # システム用的画像名を生成
