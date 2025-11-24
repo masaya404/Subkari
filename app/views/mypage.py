@@ -149,7 +149,10 @@ def get_product_info(id):
 
     con = connect_db()
     cur = con.cursor(dictionary=True)
-
+    #商品idを取得
+    sql="select id from m_product where account_id=%s"
+    cur.execute(sql,(id,))
+    product_id=cur.fetchall()
     #商品名を取得
     sql="select name from m_product where account_id=%s"
     cur.execute(sql,(id,))
@@ -161,7 +164,7 @@ def get_product_info(id):
     cur.close()
     con.close()
 
-    return name,img
+    return product_id,name,img
 
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
@@ -219,10 +222,9 @@ def editProfile():
     user_info=get_user_info(user_id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
     #商品情報を取得
-    productName,productImg=get_product_info(user_id)
-
-
-    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_info=user_info,user_id=user_id)
+    productId,productName,productImg=get_product_info(user_id)
+    print(productId)
+    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productId=productId,productName=productName,productImg=productImg,user_info=user_info,user_id=user_id)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])

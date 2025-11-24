@@ -54,7 +54,7 @@
 
     <section id="profile" class="active" class="sec">
         <div class="img-name">
-            <img src="{{url_for('static' , filename='img/'+ (user_info.identifyfrontImg if user_info.identifyfrontImg else 'default.png'))}}" alt="プロフィール画像"
+            <img src="{{url_for('static' , filename='img/'+ (user_info.profileImage if user_info.profileImage else 'default.png'))}}" alt="プロフィール画像"
                 class="profile-image">
             <div class="profile-name">
                 <p>{{user_info.username}}</p>

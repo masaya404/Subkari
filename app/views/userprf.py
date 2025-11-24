@@ -72,6 +72,7 @@ def get_transaction_info(id):
     #小数点型にしてから四捨五入
     else:
         evaluation = {"評価":0}
+        
 
 
 
@@ -83,6 +84,10 @@ def get_product_info(id):
     con = connect_db()
     cur = con.cursor(dictionary=True)
 
+    #商品idを取得
+    sql="select id from m_product where account_id=%s"
+    cur.execute(sql,(id,))
+    product_id=cur.fetchall()
     #商品名を取得
     sql="select name from m_product where account_id=%s"
     cur.execute(sql,(id,))
@@ -94,7 +99,7 @@ def get_product_info(id):
     cur.close()
     con.close()
 
-    return name,img
+    return product_id,name,img
 
 
 # Blueprintの設定
@@ -116,9 +121,10 @@ def userprf():
     user_info=get_user_info(id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(id)
     #商品情報を取得
-    productName,productImg=get_product_info(id)
-    print(user_info)
-    return render_template("userprf/userprf.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_info=user_info,user_id=user_id)
+    productId,productName,productImg=get_product_info(id)
+ 
+  
+    return render_template("userprf/userprf.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productId=productId,productName=productName,productImg=productImg,user_info=user_info,user_id=user_id)
 
 
 #--------------------------------------------------------------------------------------
