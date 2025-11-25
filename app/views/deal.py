@@ -250,7 +250,7 @@ def get_seller_data(customer_id):
     
     try:
         seller_data = get_seller_info(customer_id)
-    
+        print(seller_data)
         return jsonify({'success':True,
                     'data':seller_data})
 
@@ -267,7 +267,7 @@ def get_seller_info(id):
     sql = """
             SELECT 
                 a.firstName,
-                a.identifyImg,
+                a.profileImage,
                 a.status,
                 a.smoker,
                 COUNT(e.id) as evaluation_count,

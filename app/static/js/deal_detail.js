@@ -189,7 +189,7 @@ function renderSellerProfile(response){
   const sellerData = response.data;
   const container = document.getElementById('profileContainer');
   const sellerInfo = sellerData.firstName;
-  const sellerImg = sellerData.identifyImg;
+  const sellerImg = sellerData.profileImage;
   const sellerStatus = sellerData.status;
   const sellerSmoker = sellerData.smoker;
   const sellerCount = sellerData.evaluation_count;
