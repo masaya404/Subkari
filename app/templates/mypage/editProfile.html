@@ -73,20 +73,21 @@
       
                     <button>
                         {% if productImg %}
-                        <img src="{{url_for('static',filename='img/productImg/'+productImg[loop.index0]["img"])}}" alt="{{name.name}}の画像" class="product-image"></button>
+                        <img src="{{url_for('static',filename='img/productImg/'+productImg[loop.index0]["img"])}}" alt="{{name.name}}の画像" class="product-image">
+                    </button>
                         {% else %}
                         <p>画像がありません</p>
                         {% endif %}
                     <div class="product-name" name="product_name">{{productName[loop.index0]["name"]}}</div>
                     
-                </div>
+                </form>
+
                 {% endfor %}
                 {% else %}
                 <p>まだ出品していません</p>
                 {% endif %}
             </div>
-        </form>
-
+       
         <!-- もっと見るボタン -->
         <div class="load-more">
             <button class="load-more-btn">もっと見る</button>
