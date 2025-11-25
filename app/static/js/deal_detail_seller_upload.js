@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
         $("#cleaningTimer").toggle(status == "クリーニング期間");
         $("#shippingPhotoContainer").toggle(status == "発送待ち");
         $("#receivedPhotoContainer").toggle(status == "レンタル中");
+        $("#returnReceivedPhotoContainer").toggle(status == "返送中");
 
     });
 
@@ -79,6 +80,53 @@ document.getElementById('uploadBtn').addEventListener('click', async function() 
     } catch (error) {
         const errorMsg = error.response?.data?.error || '未知のエラーが発生しました';
         document.getElementById('uploadMessage').innerHTML = 
+            `<p style="color: red;">${errorMsg}</p>`;
+    }
+});
+
+//return received Image Upload
+document.getElementById('uploadReturnReceivedBtn').addEventListener('click', async function() {
+    const fileInput = document.getElementById('imageReturnReceivedInput');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert('ファイルを選択してください');
+        return;
+    }
+    
+    // 取得 transaction_id
+    const transactionId = document.querySelector('[data-transaction-id]').dataset.transactionId; // transaction id
+    
+    const formData = new FormData();
+    formData.append('img', file);
+    
+    try {
+        const response = await axios.post(
+            `/deal/list/returnReceived/imageUpload/${transactionId}`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        );
+        
+        if (response.data.success) {
+            document.getElementById('uploadReturnReceivedMessage').innerHTML = 
+                `<p style="color: green;">${response.data.message}</p>`;
+            
+            // 画像表示
+            const img = document.getElementById('uploadedReturnReceivedImage');
+            img.src = response.data.image_url;
+            img.style.display = 'block';
+            
+            // クリア
+            fileInput.value = '';
+            window.location.href = `/deal/deal/${transactionId}`
+        }
+    } catch (error) {
+        const errorMsg = error.response?.data?.error || '未知のエラーが発生しました';
+        document.getElementById('uploadReturnReceivedMessage').innerHTML = 
             `<p style="color: red;">${errorMsg}</p>`;
     }
 });

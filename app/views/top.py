@@ -475,7 +475,6 @@ def search():
         WHERE (%s = '' OR p.name LIKE %s)
         AND
             p.draft = 0
-        GROUP BY p.id
     """
     params_count = [search_query, f"%{search_query}%"]
     #sql実行

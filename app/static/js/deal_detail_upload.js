@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         $("#cleaningTimer").toggle(status == "クリーニング期間");
         $("#shippingPhotoContainer").toggle(status == "配送中");
         $("#receivedPhotoContainer").toggle(status == "到着");
+        $("#shippingRentalPhotoContainer").toggle(status == "返送待ち");
 
     });
 
@@ -78,6 +79,53 @@ document.getElementById('uploadBtn').addEventListener('click', async function() 
     } catch (error) {
         const errorMsg = error.response?.data?.error || '未知のエラーが発生しました';
         document.getElementById('uploadMessage').innerHTML = 
+            `<p style="color: red;">${errorMsg}</p>`;
+    }
+});
+
+//return shipping Image Upload
+document.getElementById('uploadReturnBtn').addEventListener('click', async function() {
+    const fileInput = document.getElementById('imageReturnInput');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert('ファイルを選択してください');
+        return;
+    }
+    
+    // 取得 transaction_id
+    const transactionId = document.querySelector('[data-transaction-id]').dataset.transactionId; // transaction id
+    
+    const formData = new FormData();
+    formData.append('img', file);
+    
+    try {
+        const response = await axios.post(
+            `/deal/list/return/imageUpload/${transactionId}`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        );
+        
+        if (response.data.success) {
+            document.getElementById('uploadReturnMessage').innerHTML = 
+                `<p style="color: green;">${response.data.message}</p>`;
+            
+            // 画像表示
+            const img = document.getElementById('uploadedReturnImage');
+            img.src = response.data.image_url;
+            img.style.display = 'block';
+            
+            // クリア
+            fileInput.value = '';
+            window.location.href = `/deal/deal/${transactionId}`
+        }
+    } catch (error) {
+        const errorMsg = error.response?.data?.error || '未知のエラーが発生しました';
+        document.getElementById('uploadReturnMessage').innerHTML = 
             `<p style="color: red;">${errorMsg}</p>`;
     }
 });

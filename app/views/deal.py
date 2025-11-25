@@ -286,7 +286,7 @@ def get_seller_info(id):
     return result    
      
 # cleaning取引詳細の画像添付 ----------------------------------------------------------------------------------------------------------------------------------------------------------
-@deal_bp.route('/deal/list/imageUpload', methods=['GET','POST'])
+@deal_bp.route('/deal/list/imageUpload/<int:transaction_id>', methods=['GET','POST'])
 def deal_list_imageUpload(transaction_id):
     # euser検証成功
     if 'user_id' not in session:
@@ -319,7 +319,8 @@ def deal_list_imageUpload(transaction_id):
         return render_template('deal/deal_detail.html', 
                              upload_success=False, 
                              error=error, 
-                             user_id=user_id)
+                             user_id=user_id,
+                             transaction = transaction)
     
     try:
         # システム用的画像名を生成
@@ -402,14 +403,27 @@ def deal_list_received_imageUpload(transaction_id):
         
         # 操作
         con = connect_db()
-        cur = con.cursor()
-        
+        cur = con.cursor(dictionary=True)
+        sql_check = """
+            SELECT situation
+            FROM t_transaction
+            WHERE id = %s
+        """
+        cur.execute(sql_check,(transaction_id,))
+        check = cur.fetchone()
+        print(check)
+        if check['situation'] == "購入":
+            updateSituation = "取引完了"
+        else:
+            updateSituation = "レンタル中"
+        print(updateSituation)
+         
         sql = """
             UPDATE t_transaction 
             SET receivedPhoto = %s,status=%s 
             WHERE id = %s
         """
-        cur.execute(sql, (filename, "レンタル中",transaction_id))
+        cur.execute(sql, (filename, updateSituation ,transaction_id))
         
         con.commit()
         cur.close()
@@ -428,6 +442,68 @@ def deal_list_received_imageUpload(transaction_id):
             'success': False,
             'error': f'ファイルの保存に失敗しました: {str(e)}'
         }), 500
+        
+# 出品者 received取引詳細の画像添付 ----------------------------------------------------------------------------------------------------------------------------------------------------------
+@deal_bp.route('/list/returnReceived/imageUpload/<int:transaction_id>', methods=['POST'])
+def deal_list_returnReceived_imageUpload(transaction_id):
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'error': '用戶未登入'}), 401
+    
+    user_id = session.get('user_id')
+    
+    if 'img' not in request.files or not request.files['img'].filename:
+        return jsonify({'success': False, 'error': 'ファイルが選択されていません'}), 400
+    
+    file = request.files['img']
+
+    ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif', 'webp'}
+    if not ('.' in file.filename and file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS):
+        return jsonify({'success': False, 'error': '許可されていないファイル形式です'}), 400
+    
+    try:
+        filename = secure_filename(file.filename)
+        savedata = datetime.now().strftime("%Y%m%d%H%M%S_")
+        filename = savedata + filename
+        
+        save_path = os.path.join(current_app.root_path, "static", "img", filename)
+
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        
+        # 保存
+        image = Image.open(file)
+        image.save(save_path, quality=90)
+        image_url = "/static/img/" + filename
+        
+        # 操作
+        con = connect_db()
+        cur = con.cursor(dictionary=True)
+        
+         
+        sql = """
+            UPDATE t_transaction 
+            SET receivedPhoto = %s,status=%s 
+            WHERE id = %s
+        """
+        cur.execute(sql, (filename, "取引完了" ,transaction_id))
+        
+        con.commit()
+        cur.close()
+        con.close()
+        
+        # 返回成功回應
+        return jsonify({
+            'success': True,
+            'message': 'アップロード成功',
+            'image_url': image_url,
+            'filename': filename
+        }), 200
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'ファイルの保存に失敗しました: {str(e)}'
+        }), 500
+        
 # shipping取引詳細の画像添付 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 @deal_bp.route('/list/shipping/imageUpload/<int:transaction_id>', methods=['POST'])
 def deal_list_shipping_imageUpload(transaction_id):
@@ -495,7 +571,75 @@ def deal_list_shipping_imageUpload(transaction_id):
                              upload_success=False, 
                              error=error, 
                              user_id=user_id)  
-         
+
+# Return shipping取引詳細の画像添付 ----------------------------------------------------------------------------------------------------------------------------------------------------------
+@deal_bp.route('/list/return/imageUpload/<int:transaction_id>', methods=['POST'])
+def deal_list_return_imageUpload(transaction_id):
+    # euser検証成功
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+    
+    if 'img' not in request.files or not request.files['img'].filename:
+        return jsonify({'success': False, 'error': 'ファイルが選択されていません'}), 400
+    
+    file = request.files['img']
+
+    ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif', 'webp'}
+    if not ('.' in file.filename and file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS):
+        return jsonify({'success': False, 'error': '許可されていないファイル形式です'}), 400
+    
+    try:
+        # システム用的画像名を生成
+        filename = secure_filename(file.filename)
+        savedata = datetime.now().strftime("%Y%m%d%H%M%S_")
+        filename = savedata + filename
+        
+        # 保存パス生成
+        # current_filepath = os.path.abspath(__file__)
+        # current_dictionary = os.path.dirname(current_filepath)
+        save_path = os.path.join(current_app.root_path, "static", "img", filename)
+      
+        # folder存在確保
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        
+        # 画像保存
+        image = Image.open(file)
+        image.save(save_path, quality=90)
+        image_url = "/static/img/" + filename
+         # DB操作
+        con = connect_db()
+        cur = con.cursor()
+        
+        sql = """
+            UPDATE t_transaction 
+            SET shippingPhoto = %s,status = %s 
+            WHERE id = %s
+        """
+        cur.execute(sql, (filename,'返送中',transaction_id))
+      
+        con.commit()
+     
+        cur.close()
+        con.close()
+
+        # Upload成功
+         # 返回成功
+        return jsonify({
+            'success': True,
+            'message': 'アップロード成功',
+            'image_url': image_url,
+            'filename': filename
+        }), 200
+    except Exception as e:
+        error = f"ファイルの保存に失敗しました: {str(e)}"
+        return render_template('deal/deal_detail.html', 
+                             upload_success=False, 
+                             error=error, 
+                             user_id=user_id)  
+                 
 # 評価 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 @deal_bp.route('/evaluation', methods=['POST'])
 def evaluation():
