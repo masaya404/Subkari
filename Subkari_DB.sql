@@ -300,7 +300,7 @@ CREATE TABLE `t_transaction` (
   `situation` ENUM('購入','レンタル') NOT NULL,
   `paymentMethod` ENUM('クレジットカード','PayPay','コンビニ払い') NOT NULL,
   `date` timestamp default current_timestamp ,
-  `paymentDeadline` DATETIME NOT NULL,
+  `paymentDeadline` DATETIME NULL,
   `shippingAddress` VARCHAR(255) NOT NULL,
   `shippingPhoto` VARCHAR(255),
   `shippingFlg` boolean NOT NULL,
