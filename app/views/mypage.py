@@ -251,8 +251,8 @@ def updateProfile():
     #更新後のユーザー情報を取得 
     user_info=get_user_info(id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(id)
-    productName,productImg=get_product_info(id)
-    return render_template("mypage/editProfile.html",user_info=user_info,evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_id=user_id)
+    productId,productName,productImg=get_product_info(id)
+    return render_template("mypage/editProfile.html",user_info=user_info,productId=productId,evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_id=user_id)
 
     
 #--------------------------------------------------------------------------------------------------
