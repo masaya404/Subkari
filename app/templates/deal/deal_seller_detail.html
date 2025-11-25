@@ -311,14 +311,14 @@
                             一覧に戻る
                         </a>
                         <br>
-                        <a href="{{ url_for('deal.deal_list_imageUpload') }}" class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
+                        <a href="{{ url_for('deal.deal_list_imageUpload',transaction_id = transaction.id) }}" class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
                             別のファイルをアップロード
                         </a>
                     </div>
                 </div>
             </div>
             {%else%}
-            <form action="{{url_for('deal.deal_list_imageUpload')}}" method="POST" enctype="multipart/form-data" class="mb-[100px]">
+            <form action="{{url_for('deal.deal_list_imageUpload',transaction_id = transaction.id)}}" method="POST" enctype="multipart/form-data" class="mb-[100px]">
                 <!-- ファイル選択エリア -->
                 <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8">
                     <div class="text-center">
@@ -369,6 +369,21 @@
             <img id="uploadedImage" style="display:none;" />
         </div>
         
+        <!--return receivedPhoto-->
+        <div class="" id="returnReceivedPhotoContainer">
+            <form id="uploadReturnReceivedForm" enctype="multipart/form-data">
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 mb-8 cursor-pointer">
+                <input type="file" id="imageReturnReceivedInput" class="cursor-pointer" name="img" accept="image/*" class="text-black px-6 py-2 font-semibold cursor-pointer" required>
+                </div>
+                <div class="flex justify-center">
+                    <button type="button" id="uploadReturnReceivedBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-12 py-3 rounded font-semibold cursor-pointer">アップロード</button>
+                </div>
+                
+            </form>
+
+            <div id="uploadReturnReceivedMessage"></div>
+            <img id="uploadedReturnReceivedImage" style="display:none;" />
+        </div>
 
         <!--評価-->
         <div class="container flex flex-col justify-center items-center gap-[30px] border border-gray-500 rounded-lg py-[50px] w-[550px] mb-[100px] mx-auto" id="productEvaluation">

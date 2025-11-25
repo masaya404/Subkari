@@ -98,13 +98,15 @@ function updateTimeline(status,isPurchase=false) {
 
 }
 
-const status_data = document.getElementById("status").textContent;
+const status_data = document.getElementById("status").textContent.trim().normalize();
+
 console.log(status_data);
 
 /////////////////////////////評価////////////////////////////////////////
 console.log("evaluation function loaded");
 
 const evaluation_block = $("#productEvaluation");
+
 if (status_data != "取引完了"){
     evaluation_block.hide();
 }else{

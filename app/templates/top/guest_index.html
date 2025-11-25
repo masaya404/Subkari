@@ -52,37 +52,72 @@
         <div class="sidebar-section brand-list">
             <h3>ブランドから探す</h3>
             <ul>
-                <li><a href="">TRAVAS TOKYO</a></li>
-                <li>REFLEM</li>
-                <li>CIVARIZE</li>
-                <li>BRI</li>
-                <li>Amilige</li>
-                <li>VOLCAN & APHRODITE</li>
-                <li>THCC PSYYNXX</li>
-                <li>KINGLYMASK</li>
-                <li>QY</li>
-                <li>Ark Rouge</li>
-                <li>LIZ LISA</li>
-                <li>Mars</li>
-                <li>No - Brand</li>
-                <li>その他</li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='TRAVAS TOKYO') }}">TRAVAS TOKYO</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='REFLEM') }}">REFLEM</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='CIVARIZE') }}">CIVARIZE</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='BRI') }}">BRI</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='Amilige') }}">Amilige</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='VOLCAN & APHRODITE') }}">VOLCAN & APHRODITE</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='THCC PSYYNXX') }}">THCC PSYYNXX</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='KINGLYMASK') }}">KINGLYMASK</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='QY') }}">QY</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='Ark Rouge') }}">Ark Rouge</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='LIZ LISA') }}">LIZ LISA</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='Mars') }}">Mars</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='No - Brand') }}">No - Brand</a></li>
+                <li><a href="{{ url_for('top.brand_products', brand_name='その他') }}">その他</a></li>
             </ul>
         </div>
         <div class="sidebar-section">
             <h3>カテゴリから探す</h3>
             <ul>
-                <li>ユニセックス</li>
-                <li>レディース</li>
-                <li>コーディネート</li>
-                <li>トップス</li>
-                <li>ボトムス</li>
-                <li>スカート</li>
-                <li>アクセサリー</li>
+                <li><a href="{{ url_for('top.for_products', for_value='ユニセックス') }}">ユニセックス</a></li>
+                <li><a href="{{ url_for('top.for_products', for_value='レディース') }}">レディース</a></li>
+                <li><a href="{{ url_for('top.category_products', category='コーディネート') }}">コーディネート</a></li>
+                <li><a href="{{ url_for('top.category_products', category='トップス') }}">トップス</a></li>
+                <li><a href="{{ url_for('top.category_products', category='ボトムス') }}">ボトムス</a></li>
+                <li><a href="{{ url_for('top.category_products', category='スカート') }}">スカート</a></li>
+                <li><a href="{{ url_for('top.category_products', category='アクセサリー') }}">アクセサリー</a></li>
             </ul>
         </div>
     </aside>
     <main class="main-content">
-        <section class="category-section">
+
+            <h2>商品一覧</h2>   
+     {% for category, products in categories.items() %}
+    <section class="category-section">
+    <div class="category-header">
+      <h2>{{ category }}</h2>
+      {% if not single_category %}
+      <a href="{{ url_for('top.category_products', category=category) }}" class="view-all">すべて見る</a>
+      {% endif %}
+    </div>
+
+    <div class="product-grid">
+      {% for p in products %}
+      <a href="{{ url_for('products.product_details_stub', product_id=p.id) }}"
+         style="text-decoration: none; color: inherit; display: block;">
+        <div class="product-card">
+          <div class="product-image">
+            <img src="{{ url_for('static', filename='img/productImg/' + p.image_path) }}" alt="{{ p.name }}">
+          </div>
+          <div class="product-info">
+            {% if p.brand %}<div class="product-brand">{{ p.brand }}</div>{% endif %}
+            <div class="product-name">{{ p.name }}</div>
+            <div class="product-price">¥{{ p.price }}</div>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    </section>
+    {% endfor %}
+
+
+
+
+
+        <!-- <section class="category-section">
             <div class="category-header">
                 <h2>コーデ</h2>
                 <a href="{{ url_for('products.search_result') }}" class="view-all">すべて見る</a>
@@ -327,12 +362,12 @@
                     </div>
                 </a>
             </div>
-        </section>
+        </section> -->
 
     </main>
 </div>
 
-<div class="guidelines">
+<!-- <div class="guidelines">
     <div class="guidelines-container">
         <h2>Guidelines</h2>
         <div class="guidelines-subtitle">初めての方へ</div>
@@ -366,7 +401,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
