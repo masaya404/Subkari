@@ -146,19 +146,46 @@
         </div>
         </form>
     </div>
+
+                
+    
+                
+                
+
+
+
     
     <div class="seller-info">
         <div class="seller-header">
             <div class="seller-details">
                 <div class="seller-avatar"></div>
                 <div>
+                    
+                    <!-- <div class="seller-name">{{ seller_info.username }}</div>
+                    <span class="stars">
+                    {% for i in range(evaluation)%}★{% endfor %}
+                    {% for i in range(5-evaluation)%}☆{% endfor %}</span>
+                    <span class="rating-count">{{evaluationCount}}</span> -->
+
+                    <div>
+                    <form action="{{ url_for('userprf.userprf') }}" method="post">
+                    <button type="submit" class="sales-item">
+                    <input type="hidden" name="id" value="{{ seller_info.id }}">
                     <div class="seller-name">{{ seller_info.username }}</div>
                     <span class="stars">
                     {% for i in range(evaluation)%}★{% endfor %}
                     {% for i in range(5-evaluation)%}☆{% endfor %}</span>
                     <span class="rating-count">{{evaluationCount}}</span>
+                    </button>
+                    </form>
+                    </div>
 
-                    <!-- <div class="rating">★ 4.3</div> -->
+
+
+                    
+                    
+
+
                 </div>
             </div>
             {% if not user_id == product.account_id %}

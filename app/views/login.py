@@ -65,7 +65,7 @@ def login_auth():
     userExist = cur.fetchone()
     #ユーザーが存在しないまたはパスワードが一致しない
     if not userExist or userExist['password'] != account['password']:
-        error_message = "メールアドレスまたはパスワードが正しくありません。"
+        error_message = "パスワードまたは確認用パスワードが違います"
         return render_template('login/login.html',account=account,error_message = error_message)
     
     #登録成功の処理
@@ -89,6 +89,10 @@ def logout():
 @login_bp.route("/register_user", methods=["GET"])
 def show_register_user():
     account = {}
+    error_same = request.args.get('error_same')
+    error = request.args.get('error')
+    
+
     
     # 利用規約を DB から取得
     con = connect_db()
@@ -102,7 +106,10 @@ def show_register_user():
     if not result:
         result = {"content_detail": "利用規約の内容が登録されていません。"}
     
-    return render_template("login/new_account.html", account=account, result=result)
+    return render_template("login/new_account.html", account=account, result=result,error = error,error_same=error_same) 
+    # return redirect(url_for('login.show_register_user', account=account, result=result))
+
+
 @login_bp.route("/terms", methods=["GET"])
 def show_terms():
     # DBから利用規約を取得
@@ -131,8 +138,10 @@ def register_user_complete():
     error_same = ""
     # 入力確認
     if account['password'] != account['password_confirm']:
-        error = "メールアドレスまたはパスワードが正しくありません。"
-        return render_template('login/new_account.html', error=error, account=account)
+        error = "パスワードまたは確認用パスワードが違います"
+        # return render_template('login/new_account.html', error=error, account=account)
+        return redirect(url_for('login.show_register_user', error=error, account=account))
+        
     
     
     #同一user確認    
@@ -156,12 +165,15 @@ def register_user_complete():
     
     # existing_user が None でない場合 ＝ データが取得できた ＝ 既に使用されている
     if userExist:
-        error_same = "メールアドレスまたはパスワードが正しくありません。"
+        error_same = "パスワードまたは確認用パスワードが違います"
         # エラーなので、テンプレートをレンダリングして処理を終了します
 
         cur.close()
         con.close()
-        return render_template('login/new_account.html', error=error, error_same=error_same)
+        # return render_template('login/new_account.html', error=error, error_same=error_same)
+        return redirect(url_for('login.show_register_user', error=error, error_same=error_same))
+    
+    
 
     #ここからセッション登録して次の画面にせんいする
     # account の中身（イメージ）
@@ -502,7 +514,7 @@ def verification():
         error = {}
         error_same = {}
 
-        return render_template('login/new_account.html', error=error, error_same=error_same)
+        return redirect(url_for('login.show_register_user'))
 
 
 
