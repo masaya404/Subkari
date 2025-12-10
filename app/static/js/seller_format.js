@@ -252,23 +252,28 @@ function goToSize(sizeUrl){
     saveToSessionStorage();
     window.location.href = sizeUrl;
 }
+//他の資料をsessionStorage裡面保存 その後clean画面遷移/////////////////////////////////////////////////////////////////////////////////////////
+function goToClean(sizeUrl){
+    saveToSessionStorage();
+    window.location.href = sizeUrl;
+}
 
-document.getElementById("saveBtn").addEventListener("click", function() {
-  // 各 input 欄位的值を取得
+// document.getElementById("saveBtn").addEventListener("click", function() {
+//   // 各 input 欄位的值を取得
 
 
-  // formDateで囲む
-  const formData = {
-    name: name,
-    email: email,
-    comment: comment
-  };
+//   // formDateで囲む
+//   const formData = {
+//     name: name,
+//     email: email,
+//     comment: comment
+//   };
 
-  // JSONに変換して保存
-  sessionStorage.setItem("formData", JSON.stringify(formData));
+//   // JSONに変換して保存
+//   sessionStorage.setItem("formData", JSON.stringify(formData));
 
-  alert("入力データを sessionStorage に保存しました！");
-});
+//   alert("入力データを sessionStorage に保存しました！");
+// });
 
 // フォーム検証
 function validateForm() {
@@ -395,6 +400,7 @@ function validateForm() {
 function submitForm() {
     // バリデーション
     if (!validateForm()) {
+        console.log("未入力項目存在.")
         return;
     }
 
@@ -407,10 +413,48 @@ function submitForm() {
     }
 
     // hidden input に JSON を設定
-    document.getElementById('imagesData').value = JSON.stringify(uploadedImages);
-    
-    // フォーム送信
-    document.getElementById('sellerForm').submit();
+    // document.getElementById('imagesData').value = JSON.stringify(uploadedImages);
+
+    //  sessionStorage 取得
+    const productData = {
+        name: sessionStorage.getItem("name"),
+        rental: sessionStorage.getItem("rental") === "true",
+        purchase: sessionStorage.getItem("purchase") === "true",
+        rentalPrice: sessionStorage.getItem("rentalPrice") || null,
+        purchasePrice: sessionStorage.getItem("purchasePrice") || null,
+        smoking: sessionStorage.getItem("smoking") === "yes", // "yes" OR "no"
+        color: sessionStorage.getItem("color"),
+        category1: sessionStorage.getItem("category1"),
+        category2: sessionStorage.getItem("category2"),
+        brand: sessionStorage.getItem("brand"),
+        explanation: sessionStorage.getItem("explanation"),
+        returnLocation: sessionStorage.getItem("returnLocation"),
+    };
+
+    fetch('/format/save-product', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Success:', data);
+            alert('登録成功ID: ' + data.product_id);
+            // 成功後可以清除 sessionStorage
+            // sessionStorage.clear();
+        } else {
+            alert('失敗: ' + data.message);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert('catch失敗');
+    });
+
+
 }
 // 下書き保存
 function saveDraft(url) {
@@ -420,3 +464,5 @@ function saveDraft(url) {
     // alert('下書きが保存されました');
     window.location.href = url;
 }
+
+
