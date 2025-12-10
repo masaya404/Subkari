@@ -17,9 +17,34 @@ def connect_db():
     return con
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 
+#価格をカンマ区切りにして返す ----------------------------------------------------
+def comma(num):
+    #0が来た場合の処理
+    if num==0:
+        return str(num)
+    
+    string1=""
+    string2=""
+    if type(num)=="string":
+        num=int(num)
+    tmp=num
+   
+    count=0
+ 
+    while tmp/10!=0:
+        string1+=str(tmp%10)
+        tmp//=10
+        count+=1
+        if count%3==0 :
+            string1+=","
+            count+=1
+    tmp=0
+    while tmp<count:
+        string2+=string1[count-tmp-1]
+        tmp+=1
 
-
-
+    return string2
+    
 
 #アカウントの口座情報を取得する ------------------------------------------------------------------------------
 def getAccountInfo():
@@ -68,13 +93,13 @@ def get_user_info(id):
     user_info = cur.fetchone()
     return user_info
 
+
 #プロフィールに表示する取引情報を取得する ------------------------------------------------------------------------------------
 #引数として受け取ったidを持つユーザーの情報を取得
 def get_transaction_info(id):
     #アカウントテーブルからは取れない情報を取得
     con = connect_db()
     cur = con.cursor(dictionary=True)
-      
     #フォロワー数、フォロー数、評価、総評価件数、出品数を取得
     #フォロー数
     sql="select count(*) as フォロー数 from t_connection where execution_id=%s and type='フォロー' group by execution_id"
@@ -97,15 +122,37 @@ def get_transaction_info(id):
     cur.execute(sql, (id,))
     products=cur.fetchone()
     #評価を変形
-    evaluation=round(float(evaluation['評価']))     #小数点型にしてから四捨五入
-   
+
+    if followers is None:
+        followers={'フォロワー数':0}
+    if follows is None:
+        follows={'フォロー数':0}
+    if products is None:
+        products={'出品数':0}
+    
+
+
+    if evaluation is not None:
+
+
+        evaluation['評価'] = round(float(evaluation['評価']))
+    #小数点型にしてから四捨五入
+    else:
+        evaluation = {"評価":0}
+
+
+
     return evaluation,evaluationCount,follows,followers,products
+
 #商品データを取得 --------------------------------------------------
 def get_product_info(id):
 
     con = connect_db()
     cur = con.cursor(dictionary=True)
-
+    #商品idを取得
+    sql="select id from m_product where account_id=%s"
+    cur.execute(sql,(id,))
+    product_id=cur.fetchall()
     #商品名を取得
     sql="select name from m_product where account_id=%s"
     cur.execute(sql,(id,))
@@ -117,8 +164,7 @@ def get_product_info(id):
     cur.close()
     con.close()
 
-    return name,img
-
+    return product_id,name,img
 
 #mypageこういう名前のモジュール
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
@@ -143,20 +189,25 @@ def mypage():
     user_info=get_user_info(user_id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
 
-    return render_template("mypage/mypage.html",image_path=user_info['identifyImg'],evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],user_info=user_info ,user_id=user_id)
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    
+    #売上履歴を取得
+    #売上履歴から売上金を計算する
+    sql="select p.id ,ti.created_at, case when t.situation='購入' then p.purchasePrice else p.rentalPrice end as price from t_transaction t inner join m_product  p on t.product_id=p.id left join t_time ti on t.id=ti.transaction_id where t.status='取引完了' and p.account_id=%s group by ti.created_at,t.seller_id"
+    cur.execute(sql,(user_id,))
+    sales=cur.fetchall()
+    total=0
+    for sale in sales:
+        total+=int(sale['price'] if sale['price'] else 0)
+    total=comma(total)
+
+    return render_template("mypage/mypage.html",
+    evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,
+    followers=followers,products=products,user_info=user_info ,user_id=user_id,total=total)
     
 #------------------------------------------------------------------------------------------------
 
-#userprf表示--------------------------------------------------------------------------------------
-@mypage_bp.route("mypage/userprf")
-def userprf():
-    if 'user_id' not in session:
-        user_id = None
-        return redirect(url_for('login.login'))
-    else:
-        user_id = session.get('user_id')
-    return render_template("mypage/mypage.html" , user_id=user_id)
-#-------------------------------------------------------------------------------------------------
 
 #editProfile プロフィール編集ページ表示--------------------------------------------------------------
 @mypage_bp.route("/editProfile")
@@ -171,9 +222,9 @@ def editProfile():
     user_info=get_user_info(user_id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(user_id)
     #商品情報を取得
-    productName,productImg=get_product_info(user_id)
-
-    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg,user_info=user_info)
+    productId,productName,productImg=get_product_info(user_id)
+    print(productId)
+    return render_template("mypage/editProfile.html",evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productId=productId,productName=productName,productImg=productImg,user_info=user_info,user_id=user_id)
 
 #updateProfile プロフィール更新--------------------------------------------------------------
 @mypage_bp.route("/updateProfile",methods=['POST'])
@@ -200,12 +251,10 @@ def updateProfile():
     #更新後のユーザー情報を取得 
     user_info=get_user_info(id)
     evaluation,evaluationCount,follows,followers,products=get_transaction_info(id)
-    productName,productImg=get_product_info(id)
-    return render_template("mypage/editProfile.html",user_info=user_info,evaluation=evaluation,evaluationCount=evaluationCount['評価件数'],follows=follows['フォロー数'],followers=followers['フォロワー数'],products=products['出品数'],productName=productName,productImg=productImg)
+    productId,productName,productImg=get_product_info(id)
+    return render_template("mypage/editProfile.html",user_info=user_info,productId=productId,evaluation=evaluation,evaluationCount=evaluationCount,follows=follows,followers=followers,products=products,productName=productName,productImg=productImg,user_id=user_id)
 
     
-
-
 #--------------------------------------------------------------------------------------------------
 
 #edit プロフィール編集-------------------------------------------------------------------------------
@@ -220,7 +269,7 @@ def edit():
     #ユーザー情報を取得
     user_info=get_user_info(user_id)
 
-    return render_template("mypage/edit.html", user_info=user_info)
+    return render_template("mypage/edit.html", user_info=user_info,user_id=user_id)
     
 
 #--------------------------------------------------------------------------------------------------
@@ -250,6 +299,9 @@ def bankRegistration():
     con.close()
     #3件すでに登録済みなら拒否する
     if bank_count>=3:
+    #     return render_template("mypage/mypage.html",user_id=user_id)
+    
+    # return render_template("mypage/bankRegistration.html",user_id=user_id)
         return render_template("mypage/mypage.html")
     
     return render_template("mypage/bankRegistration.html")
@@ -270,6 +322,7 @@ def bankComplete():
     #空欄あり、登録できない      
     if ecnt !=0:
         return render_template('mypage/bankRegistration.html')
+        # return render_template('mypage/bankRegistration.html',user_id=user_id)
     
     #既に登録されていないか調べる 
     id=session["user_id"]
@@ -282,6 +335,7 @@ def bankComplete():
     #登録されているのでエラー
     if bankSame is not None:
         return render_template('mypage/bankRegistration.html')
+        # return render_template('mypage/bankRegistration.html',user_id=user_id)
     
     accountHolder=bank_info['famillyName']+bank_info['firstName']
     #登録処理
@@ -292,19 +346,30 @@ def bankComplete():
     con.commit()
     cur.close()
     return render_template("mypage/bankComplete.html")
+    # return render_template("mypage/bankComplete.html",user_id=user_id)
 #----------------------------------------------------------------------------------------------------
 
 #bank_transfer 振込申請ページ表示---------------------------------------------------------------------
 @mypage_bp.route("mypage/transferApplication")
 def transferApplication():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     session["editmode"]=False
     bank_info,accountNumbers,count=getAccountInfo()
     editmode=session["editmode"]
-    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+    return render_template("mypage/transferApplication.html",user_id=user_id,bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 #---------------------------------------------------------------------------------------------------
 #transferApplication 削除ボタン表示 -----------------------------------------------------------------
 @mypage_bp.route("/transferApplication")
 def editActivate():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     editmode=session["editmode"]
     if not editmode:
         session["editmode"]=True
@@ -314,11 +379,16 @@ def editActivate():
     bank_info,accountNumbers,count=getAccountInfo()
    
     
-    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+    return render_template("mypage/transferApplication.html",user_id=user_id,bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 
 #transferApplication 登録口座削除 -------------------------------------------------------------------
 @mypage_bp.route("/transferApplication/removeBank",methods=['POST'])
 def removeBank():
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     #何番目が選択されたかを取得
     bank_id = request.form.get("bank_id") 
 
@@ -340,7 +410,7 @@ def removeBank():
     bank_info,accountNumbers,count=getAccountInfo()
     editmode=session["editmode"]
     
-    return render_template("mypage/transferApplication.html",bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
+    return render_template("mypage/transferApplication.html",user_id=user_id,bank_info=bank_info,accountNumbers=accountNumbers,count=count,editmode=editmode)
 
 
 #transferAmount 金額選択ページ表示--------------------------------------------------------------------
@@ -379,14 +449,13 @@ def transferAmount():
 #---------------------------------------------------------------------------------------------------
 
 
-
 #金額確定ページ------------------------------------------------------------------------------------
 @mypage_bp.route("/mypage/amountComp")
 def amountComp():
     return render_template("mypage/amountComp.html")
 #---------------------------------------------------------------------------------------------------
 
-
+#レンタルと購入で値段の区別がつかないため支払った額がわからない
 #salesHistory 売上履歴------------------------------------------------------------------------------
 @mypage_bp.route("/salesHistory")
 def salesHistory():
@@ -395,43 +464,31 @@ def salesHistory():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
+    datetimes=[]
+    prices=[]
+    ids=[]
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
     
-
+    #売上履歴を取得
+    #売上履歴は取引テーブルでステータスが取引完了のものを取得
+    sql="select p.id ,ti.created_at, case when t.situation='購入' then p.purchasePrice else p.rentalPrice end as price from t_transaction t inner join m_product  p on t.product_id=p.id left join t_time ti on t.id=ti.transaction_id where t.status='取引完了' and p.account_id=%s group by ti.created_at,t.seller_id"
+    cur.execute(sql,(user_id,))
+    #id,created_at,price
+    salesHistory=cur.fetchall()
     
-    # try:
-    #     conn = mysql.connector.connect(
-    #         host="localhost",
-    #         user="root",
-    #         password="あなたのパスワード",
-    #         database="db_subkari",   # ←実際のDB名に変更
-    #         charset="utf8mb4"
-    #     )
-    #     cursor = conn.cursor(dictionary=True)
+    for history  in salesHistory:
+        datetimes.append(history['created_at'])
+        #価格をカンマ区切りにしてから配列に格納
+        prices.append(comma(history['price']))
+        ids.append(history['id'])
 
-    #     # ログイン中のユーザーIDを使用する場合（例）
-    #     user_id = session.get("user_id", 1)  # 仮で1番ユーザー
-
-    #     # 売上履歴を取得（新しい順）
-    #     sql = """
-    #         SELECT id, type, DATE_FORMAT(date, '%%Y/%%m/%%d %%H:%%i') AS date, amount
-    #         FROM sales_history
-    #         WHERE user_id = %s
-    #         ORDER BY date DESC
-    #     """
-    #     cursor.execute(sql, (user_id,))
-    #     sales_list = cursor.fetchall()
-
-    # except mysql.connector.Error as err:
-    #     print("DBエラー:", err)
-    #     sales_list = []
-    # finally:
-    #     cursor.close()
-    #     conn.close()
-
-    # HTMLへ渡す
-    # return render_template("mypage/salesHistory.html", sales_list=sales_list)
-    return render_template("mypage/salesHistory.html" ,  user_id=user_id)
+    cur.close()
+    con.close()
+    return render_template("mypage/salesHistory.html" ,  user_id=user_id,datetimes=datetimes,prices=prices,ids=ids)
 #-------------------------------------------------------------------------------------------------
+
+
 
 #振込履歴-----------------------------------------------------------------------------------------
 @mypage_bp.route("/transferHistory")
@@ -441,38 +498,12 @@ def transferHistory():
         return redirect(url_for('login.login'))
     else:
         user_id = session.get('user_id')
-    # try:
-    #     conn = mysql.connector.connect(
-    #         host="localhost",
-    #         user="root",
-    #         password="あなたのパスワード",
-    #         database="db_subkari",   # ←実際のDB名に変更
-    #         charset="utf8mb4"
-    #     )
-    #     cursor = conn.cursor(dictionary=True)
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql="select  from t_transaction t inner join m_product p on t.product_id=p.id where t.seller_id=%s and t.status='取引完了'"
 
-    #     # ログイン中のユーザーIDを使用する場合（例）
-    #     user_id = session.get("user_id", 1)  # 仮で1番ユーザー
-
-    #     # 売上履歴を取得（新しい順）
-    #     sql = """
-    #         SELECT id, type, DATE_FORMAT(date, '%%Y/%%m/%%d %%H:%%i') AS date, amount
-    #         FROM sales_history
-    #         WHERE user_id = %s
-    #         ORDER BY date DESC
-    #     """
-    #     cursor.execute(sql, (user_id,))
-    #     sales_list = cursor.fetchall()
-
-    # except mysql.connector.Error as err:
-    #     print("DBエラー:", err)
-    #     sales_list = []
-    # finally:
-    #     cursor.close()
-    #     conn.close()
-
-    # HTMLへ渡す
-    # return render_template("mypage/salesHistory.html", sales_list=sales_list)
+    #売上履歴を取得
+    #売上履歴は取引テーブルでステータスが取引完了のものを取得
     return render_template("mypage/transferHistory.html" ,  user_id=user_id)
 #------------------------------------------------------------------------------------------------
 
@@ -497,11 +528,15 @@ def todo():
 
     return render_template("mypage/todo.html" ,  user_id=user_id )
 #------------------------------------------------------------------------------------------------
+@mypage_bp.route('/personal_info')
+def personal_info():
+    # 個人情報編集ページの処理
+    return render_template('mypage/personal_info.html')
 
 
 #privacy_policy プライバシーポリシー表示---------------------------------------------------------------
-@mypage_bp.route("/privacy_policy")
-def privacy_policy():
+@mypage_bp.route("/privacyPolicy")
+def privacyPolicy():
     if 'user_id' not in session:
         user_id = None
         return redirect(url_for('login.login'))
@@ -517,7 +552,7 @@ def privacy_policy():
     con.close()
     
 
-    return render_template("mypage/privacy_policy.html" ,  user_id=user_id , result=result)
+    return render_template("mypage/privacyPolicy.html" ,  user_id=user_id , result=result)
 #--------------------------------------------------------------------------------------------------------------------
 
 #terms 利用規約表示  ----------------------------------------------------------------------------------------
@@ -541,13 +576,117 @@ def terms():
     return render_template("mypage/terms.html" ,  user_id=user_id , result=result)
 #--------------------------------------------------------------------------------------------------------------------
 
+# helpCenter ヘルプセンター表示ページ
+@mypage_bp.route("/helpCenter")
+def helpCenter():
+    if 'user_id' not in session:
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
     
-    
+    return render_template("mypage/helpCenter.html", user_id=user_id)
 
 
-# htmlの画面遷移url_for
-# {{ url_for('モジュール名.関数名') }}
-# {{ url_for('seller.seller_format') }}
-# {{ url_for('mypage.mypage') }}
-# {{ url_for('mypage.userprf') }}
-# >>>>>>> 3380b182aa575165ef27f84ca612b9c047078a8d
+#問い合わせ----------------------------------------------------------------------------------------------------------
+@mypage_bp.route("/inquiry")
+def inquiry():
+
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    return render_template("mypage/inquiry.html" , user_id=user_id  )
+#-------------------------------------------------------------------------------------------------------------------
+    
+#いいね一覧---------------------------------------------------------------------------------------------------------
+@mypage_bp.route("/likes")
+def likes():
+
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+    sql = """
+    SELECT 
+        p.id, 
+        p.name, 
+        p.purchasePrice, 
+        p.rentalPrice, 
+        p.purchaseFlg, 
+        p.rentalFlg, 
+        MIN(i.img) AS image_path
+    FROM t_favorite f
+    JOIN m_product p ON f.product_id = p.id
+    LEFT JOIN m_productimg i ON p.id = i.product_id
+    WHERE f.account_id = %s
+    GROUP BY p.id, p.name, p.purchasePrice, p.rentalPrice, p.purchaseFlg, p.rentalFlg;
+"""
+
+    cur.execute(sql, (user_id,))
+    likes_list = cur.fetchall()
+
+    cur.close()
+    con.close()  
+    # print(likes_list)
+
+
+    return render_template("mypage/likes.html" ,  user_id=user_id , likes_list=likes_list)
+#------------------------------------------------------------------------------------------------------------------
+
+#フォローリスト ---------------------------------------------------------------------------------------------------------
+@mypage_bp.route("/follow")
+def follow():
+
+    if 'user_id' not in session:
+        user_id = None
+        return redirect(url_for('login.login'))
+    else:
+        user_id = session.get('user_id')
+
+    follow_list=[]
+    con=connect_db()
+    cur=con.cursor(dictionary=True)
+
+    #フォローしているアカウントのid、アカウント名、評価、評価件数を取得
+    sql='''
+    SELECT 
+        a.id as id, a.username as ユーザー名,a.profileImage as アイコン,
+        (
+            SELECT AVG(e.score)
+            FROM t_evaluation e
+            WHERE e.recipient_id = a.id
+        ) AS 評価,
+        (
+            SELECT count(e.score)
+            FROM t_evaluation e
+            WHERE e.recipient_id = a.id
+        ) as 評価件数
+    FROM m_account a
+    WHERE a.id IN (
+        SELECT target_id
+        FROM t_connection 
+        WHERE type='フォロー'
+        AND execution_id=%s
+    );
+        '''
+    cur.execute(sql,(user_id,))
+    follow_list=cur.fetchall()
+    #評価を整数値に変換
+    for f in follow_list:
+        if f['評価'] is not None:
+            f['評価']=int(f['評価'])
+        else:
+            f['評価']=0   # 評価が無い人は0
+            f['評価件数']=0
+
+    cur.close()
+    con.close()
+    return render_template("mypage/followList.html",follow_list=follow_list,user_id=user_id)
+

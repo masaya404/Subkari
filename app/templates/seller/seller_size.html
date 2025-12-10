@@ -9,15 +9,6 @@
         <h1 class="text-center text-3xl font-bold mb-8 text-gray-800">サイズ</h1>
 
         <!-- sizeの参考画像-->
-    <!--<div class="bg-white rounded-lg border-2 border-gray-300 p-8 mb-8">
-            <img src="{{url_for("static",filename='img/size_cloth.svg')}}" alt="sizeガイド" class="w-full h-auto">
-        </div>
-        <div class="bg-white rounded-lg border-2 border-gray-300 p-8 mb-8">
-            <img src="{{url_for("static",filename='img/size_bottom1.png')}}" alt="sizeガイド" class="w-full h-auto">
-        </div>
-        <div class="bg-white rounded-lg border-2 border-gray-300 p-8 mb-8">
-            <img src="{{url_for("static",filename='img/size_bottom2.png')}}" alt="sizeガイド" class="w-full h-auto">
-        </div>-->
         <div class="bg-white rounded-lg border-2 border-gray-300 p-8 mb-8">
                 <div class="relative w-full">
                     <!-- Carousel Container -->
@@ -73,6 +64,7 @@
 
         <form action="{{url_for("seller.seller_size_success")}}" method="POST">
             <!-- Input Section -->
+           
             <div class="grid grid-cols-2 gap-8">
                 <!-- Left Column - Input Form -->
                 <div class="bg-white rounded-lg border-2 border-gray-300 p-8">
@@ -82,13 +74,20 @@
                     <div class="space-y-6">
                         <!-- Tops Section -->
                         <div>
-
+                            <!--ここでactive tab の判断-->
+                             <input type="hidden" name="active_tab" id="active_tab" value="tops">
                              <div class="flex gap-0 mb-6">
                                 <button type="button" class="bg-gray-500 text-white px-6 py-3 rounded-t-lg font-medium hover:bg-gray-600 transition tab active cursor-pointer" onclick="switchTab(0)" >
                                     トップス
                                 </button>
                                 <button type="button" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-tr-lg font-medium text-gray-700 hover:bg-gray-50 transition tab cursor-pointer" onclick="switchTab(1)">
                                     ボトムズ
+                                </button>
+                                <button type="button" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-tr-lg font-medium text-gray-700 hover:bg-gray-50 transition tab cursor-pointer" onclick="switchTab(2)">
+                                    コーデ
+                                </button>
+                                <button type="button" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-tr-lg font-medium text-gray-700 hover:bg-gray-50 transition tab cursor-pointer" onclick="switchTab(3)">
+                                    アクセサリー
                                 </button>
                             </div>
 
@@ -140,7 +139,7 @@
                                 </div>
                             </div>
 
-                          <!--bottoms-->    
+                        <!--bottoms-->    
                             <div class="lg:col-span-2 space-y-4 tab-content" id="tab2">
                                 <!-- ヒップ -->
                                 <div>
@@ -231,18 +230,26 @@
                                 </div>
                             </div>
 
-
-
+                        <!--コーデ-->    
+                            <div class="lg:col-span-2 space-y-4 tab-content" id="tab3">
+                                <p>サイズの記入が不要</p>
+                            </div>
+                        <!--アクセサリー-->    
+                            <div class="lg:col-span-2 space-y-4 tab-content" id="tab4">
+                                <p>サイズの記入が不要</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right Column - Notes -->
                 <div class="bg-white rounded-lg border-2 border-gray-300 p-8">
-                    <h2 class="text-lg font-bold mb-4 text-gray-800">サイズ備考欄</h2>
+                    <h2 class="text-lg font-bold mb-4 text-gray-800">サイズ備考欄(必須)</h2>
                     <textarea 
                         name="notes"
                         class="w-full h-64 p-4 border border-gray-300 rounded focus:outline-none focus:border-blue-500 resize-none text-sm"
+                        placeholder="衣類のタグに表示されているサイズと注意事項を入力してください。" 
+                        required
                     >{{ selected.get('notes','') }}</textarea>
                 </div>
             </div>

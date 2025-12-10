@@ -261,3 +261,8 @@ header, footer {
         gap: 30px;
     }
 }
+
+
+.none{
+    display: none;
+}

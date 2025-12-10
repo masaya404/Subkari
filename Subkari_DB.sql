@@ -1,11 +1,10 @@
+drop database if exists db_subkari;
+
 -- データベース作成
 create database db_subkari
 default character set utf8;
 
 use db_subkari
-
--- アラートとタイムテーブルがまだ
--- アラートはenum内が空
 
 
 
@@ -25,7 +24,8 @@ CREATE TABLE `m_account` (
   `status` ENUM('未確認','本人確認済み','凍結','削除','強制削除') NOT NULL,
   `updaterId` INT,
   `password` VARCHAR(255) NOT NULL,
-  `identifyImg` varchar(255) NOT NULL,
+  `identifyfrontImg` varchar(255) NOT NULL,
+  `identifybackImg` VARCHAR(255) NOT NULL,
   `apiFavoriteAnnounce` boolean,
   `apiFollowAnnounce` boolean,
   `apiSystemAnnounce` boolean,
@@ -33,10 +33,11 @@ CREATE TABLE `m_account` (
   `mailFollowAnnounce` boolean,
   `mailSystemAnnounce` boolean,
   `autoLogin` boolean,
-  `last_name` VARCHAR(50) NOT NULL,
-  `first_name` VARCHAR(50) NOT NULL,
-  `last_name_kana` VARCHAR(50) NOT NULL,
-  `first_name_kana` VARCHAR(50) NOT NULL,
+  `lastName` VARCHAR(50) NOT NULL,
+  `firstName` VARCHAR(50) NOT NULL,
+  `lastNameKana` VARCHAR(50) NOT NULL,
+  `firstNameKana` VARCHAR(50) NOT NULL,
+  `profileImage` VARCHAR(255) NOT NULL,
 
 
   
@@ -78,24 +79,28 @@ CREATE TABLE `m_category` (
 -- 商品テーブル ------------------------------------
 CREATE TABLE `m_product` (
   `id` INT AUTO_INCREMENT NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) ,
   `purchasePrice` INT NULL,
   `rentalPrice` INT NULL,
-  `size` VARCHAR(255) NOT NULL,
-  `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','ピンク','レッド','オレンジ')  NULL,
-  `for` ENUM('ユニセックス','レディース') NOT NULL,
-  `upload` DATE NOT NULL,
-  `showing` ENUM('公開','非公開','非表示') NOT NULL,
-  `draft` boolean NOT NULL,
-  `updateDate` DATETIME NOT NULL,
-  `purchaseFlg` boolean NOT NULL,
-  `rentalFlg` boolean NOT NULL,
-  `explanation` TEXT NULL,
-  `account_id` INT NOT NULL,
-  `brand_id` INT NOT NULL,
-  `category_id` INT NOT NULL,
+  `size` VARCHAR(255) ,
+  `color` ENUM('ブラック','ホワイト','イエロー','グレー','ブラウン','グリーン','ブルー','パープル','シルバー','ピンク','レッド','オレンジ')  NULL,
+  `for` ENUM('ユニセックス','レディース') ,
+  `upload` DATE ,
+  `showing` ENUM('公開','非公開','非表示') ,
+  `draft` boolean ,
+  `updateDate` DATETIME ,
+  `purchaseFlg` boolean ,
+  `rentalFlg` boolean ,
+  `explanation` TEXT ,
+  `account_id` INT ,
+  `brand_id` INT ,
+  `category_id` INT ,
   `cleanNotes` TEXT ,
-  `smokingFlg` boolean NOT NULL,
+  `smokingFlg` boolean ,
+  `returnAddress` varchar(255) ,
+  `condition` ENUM('取引可','取引中','売却済み'),
+  `rentalPeriod` INT,
+
 
   PRIMARY KEY (`id`),
   FOREIGN KEY (`brand_id`)
@@ -222,16 +227,16 @@ CREATE TABLE `t_adminLogin` (
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
 -- レンタル期間テーブル ---------------------------------------
-CREATE TABLE `t_rentalPeriod` (
-  `id` INT NOT NULL,
-  `product_id` INT NOT NULL,
-  `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
+-- CREATE TABLE `t_rentalPeriod` (
+--   `id` INT AUTO_INCREMENT NOT NULL,
+--   `product_id` INT NOT NULL,
+--   `rentalPeriod` ENUM('4日','7日','14日')  NOT NULL,
 
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`product_id`)
-    REFERENCES `m_product`(`id`)
-    ON DELETE RESTRICT ON UPDATE CASCADE
-);
+--   PRIMARY KEY (`id`),
+--   FOREIGN KEY (`product_id`)
+--     REFERENCES `m_product`(`id`)
+--     ON DELETE RESTRICT ON UPDATE CASCADE
+-- );
 
 -- お気に入りテーブル --------------------------------
 CREATE TABLE `t_favorite` (
@@ -289,17 +294,19 @@ CREATE TABLE `t_transaction` (
   `product_id` INT NOT NULL,
   `customer_id` INT NOT NULL,
   `seller_id` INT NOT NULL,
-  `status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','発送待ち','取引完了') NOT NULL,
+  `status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','返送待ち','返送中','取引完了') NOT NULL,
   `situation` ENUM('購入','レンタル') NOT NULL,
   `paymentMethod` ENUM('クレジットカード','PayPay','コンビニ払い') NOT NULL,
   `date` timestamp default current_timestamp ,
-  `paymentDeadline` DATETIME NOT NULL,
+  `paymentDeadline` DATETIME NULL,
   `shippingAddress` VARCHAR(255) NOT NULL,
-  `shippingPhoto` VARCHAR(255) NOT NULL,
+  `shippingPhoto` VARCHAR(255),
   `shippingFlg` boolean NOT NULL,
-  `receivedPhoto` VARCHAR(255) NOT NULL,
+  `receivedPhoto` VARCHAR(255),
   `receivedFlg` boolean NOT NULL,
-  `rentalPeriod` DATETIME NOT NULL,
+  `cleaningPhoto` VARCHAR(255),
+  `cleaningFlg` boolean NOT NULL,
+  `rentalPeriod` INT,
   `creditcard_id` INT ,
 
   PRIMARY KEY (`id`),
@@ -469,7 +476,6 @@ CREATE TABLE `t_clean` (
 );
 
 
-
 -- お問い合わせテーブル ------------------------------------------
 CREATE TABLE `t_inquiry` (
   `id` INT AUTO_INCREMENT NOT NULL,
@@ -508,7 +514,7 @@ CREATE TABLE `t_time` (
   `message_id` INT NULL,
   `inquiry_id` INT NULL,
   `transaction_id` INT NULL,
-  `transaction_status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','発送待ち','取引完了') NULL,
+  `transaction_status` ENUM('支払い待ち','発送待ち','配達中','到着','レンタル中','クリーニング期間','取引完了') NULL,
   `evaluation_id` INT NULL,
   `product_change` ENUM('料金変更','取引状態遷移','コメント') NULL,
 
@@ -1046,5 +1052,4 @@ GROUP BY
   month
 ORDER BY
   month;
-
 

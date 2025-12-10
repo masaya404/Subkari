@@ -24,6 +24,9 @@
   text-align: center;
 }
 
+.w-full max-w-lg mx-auto {
+  justify-content: center;
+}
 /* ===============================
    見出し
 =============================== */
@@ -49,6 +52,7 @@ h1 {
   font-size: 14px;
   transition: all 0.3s;
   cursor: pointer;
+  text-align: center;
 }
 
 .btn:hover {
@@ -123,7 +127,7 @@ footer {
 =============================== */
 
 .container--login {
-  max-width: 700px;        /* ログイン専用幅（元の500px）*/
+  max-width: 500px;        /* ログイン専用幅（元の500px）*/
   margin: 80px auto;
   /* padding: 40px; */
   background: #fff;
@@ -230,7 +234,7 @@ footer {
 .container--forgot-email {
   max-width: 600px;
   margin: 80px auto;
-  padding: 60px 40px;
+  padding: 60px 140px;
   background: #fff;
 }
 
@@ -1259,6 +1263,7 @@ a {
     align-items: flex-start; /* 上部に寄せる */
     padding-top: 100px; /* 上からの余白 */
     padding-bottom: 50px;
+    margin: 100px 0;
 }
 
 .subkari-main {

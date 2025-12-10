@@ -30,8 +30,8 @@ header {
 main {
     flex: 1;
     max-width: 600px;
-    margin: 0 auto;
-    padding: 3rem 2rem;
+    margin:  100px auto;
+    padding: 2rem 2rem;
     width: 100%;
 }
 

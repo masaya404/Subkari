@@ -9,12 +9,12 @@
     <div class="container">
         <h1>プロフィール編集</h1>
 
-        <form action="{{url_for('mypage.updateProfile')}}" method="post">
+        <form action="{{url_for('mypage.updateProfile')}}" method="post" id="account_info">
             <!-- 画像 -->
             <div class="form-section">
                 <div class="section-title">画像</div>
                 <div class="image-upload">
-                    <img src="{{url_for('static' , filename='img/'+user_info.identifyImg)}}" alt="プロフィール画像" class="profile-image">
+                    <img src="{{url_for('static' , filename='img/'+user_info.identifyfrontImg)}}" alt="プロフィール画像" class="profile-image">
 
                     <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="previewImage(event)">
                     <button type="button" class="upload-btn" onclick="document.getElementById('imageInput').click()">画像を選択</button>
@@ -41,14 +41,14 @@
             <div class="form-group">
                 <label class="form-label">アカウント名</label>
                 <input type="text" class="form-input" id="accountName" name="username"value="{{user_info.username}}" maxlength="20" oninput="updateCharCount('accountName', 'nameCount', 20); validateAccountName()">
-                <div class="error-message" id="nameError" >ニックネームを入力してください</div>
+                <div class="error-message" id="nameError" >アカウント名を入力してください</div>
                 <div class="char-count"><span id="nameCount">0</span> / 20</div>
             </div>
 
             <!-- 自己紹介 -->
             <div class="form-group">
                 <label class="form-label">自己紹介</label>
-                <textarea class="form-textarea" id="bio" maxlength="1000" oninput="updateCharCount('bio', 'bioCount', 1000); validateBio()" name="user_info.introduction">{{introduction}}</textarea>
+                <textarea class="form-textarea" id="bio" maxlength="1000" oninput="updateCharCount('bio', 'bioCount', 1000); validateBio()" name="introduction">{% if user_info.introduction!='None' %}{{user_info.introduction}}{% else %}{% endif %}</textarea>
                 <div class="error-message" id="bioError">1000文字以下で入力してください</div>
                 <div class="char-count" id="bioCountWrapper"><span id="bioCount">0</span> / 1000</div>
             </div>

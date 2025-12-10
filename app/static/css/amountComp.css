@@ -86,12 +86,14 @@ main {
     width: 100%;
     max-width: 800px; /* PC幅で見やすく */
     padding: 40px 60px;
+    margin: 100px auto;
 }
 
 /* --- 見出し部分 --- */
 .header {
     text-align: center;
     margin-bottom: 40px;
+    justify-content: center;
 }
 
 h1 {

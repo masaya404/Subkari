@@ -43,7 +43,7 @@
             </div>
           </a>
 
-          <a href="/product/123" class="block">
+          <a href="{{url_for("deal.deal")}}" class="block">
             <div class="w-[250px] h-[250px] relative rounded-lg border-2 border-gray-300 hover:opacity-80 transition cursor-pointer">
               <img class="w-full h-full object-cover rounded" src="{{url_for("static",filename="img/cloth.jpg")}}">
               <div class="absolute inset-0 flex items-center justify-center">
@@ -85,9 +85,9 @@
                 出品する
               </button>
             </a>
-            <a href="{{ url_for('seller.datacenter') }}" class="block">
-              <button onclick="window.location.href='/seller/format'" class="w-[338px] bg-white text-[#826969] font-bold py-4 rounded border border-[#837575] hover:bg-gray-700 hover:text-white transition cursor-pointer">
-                データセンター
+            <a href="{{ url_for('seller.seller_draft') }}" class="block">
+              <button onclick="window.location.href='/seller/draft'" class="w-[338px] bg-white text-[#826969] font-bold py-4 rounded border border-[#837575] hover:bg-gray-700 hover:text-white transition cursor-pointer">
+                下書き一覧
               </button>
             </a>
           </div>

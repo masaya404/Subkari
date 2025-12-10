@@ -6,40 +6,49 @@
 
 {% block content %}
 <link rel="stylesheet" href="../../static/css/userprf.css">
-    <main>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/userprf.css') }}">
+<style>
+    main{
+        margin-top: 190px;
+    }
+
+</style>
+    <main >
         <h1></h1>
         <div class="profile-header">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%231e3c72'/%3E%3Ctext x='50' y='60' font-size='40' fill='white' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E" alt="プロフィール画像" class="profile-image">
-            <link rel="stylesheet" href="../../static/css/userprf.css">
+            <img src="{{url_for('static' , filename='img/'+user_info.profileImage)}}" alt="プロフィール画像" class="profile-image">
             <div class="profile-info">
-                <h1 class="profile-name">haltaro</h1>
+                <h1 class="profile-name">{{user_info.username}}</h1>
                 
                 <div class="profile-rating">
-                    <span class="stars">★★★★☆</span>
-                    <span class="rating-count">255</span>
-                    <span class="reviewer-badge">喫煙者</span>
+                    <span class="stars">
+                    {% for i in range(evaluation.評価)%}★{% endfor %}{% for i in range(5-evaluation.評価)%}☆{% endfor %}</span>
+                    <span class="rating-count">{{evaluationCount.評価件数}}</span>
+                    {% if smoker == 0%}
+                        <span class="reviewer-badge">喫煙者</span>
+                    {% else %}
+                        <span class="reviewer-badge">非喫煙者</span>
+                    {% endif %} 
                 </div>
                 
                 <div class="profile-stats">
                     <div class="stat-item">
-                        <span class="stat-number">80</span>
+                        <span class="stat-number">{{products.出品数}}</span>
                         <span class="stat-label">出品数</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">10</span>
+                        <span class="stat-number">{{follows.フォロー数}}</span>
                         <span class="stat-label">フォロー</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">5</span>
+                        <span class="stat-number">{{followers.フォロワー数}}</span>
                         <span class="stat-label">フォロワー</span>
                     </div>
                 </div>
                 
                 <div class="profile-description" id="profileDescription">
-                    猫アレルギーの人はごめんなさい。<br>
-                    猫の毛がついてるかもです。<br>
-                    よろしくお願いします。<br>
-                    柄→柄選択します。
+                    {{user_info.introduction}}
+                    <!-- 何文字以上でを作る -->
                     <span id="moreText" style="display: none;">
                         <br><br>
                         【取引について】<br>
@@ -69,94 +78,27 @@
 
         <!-- 商品グリッド -->
         <div class="products-grid">
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1467043237213-65f2da53396f?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1562137369-1a1a0bc66744?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1560243563-062bfc001d68?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1578932750355-5eb30ece2a83?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1558769132-cb1aea8f2c57?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1544441893-675973e31985?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1555529902-5261145633bf?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?w=300" alt="スカート" class="product-image">
-                <div class="product-name">スカート</div>
-            </div>
-        </div>
+                {% if productName %}
+                {% for name in productName %}
+                <form action="{{ url_for('products.product_details_stub', product_id=productId[loop.index0]["id"]) }}" method="get"> <!--商品詳細へ遷移-->
 
-        <!-- もっと見るボタン -->
-        <div class="load-more">
-            <button class="load-more-btn">もっと見る</button>
-        </div>
+      
+                    <button>
+                        {% if productImg %}
+                        <img src="{{url_for('static',filename='img/productImg/'+productImg[loop.index0]["img"])}}" alt="{{name.name}}の画像" class="product-image"></button>
+                        {% endif %}
+                    <div class="product-name" name="product_name">{{productName[loop.index0]["name"]}}</div>
+                    
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>まだ出品していません</p>
+                {% endif %}
+            </div>
+        </form>
 
-        <!-- ポップアップ（モーダル） -->
+<!-- 
+        ポップアップ（モーダル） 
         <div id="modalOverlay" class="modal-overlay" style="display: none;">
             <div class="modal-box">
                 <h2 id="modalTitle">確認</h2>
@@ -166,7 +108,7 @@
                     <button id="confirmBtn" class="confirm-btn">OK</button>
                 </div>
             </div>
-        </div>
+        </div> -->
     </main>
 
 

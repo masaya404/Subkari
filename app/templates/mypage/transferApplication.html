@@ -27,6 +27,7 @@
 
     <!-- Bank List -->
     <div class="bank-list" id="bankList">
+        {% if count %}
         {% for i in range(count) %}
         <div class="bank-item" data-id=1>
             <input type="radio" name="bank" value="1">
@@ -55,6 +56,7 @@
             </div>
         </div>
         {% endfor %}
+        {% endif %}
     </div>
 
     <!-- Add Bank Button -->
@@ -89,19 +91,6 @@
 </div>
 
 <!-- Footer -->
-<footer>
-    <div class="footer-links">
-        <a href="#">初めての方へ</a>
-        <a href="#">サイトマップ</a>
-        <a href="#">FAQ</a>
-        <a href="#">お問い合わせ</a>
-        <a href="#">利用規約</a>
-        <a href="#">プライバシーポリシー</a>
-        <a href="#">特定商取引法に基づく表記</a>
-        <a href="#">古物営業法に基づく表示</a>
-    </div>
-    <p class="copyright">© 2025 HAL OSAKA IA・IH Team 5</p>
-</footer>
 <script src="../../static/js/transferApplication.js"></script>
 
 {% endblock %}
